@@ -13,4 +13,9 @@ class Login extends APP_Controller
 	{
 		$this->load->lview('auth/login');
 	}
+
+	public function logout()
+	{
+		echo 'logout';
+	}
 }
