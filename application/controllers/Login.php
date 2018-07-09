@@ -11,11 +11,19 @@ class Login extends APP_Controller
 
 	public function index()
 	{
-		$this->load->lview('auth/login');
+		$data = [];
+
+		if($this->Auth->Login()) redirect('');
+		
+		$data['form'] = $this->Auth->GetLoginRemember();
+		$data['error'] = $this->Auth->LAST_ERROR;
+
+		$this->load->lview('auth/login', $data);
 	}
 
 	public function logout()
 	{
-		echo 'logout';
+		$this->Auth->Logout();
+		redirect('');
 	}
 }

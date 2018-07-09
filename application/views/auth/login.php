@@ -4,18 +4,19 @@
 			<div class="logo text-center"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo-dark.png" alt="Klorofil Logo"></div>
 			<p class="lead">Login to your account</p>
 		</div>
-		<form class="form-auth-small" action="">
+		<?=ShowError($error);?>
+		<form class="form-auth-small" action="" method="POST">
 			<div class="form-group">
 				<label for="signin-email" class="control-label sr-only">Email</label>
-				<input type="email" class="form-control" id="signin-email" value="" placeholder="Email">
+				<input type="text" class="form-control" id="signin-email" name="email" value="<?=set_value('email', $form['email'], true)?>" placeholder="Email">
 			</div>
 			<div class="form-group">
 				<label for="signin-password" class="control-label sr-only">Password</label>
-				<input type="password" class="form-control" id="signin-password" value="" placeholder="Password">
+				<input type="password" class="form-control" id="signin-password" name="password" value="" placeholder="Password">
 			</div>
 			<div class="form-group clearfix">
 				<label class="fancy-checkbox element-left">
-					<input type="checkbox">
+					<input name="remember" type="checkbox" value="1" <?=set_checkbox('remember', '1',$form['remember'])?>>
 					<span>Remember me</span>
 				</label>
 			</div>
