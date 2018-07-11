@@ -5,6 +5,11 @@ class UserModel extends APP_Model
 {
 	private const TABLE = 'users';
 
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
 	public function Add($data = [])
 	{
 		return false;

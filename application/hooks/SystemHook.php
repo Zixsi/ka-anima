@@ -24,13 +24,13 @@ class SystemHook
 		$a = $this->CI->router->fetch_method();
 		$check = $this->CI->Auth->Check();
 
-		if($check == false && $c != 'login')
+		if($check == false && $c != 'auth')
 		{
-			redirect('?c=login');
+			redirect('/auth/');
 		}
-		elseif($check == true && $c == 'login' && $a != 'logout')
+		elseif($check == true && $c == 'auth' && $a != 'logout')
 		{
-			redirect('?c=main');
+			redirect('/');
 		}
 	}
 }

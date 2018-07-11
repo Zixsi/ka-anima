@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Auth extends APP_Model
+class AuthModel extends APP_Model
 {
 	public function __construct()
 	{
@@ -87,7 +87,6 @@ class Auth extends APP_Model
 			return false;
 		}
 
-		var_dump($user);
 		if(isset($user['id']) == false || $user['id'] < 1 || intval($user['active']) === 0)
 		{
 			return false;

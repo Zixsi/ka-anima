@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Login extends APP_Controller
+class Auth extends APP_Controller
 {
 	public function __construct()
 	{
@@ -26,4 +26,16 @@ class Login extends APP_Controller
 		$this->Auth->Logout();
 		redirect('');
 	}
+
+	public function register()
+	{
+		$data = [];
+
+		//if($this->Auth->Login()) redirect('');
+		//$data['form'] = $this->Auth->GetLoginRemember();
+		$data['error'] = $this->Auth->LAST_ERROR;
+
+		$this->load->lview('auth/register', $data);
+	}
+	
 }

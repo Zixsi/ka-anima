@@ -1,10 +1,7 @@
-<?php
+<?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class APP_Controller extends CI_Controller
+
+class APP_Controller extends MX_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-		$GLOBALS['EXT']->call_hook('pre_controller_constructor');
-	}
+
 }
