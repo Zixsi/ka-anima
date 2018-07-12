@@ -12,6 +12,11 @@ class UserModel extends APP_Model
 
 	public function Add($data = [])
 	{
+		if($this->db->insert(self::TABLE, $data))
+		{
+			return $this->db->insert_id();
+		}
+
 		return false;
 	}
 
@@ -27,8 +32,9 @@ class UserModel extends APP_Model
 
 	public function GetByID($id)
 	{
+		$id = intval($id);
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
-		if($row = $query->row_array())
+		if($row = $res->row_array())
 		{
 			return $row;
 		}

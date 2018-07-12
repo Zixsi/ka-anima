@@ -31,11 +31,33 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		//if($this->Auth->Login()) redirect('');
-		//$data['form'] = $this->Auth->GetLoginRemember();
+		if($this->Auth->Register()) redirect('');
+
+		$data['form']['email'] = $this->input->post('email', true);
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/register', $data);
 	}
+
+	public function forgot()
+	{
+		$data = [];
+
+		//if($this->Auth->Login()) redirect('');
+		//$data['form'] = $this->Auth->GetLoginRemember();
+		$data['error'] = $this->Auth->LAST_ERROR;
+
+		$this->load->lview('auth/forgot', $data);
+	}
 	
+	public function confirmation()
+	{
+		$data = [];
+
+		//if($this->Auth->Login()) redirect('');
+		//$data['form'] = $this->Auth->GetLoginRemember();
+		$data['error'] = $this->Auth->LAST_ERROR;
+
+		$this->load->lview('auth/confirmation', $data);
+	}
 }

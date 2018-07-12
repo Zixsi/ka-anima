@@ -2,9 +2,10 @@
 	<div class="content">
 		<div class="header">
 			<div class="logo text-center"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo-dark.png" alt="Klorofil Logo"></div>
-			<p class="lead">Login to your account</p>
+			<p class="lead">Confirmation</p>
 		</div>
 		<?=ShowError($error);?>
+		<?/*
 		<form class="form-auth-small" action="" method="POST">
 			<div class="form-group">
 				<label for="signin-email" class="control-label sr-only">Email</label>
@@ -22,10 +23,10 @@
 			</div>
 			<button type="submit" class="btn btn-primary btn-lg btn-block">LOGIN</button>
 			<div class="bottom">
-				<div class="helper-text"><i class="fa fa-lock"></i> <a href="/auth/forgot/">Forgot password?</a></div>
-				<div class="helper-text">Don't you have account? <a href="/auth/register/"> Sign Up Here</a></div>
+				<span class="helper-text"><i class="fa fa-lock"></i> <a href="#">Forgot password?</a></span>
 			</div>
 		</form>
+		*/?>
 	</div>
 	<div class="clearfix"></div>
 </div>

@@ -14,7 +14,6 @@ class AuthModel extends APP_Model
 		{
 			$data = $this->input->post(null, true);
 			$this->form_validation->set_data($data);
-			//$this->form_validation->set_error_delimiters('', '');
 
 			if($this->form_validation->run('signin') == FALSE)
 			{
@@ -43,7 +42,43 @@ class AuthModel extends APP_Model
 				delete_cookie('remember');
 				delete_cookie('email');
 			}
-			$this->session->set_userdata('USER', $res);
+
+			$this->SetUser($res);
+			
+			return true;
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+			//var_dump($e->getMessage());
+		}
+
+		return false;
+	}
+
+	public function Register()
+	{
+		try
+		{
+			$data = $this->input->post(null, true);
+			$this->form_validation->set_data($data);
+
+			if($this->form_validation->run('signup') == FALSE)
+			{
+				throw new Exception($this->form_validation->error_string(), 1);
+			}
+
+			$user_fields = [
+				'email' => $data['email'],
+				'password' => $this->UserModel->PwdHash($data['password']),
+				'active' => 1,
+				'hash' => sha1(time())
+			];
+			if($user_id = $this->UserModel->Add($user_fields))
+			{
+				$user = $this->UserModel->GetByID($user_id);
+				$this->SetUser($user);
+			}
 			
 			return true;
 		}
@@ -70,14 +105,14 @@ class AuthModel extends APP_Model
 		return true;
 	}
 
+	public function SetUser($user = [])
+	{
+		$this->session->set_userdata('USER', $user);
+	}
+
 	public function User()
 	{
 		return $this->session->userdata('USER');
-	}
-
-	public function Register()
-	{
-		return false;
 	}
 
 	public function Check()
