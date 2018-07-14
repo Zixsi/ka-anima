@@ -32,3 +32,26 @@ $config['signup'] = [
 		'rules' => 'trim|matches[password]'
 	]
 ];
+
+$config['course_add'] = [
+	[
+		'field' => 'name',
+		'label' => 'Name',
+		'rules' => 'required'
+	],
+	[
+		'field' => 'period',
+		'label' => 'Period',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'price_month',
+		'label' => 'Price month',
+		'rules' => 'required|numeric|greater_than[0]'
+	],
+	[
+		'field' => 'price_full',
+		'label' => 'Price full',
+		'rules' => 'required|numeric|greater_than[0]'
+	]
+];

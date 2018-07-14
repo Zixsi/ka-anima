@@ -22,15 +22,32 @@ class SystemHook
 	{
 		$c = $this->CI->router->fetch_class();		
 		$a = $this->CI->router->fetch_method();
+		$d = $this->CI->uri->segment(1);
 		$check = $this->CI->Auth->Check();
 
-		if($check == false && $c != 'auth')
+		//var_dump($d); die();
+
+		if($d == 'admin')
 		{
-			redirect('/auth/');
+			if($check == false && $c != 'auth')
+			{
+				redirect('/admin/auth/');
+			}
+			elseif($check == true && $c == 'auth' && $a != 'logout')
+			{
+				redirect('/admin/');
+			}
 		}
-		elseif($check == true && $c == 'auth' && $a != 'logout')
+		else
 		{
-			redirect('/');
+			if($check == false && $c != 'auth')
+			{
+				redirect('/auth/');
+			}
+			elseif($check == true && $c == 'auth' && $a != 'logout')
+			{
+				redirect('/');
+			}
 		}
 	}
 }

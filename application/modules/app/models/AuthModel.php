@@ -115,6 +115,11 @@ class AuthModel extends APP_Model
 		return $this->session->userdata('USER');
 	}
 
+	public function UserID()
+	{
+		return $this->User()['id'];
+	}
+
 	public function Check()
 	{
 		if(($user = $this->User()) == false )

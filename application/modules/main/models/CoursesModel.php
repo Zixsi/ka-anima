@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class СoursesModel extends APP_Model
+class CoursesModel extends APP_Model
 {
 	private const TABLE = 'courses';
 
@@ -12,6 +12,13 @@ class СoursesModel extends APP_Model
 
 	public function Add($data = [])
 	{
+		$this->CheckFields($data);
+
+		if($this->db->insert(self::TABLE, $data))
+		{
+			return $this->db->insert_id();
+		}
+
 		return false;
 	}
 
@@ -39,5 +46,12 @@ class СoursesModel extends APP_Model
 	public function List()
 	{
 		return false;
+	}
+
+	private function CheckFields($data = [])
+	{
+		
+		
+		return true;
 	}
 }
