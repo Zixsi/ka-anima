@@ -3,5 +3,5 @@
 
 class APP_Controller extends MX_Controller
 {
-
+	public $User = [];
 }

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CoursesModel extends APP_Model
 {
 	private const TABLE = 'courses';
+	private const TABLE_FIELDS = ['name', 'description', 'period', 'price_month', 'price_full', 'author', 'ts', 'active'];
 
 	public function __construct()
 	{
@@ -12,7 +13,10 @@ class CoursesModel extends APP_Model
 
 	public function Add($data = [])
 	{
-		$this->CheckFields($data);
+		if($this->CheckFields($data) == false)
+		{
+			return false;
+		}
 
 		if($this->db->insert(self::TABLE, $data))
 		{
@@ -22,8 +26,19 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	public function Update($id, $data = [])
+	public function Edit($id, $data = [])
 	{
+		if($this->CheckFields($data) == false)
+		{
+			return false;
+		}
+
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+		{
+			return true;
+		}
+
 		return false;
 	}
 
@@ -35,7 +50,7 @@ class CoursesModel extends APP_Model
 	public function GetByID($id)
 	{
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
-		if($row = $query->row_array())
+		if($row = $res->row_array())
 		{
 			return $row;
 		}
@@ -43,15 +58,51 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	public function List()
+	public function List($filter = [], $order = [], $select = [])
 	{
+		$select = count($select)?implode(', ', $select):'*';
+		$this->db->select($select);
+	
+		count($filter)?$this->db->where($filter):$this->db->where('id >', 0);
+		foreach($order as $key => $val)
+		{
+			$this->db->order_by($key, $val);
+		}
+
+		if($res = $this->db->get(self::TABLE))
+		{
+			return $res->result_array();
+		}
+
 		return false;
 	}
 
-	private function CheckFields($data = [])
+	private function CheckFields(&$data = [])
 	{
-		
-		
-		return true;
+		try
+		{
+			$this->form_validation->set_data($data);
+
+			if($this->form_validation->run('course_add') == FALSE)
+			{
+				throw new Exception($this->form_validation->error_string(), 1);
+			}
+
+			foreach($data as $key => $val)
+			{
+				if(in_array($key, self::TABLE_FIELDS) == false)
+				{
+					unset($data[$key]);
+				}
+			}
+			
+			return true;
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
 	}
 }

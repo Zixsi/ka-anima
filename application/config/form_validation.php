@@ -55,3 +55,26 @@ $config['course_add'] = [
 		'rules' => 'required|numeric|greater_than[0]'
 	]
 ];
+
+$config['lectures_add'] = [
+	[
+		'field' => 'name',
+		'label' => 'Name',
+		'rules' => 'required|min_length[3]'
+	],
+	[
+		'field' => 'course',
+		'label' => 'Course',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'video',
+		'label' => 'Video',
+		'rules' => 'required|valid_url'
+	],
+	[
+		'field' => 'sort',
+		'label' => 'Sort',
+		'rules' => 'required|integer|greater_than[0]|less_than[65535]'
+	]
+];

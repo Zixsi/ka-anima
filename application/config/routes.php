@@ -12,6 +12,9 @@ $route['admin/(.*)'] = 'admin/$1';
 
 
 $route['teachingcourses'] = 'app/TeachingCourses';
+$route['teachingcourses/(:num)/lectures'] = 'app/TeachingLectures/index/$1';
+$route['teachingcourses/(:num)/lectures/(.*)'] = 'app/TeachingLectures/$2/$1';
 $route['teachingcourses/(.*)'] = 'app/TeachingCourses/$1';
+
 
 $route['(.*)'] = 'app/$1';

@@ -1,7 +1,7 @@
 <div class="panel">
 	<div class="panel-heading">
 		<div class="col-xs-6">
-			<h3 class="panel-title">Курсы</h3>
+			<h3 class="panel-title">Лекции</h3>
 		</div>
 		<div class="col-xs-6 text-right">
 			<a href="./add/" class="btn btn-primary btn-xs">Добавить</a>
@@ -11,9 +11,10 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Статус</th>
 					<th>Название</th>
-					<th>Кол-во лекций</th>
+					<th>Сортировка</th>
 					<th class="text-right">Действие</th>
 				</tr>
 			</thead>
@@ -21,6 +22,7 @@
 				<?if(is_array($items)):?>
 					<?foreach($items as $item):?>
 						<tr>
+							<td><?=$item['id']?></td>
 							<td>
 								<?if($item['active']):?>
 									<span class="label label-success">ENABLED</span>
@@ -29,9 +31,8 @@
 								<?endif;?>
 							</td>
 							<td><?=$item['name']?></td>
-							<td>0</td>
+							<td><?=$item['sort']?></td>
 							<td class="text-right">
-								<a href="./<?=$item['id']?>/lectures/" class="btn btn-xxs btn-default lnr lnr-book" title="Лекции"></a>
 								<a href="./edit/<?=$item['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
 								<a href="#" class="btn btn-xxs btn-danger lnr lnr-trash" title="Удалить"></a>
 							</td>
