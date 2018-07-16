@@ -51,9 +51,9 @@
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->User()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="#"><i class="lnr lnr-user"></i> <span>My Profile</span></a></li>
-								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Message</span></a></li>
-								<li><a href="#"><i class="lnr lnr-cog"></i> <span>Settings</span></a></li>
+								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
+								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
+								<li><a href="#"><i class="lnr lnr-cog"></i> <span>Настройки</span></a></li>
 								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
 							</ul>
 						</li>
@@ -67,7 +67,8 @@
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="#" class="active"><i class="lnr lnr-home"></i> <span>Dashboard</span></a></li>
+						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
+						<li><a href="/courses/enroll/"><i class="lnr lnr-graduation-hat"></i> <span>Запись на курс</span></a></li>
 						<li>
 							<a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 							<div id="subPages" class="collapse ">
@@ -104,6 +105,7 @@
 	<!-- Javascript -->
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery/jquery.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/holder.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
 </body>

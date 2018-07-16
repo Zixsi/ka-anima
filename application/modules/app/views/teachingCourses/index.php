@@ -11,9 +11,8 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Статус</th>
+					<th width="100">Статус</th>
 					<th>Название</th>
-					<th>Кол-во лекций</th>
 					<th class="text-right">Действие</th>
 				</tr>
 			</thead>
@@ -29,7 +28,6 @@
 								<?endif;?>
 							</td>
 							<td><?=$item['name']?></td>
-							<td>0</td>
 							<td class="text-right">
 								<a href="./<?=$item['id']?>/lectures/" class="btn btn-xxs btn-default lnr lnr-book" title="Лекции"></a>
 								<a href="./edit/<?=$item['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
