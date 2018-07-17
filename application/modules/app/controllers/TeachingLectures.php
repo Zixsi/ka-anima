@@ -62,7 +62,7 @@ class TeachingLectures extends APP_Controller
 		{
 			$form_data = $this->input->post(null, true);
 			$form_data['course'] = $course;
-			if($id = $this->LecturesModel->Edit($id, $form_data))
+			if($id = $this->LecturesModel->Update($id, $form_data))
 			{
 				$data['item'] += $form_data;
 				SetFlashMessage('success', 'Success');

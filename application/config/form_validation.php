@@ -33,7 +33,7 @@ $config['signup'] = [
 	]
 ];
 
-$config['course_add'] = [
+$config['course'] = [
 	[
 		'field' => 'name',
 		'label' => 'Name',
@@ -56,7 +56,7 @@ $config['course_add'] = [
 	]
 ];
 
-$config['lectures_add'] = [
+$config['lectures'] = [
 	[
 		'field' => 'name',
 		'label' => 'Name',
@@ -76,5 +76,23 @@ $config['lectures_add'] = [
 		'field' => 'sort',
 		'label' => 'Sort',
 		'rules' => 'required|integer|greater_than[0]|less_than[65535]'
+	]
+];
+
+$config['transaction'] = [
+	[
+		'field' => 'user',
+		'label' => 'User',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'type',
+		'label' => 'Type',
+		'rules' => 'required|in_list[IN,OUT]'
+	],
+	[
+		'field' => 'amount',
+		'label' => 'Amount',
+		'rules' => 'required|numeric|greater_than_equal_to[0.01]'
 	]
 ];

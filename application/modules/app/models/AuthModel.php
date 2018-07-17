@@ -6,6 +6,7 @@ class AuthModel extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->model('main/TransactionsModel');
 	}
 
 	public function Login()
@@ -43,6 +44,8 @@ class AuthModel extends APP_Model
 				delete_cookie('email');
 			}
 
+			$res['balance'] = $this->TransactionsModel->BalanceUser($res['id']);
+			$res['last_update'] = time();
 			$this->SetUser($res);
 			
 			return true;
@@ -133,5 +136,18 @@ class AuthModel extends APP_Model
 		}
 
 		return true;
+	}
+
+	public function Balance()
+	{
+		$user = $this->User();
+		return isset($user['balance'])?$user['balance']:0;
+	}
+
+	public function UpdateBalance()
+	{
+		$user = $this->User();
+		$user['balance'] = $this->TransactionsModel->BalanceUser($user['id']);
+		$this->session->set_userdata('USER', $user);
 	}
 }

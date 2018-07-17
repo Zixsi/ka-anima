@@ -13,30 +13,38 @@ class CoursesModel extends APP_Model
 
 	public function Add($data = [])
 	{
-		if($this->CheckFields($data) == false)
+		try
 		{
-			return false;
-		}
+			$this->_CheckFields($data);
 
-		if($this->db->insert(self::TABLE, $data))
+			if($this->db->insert(self::TABLE, $data))
+			{
+				return $this->db->insert_id();
+			}
+		}
+		catch(Exception $e)
 		{
-			return $this->db->insert_id();
+			$this->LAST_ERROR = $e->getMessage();
 		}
 
 		return false;
 	}
 
-	public function Edit($id, $data = [])
+	public function Update($id, $data = [])
 	{
-		if($this->CheckFields($data) == false)
+		try
 		{
-			return false;
-		}
+			$this->_CheckFields($data);
 
-		$this->db->where('id', $id);
-		if($this->db->update(self::TABLE, $data))
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $data))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
 		{
-			return true;
+			$this->LAST_ERROR = $e->getMessage();
 		}
 
 		return false;
@@ -77,32 +85,22 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	private function CheckFields(&$data = [])
+	private function _CheckFields(&$data = [])
 	{
-		try
+		$this->form_validation->set_data($data);
+		if($this->form_validation->run('course') == FALSE)
 		{
-			$this->form_validation->set_data($data);
-
-			if($this->form_validation->run('course_add') == FALSE)
-			{
-				throw new Exception($this->form_validation->error_string(), 1);
-			}
-
-			foreach($data as $key => $val)
-			{
-				if(in_array($key, self::TABLE_FIELDS) == false)
-				{
-					unset($data[$key]);
-				}
-			}
-			
-			return true;
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
+			throw new Exception($this->form_validation->error_string(), 1);
 		}
 
-		return false;
+		foreach($data as $key => $val)
+		{
+			if(in_array($key, self::TABLE_FIELDS) == false)
+			{
+				unset($data[$key]);
+			}
+		}
+		
+		return true;
 	}
 }

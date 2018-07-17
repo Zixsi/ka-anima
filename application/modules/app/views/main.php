@@ -29,11 +29,19 @@
 				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
+				<!--
 				<div class="navbar-btn">
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+				</div>-->
+				<div class="navbar-btn navbar-left">
+					<span class="nav-balance">
+						Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->Balance(), 2, '.', ' ')?> $</span>
+						<a href="/pay/" class="lnr lnr-plus-circle"></a>
+					</span>
 				</div>
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
+						<!--
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
 								<i class="lnr lnr-alarm"></i>
@@ -47,14 +55,14 @@
 								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
 								<li><a href="#" class="more">See all notifications</a></li>
 							</ul>
-						</li>
+						</li>-->
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->User()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
 								<li><a href="#"><i class="lnr lnr-cog"></i> <span>Настройки</span></a></li>
-								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Logout</span></a></li>
+								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
 							</ul>
 						</li>
 					</ul>
@@ -68,10 +76,17 @@
 				<nav>
 					<ul class="nav">
 						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
-						<li><a href="/courses/enroll/"><i class="lnr lnr-graduation-hat"></i> <span>Запись на курс</span></a></li>
 						<li>
-							<a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages" class="collapse ">
+							<a href="#subPages1" data-toggle="collapse" class="collapsed"><i class="lnr lnr-graduation-hat"></i> <span>Обучение</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPages1" class="collapse in">
+								<ul class="nav">
+									<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
+								</ul>
+							</div>
+						</li>
+						<li>
+							<a href="#subPages2" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPages2" class="collapse in">
 								<ul class="nav">
 									<li><a href="/teachingcourses/" class="">Курсы</a></li>
 									<li><a href="#" class="">Группы</a></li>

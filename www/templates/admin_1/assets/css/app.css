@@ -1,7 +1,10 @@
 .auth-box {padding: 0 30px; width: 30%;}
 .alert {font-size: 13px;}
-
 .btn-xxs {padding: 3px 5px; font-size: 14px;}
+
+.nav-balance {font-size: 26px; display: inline-block; line-height: 32px; padding-left: 45px;}
+.nav-balance .nav-balance-value {color: #00AAFF;}
+.nav-balance > a {color: #676a6d; font-size: 20px; line-height: 22px; margin-left: 5px;}
 
 .course-list {}
 .course-list .course-list-item {}
@@ -12,4 +15,3 @@
 .course-list .type-info, .course-list .price-info {font-size: 12px;}
 .course-list .price-value {font-size: 24px; color: #00AAFF;}
 .course-list .fancy-radio input[type="radio"] + span i:after {background-color: #00AAFF;}
-
