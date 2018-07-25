@@ -20,6 +20,11 @@ class SystemHook
 
 	public function CheckAuth()
 	{
+		if(is_cli() == true)
+		{
+			return;
+		}
+
 		$c = $this->CI->router->fetch_class();		
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);

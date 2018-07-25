@@ -1,4 +1,13 @@
-
+CREATE TABLE `users` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `active` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+  `hash` varchar(255) NOT NULL,
+  `ts_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ts_modify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE `courses` ( 
 	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
@@ -35,5 +44,22 @@ CREATE TABLE `transactions` (
 	`service` VARCHAR(255) NOT NULL , 
 	`service_id` INT(11) UNSIGNED NOT NULL , 
 	`ts` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `courses_subscription` ( 
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT , 
+	`user` INT(11) UNSIGNED NOT NULL , 
+	`group` INT(11) NOT NULL , 
+	`price_month` DECIMAL(13,2) UNSIGNED NOT NULL , 
+	`price_full` DECIMAL(13,2) NOT NULL , 
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+CREATE TABLE `courses_groups` ( 
+	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT , 
+	`code` VARCHAR(255) NOT NULL , 
+	`course` INT(11) UNSIGNED NOT NULL , 
+	`ts` TIMESTAMP NOT NULL , 
 	PRIMARY KEY (`id`)
 ) ENGINE = InnoDB;

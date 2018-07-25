@@ -7,6 +7,9 @@ $route['default_controller'] = 'app/main';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+$route['cli'] = 'cli/index';
+$route['cli/(.*)'] = 'cli/$1';
+
 $route['admin'] = 'admin/main';
 $route['admin/(.*)'] = 'admin/$1';
 

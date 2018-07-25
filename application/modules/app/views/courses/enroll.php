@@ -1,4 +1,5 @@
 <div class="course-list row">
+	<?=ShowError($error);?>
 	<?if($items):?>
 		<?foreach($items as $item):?>
 			<div class="course-list-item col-md-12 col-lg-6">
@@ -14,6 +15,8 @@
 							<p class="item-text"><?=$item['description']?></p>
 						</div>
 						<form action="" method="post">
+							<input type="hidden" name="group" value="<?=$item['groups'][0]['id']?>">
+							<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 							<div class="col-xs-12">
 								<div class="text-center">
 									<span class="type-title">Обучение с инструктором</span>
@@ -24,7 +27,7 @@
 										<div class="price-info">Цена за первый месяц:</div>
 										<label class="fancy-radio">
 											<input type="radio" name="price" value="month">
-											<span><i></i> <span class="price-value">$ <?=number_format($item['price_month'], 2, '.', ' ')?></span></span>
+											<span><i></i> <span class="price-value">$ <?=number_format($item['price']['month'], 2, '.', ' ')?></span></span>
 										</label>
 										
 									</div>
@@ -32,7 +35,7 @@
 										<div class="price-info">Цена за весь курс:</div>
 										<label class="fancy-radio">
 											<input type="radio" name="price" value="full">
-											<span><i></i> <span class="price-value">$ <?=number_format($item['price_full'], 2, '.', ' ')?></span></span>
+											<span><i></i> <span class="price-value">$ <?=number_format($item['price']['full'], 2, '.', ' ')?></span></span>
 										</label>
 									</div>
 								</div>

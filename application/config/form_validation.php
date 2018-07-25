@@ -96,3 +96,44 @@ $config['transaction'] = [
 		'rules' => 'required|numeric|greater_than_equal_to[0.01]'
 	]
 ];
+
+$config['courses_subscription'] = [
+	[
+		'field' => 'user',
+		'label' => 'User',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'group',
+		'label' => 'Group',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'price_month',
+		'label' => 'Price month',
+		'rules' => 'required|numeric|greater_than[0]'
+	],
+	[
+		'field' => 'price_full',
+		'label' => 'Price full',
+		'rules' => 'required|numeric|greater_than[0]'
+	]
+];
+
+$config['courses_groups'] = [
+	[
+		'field' => 'code',
+		'label' => 'Code',
+		'rules' => 'required|min_length[3]'
+	],
+	[
+		'field' => 'course',
+		'label' => 'Course',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'ts',
+		'label' => 'Ts',
+		'rules' => 'required'
+	]
+];
