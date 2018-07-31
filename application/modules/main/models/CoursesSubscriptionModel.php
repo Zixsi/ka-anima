@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CoursesSubscriptionModel extends APP_Model
 {
 	private const TABLE = 'courses_subscription';
-	private const TABLE_FIELDS = ['user', 'group', 'price_month', 'price_full'];
+	private const TABLE_FIELDS = ['user', 'course_group', 'price_month', 'price_full'];
 
 	public function __construct()
 	{
@@ -61,6 +61,17 @@ class CoursesSubscriptionModel extends APP_Model
 		if($row = $res->row_array())
 		{
 			return $row;
+		}
+
+		return false;
+	}
+
+	public function CheckSubscibe($user, $group)
+	{
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE user = ? AND course_group = ?', [$user, $group]);
+		if($res->row())
+		{
+			return true;
 		}
 
 		return false;

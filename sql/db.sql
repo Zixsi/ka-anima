@@ -50,7 +50,7 @@ CREATE TABLE `transactions` (
 CREATE TABLE `courses_subscription` ( 
 	`id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT , 
 	`user` INT(11) UNSIGNED NOT NULL , 
-	`group` INT(11) NOT NULL , 
+	`course_group` INT(11) NOT NULL , 
 	`price_month` DECIMAL(13,2) UNSIGNED NOT NULL , 
 	`price_full` DECIMAL(13,2) NOT NULL , 
 	PRIMARY KEY (`id`)

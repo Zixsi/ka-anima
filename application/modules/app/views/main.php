@@ -81,6 +81,7 @@
 							<div id="subPages1" class="collapse in">
 								<ul class="nav">
 									<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
+									<li><a href="/courses/" class="">Курсы</a></li>
 								</ul>
 							</div>
 						</li>

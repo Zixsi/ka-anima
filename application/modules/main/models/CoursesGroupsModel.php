@@ -58,7 +58,7 @@ class CoursesGroupsModel extends APP_Model
 
 	public function GetByID($id)
 	{
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
+		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course) WHERE g.id = ?', [$id]);
 		if($row = $res->row_array())
 		{
 			return $row;
@@ -69,7 +69,7 @@ class CoursesGroupsModel extends APP_Model
 
 	public function GetByCode($code)
 	{
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE code = ?', [$code]);
+		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course) WHERE g.code = ?', [$id]);
 		if($row = $res->row_array())
 		{
 			return $row;
@@ -97,11 +97,25 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function ListSubscribe()
+	public function ListSubscribe($user)
 	{
 		$ts = time() - (3600 * 24 * 30);
-		$sql = 'SELECT c.id, c.name, c.description, c.price_month, c.price_full, g.id as group_id, g.code, g.ts FROM courses as c LEFT JOIN courses_groups as g ON(c.id = g.course) WHERE c.active = 1 AND g.id IS NOT NULL AND g.ts >= \''.date('Y-m-d 00:00:00', $ts).'\' ORDER BY c.id ASC, g.ts ASC';
-		$res = $this->db->query($sql);
+		$sql = 'SELECT 
+					c.id, c.name, c.description, c.price_month, 
+					c.price_full, g.id as group_id, g.code, g.ts 
+				FROM 
+					courses as c LEFT JOIN courses_groups as g ON(c.id = g.course) 
+				LEFT JOIN 
+					courses_subscription as cs ON(g.id = cs.course_group AND cs.user = ?) 
+				WHERE 
+					c.active = 1 AND 
+					g.id IS NOT NULL AND 
+					g.ts >= ? AND 
+					cs.user IS NULL 
+				ORDER BY 
+					c.id ASC, g.ts ASC';
+
+		$res = $this->db->query($sql, [intval($user), date('Y-m-d 00:00:00', $ts)]);
 		if($res = $res->result_array())
 		{
 			$result = [];

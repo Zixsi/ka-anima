@@ -66,6 +66,17 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	public function GetByCourse($id)
+	{
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE course = ?', [$id]);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
 	public function List($filter = [], $order = [], $select = [])
 	{
 		$select = count($select)?implode(', ', $select):'*';

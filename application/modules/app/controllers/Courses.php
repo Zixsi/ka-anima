@@ -6,37 +6,51 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesModel', 'main/CoursesSubscriptionModel', 'main/CoursesGroupsModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesGroupsModel', 'main/LecturesModel']);
 	}
 	
 	public function index()
 	{
-		$this->load->lview('courses/index');
+		$data = [];
+
+		$user = $this->Auth->UserID();
+		$data['courses'] = $this->SubscriptionModel->CoursesList($user);
+		$data['course_lectures'] = [];
+		if(count($data['courses']))
+		{
+			$data['course_lectures'] = $this->LecturesModel->GetByCourse($data['courses'][0]['id']);
+		}
+		
+
+		$this->load->lview('courses/index', $data);
 	}
 
 	public function enroll()
 	{
 		$data = [];
 
+		$user = $this->Auth->UserID();
+		$data['error'] = null;
+		$data['items'] = $this->CoursesGroupsModel->ListSubscribe($user);
+
 		if(CrValidKey())
 		{
 			$subscr_data = [
-				'user' => $this->Auth->UserID(),
+				'user' => $user,
 				'group' => $this->input->post('group', true),
-				'price_month' => 1,
-				'price_full' => 1
+				'price_period' => $this->input->post('price', true)
 			];
 
-			if($id = $this->CoursesSubscriptionModel->Add($subscr_data))
+			if($this->SubscriptionModel->Group($subscr_data['user'], $subscr_data['group'], $subscr_data['price_period']))
 			{
-				header('Location: ../');
+				header('Location: ./');
 			}
+
+			$data['error'] = $this->SubscriptionModel->LAST_ERROR;
 		}
 
 		$data['csrf'] = CrGetKey();
-		$data['error'] = $this->CoursesSubscriptionModel->LAST_ERROR;
-
-		$data['items'] = $this->CoursesGroupsModel->ListSubscribe();
+		//debug($data['items']); die();
 
 		$this->load->lview('courses/enroll', $data);
 	}

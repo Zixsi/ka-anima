@@ -104,7 +104,7 @@ $config['courses_subscription'] = [
 		'rules' => 'required|integer'
 	],
 	[
-		'field' => 'group',
+		'field' => 'course_group',
 		'label' => 'Group',
 		'rules' => 'required|integer'
 	],
