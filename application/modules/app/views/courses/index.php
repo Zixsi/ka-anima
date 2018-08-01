@@ -3,10 +3,11 @@
 		<div class="panel">
 			<div class="panel-body">
 				<h4>Курсы</h4>
-				<table class="table">
+				<table class="table table-courses">
+					<?$i = 0;?>
 					<?foreach($courses as $course):?>
 						<tr>
-							<td data-course="<?=$course['id']?>"><?=$course['name']?> (<?=$course['ts_f']?>)</td>
+							<td class="row-course <?=(($i++) == 0)?'active':''?>" data-id="<?=$course['id']?>"><?=$course['name']?> (<?=$course['ts_f']?>)</td>
 						</tr>
 					<?endforeach;?>
 				</table>
@@ -15,7 +16,7 @@
 		<div class="panel">
 			<div class="panel-body">
 				<h4>Лекции</h4>
-				<table class="table">
+				<table class="table lectures-block">
 					<?foreach($course_lectures as $lecture):?>
 						<tr>
 							<td>

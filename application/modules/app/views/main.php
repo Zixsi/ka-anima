@@ -124,5 +124,6 @@
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/holder.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js"></script>
 </body>
 </html>

@@ -15,3 +15,11 @@
 .course-list .type-info, .course-list .price-info {font-size: 12px;}
 .course-list .price-value {font-size: 24px; color: #00AAFF;}
 .course-list .fancy-radio input[type="radio"] + span i:after {background-color: #00AAFF;}
+
+
+.lectures-block {}
+.lectures-block .lnr-eye {font-size: 36px;}
+.lectures-block .lnr-sync {font-size: 20px; cursor: pointer;}
+.table-courses {}
+.table-courses .row-course {cursor: pointer;}
+.table-courses .row-course.active {background-color: #dff0d8; cursor: auto;}
