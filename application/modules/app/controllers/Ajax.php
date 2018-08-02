@@ -28,7 +28,8 @@ class Ajax extends APP_Controller
 				{
 					$data['items'][] = [
 						'id' => $val['id'],
-						'name' => $val['name']
+						'name' => $val['name'],
+						'video' => isset($val['video'])?$val['video'].'?rel=0&amp;showinfo=0':''
 					];
 				}
 			}

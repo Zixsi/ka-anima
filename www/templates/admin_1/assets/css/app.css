@@ -18,6 +18,7 @@
 
 
 .lectures-block {}
+.lectures-block tr {cursor: pointer;}
 .lectures-block .lnr-eye {font-size: 36px;}
 .lectures-block .lnr-sync {font-size: 20px; cursor: pointer;}
 .table-courses {}

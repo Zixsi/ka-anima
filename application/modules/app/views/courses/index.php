@@ -18,7 +18,7 @@
 				<h4>Лекции</h4>
 				<table class="table lectures-block">
 					<?foreach($course_lectures as $lecture):?>
-						<tr>
+						<tr data-video="<?=$lecture['video']?>">
 							<td>
 								<span class="lnr lnr-eye"></span>
 							</td>
@@ -46,7 +46,7 @@
 			<div class="panel-body">
 				<h4>Лекция</h4>
 				<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
-
+					<iframe width="100%" height="100%" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 				</div>
 			</div>
 		</div>
