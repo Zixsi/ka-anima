@@ -14,13 +14,12 @@ class Courses extends APP_Controller
 		$data = [];
 
 		$user = $this->Auth->UserID();
-		$data['courses'] = $this->SubscriptionModel->CoursesList($user);
+		$data['courses'] = $this->SubscriptionModel->coursesList($user);
 		$data['course_lectures'] = [];
 		if(count($data['courses']))
 		{
-			$data['course_lectures'] = $this->LecturesModel->GetByCourse($data['courses'][0]['id']);
+			$data['course_lectures'] = $this->LecturesModel->getAvailableForGroup($data['courses'][0]['course_group']);
 		}
-		
 
 		$this->load->lview('courses/index', $data);
 	}
@@ -31,7 +30,7 @@ class Courses extends APP_Controller
 
 		$user = $this->Auth->UserID();
 		$data['error'] = null;
-		$data['items'] = $this->CoursesGroupsModel->ListSubscribe($user);
+		$data['items'] = $this->CoursesGroupsModel->listSubscribe($user);
 
 		if(CrValidKey())
 		{
@@ -41,7 +40,7 @@ class Courses extends APP_Controller
 				'price_period' => $this->input->post('price', true)
 			];
 
-			if($this->SubscriptionModel->Group($subscr_data['user'], $subscr_data['group'], $subscr_data['price_period']))
+			if($this->SubscriptionModel->group($subscr_data['user'], $subscr_data['group'], $subscr_data['price_period']))
 			{
 				header('Location: ./');
 			}

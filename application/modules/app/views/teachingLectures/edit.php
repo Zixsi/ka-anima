@@ -24,12 +24,16 @@
 					<input type="text" name="sort" id="fsort" class="form-control" placeholder="Сортировка" value="<?=set_value('sort', $item['sort'], true)?>">
 				</div>
 				<div class="form-group">
-					<label for="fperiod">Название</label>
+					<label for="fname">Название</label>
 					<input type="text" name="name" id="fname" class="form-control" placeholder="Название" value="<?=set_value('name', $item['name'], true)?>">
 				</div>
 				<div class="form-group">
-					<label for="fperiod">Описание</label>
+					<label for="fdescription">Описание</label>
 					<textarea name="description" id="fdescription" class="form-control" placeholder="Описание"><?=set_value('description', $item['description'], true)?></textarea>
+				</div>
+				<div class="form-group">
+					<label for="ftask">Задание</label>
+					<textarea name="task" id="ftask" class="form-control" placeholder="Задание"><?=set_value('task', $item['task'], true)?></textarea>
 				</div>
 				<div class="form-group">
 					<label for="fvideo">Видео</label>

@@ -11,6 +11,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<th width="100">Id</th>
 					<th width="100">Статус</th>
 					<th>Название</th>
 					<th class="text-right">Действие</th>
@@ -20,6 +21,7 @@
 				<?if(is_array($items)):?>
 					<?foreach($items as $item):?>
 						<tr>
+							<td><?=$item['id']?></td>
 							<td>
 								<?if($item['active']):?>
 									<span class="label label-success">ENABLED</span>

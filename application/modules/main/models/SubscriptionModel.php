@@ -3,13 +3,115 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SubscriptionModel extends APP_Model
 {
+	private const TABLE = 'subscription';
+	private const TABLE_COURSES = 'courses';
+	private const TABLE_COURSES_GROUPS = 'courses_groups';
+	private const TABLE_FIELDS = ['user', 'type', 'service', 'ts_end', 'price_month', 'price_full'];
+	private const TYPES = [
+		0, // курсы
+		1, // резерв
+		2, // резерв
+		3, // резерв
+		4, // резерв
+		5, // резерв
+		6, // резерв
+		7 // резерв
+	];
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesSubscriptionModel', 'main/CoursesGroupsModel']);
+		$this->load->model(['main/CoursesGroupsModel']);
 	}
 
-	public function Group($user, $group, $price_period = null)
+	public function Add($data = [])
+	{
+		try
+		{
+			$this->_CheckFields($data);
+
+			if($this->db->insert(self::TABLE, $data))
+			{
+				return $this->db->insert_id();
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	public function Update($id, $data = [])
+	{
+		try
+		{
+			$this->_CheckFields($data);
+
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $data))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	public function Delete($id)
+	{
+		return false;
+	}
+
+	public function GetByID($id)
+	{
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
+		if($row = $res->row_array())
+		{
+			return $row;
+		}
+
+		return false;
+	}
+
+
+
+	public function CheckSubscibe($user, $service, $type = 0)
+	{
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE user = ? AND service = ? AND type = ?', [$user, $service, $type]);
+		if($res->row())
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	public function List($filter = [], $order = [], $select = [])
+	{
+		$select = count($select)?implode(', ', $select):'*';
+		$this->db->select($select);
+	
+		count($filter)?$this->db->where($filter):$this->db->where('id >', 0);
+		foreach($order as $key => $val)
+		{
+			$this->db->order_by($key, $val);
+		}
+
+		if($res = $this->db->get(self::TABLE))
+		{
+			return $res->result_array();
+		}
+
+		return false;
+	}
+
+	public function group($user, $group, $price_period = null)
 	{
 		try
 		{	
@@ -32,23 +134,25 @@ class SubscriptionModel extends APP_Model
 				throw new Exception('Insufficient funds', 1);
 			}
 
-			if($this->CoursesSubscriptionModel->CheckSubscibe($user, $group))
+			if($this->CheckSubscibe($user, $group))
 			{
 				throw new Exception('Already subscribed', 1);
 			}
 
 			$data = [
 				'user' => $user,
-				'course_group' => $group,
+				'type' => 0,
+				'service' => $group,
+				'ts_end' => 0,
 				'price_month' => $item['price_month'],
 				'price_full' => $item['price_full']
 			];
 
 			$this->db->trans_begin();
 
-			if(($this->CoursesSubscriptionModel->Add($data)) == false)
+			if(($this->Add($data)) == false)
 			{
-				throw new Exception($this->CoursesSubscriptionModel->LAST_ERROR, 1);
+				throw new Exception($this->LAST_ERROR, 1);
 			}
 
 			$fields = [
@@ -87,7 +191,7 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	public function CoursesList($user)
+	public function coursesList($user)
 	{
 		try
 		{
@@ -96,7 +200,19 @@ class SubscriptionModel extends APP_Model
 				throw new Exception('User not found', 1);
 			}
 
-			$sql = 'SELECT c.id, c.name, cg.ts, cg.id as course_group FROM courses_subscription as cs LEFT JOIN courses_groups as cg ON(cs.course_group = cg.id) LEFT JOIN courses as c ON(cg.course = c.id) WHERE cs.user = ? ORDER BY cg.ts DESC';
+			$sql = 'SELECT 
+						c.id, c.name, cg.ts, cg.id as course_group 
+					FROM 
+						'.self::TABLE.' as s 
+					LEFT JOIN 
+						'.self::TABLE_COURSES_GROUPS.' as cg ON(s.service = cg.id AND s.type = 0) 
+					LEFT JOIN 
+						'.self::TABLE_COURSES.' as c ON(cg.course_id = c.id) 
+					WHERE 
+						s.user = ? 
+					ORDER BY 
+						cg.ts DESC';
+
 			$res = $this->db->query($sql, [intval($user)]);
 			if($res = $res->result_array())
 			{
@@ -114,5 +230,24 @@ class SubscriptionModel extends APP_Model
 		}
 
 		return false;
+	}
+
+	private function _CheckFields(&$data = [])
+	{
+		$this->form_validation->set_data($data);
+		if($this->form_validation->run('subscription') == FALSE)
+		{
+			throw new Exception($this->form_validation->error_string(), 1);
+		}
+
+		foreach($data as $key => $val)
+		{
+			if(in_array($key, self::TABLE_FIELDS) == false)
+			{
+				unset($data[$key]);
+			}
+		}
+		
+		return true;
 	}
 }

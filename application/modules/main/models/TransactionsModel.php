@@ -91,13 +91,13 @@ class TransactionsModel extends APP_Model
 			$res = $this->db->query('SELECT SUM(amount) as amount, type FROM '.self::TABLE.' WHERE user = ? GROUP BY type', [intval($id)]);
 			if($rows = $res->result_array())
 			{
-				$data = ['IN' => 0, 'OUT' => 0];
+				$data = ['0' => 0, '1' => 0];
 				foreach($rows as $val)
 				{
 					$data[$val['type']] = $val['amount'];
 				}
 
-				return ($data['IN'] - $data['OUT']);
+				return ($data['0'] - $data['1']);
 			}
 		}
 		catch(Exception $e)

@@ -14,8 +14,7 @@ class TeachingLectures extends APP_Controller
 		$data = [];
 		$this->checkAccess($course);
 
-		$data['items'] = $this->LecturesModel->List(['course' => $course], ['sort' => 'ASC', 'id' => 'ASC']);
-		//Debug($data); die();
+		$data['items'] = $this->LecturesModel->getByCourse($course);
 		
 		$this->load->lview('teachingLectures/index', $data);
 	}
@@ -53,7 +52,7 @@ class TeachingLectures extends APP_Controller
 			header('Location: ../');
 		}
 
-		if($data['item']['course'] !== $course)
+		if($data['item']['course_id'] !== $course)
 		{
 			header('Location: ../');
 		}

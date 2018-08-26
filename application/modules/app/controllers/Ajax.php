@@ -22,7 +22,7 @@ class Ajax extends APP_Controller
 		if($id > 0)
 		{
 			$this->load->model(['main/LecturesModel']);
-			if($res = $this->LecturesModel->GetByCourse($id))
+			if($res = $this->LecturesModel->getByCourse($id))
 			{
 				foreach($res as $val)
 				{

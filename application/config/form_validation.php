@@ -40,11 +40,6 @@ $config['course'] = [
 		'rules' => 'required'
 	],
 	[
-		'field' => 'period',
-		'label' => 'Period',
-		'rules' => 'required|integer'
-	],
-	[
 		'field' => 'price_month',
 		'label' => 'Price month',
 		'rules' => 'required|numeric|greater_than[0]'
@@ -63,7 +58,7 @@ $config['lectures'] = [
 		'rules' => 'required|min_length[3]'
 	],
 	[
-		'field' => 'course',
+		'field' => 'course_id',
 		'label' => 'Course',
 		'rules' => 'required|integer'
 	],
@@ -97,15 +92,15 @@ $config['transaction'] = [
 	]
 ];
 
-$config['courses_subscription'] = [
+$config['subscription'] = [
 	[
 		'field' => 'user',
 		'label' => 'User',
 		'rules' => 'required|integer'
 	],
 	[
-		'field' => 'course_group',
-		'label' => 'Group',
+		'field' => 'service',
+		'label' => 'Service',
 		'rules' => 'required|integer'
 	],
 	[
@@ -127,7 +122,7 @@ $config['courses_groups'] = [
 		'rules' => 'required|min_length[3]'
 	],
 	[
-		'field' => 'course',
+		'field' => 'course_id',
 		'label' => 'Course',
 		'rules' => 'required|integer'
 	],

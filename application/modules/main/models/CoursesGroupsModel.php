@@ -5,7 +5,10 @@ class CoursesGroupsModel extends APP_Model
 {
 	private const TABLE = 'courses_groups';
 	private const TABLE_COURSES = 'courses';
-	private const TABLE_FIELDS = ['code', 'course', 'ts'];
+	private const TABLE_LECTURES = 'lectures';
+	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
+	private const TABLE_SUBSCRIPTION = 'subscription';
+	private const TABLE_FIELDS = ['code', 'course_id', 'ts', 'ts_end'];
 
 	public function __construct()
 	{
@@ -58,7 +61,7 @@ class CoursesGroupsModel extends APP_Model
 
 	public function GetByID($id)
 	{
-		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course) WHERE g.id = ?', [$id]);
+		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.id = ?', [$id]);
 		if($row = $res->row_array())
 		{
 			return $row;
@@ -69,7 +72,7 @@ class CoursesGroupsModel extends APP_Model
 
 	public function GetByCode($code)
 	{
-		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course) WHERE g.code = ?', [$id]);
+		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.code = ?', [$id]);
 		if($row = $res->row_array())
 		{
 			return $row;
@@ -97,25 +100,62 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function ListSubscribe($user)
+	// Получить группы в которые не мтартовали и доступны еще не все лекции 
+	public function getActiveGroups()
 	{
-		$ts = time() - (3600 * 24 * 30);
+		$sql = 'SELECT 
+					g.id, g.course_id, l1.cnt as cnt_all, l2.cnt as cnt_available 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l1 ON(l1.course_id = g.course_id) 
+				LEFT JOIN 
+					(SELECT group_id, count(lecture_id) as cnt FROM '.self::TABLE_LECTURES_GROUPS.' GROUP BY group_id) as l2 ON(l2.group_id = g.id)
+				WHERE 
+					g.ts < ?';
+
+		$res = $this->db->query($sql, [date('Y-m-d 00:00:00')]);
+		if($res = $res->result_array())
+		{
+			$result = [];
+			foreach($res as $val) 
+			{
+				$val = array_map(function($v){return intval($v);}, $val);
+				if($val['cnt_available'] < $val['cnt_all'])
+				{
+					$result[] = $val;
+				}					
+			}
+
+			return  $result;
+		}
+
+		return false;
+	}
+
+	public function listSubscribe($user)
+	{
+		//$ts = time() - (3600 * 24 * 30);
+		$ts = time();
 		$sql = 'SELECT 
 					c.id, c.name, c.description, c.price_month, 
 					c.price_full, g.id as group_id, g.code, g.ts 
 				FROM 
-					courses as c LEFT JOIN courses_groups as g ON(c.id = g.course) 
+					'.self::TABLE_COURSES.' as c 
 				LEFT JOIN 
-					courses_subscription as cs ON(g.id = cs.course_group AND cs.user = ?) 
+					'.self::TABLE.' as g ON(c.id = g.course_id) 
+				LEFT JOIN 
+					'.self::TABLE_SUBSCRIPTION.' as s ON(g.id = s.service AND s.type = 0 AND s.user = ?) 
 				WHERE 
 					c.active = 1 AND 
 					g.id IS NOT NULL AND 
 					g.ts >= ? AND 
-					cs.user IS NULL 
+					s.user IS NULL 
 				ORDER BY 
 					c.id ASC, g.ts ASC';
 
 		$res = $this->db->query($sql, [intval($user), date('Y-m-d 00:00:00', $ts)]);
+
 		if($res = $res->result_array())
 		{
 			$result = [];
@@ -149,16 +189,26 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	// Выбрать курсы группы для которых еще не созданы
+	// Выбрать курсы, группы для которых еще не созданы
 	public function GetListNeedCreate()
 	{
-		//$sql = 'SELECT c.id, g.id as group_id, g.code, g.ts  FROM courses as c LEFT JOIN (SELECT g1.* FROM courses_groups as g1 LEFT JOIN courses_groups AS g2 ON g1.course = g2.course AND g1.ts < g2.ts WHERE g2.course IS NULL) as g ON(c.id = g.course) WHERE c.active = 1 AND (g.id IS NULL OR g.ts < ???) ORDER BY c.id ASC';
-		//print_r($sql);
-		/*$res = $this->db->query($sql);
-		if($res = $res->result_array())
+		$sql = 'SELECT 
+					c.id, c.active, g.id as gid, g.ts  
+				FROM 
+					'.self::TABLE_COURSES.' as c 
+				LEFT JOIN 
+					'.self::TABLE.' as g ON(c.id = g.course_id AND g.ts > ?) 
+				WHERE 
+					c.active = 1 AND 
+					g.id IS NULL 
+				ORDER BY 
+					c.id ASC';
+
+		$res = $this->db->query($sql, [date('Y-m-01 00:00:00')]);
+		if($result = $res->result_array())
 		{
-			return $res;
-		}*/
+			return $result;
+		}
 
 		return false;
 	}

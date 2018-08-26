@@ -11,7 +11,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>#</th>
+					<th>Id</th>
 					<th>Статус</th>
 					<th>Название</th>
 					<th>Сортировка</th>

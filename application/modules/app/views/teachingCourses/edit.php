@@ -29,15 +29,6 @@
 					<textarea name="description" id="fdescription" class="form-control" placeholder="Описание"><?=set_value('description', $item['description'], true)?></textarea>
 				</div>
 				<div class="form-group">
-					<label for="fperiod">Периодичность набора в группу каждые</label>
-					<select name="period" id="fperiod" class="form-control">
-						<option value="3" <?=set_select('period', 3, ($item['period'] == 3))?> >3 месяца</option>
-						<option value="6" <?=set_select('period', 6, ($item['period'] == 6))?> >6 месяцев</option>
-						<option value="9" <?=set_select('period', 9, ($item['period'] == 9))?> >9 месяцев</option>
-						<option value="12"<?=set_select('period', 12, ($item['period'] == 12))?> >12 месяцев</option>
-					</select>
-				</div>
-				<div class="form-group">
 					<div class="row">
 						<div class="col-xs-6">
 							<label for="fprice_month">Стоимость первого месяца</label>

@@ -22,7 +22,7 @@
 		<?foreach($items as $item):?>
 			<tr>
 				<td><?=$item['ts']?></td>
-				<td><span class="label label-<?=($item['type'] == 'IN')?'success':'warning'?>"><?=$item['type']?></span></td>
+				<td><span class="label label-<?=($item['type'] == 0)?'success':'warning'?>"><?=($item['type'] == 0)?'IN':'OUT'?></span></td>
 				<td><?=$item['description']?></td>
 				<td class="text-right"><?=number_format($item['amount'], 2, '.', ' ')?> $</td>
 			</tr>
