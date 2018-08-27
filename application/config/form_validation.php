@@ -83,7 +83,7 @@ $config['transaction'] = [
 	[
 		'field' => 'type',
 		'label' => 'Type',
-		'rules' => 'required|in_list[IN,OUT]'
+		'rules' => 'required|in_list[0,1]'
 	],
 	[
 		'field' => 'amount',

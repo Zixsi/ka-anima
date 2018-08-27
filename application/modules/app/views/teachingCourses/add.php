@@ -12,11 +12,21 @@
 			<?=ShowError($error);?>
 			<form action="./" method="POST">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+				<?/*
 				<div class="form-group">
 					<label class="fancy-checkbox">
 						<input type="checkbox" name="active" id="factive" class="form-control" value="1" <?=set_checkbox('active', 1)?> >
 						<span>Доступен?</span>
 					</label>
+				</div>*/?>
+				<div class="form-group">
+					<label for="ftype">Тип</label>
+					<select name="type" id="ftype" class="form-control">
+						<option selected="true">- - -</option>
+						<?foreach($course_types as $key => $val):?>
+							<option value="<?=$key?>" <?=set_select('type', $key)?> ><?=$val?></option>
+						<?endforeach;?>
+					</select>
 				</div>
 				<div class="form-group">
 					<label for="fperiod">Название</label>

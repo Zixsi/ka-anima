@@ -14,6 +14,7 @@ class AuthModel extends APP_Model
 		try
 		{
 			$data = $this->input->post(null, true);
+			$this->form_validation->reset_validation();
 			$this->form_validation->set_data($data);
 
 			if($this->form_validation->run('signin') == FALSE)
@@ -64,6 +65,7 @@ class AuthModel extends APP_Model
 		try
 		{
 			$data = $this->input->post(null, true);
+			$this->form_validation->reset_validation();
 			$this->form_validation->set_data($data);
 
 			if($this->form_validation->run('signup') == FALSE)
@@ -118,7 +120,7 @@ class AuthModel extends APP_Model
 		return $this->session->userdata('USER');
 	}
 
-	public function UserID()
+	public function userID()
 	{
 		return $this->User()['id'];
 	}

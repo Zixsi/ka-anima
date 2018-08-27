@@ -6,7 +6,7 @@ class SubscriptionModel extends APP_Model
 	private const TABLE = 'subscription';
 	private const TABLE_COURSES = 'courses';
 	private const TABLE_COURSES_GROUPS = 'courses_groups';
-	private const TABLE_FIELDS = ['user', 'type', 'service', 'ts_end', 'price_month', 'price_full'];
+	private const TABLE_FIELDS = ['user', 'type', 'service', 'description', 'ts_start', 'ts_end', 'price_month', 'price_full'];
 	private const TYPES = [
 		0, // курсы
 		1, // резерв
@@ -120,7 +120,7 @@ class SubscriptionModel extends APP_Model
 				throw new Exception('User not found', 1);
 			}
 
-			if(($item = $this->CoursesGroupsModel->GetByID($group)) == false)
+			if(($item = $this->CoursesGroupsModel->getByID($group)) == false)
 			{
 				throw new Exception('Group not found', 1);
 			}
@@ -139,11 +139,20 @@ class SubscriptionModel extends APP_Model
 				throw new Exception('Already subscribed', 1);
 			}
 
+			//strtotime()
+			$next_month = new DateTime($item['ts']);
+			$next_month->modify('next month');
+			$ts_next_month = $next_month->format('Y-m-d 00:00:00');
+
+			$ts_end = ($price_period == 'full')?$item['ts_end']:$ts_next_month; // $item['ts']
+
 			$data = [
-				'user' => $user,
+				'user' => intval($user),
 				'type' => 0,
-				'service' => $group,
-				'ts_end' => 0,
+				'service' => intval($group),
+				'description' => $item['name'].' ('.date('F Y', strtotime($item['ts'])).')',
+				'ts_start' => $item['ts'],
+				'ts_end' => $ts_end,
 				'price_month' => $item['price_month'],
 				'price_full' => $item['price_full']
 			];
@@ -157,9 +166,9 @@ class SubscriptionModel extends APP_Model
 
 			$fields = [
 				'user' => $user,
-				'type' => 'OUT',
+				'type' => '1',
 				'amount' => $item['price_'.$price_period],
-				'description' => 'Subscibe '.$item['code'],
+				'description' => $data['description'],
 				'service' => 'group',
 				'service_id' => $group
 			];
@@ -201,7 +210,7 @@ class SubscriptionModel extends APP_Model
 			}
 
 			$sql = 'SELECT 
-						c.id, c.name, cg.ts, cg.id as course_group 
+						c.id, c.name, c.type, cg.ts, cg.id as course_group 
 					FROM 
 						'.self::TABLE.' as s 
 					LEFT JOIN 
@@ -211,7 +220,7 @@ class SubscriptionModel extends APP_Model
 					WHERE 
 						s.user = ? 
 					ORDER BY 
-						cg.ts DESC';
+						cg.id ASC';
 
 			$res = $this->db->query($sql, [intval($user)]);
 			if($res = $res->result_array())
@@ -232,8 +241,32 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
+	// Подписки пользователя
+	public function byUser($user)
+	{
+		try
+		{
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
+			$res = $this->db->query($sql, [intval($user)]);
+			if($res = $res->result_array())
+			{
+				$result = [];
+				$result = $res;
+
+				return $result;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
 	private function _CheckFields(&$data = [])
 	{
+		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
 		if($this->form_validation->run('subscription') == FALSE)
 		{

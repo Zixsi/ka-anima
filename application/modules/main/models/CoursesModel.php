@@ -4,14 +4,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CoursesModel extends APP_Model
 {
 	private const TABLE = 'courses';
-	private const TABLE_FIELDS = ['name', 'description', 'period', 'price_month', 'price_full', 'author', 'ts', 'active'];
+	private const TABLE_FIELDS = ['name', 'description', 'type', 'period', 'price_month', 'price_full', 'author', 'ts', 'active'];
+	public const TYPES = [
+		0 => 'Самостоятельное обучение',
+		1 => 'Обучение с инструктором'
+	];
 
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
-	public function Add($data = [])
+	public function add($data = [])
 	{
 		try
 		{
@@ -30,7 +34,7 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	public function Update($id, $data = [])
+	public function update($id, $data = [])
 	{
 		try
 		{
@@ -50,12 +54,12 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	public function Delete($id)
+	public function delete($id)
 	{
 		return false;
 	}
 
-	public function GetByID($id)
+	public function getByID($id)
 	{
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
 		if($row = $res->row_array())
@@ -66,7 +70,7 @@ class CoursesModel extends APP_Model
 		return false;
 	}
 
-	public function List($filter = [], $order = [], $select = [])
+	public function list($filter = [], $order = [], $select = [])
 	{
 		$select = count($select)?implode(', ', $select):'*';
 		$this->db->select($select);
@@ -87,6 +91,7 @@ class CoursesModel extends APP_Model
 
 	private function _CheckFields(&$data = [])
 	{
+		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
 		if($this->form_validation->run('course') == FALSE)
 		{

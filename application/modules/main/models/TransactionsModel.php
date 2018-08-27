@@ -5,7 +5,10 @@ class TransactionsModel extends APP_Model
 {
 	private const TABLE = 'transactions';
 	private const TABLE_FIELDS = ['user', 'type', 'amount', 'description', 'service', 'service_id'];
-	private const TYPES = ['IN', 'OUT'];
+	private const TYPES = [
+		0, // IN
+		1 // OUT
+	];
 
 	public function Add($data = [])
 	{
@@ -20,6 +23,7 @@ class TransactionsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
+			var_dump($e->getMessage().'###'); die();
 			$this->LAST_ERROR = $e->getMessage();
 		}
 
@@ -110,6 +114,7 @@ class TransactionsModel extends APP_Model
 
 	private function _CheckFields($data = [])
 	{
+		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
 		if($this->form_validation->run('transaction') == FALSE)
 		{

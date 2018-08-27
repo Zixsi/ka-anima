@@ -12,7 +12,7 @@ class Pay extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$user_id = $this->Auth->UserID();
+		$user_id = $this->Auth->userID();
 
 		if(CrValidKey())
 		{

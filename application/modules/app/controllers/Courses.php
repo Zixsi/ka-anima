@@ -6,19 +6,26 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesGroupsModel', 'main/LecturesModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel']);
 	}
 	
 	public function index()
 	{
 		$data = [];
 
-		$user = $this->Auth->UserID();
+		$user = $this->Auth->userID();
 		$data['courses'] = $this->SubscriptionModel->coursesList($user);
 		$data['course_lectures'] = [];
-		if(count($data['courses']))
+		if($data['courses'])
 		{
-			$data['course_lectures'] = $this->LecturesModel->getAvailableForGroup($data['courses'][0]['course_group']);
+			if($data['course_lectures'] = $this->LecturesModel->getAvailableForGroup($data['courses'][0]['course_group']))
+			{
+				foreach($data['course_lectures'] as &$val)
+				{
+					$video = $this->LecturesModel->lectureOrignVideo($val['id']);
+					$val['video'] = isset($video['mp4'])?$video['mp4']:'';
+				}
+			}
 		}
 
 		$this->load->lview('courses/index', $data);
@@ -28,9 +35,10 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 
-		$user = $this->Auth->UserID();
+		$user = $this->Auth->userID();
 		$data['error'] = null;
 		$data['items'] = $this->CoursesGroupsModel->listSubscribe($user);
+		$data['course_types'] = $this->CoursesModel::TYPES;
 
 		if(CrValidKey())
 		{

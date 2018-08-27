@@ -25,8 +25,13 @@
 						</div>
 						<div class="col-xs-12">
 							<div class="text-center">
-								<span class="type-title">Обучение с инструктором</span>
-								<span class="type-info">(с онлайн встречами и проверкой ваших работ)</span>
+
+								<span class="type-title"><?=$course_types[$item['type']]?></span>
+								<?if($item['type'] == 0):?>
+									<span class="type-info">(без онлайн встреч и без проверки ваших работ)</span>
+								<?else:?>
+									<span class="type-info">(с онлайн встречами и проверкой ваших работ)</span>
+								<?endif;?>
 							</div>
 							<div class="tab-content">
 								<?$i = 0;?>

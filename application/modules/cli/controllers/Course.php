@@ -57,11 +57,12 @@ class Course extends APP_Controller
 				$trigger = false;
 				$lectures = $this->LecturesModel->listAvailableForAddToGroup($group['course_id'], $group['cnt_available']);
 
-				if($group['cnt_all'] == 0)
+				// Добавить вводную лекцию в список
+				/*if($group['cnt_all'] == 0)
 				{
 					$group['cnt_all']++;
 					$this->LecturesModel->addLectureToGroup($group['id'], 6);
-				}
+				}*/
 
 				foreach($lectures as $val)
 				{
@@ -91,4 +92,38 @@ class Course extends APP_Controller
 		}
 	}
 
+	// Обновление ссылок на видео
+	// php www/index.php cli course updateLecturesVideoUrl
+	public function updateLecturesVideoUrl()
+	{
+		var_dump('Update Lectures Video Url');
+		$this->load->library(['youtube']);
+
+		if($items = $this->LecturesModel->listLecturesVideoForUpdate(300))
+		{
+			foreach($items as $item)
+			{
+				$code  = $this->youtube->extractVideoId($item['video']);
+				$video_array = $this->youtube->getVideo($code);
+				foreach($video_array as $key => $val)
+				{
+					$video = current($val);
+					$this->LecturesModel->updateLectureVideo($item['id'], $video , $key);
+				}
+			}
+		}
+	}
+
+	// php www/index.php cli course test
+	public function test()
+	{
+		/*var_dump('Test');
+		$this->load->library(['youtube']);
+
+		$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=x8XXOvIEVco');
+		var_dump($code);
+		$video_array = $this->youtube->getInfo($code);
+		//$video_array = $this->youtube->getVideo($code);
+		var_dump($video_array);*/
+	}
 }

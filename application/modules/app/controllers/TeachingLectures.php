@@ -27,8 +27,8 @@ class TeachingLectures extends APP_Controller
 		if(CrValidKey())
 		{
 			$form_data = $this->input->post(null, true);
-			$form_data['course'] = $course;
-			if($id = $this->LecturesModel->Add($form_data))
+			$form_data['course_id'] = $course;
+			if($id = $this->LecturesModel->add($form_data))
 			{
 				header('Location: ../');
 			}
@@ -47,7 +47,7 @@ class TeachingLectures extends APP_Controller
 		
 		$id = intval($id);
 
-		if(($data['item'] = $this->LecturesModel->GetByID($id)) == false)
+		if(($data['item'] = $this->LecturesModel->getByID($id)) == false)
 		{
 			header('Location: ../');
 		}
@@ -60,8 +60,8 @@ class TeachingLectures extends APP_Controller
 		if(CrValidKey())
 		{
 			$form_data = $this->input->post(null, true);
-			$form_data['course'] = $course;
-			if($id = $this->LecturesModel->Update($id, $form_data))
+			$form_data['course_id'] = $course;
+			if($id = $this->LecturesModel->update($id, $form_data))
 			{
 				$data['item'] += $form_data;
 				SetFlashMessage('success', 'Success');
@@ -81,10 +81,10 @@ class TeachingLectures extends APP_Controller
 			if($id == 0)
 				throw new Exception("Empty course id", 1);
 
-			if(($item = $this->CoursesModel->GetByID($id)) == false)
+			if(($item = $this->CoursesModel->getByID($id)) == false)
 				throw new Exception("Course not found", 1);
 
-			if($item['author'] !== $this->Auth->UserID())
+			if($item['author'] !== $this->Auth->userID())
 				throw new Exception("Access denied", 1);
 		}
 		catch(Exception $e)

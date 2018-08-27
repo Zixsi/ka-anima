@@ -12,7 +12,7 @@ class TeachingCourses extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->CoursesModel->List(['author' => $this->Auth->UserID()]);
+		$data['items'] = $this->CoursesModel->list(['author' => $this->Auth->userID()]);
 		//Debug($data); die();
 
 		$this->load->lview('teachingCourses/index', $data);
@@ -21,13 +21,14 @@ class TeachingCourses extends APP_Controller
 	public function add()
 	{
 		$data = [];
+		$data['course_types'] = $this->CoursesModel::TYPES;
 		
 		if(CrValidKey())
 		{
 			$form_data = $this->input->post(null, true);
-			$form_data['author'] = $this->Auth->UserID();
+			$form_data['author'] = $this->Auth->userID();
 
-			if($id = $this->CoursesModel->Add($form_data))
+			if($id = $this->CoursesModel->add($form_data))
 			{
 				header('Location: ../');
 			}
@@ -42,14 +43,15 @@ class TeachingCourses extends APP_Controller
 	public function edit($id = 0)
 	{
 		$data = [];
+		$data['course_types'] = $this->CoursesModel::TYPES;
 		
 		$id = intval($id);
-		if(($data['item'] = $this->CoursesModel->GetByID($id)) == false)
+		if(($data['item'] = $this->CoursesModel->getByID($id)) == false)
 		{
 			header('Location: ../');
 		}
 
-		if($data['item']['author'] !== $this->Auth->UserID())
+		if($data['item']['author'] !== $this->Auth->userID())
 		{
 			header('Location: ../');
 		}
@@ -58,7 +60,7 @@ class TeachingCourses extends APP_Controller
 		{
 			$form_data = $this->input->post(null, true);
 
-			if($id = $this->CoursesModel->Update($id, $form_data))
+			if($id = $this->CoursesModel->update($id, $form_data))
 			{
 				$data['item'] += $form_data;
 				SetFlashMessage('success', 'Success');

@@ -19,17 +19,21 @@ class Ajax extends APP_Controller
 		$data['items'] =  [];
 
 		$id = intval($this->input->post('id', true));
+		//$id = intval($this->input->get('id', true));
 		if($id > 0)
 		{
 			$this->load->model(['main/LecturesModel']);
-			if($res = $this->LecturesModel->getByCourse($id))
+			if($res = $this->LecturesModel->getAvailableForGroup($id))
 			{
+				//debug($res);
 				foreach($res as $val)
 				{
+					$video = $this->LecturesModel->lectureOrignVideo($val['id']);
 					$data['items'][] = [
 						'id' => $val['id'],
 						'name' => $val['name'],
-						'video' => isset($val['video'])?$val['video'].'?rel=0&amp;showinfo=0':''
+						'video' => isset($video['mp4'])?$video['mp4']:'',
+						'task' => $val['task']
 					];
 				}
 			}

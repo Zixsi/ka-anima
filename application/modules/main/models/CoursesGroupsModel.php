@@ -59,9 +59,9 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function GetByID($id)
+	public function getByID($id)
 	{
-		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.id = ?', [$id]);
+		$res = $this->db->query('SELECT g.*, c.name, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.id = ?', [$id]);
 		if($row = $res->row_array())
 		{
 			return $row;
@@ -138,7 +138,7 @@ class CoursesGroupsModel extends APP_Model
 		//$ts = time() - (3600 * 24 * 30);
 		$ts = time();
 		$sql = 'SELECT 
-					c.id, c.name, c.description, c.price_month, 
+					c.id, c.name, c.type, c.description, c.price_month, 
 					c.price_full, g.id as group_id, g.code, g.ts 
 				FROM 
 					'.self::TABLE_COURSES.' as c 
@@ -167,6 +167,7 @@ class CoursesGroupsModel extends APP_Model
 					$result[$val['id']] = [
 						'id' => $val['id'],
 						'name' => $val['name'],
+						'type' => $val['type'],
 						'description' => $val['description'],
 						'price' => [
 							'month' => $val['price_month'],
@@ -215,6 +216,7 @@ class CoursesGroupsModel extends APP_Model
 
 	private function _CheckFields(&$data = [])
 	{
+		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
 		if($this->form_validation->run('courses_groups') == FALSE)
 		{

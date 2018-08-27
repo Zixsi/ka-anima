@@ -21,6 +21,15 @@
 					</label>
 				</div>
 				<div class="form-group">
+					<label for="ftype">Тип</label>
+					<select name="type" id="ftype" class="form-control">
+						<option selected="true">- - -</option>
+						<?foreach($course_types as $key => $val):?>
+							<option value="<?=$key?>" <?=set_select('type', $key, ($key == intval($item['type'])))?> ><?=$val?></option>
+						<?endforeach;?>
+					</select>
+				</div>
+				<div class="form-group">
 					<label for="fperiod">Название</label>
 					<input type="text" name="name" id="fname" class="form-control" placeholder="Название" value="<?=set_value('name', $item['name'], true)?>">
 				</div>
