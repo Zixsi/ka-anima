@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CoursesModel extends APP_Model
 {
 	private const TABLE = 'courses';
+	private const TABLE_LECTURES = 'lectures';
 	private const TABLE_FIELDS = ['name', 'description', 'type', 'period', 'price_month', 'price_full', 'author', 'ts', 'active'];
 	public const TYPES = [
 		0 => 'Самостоятельное обучение',
@@ -61,8 +62,17 @@ class CoursesModel extends APP_Model
 
 	public function getByID($id)
 	{
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
-		if($row = $res->row_array())
+		$sql = 'SELECT 
+					c.*, l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other  
+				FROM 
+					'.self::TABLE.' as c  
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l_all ON(l_all.course_id = c.id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = c.id) 
+				WHERE id = ?';
+
+		if($row = $this->db->query($sql, [$id])->row_array())
 		{
 			return $row;
 		}

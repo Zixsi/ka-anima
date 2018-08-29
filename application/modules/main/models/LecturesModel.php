@@ -157,6 +157,27 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// Получить кол-во лекций для курса
+	public function getCntByCourse($id)
+	{
+		$sql = 'SELECT 
+					l.course_id, count(l.id) as cnt_all, l_main.cnt as cnt_main, (count(l.id) - l_main.cnt) as cnt_other   
+				FROM 
+					'.self::TABLE.' as l
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = l.course_id) 
+				WHERE 
+					l.course_id = ?  
+				GROUP BY l.course_id';
+
+		if($res = $this->db->query($sql, [$id])->row_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
 	public function addLectureToGroup($group_id, $lecture_id)
 	{
 		try

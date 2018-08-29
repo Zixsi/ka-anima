@@ -1,6 +1,7 @@
 .auth-box {padding: 0 30px; width: 30%;}
 .alert {font-size: 13px;}
 .btn-xxs {padding: 3px 5px; font-size: 14px;}
+.btn-3xs {padding: .2em .6em .3em; font-size: 75%; line-height: 1;}
 
 .nav-balance {font-size: 26px; display: inline-block; line-height: 32px; padding-left: 45px;}
 .nav-balance .nav-balance-value {color: #00AAFF;}

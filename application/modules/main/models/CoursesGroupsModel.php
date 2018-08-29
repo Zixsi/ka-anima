@@ -61,8 +61,19 @@ class CoursesGroupsModel extends APP_Model
 
 	public function getByID($id)
 	{
-		$res = $this->db->query('SELECT g.*, c.name, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.id = ?', [$id]);
-		if($row = $res->row_array())
+		$sql = 'SELECT 
+					g.*, c.name, c.price_month, c.price_full, 
+					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l_all ON(l_all.course_id = g.course_id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = g.course_id) 
+				WHERE g.id = ?';
+		if($row = $this->db->query($sql, [$id])->row_array())
 		{
 			return $row;
 		}

@@ -28,15 +28,27 @@ class Course extends APP_Controller
 		$current_year += ($next_month < $current_month)?1:0;
 		$ts = date($current_year.'-'.$next_month.'-01 00:00:00');
 
+		// Высчитываем дату окончания курсов
+		// получаем первый понедельник месяца в котором начинается курс
+		$ts_obj = new DateTime($ts);
+		$day = compute_day(1, 1, $ts_obj->format('n'), $ts_obj->format('Y')) - 1;
+
 		if($res = $this->CoursesGroupsModel->GetListNeedCreate())
 		{
 			foreach($res as $item)
 			{
+				$info = $this->LecturesModel->getCntByCourse($item['id']);
+
+				$days = $day + (($info['cnt_main'] + 1) * 7);
+				$ts_item = new DateTime($ts);
+				$ts_item->add(new DateInterval('P'.$days.'D'));
+
 				$data = [
 					'code' => 'c'.$item['id'].'-'.$current_year.$next_month,
 					'course_id' => $item['id'],
 					'ts' => $ts,
-					'ts_end' => 0
+					// и прибавляем кол-во недель равного кол-ву основных курсов + 1 неделя
+					'ts_end' => $ts_item->format('Y-m-d 00:00:00')
 				];
 
 				$this->CoursesGroupsModel->Add($data);

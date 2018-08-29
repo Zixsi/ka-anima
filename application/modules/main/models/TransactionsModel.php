@@ -112,6 +112,25 @@ class TransactionsModel extends APP_Model
 		return 0;
 	}
 
+	// Сумма оплат сервиса
+	public function getPayAmountService($id, $user, $service = 'group')
+	{
+		try
+		{
+			$sql = 'SELECT SUM(amount) as amount FROM '.self::TABLE.' WHERE user = ? AND service_id = ? AND service = ? GROUP BY service_id';
+			if($res = $this->db->query($sql, [intval($user), intval($id) , $service])->row_array())
+			{
+				return floatval($res['amount']);
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return 0;
+	}
+
 	private function _CheckFields($data = [])
 	{
 		$this->form_validation->reset_validation();

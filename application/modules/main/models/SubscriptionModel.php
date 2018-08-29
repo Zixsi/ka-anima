@@ -6,16 +6,20 @@ class SubscriptionModel extends APP_Model
 	private const TABLE = 'subscription';
 	private const TABLE_COURSES = 'courses';
 	private const TABLE_COURSES_GROUPS = 'courses_groups';
-	private const TABLE_FIELDS = ['user', 'type', 'service', 'description', 'ts_start', 'ts_end', 'price_month', 'price_full'];
+	private const TABLE_FIELDS = ['user', 'type', 'service', 'description', 'ts_start', 'ts_end', 'subscr_type', 'price_month', 'price_full', 'amount'];
+	
+	// Типы сервисов подписки
 	private const TYPES = [
 		0, // курсы
 		1, // резерв
-		2, // резерв
-		3, // резерв
-		4, // резерв
-		5, // резерв
-		6, // резерв
-		7 // резерв
+		2 // резерв
+	];
+
+	// Тип подписки
+	private const TYPES_SUBSCR = [
+		0, // полная (подписка произведена на весь срок)
+		1, // частичная (подписка на месяц / несколько месяцев)
+		2 // продление
 	];
 
 	public function __construct()
@@ -24,11 +28,11 @@ class SubscriptionModel extends APP_Model
 		$this->load->model(['main/CoursesGroupsModel']);
 	}
 
-	public function Add($data = [])
+	public function add($data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			if($this->db->insert(self::TABLE, $data))
 			{
@@ -43,11 +47,11 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	public function Update($id, $data = [])
+	public function update($id, $data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			$this->db->where('id', $id);
 			if($this->db->update(self::TABLE, $data))
@@ -63,12 +67,12 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	public function Delete($id)
+	public function delete($id)
 	{
 		return false;
 	}
 
-	public function GetByID($id)
+	public function getByID($id)
 	{
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
 		if($row = $res->row_array())
@@ -139,13 +143,37 @@ class SubscriptionModel extends APP_Model
 				throw new Exception('Already subscribed', 1);
 			}
 
-			//strtotime()
-			$next_month = new DateTime($item['ts']);
-			$next_month->modify('next month');
-			$ts_next_month = $next_month->format('Y-m-d 00:00:00');
+			$ts_end = $item['ts_end'];
+			$subscr_type = 0;
+			$amount = 0; // остаток для оплаты
 
-			$ts_end = ($price_period == 'full')?$item['ts_end']:$ts_next_month; // $item['ts']
+			// Оплата за месяц
+			if($price_period == 'month')
+			{
+				$ts_curr = new DateTime($item['ts']);
+				$ts_month = new DateTime($item['ts']);
+				$ts_month->modify('next month');
+				$diff = $ts_curr->diff($ts_month);
+				
+				// Если разница между датой окончания и месяцем оплаты меньше или равно 1 недели 
+				// то устанавливаем дату окончания курса
+				if($diff->days > 7)
+				{
+					$subscr_type = 1;
+					$ts_end = $ts_month->format('Y-m-d 00:00:00');
 
+					// Рассчитываем остаток оплаты при покупке месяца
+					$diff = $ts_curr->diff(new DateTime($item['ts_end']));
+					if($diff->d > 7)
+					{
+						$diff->m++;
+					}
+
+					$amount = ($diff->m * $item['price_month']) - $item['price_month'];
+				}
+			}
+
+			
 			$data = [
 				'user' => intval($user),
 				'type' => 0,
@@ -153,13 +181,15 @@ class SubscriptionModel extends APP_Model
 				'description' => $item['name'].' ('.date('F Y', strtotime($item['ts'])).')',
 				'ts_start' => $item['ts'],
 				'ts_end' => $ts_end,
+				'subscr_type' => $subscr_type,
 				'price_month' => $item['price_month'],
-				'price_full' => $item['price_full']
+				'price_full' => $item['price_full'],
+				'amount' => $amount
 			];
 
 			$this->db->trans_begin();
 
-			if(($this->Add($data)) == false)
+			if(($this->add($data)) == false)
 			{
 				throw new Exception($this->LAST_ERROR, 1);
 			}
@@ -184,6 +214,7 @@ class SubscriptionModel extends APP_Model
 			}
 
 			$this->db->trans_commit();
+
 			return true;
 		}
 		catch(Exception $e)
@@ -195,7 +226,7 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	public function GroupList($user)
+	public function groupList($user)
 	{
 		return false;
 	}
@@ -251,7 +282,12 @@ class SubscriptionModel extends APP_Model
 			if($res = $res->result_array())
 			{
 				$result = [];
-				$result = $res;
+
+				foreach($res as &$val)
+				{
+					$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
+					$result[] = $val;
+				}
 
 				return $result;
 			}
@@ -264,7 +300,7 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	private function _CheckFields(&$data = [])
+	private function _checkFields(&$data = [])
 	{
 		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);

@@ -56,3 +56,26 @@ function Debug($data = [])
 {
 	echo '<pre>'; print_r($data); echo '</pre>';
 }
+
+// Получить день месяца у дня недели. Например первого воскресенья августа
+function compute_day($weekNumber, $dayOfWeek, $monthNumber, $year)
+{
+    // порядковый номер дня недели первого дня месяца $monthNumber
+    $dayOfWeekFirstDayOfMonth = date('w', mktime(0, 0, 0, $monthNumber, 1, $year));
+ 
+    // сколько дней осталось до дня недели $dayOfWeek относительно дня недели $dayOfWeekFirstDayOfMonth
+    $diference = 0;
+ 
+    // если нужный день недели $dayOfWeek только наступит относительно дня недели $dayOfWeekFirstDayOfMonth
+    if ($dayOfWeekFirstDayOfMonth <= $dayOfWeek)
+    {
+        $diference = $dayOfWeek - $dayOfWeekFirstDayOfMonth;
+    }
+    // если нужный день недели $dayOfWeek уже прошёл относительно дня недели $dayOfWeekFirstDayOfMonth
+    else
+    {
+        $diference = 7 - $dayOfWeekFirstDayOfMonth + $dayOfWeek;
+    }
+ 
+    return 1 + $diference + ($weekNumber - 1) * 7;
+}
