@@ -8,16 +8,21 @@
 						<?$i = 0;?>
 						<?foreach($courses as $course):?>
 							<tr>
-								<td class="row-course <?=(($i++) == 0)?'active':''?>" data-id="<?=$course['course_group']?>"><?=$course['name']?> (<?=$course['ts_f']?>)</td>
+								<td class="row-course <?=(($i++) == 0)?'active':''?>" data-id="<?=$course['course_group']?>">
+									<span><?=$course['name']?> (<?=$course['ts_f']?>)</span>
+									<?if($course['status'] == false):?>
+										<span class="label label-danger">Истек</span>
+									<?endif;?>
+								</td>
 							</tr>
 						<?endforeach;?>
 					</table>
 				</div>
 			</div>
-			<div class="panel">
+			<div class="panel lectures-block <?=(!$course_lectures && !count($course_lectures))?'hidden':''?>">
 				<div class="panel-body">
 					<h4>Лекции</h4>
-					<table class="table lectures-block">
+					<table class="table">
 						<?if($course_lectures):?>
 							<?foreach($course_lectures as $lecture):?>
 								<tr data-video="<?=$lecture['video']?>">

@@ -19,7 +19,10 @@ class Subscription extends APP_Controller
 		if(CrValidKey())
 		{
 			$data_post = $this->input->post(null, true);
-			debug($data_post); die();
+			if($this->SubscriptionModel->renewItem($data_post['id']) == false)
+			{
+				$data['error'] = $this->SubscriptionModel->LAST_ERROR;
+			}
 		}
 		$data['csrf'] = CrGetKey();
 
@@ -37,31 +40,34 @@ class Subscription extends APP_Controller
 		//debug($items); die();
 		//debug($user); die();
 
-		foreach($items as &$item)
+		if($items)
 		{
-			$item['renew'] = null;
-
-			switch($item['type'])
+			foreach($items as &$item)
 			{
-				// Если подписка на курс
-				case 0:
+				$item['renew'] = null;
 
-					// Если не все оплачено по месяцам
-					if($item['amount'] > 0)
-					{
-						$item['renew'] = 'month';
-					}
-					// Если оплатили все м кончилась подписка
-					elseif(strtotime($item['ts_end']) < time())
-					{
-						$item['renew'] = 'year';
-					}
+				switch($item['type'])
+				{
+					// Если подписка на курс
+					case 0:
 
-				break;
+						// Если не все оплачено по месяцам
+						if($item['amount'] > 0)
+						{
+							$item['renew'] = 'month';
+						}
+						// Если оплатили все м кончилась подписка
+						elseif(strtotime($item['ts_end']) < time())
+						{
+							$item['renew'] = 'year';
+						}
 
-				default:
-					//
-				break;
+					break;
+
+					default:
+						//
+					break;
+				}
 			}
 		}
 	}

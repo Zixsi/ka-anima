@@ -1,3 +1,4 @@
+<?=ShowError($error);?>
 <table class="table table-bordered">
 	<thead>
 		<tr>
@@ -35,11 +36,17 @@
 								<input type="hidden" name="type" value="year">
 								Продлить на год ($<?=number_format($item['price_month'], 2, '.', '')?>) 
 								<button type="submit" class="btn btn-3xs btn-success">Продлить</button>
+							<?else:?>
+								<span>- - -</span>
 							<?endif;?>
 						</form>
 					</td>
 					<td>
-						$<?=number_format($item['amount'], 2, '.', '')?>
+						<?if($item['amount'] > 0):?>
+							$<?=number_format($item['amount'], 2, '.', '')?>
+						<?else:?>
+							<span>- - -</span>
+						<?endif;?>
 					</td>
 				</tr>
 			<?endforeach;?>

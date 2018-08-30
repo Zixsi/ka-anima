@@ -115,17 +115,17 @@ class AuthModel extends APP_Model
 		$this->session->set_userdata('USER', $user);
 	}
 
-	public function User()
+	public function user()
 	{
 		return $this->session->userdata('USER');
 	}
 
 	public function userID()
 	{
-		return $this->User()['id'];
+		return $this->user()['id'];
 	}
 
-	public function Check()
+	public function check()
 	{
 		if(($user = $this->User()) == false )
 		{
@@ -140,13 +140,13 @@ class AuthModel extends APP_Model
 		return true;
 	}
 
-	public function Balance()
+	public function balance()
 	{
 		$user = $this->User();
 		return isset($user['balance'])?$user['balance']:0;
 	}
 
-	public function UpdateBalance()
+	public function updateBalance()
 	{
 		$user = $this->User();
 		$user['balance'] = $this->TransactionsModel->BalanceUser($user['id']);

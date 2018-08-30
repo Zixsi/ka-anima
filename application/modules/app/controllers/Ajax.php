@@ -22,19 +22,31 @@ class Ajax extends APP_Controller
 		//$id = intval($this->input->get('id', true));
 		if($id > 0)
 		{
-			$this->load->model(['main/LecturesModel']);
-			if($res = $this->LecturesModel->getAvailableForGroup($id))
+			$this->load->model(['main/LecturesModel', 'main/SubscriptionModel']);
+
+			if($subscr = $this->SubscriptionModel->byUserService($this->Auth->userID(), $id, 0))
 			{
-				//debug($res);
-				foreach($res as $val)
+				$subscr['ts_end'] = strtotime($subscr['ts_end']);
+
+				if($subscr['active'] && ($res = $this->LecturesModel->getAvailableForGroup($id)))
 				{
-					$video = $this->LecturesModel->lectureOrignVideo($val['id']);
-					$data['items'][] = [
-						'id' => $val['id'],
-						'name' => $val['name'],
-						'video' => isset($video['mp4'])?$video['mp4']:'',
-						'task' => $val['task']
-					];
+					//debug($res);
+					foreach($res as $val)
+					{
+						if(strtotime($val['ts']) > $subscr['ts_end'])
+						{
+							continue;
+						}
+						
+						$video = $subscr['active']?$this->LecturesModel->lectureOrignVideo($val['id']):null;
+
+						$data['items'][] = [
+							'id' => $val['id'],
+							'name' => $val['name'],
+							'video' => isset($video['mp4'])?$video['mp4']:'',
+							'task' => $val['task']
+						];
+					}
 				}
 			}
 		}

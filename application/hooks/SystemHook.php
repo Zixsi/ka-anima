@@ -28,7 +28,7 @@ class SystemHook
 		$c = $this->CI->router->fetch_class();		
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);
-		$check = $this->CI->Auth->Check();
+		$check = $this->CI->Auth->check();
 
 		//var_dump($d); die();
 

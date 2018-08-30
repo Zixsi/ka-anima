@@ -35,7 +35,7 @@
 				</div>-->
 				<div class="navbar-btn navbar-left">
 					<span class="nav-balance">
-						Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->Balance(), 2, '.', ' ')?> $</span>
+						Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->balance(), 2, '.', ' ')?> $</span>
 						<a href="/pay/" class="lnr lnr-plus-circle"></a>
 					</span>
 				</div>
@@ -57,7 +57,7 @@
 							</ul>
 						</li>-->
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->User()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>

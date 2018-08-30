@@ -133,7 +133,7 @@ class SubscriptionModel extends APP_Model
 			{
 				throw new Exception('Invalid price period', 1);
 			}
-			elseif($this->Auth->Balance() < $item['price_'.$price_period])
+			elseif($this->Auth->balance() < $item['price_'.$price_period])
 			{
 				throw new Exception('Insufficient funds', 1);
 			}
@@ -157,7 +157,7 @@ class SubscriptionModel extends APP_Model
 				
 				// Если разница между датой окончания и месяцем оплаты меньше или равно 1 недели 
 				// то устанавливаем дату окончания курса
-				if($diff->days > 7)
+				if(strtotime($ts_month->format('Y-m-d 00:00:00')) < strtotime($ts_end) && $diff->d > 7)
 				{
 					$subscr_type = 1;
 					$ts_end = $ts_month->format('Y-m-d 00:00:00');
@@ -203,9 +203,9 @@ class SubscriptionModel extends APP_Model
 				'service_id' => $group
 			];
 
-			if($this->TransactionsModel->Add($fields))
+			if($this->TransactionsModel->add($fields))
 			{
-				 $this->Auth->UpdateBalance();
+				 $this->Auth->updateBalance();
 			}
 
 			if($this->db->trans_status() === FALSE)
@@ -294,6 +294,126 @@ class SubscriptionModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// Подписки пользователя по сервису
+	public function byUserService($user, $service_id, $type = 0)
+	{
+		try
+		{
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND service = ? AND type = ? ORDER BY id DESC';
+			if($res = $this->db->query($sql, [intval($user), intval($service_id), $type])->row_array())
+			{
+				$res['active'] = (strtotime($res['ts_end']) > time())?true:false;
+
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// Продление подписки
+	public function renewItem($id)
+	{
+		try
+		{
+			if($item = $this->getByID($id))
+			{
+				unset($item['id']);
+				$price = 0;
+				$item['amount'] = floatval($item['amount']);
+				$item['price_month'] = floatval($item['price_month']);
+				$ts_end_mark = strtotime($item['ts_end']);
+
+				switch($item['type'])
+				{
+					case '0':
+						// Продление на месяц
+						if($item['amount'] > 0)
+						{
+							if(($service = $this->CoursesGroupsModel->getByID($item['service'])) == false)
+							{
+								throw new Exception('Group not found', 1);
+							}
+
+							$price = ($item['amount'] > $item['price_month'])?($item['amount'] - $item['price_month']):$item['price_month'];
+
+							$ts_end = new DateTime($item['ts_end']);
+							$ts_end->modify('next month');
+							$ts_end_format = $ts_end->format('Y-m-d 00:00:00');
+
+							$item['ts_end'] = (strtotime($ts_end_format) > strtotime($service['ts_end']))?$service['ts_end']:$ts_end_format;
+							$item['amount'] -= $price;
+						}
+						// Продление на год
+						elseif($ts_end_mark < time())
+						{
+							$price = $item['price_month'];
+							$ts_end = new DateTime($item['ts_end']);
+							$ts_end->modify('next year');
+							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
+						}
+					break;
+					default:
+						// empty	
+					break;
+				}
+
+				$this->db->trans_begin();
+
+				if($this->Auth->balance() < $price)
+				{
+					throw new Exception('Insufficient funds', 1);
+				}
+
+				if($this->update($id, $item) == false)
+				{
+					throw new Exception('Update error', 1);
+				}
+
+				if($price > 0)
+				{
+					$tx = [
+						'user' => $item['user'],
+						'type' => '1',
+						'amount' => $price,
+						'description' => $item['description'],
+						'service' => 'group',
+						'service_id' => $item['service']
+					];
+
+					if($this->TransactionsModel->add($tx))
+					{
+						$this->Auth->updateBalance();
+					}
+					else
+					{
+						throw new Exception('Pay error', 1);
+					}
+				}
+
+				if($this->db->trans_status() === FALSE)
+				{
+					throw new Exception('Renew error', 1);
+				}
+
+				$this->db->trans_commit();
+
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->db->trans_rollback();
 			$this->LAST_ERROR = $e->getMessage();
 		}
 

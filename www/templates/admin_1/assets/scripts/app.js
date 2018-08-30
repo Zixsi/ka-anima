@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	var lectures_block = $('table.lectures-block');
+	var lectures_block = $('.lectures-block');
 
 	$('.row-course').on('click', function(){
 		if(!$(this).hasClass('active'))
@@ -16,7 +16,8 @@ $(document).ready(function(){
 				dataType: 'json',
 				success: function(res){
 
-					lectures_block.empty();
+					var table = lectures_block.find('table');
+					table.empty();
 					if(res.items.length > 0)
 					{
 						var html = '';
@@ -32,7 +33,12 @@ $(document).ready(function(){
 							'</div></div></td></tr>';
 						});
 
-						lectures_block.append(html);
+						table.append(html);
+						lectures_block.removeClass('hidden');
+					}
+					else
+					{
+						lectures_block.addClass('hidden');
 					}
 				},
 				error: function(e){
@@ -43,11 +49,12 @@ $(document).ready(function(){
 	});
 
 
-	$('body').on('click', 'table.lectures-block tr', function(){
+	$('body').on('click', '.lectures-block table tr', function(){
 
 		var video = $(this).data('video');
 		var task = $(this).find('.data-task').html();
-		if(video !== null && video !== undefined)
+		console.log(video);
+		if(video !== null && video !== undefined && video != '')
 		{
 			$('#lectures-video video').attr('src', video);
 			$('#lecture-task-text').html(task);

@@ -138,7 +138,7 @@ class LecturesModel extends APP_Model
 	public function getAvailableForGroup($group_id)
 	{
 		$sql = 'SELECT 
-					l.* 
+					l.* , lg.ts 
 				FROM 
 					'.self::TABLE_LECTURES_GROUPS.' as lg 
 				LEFT JOIN

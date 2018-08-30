@@ -18,14 +18,14 @@ class Pay extends APP_Controller
 		{
 			$fields = [
 				'user' => $user_id,
-				'type' => 'IN',
-				'amount' => $this->input->post('amount', true),
+				'type' => '0',
+				'amount' => abs($this->input->post('amount', true)),
 				'description' => 'add balance'
 			];
 
-			if($this->TransactionsModel->Add($fields))
+			if($this->TransactionsModel->add($fields))
 			{
-				 $this->Auth->UpdateBalance();
+				 $this->Auth->updateBalance();
 			}
 		}
 		$data['csrf'] = CrGetKey();
