@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	
-	var lectures_block = $('.lectures-block');
+	/*var lectures_block = $('.lectures-block');
 
 	$('.row-course').on('click', function(){
 		if(!$(this).hasClass('active'))
@@ -60,5 +60,5 @@ $(document).ready(function(){
 			$('#lecture-task-text').html(task);
 		}
 	});
-
+	*/
 });

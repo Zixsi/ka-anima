@@ -1,38 +1,44 @@
 <div class="row">
+	
+	<?if($error):?>
+		<div class="col-xs-12"><?=ShowError($error);?></div>
+	<?endif;?>
+
 	<?if($courses):?>
 		<div class="col-xs-6">
 			<div class="panel">
 				<div class="panel-body">
 					<h4>Курсы</h4>
 					<table class="table table-courses">
-						<?$i = 0;?>
-						<?foreach($courses as $course):?>
+						<?foreach($courses as $val):?>
 							<tr>
-								<td class="row-course <?=(($i++) == 0)?'active':''?>" data-id="<?=$course['course_group']?>">
-									<span><?=$course['name']?> (<?=$course['ts_f']?>)</span>
-									<?if($course['status'] == false):?>
-										<span class="label label-danger">Истек</span>
-									<?endif;?>
+								<td class="row-course <?=($group_id == $val['id'])?'active':''?>">
+									<a href="/courses/<?=$val['id']?>/">
+										<span><?=$val['name']?></span>
+										<?if($val['active'] == false):?>
+											<span class="label label-danger">Истек</span>
+										<?endif;?>
+									</a>
 								</td>
 							</tr>
 						<?endforeach;?>
 					</table>
 				</div>
 			</div>
-			<div class="panel lectures-block <?=(!$course_lectures && !count($course_lectures))?'hidden':''?>">
+			<div class="panel lectures-block">
 				<div class="panel-body">
 					<h4>Лекции</h4>
 					<table class="table">
-						<?if($course_lectures):?>
-							<?foreach($course_lectures as $lecture):?>
-								<tr data-video="<?=$lecture['video']?>">
+						<?if($lectures):?>
+							<?foreach($lectures as $val):?>
+								<tr>
 									<td>
 										<span class="lnr lnr-eye"></span>
 									</td>
 									<td>
 										<div class="row">
 											<div class="col-xs-8">
-												<?=$lecture['name']?>
+												<a href="/courses/<?=$group_id?>/<?=$val['id']?>/"><?=$val['name']?></a>
 											</div>
 											<div class="col-xs-4 text-right">
 												<span class="lnr lnr-sync"></span>
@@ -50,20 +56,74 @@
 			</div>
 		</div>
 		<div class="col-xs-6">
-			<div class="panel">
-				<div class="panel-body">
-					<h4>Лекция</h4>
-					<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
-						<video src="" poster="<?=TEMPLATE_DIR?>/admin_1/assets/img/video-poster.png" width="100%" height="100%" controls="true"></video>
+			<?if($lecture):?>
+				<div class="panel">
+					<div class="panel-body">
+						<h4>Лекция</h4>
+						<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
+							<video src="<?=$lecture['video']?>" poster="<?=TEMPLATE_DIR?>/admin_1/assets/img/video-poster.png" width="100%" height="100%" controls="true"></video>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="panel">
-				<div class="panel-body">
-					<h4>Задание</h4>
-					<div id="lecture-task-text"></div>
+				<div class="panel">
+					<div class="panel-body">
+						<h4>Задание</h4>
+						<div id="lecture-task-text"><?=$lecture['task']?></div>
+					</div>
 				</div>
-			</div>
+				<div class="panel">
+					<div class="panel-body">
+						<h4 class="panel-title" style="margin-bottom: 25px;">Загрузка заданий</h4>
+						<p>Описание к требуемым форматам и размеру загружаемых файлов</p>
+						<form action="" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+							<div class="form-group">
+								<input type="file" name="file">
+							</div>
+							<div class="form-group">
+								<textarea class="form-control" name="text" placeholder="Комментарий к файлу"></textarea>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<?if($homework):?>
+					<div class="panel">
+						<div class="panel-body">
+							<h4 class="panel-title" style="margin-bottom: 25px;">Мои загруженные задания</h4>
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th>Дата</th>
+										<th>Название</th>
+										<th>Комментарий</th>
+									</tr>
+								</thead>
+								<?foreach($homework as $val):?>
+									<tr>
+										<td><?=$val['ts']?></td>
+										<td><?=$val['name']?></td>
+										<td><?=$val['comment']?></td>
+									</tr>
+								<?endforeach;?>
+							</table>
+						</div>
+					</div>
+				<?endif;;?>
+
+			<?else:?>
+				<div class="panel">
+					<div class="panel-body">
+						<h4>Лекция</h4>
+						<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
+							<video src="" poster="<?=TEMPLATE_DIR?>/admin_1/assets/img/video-poster.png" width="100%" height="100%" controls="true"></video>
+						</div>
+					</div>
+				</div>
+			<?endif;?>
 		</div>
 	<?else:?>
 		<div class="col-xs-12 text-center">

@@ -6,6 +6,8 @@ class LecturesModel extends APP_Model
 	private const TABLE = 'lectures';
 	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	private const TABLE_LECTURES_VIDEO = 'lectures_video';
+	private const TABLE_LECTURES_HOMEWORK = 'lectures_homework';
+	private const TABLE_FILES = 'files';
 	private const TABLE_FIELDS = ['active', 'name', 'description', 'task', 'type', 'course_id', 'video', 'modify', 'sort'];
 	private const LECTURE_VIDEO_TYPES = [
 		'lecture', // лекция
@@ -178,6 +180,7 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// добавить лекцию к группе
 	public function addLectureToGroup($group_id, $lecture_id)
 	{
 		try
@@ -204,6 +207,7 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// список видео лекций
 	public function getLectureVideo($id, $type = 'lecture')
 	{
 		try
@@ -225,6 +229,8 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+
+	// обновить / добавить ссылки на видео лекции
 	public function updateLectureVideo($id, $url, $format = '', $type = 'lecture')
 	{
 		try
@@ -268,6 +274,7 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// оригинальное видео лекции
 	public function lectureOrignVideo($id, $type = 'lecture')
 	{
 		try
@@ -292,6 +299,7 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// список видео для обновление ссылки на оригинальный источник
 	public function listLecturesVideoForUpdate($time = 300)
 	{
 		try
@@ -312,6 +320,87 @@ class LecturesModel extends APP_Model
 			if($res = $res->result_array())
 			{
 				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// добавить файл д/з к лекции
+	public function addHomeWork($group_id, $lecture_id, $user_id, $file_id, $comment = '')
+	{
+		try
+		{
+			$data = [
+				'user' => $user_id,
+				'group_id' => $group_id,
+				'lecture_id' => $lecture_id,
+				'file' => $file_id,
+				'type' => 0, // д/з
+				'comment' => $comment
+			];
+
+			if($this->db->insert(self::TABLE_LECTURES_HOMEWORK, $data))
+			{
+				return $this->db->insert_id();
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// Список загруженных юзером файлов в лекции
+	public function getUserHomeWork($group_id, $lecture_id, $user)
+	{
+		try
+		{
+			$sql = 'SELECT 
+						hw.*, f.ts, f.orig_name as name
+					FROM 
+						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
+					LEFT JOIN 
+						'.self::TABLE_FILES.' as f  ON(f.id = hw.file)  
+					WHERE 
+						hw.user = ? AND hw.group_id = ? AND hw.lecture_id = ? AND hw.type = 0
+					ORDER BY 
+						hw.id DESC';
+
+			if($res = $this->db->query($sql, [$user, $group_id, $lecture_id])->result_array())
+			{
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// добавить ревью к лекции
+	public function addReview($lecture_id, $user_id, $url)
+	{
+		try
+		{
+			$data = [
+				'user' => $user_id,
+				'lecture_id' => $lecture_id,
+				'video_url' => $url,
+				'type' => 1 // ревью
+			];
+
+			if($this->db->insert(self::TABLE_LECTURES_HOMEWORK, $data))
+			{
+				return $this->db->insert_id();
 			}
 		}
 		catch(Exception $e)

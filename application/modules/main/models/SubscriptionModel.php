@@ -321,6 +321,31 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
+	// Подписки пользователя по типу
+	public function byUserType($user, $type = 0)
+	{
+		try
+		{
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND type = ? ORDER BY id DESC';
+			if($res = $this->db->query($sql, [intval($user), intval($type)])->result_array())
+			{
+				foreach($res as &$val)
+				{
+					$val['ts_end_mark'] = strtotime($val['ts_end']);
+					$val['active'] = ($val['ts_end_mark'] > time())?true:false;
+				}
+				
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
 	// Продление подписки
 	public function renewItem($id)
 	{

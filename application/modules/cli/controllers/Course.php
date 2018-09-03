@@ -33,7 +33,7 @@ class Course extends APP_Controller
 		$ts_obj = new DateTime($ts);
 		$day = compute_day(1, 1, $ts_obj->format('n'), $ts_obj->format('Y')) - 1;
 
-		if($res = $this->CoursesGroupsModel->GetListNeedCreate())
+		if($res = $this->CoursesGroupsModel->getListNeedCreate())
 		{
 			foreach($res as $item)
 			{

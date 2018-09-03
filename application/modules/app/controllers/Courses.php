@@ -3,72 +3,59 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Courses extends APP_Controller
 {
+	private $user_id = null;
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel']);
+
+		$this->user_id = $this->Auth->userID();
 	}
 	
-	public function index()
+	public function index($group = 0, $lecture = 0)
 	{
 		$data = [];
+		$data['error'] = null;
+		$data['group_id'] = intval($group);
+		$data['lecture_id'] = intval($lecture);
 
-		$user = $this->Auth->userID();
-		$data['courses'] = $this->SubscriptionModel->coursesList($user);
-		$data['course_lectures'] = [];
+		$data['courses'] = $this->SubscriptionModel->byUserType($this->user_id, 0);
+		$this->prepareCourses($data['courses']);
+		$data['lectures'] = [];
+		$data['lecture'] = [];
 
-		if($data['courses'])
+		if($data['group_id'] > 0)
 		{
-			//$subscr = $this->SubscriptionModel->byUserService($user, $data['courses'][0]['course_group'], 0);
-			$subscr_list = [];
-			if($res = $this->SubscriptionModel->byUser($user))
+			if(array_key_exists($data['group_id'], $data['courses']) == false)
 			{
-				foreach($res as $val)
-				{
-					$subscr_list[$val['service'].'_'.$val['type']] = $val;
-				}
-				unset($res);
+				header('Location: /courses/');
 			}
 
-			$i = 0;
-			foreach($data['courses'] as &$val)
-			{
-				$val['status'] = (isset($subscr_list[$val['course_group'].'_0']) && $subscr_list[$val['course_group'].'_0']['active'] == true)?true:false;
+			$data['lectures'] = $this->LecturesModel->getAvailableForGroup($data['group_id']);
+			$this->prepareLectures($data['lectures'], $data['courses'][$data['group_id']]);
 
-				if($i == 0 && $val['status'])
+			if($data['lecture_id'] > 0)
+			{
+				if(array_key_exists($data['lecture_id'], $data['lectures']) == false)
 				{
-					if($data['course_lectures'] = $this->LecturesModel->getAvailableForGroup($val['course_group']))
-					{
-						if(isset($subscr_list[$val['course_group'].'_0']))
-						{
-							$end = strtotime($subscr_list[$val['course_group'].'_0']['ts_end']);
-							foreach($data['course_lectures'] as $k => &$v)
-							{
-								if(strtotime($v['ts']) <= $end)
-								{
-									if($val['status'])
-									{
-										$video = $this->LecturesModel->lectureOrignVideo($v['id']);
-										$v['video'] = isset($video['mp4'])?$video['mp4']:'';
-									}
-									else
-									{
-										$v['video'] = '';
-									}
-								}
-								else
-								{
-									unset($data['course_lectures'][$k]);
-								}
-							}
-						}
-					}
+					header('Location: /courses/'.$data['group_id'].'/');
 				}
 
-				$i++;
-			}
+				$data['lecture'] = $data['lectures'][$data['lecture_id']];
+				$video = $this->LecturesModel->lectureOrignVideo($data['lecture']['id']);
+				$data['lecture']['video'] = isset($video['mp4'])?$video['mp4']:'';
 
+				if(CrValidKey())
+				{
+					$this->uploadHomeWork($data);
+				}
+				$data['csrf'] = CrGetKey();
+			}
 		}
+
+		$data['homework'] = $this->LecturesModel->getUserHomeWork($data['group_id'], $data['lecture_id'], $this->user_id);
+
 
 		$this->load->lview('courses/index', $data);
 	}
@@ -102,5 +89,67 @@ class Courses extends APP_Controller
 		//debug($data['items']); die();
 
 		$this->load->lview('courses/enroll', $data);
+	}
+
+	private function prepareCourses(&$data)
+	{
+		$tmp_data = $data;
+		$data = [];
+
+		foreach($tmp_data as $val)
+		{
+			$data[$val['id']] = [
+				'id' => $val['id'],
+				'service' => $val['service'],
+				'name' => $val['description'],
+				'active' => $val['active'],
+				'ts_end' => $val['ts_end'],
+				'ts_end_mark' => $val['ts_end_mark']
+			];
+		}
+
+		unset($tmp_data);
+	}
+
+	private function prepareLectures(&$data, $group)
+	{
+		if($data)
+		{
+			$tmp_data = $data;
+			$data = [];
+			
+			foreach($tmp_data as $val)
+			{
+				if(strtotime($val['ts']) <= $group['ts_end_mark'])
+				{
+					$data[$val['id']] = $val;
+				}
+			}
+		
+			unset($tmp_data);
+		}
+	}
+
+
+	private function uploadHomeWork(&$data)
+	{
+		$comment = $this->input->post('text', true);
+		$this->load->config('upload');
+		$upload_config = $this->config->item('upload_homework');
+		$this->load->library('upload', $upload_config);
+
+		if($this->upload->do_upload('file') == false)
+		{
+			$data['error'] = $this->upload->display_errors();
+		}
+		else
+		{
+			if($file_id = $this->FilesModel->saveFileArray($this->upload->data()))
+			{
+				$this->LecturesModel->addHomeWork($data['group_id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
+			}
+
+			$data['error'] = $this->FilesModel->LAST_ERROR;
+		}
 	}
 }

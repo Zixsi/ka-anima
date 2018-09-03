@@ -20,4 +20,8 @@ $route['teachingcourses/(:num)/lectures/(.*)'] = 'app/TeachingLectures/$2/$1';
 $route['teachingcourses/(.*)'] = 'app/TeachingCourses/$1';
 
 
+//$route['groups/(:num)'] = 'app/Groups/index/$1';
+$route['courses'] = 'app/courses/index';
+$route['courses/(:num)'] = 'app/courses/index/$1';
+$route['courses/(:num)/(:num)'] = 'app/courses/index/$1/$2';
 $route['(.*)'] = 'app/$1';

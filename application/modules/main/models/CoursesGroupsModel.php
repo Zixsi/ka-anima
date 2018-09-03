@@ -54,7 +54,7 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function Delete($id)
+	public function delete($id)
 	{
 		return false;
 	}
@@ -81,7 +81,7 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function GetByCode($code)
+	public function getByCode($code)
 	{
 		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.code = ?', [$id]);
 		if($row = $res->row_array())
@@ -92,7 +92,7 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function List($filter = [], $order = [], $select = [])
+	public function list($filter = [], $order = [], $select = [])
 	{
 		$select = count($select)?implode(', ', $select):'*';
 		$this->db->select($select);
@@ -202,7 +202,7 @@ class CoursesGroupsModel extends APP_Model
 	}
 
 	// Выбрать курсы, группы для которых еще не созданы
-	public function GetListNeedCreate()
+	public function getListNeedCreate()
 	{
 		$sql = 'SELECT 
 					c.id, c.active, g.id as gid, g.ts  
@@ -220,6 +220,37 @@ class CoursesGroupsModel extends APP_Model
 		if($result = $res->result_array())
 		{
 			return $result;
+		}
+
+		return false;
+	}
+
+	// Получить список групп юзера
+	public function getUserGroups($id)
+	{
+		$sql = 'SELECT 
+					service as id, description as name 
+				FROM 
+					'.self::TABLE_SUBSCRIPTION.' 
+				WHERE 
+					user = ? AND type = 0  
+				ORDER BY 
+					id DESC';
+		if($res = $this->db->query($sql, [$id])->result_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
+	// Проверка наличия юзера в группе
+	public function userInGroup($id, $user)
+	{
+		$sql = 'SELECT id FROM '.self::TABLE_SUBSCRIPTION.' WHERE user = ? AND service = ? AND type = 0';
+		if($this->db->query($sql, [$user, $id])->row_array())
+		{
+			return true;
 		}
 
 		return false;

@@ -86,9 +86,21 @@
 								</ul>
 							</div>
 						</li>
+						<?/*if($list_groups = $CI->CoursesGroupsModel->getUserGroups($CI->Auth->userID())):?>
+							<li>
+								<a href="#subPages2" data-toggle="collapse" class="collapsed"><i class="lnr lnr-users"></i> <span>Группы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+								<div id="subPages2" class="collapse in">
+									<ul class="nav">
+										<?foreach($list_groups as $val):?>
+											<li><a href="/groups/<?=$val['id']?>/" class=""><?=$val['name']?></a></li>
+										<?endforeach;?>
+									</ul>
+								</div>
+							</li>
+						<?endif;*/?>
 						<li>
-							<a href="#subPages2" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages2" class="collapse in">
+							<a href="#subPages3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+							<div id="subPages3" class="collapse in">
 								<ul class="nav">
 									<li><a href="/teachingcourses/" class="">Курсы</a></li>
 									<li><a href="#" class="">Группы</a></li>
