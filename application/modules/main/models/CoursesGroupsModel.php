@@ -111,7 +111,7 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	// Получить группы в которые не мтартовали и доступны еще не все лекции 
+	// Получить группы в которые не cтартовали и доступны еще не все лекции 
 	public function getActiveGroups()
 	{
 		$sql = 'SELECT 
@@ -251,6 +251,30 @@ class CoursesGroupsModel extends APP_Model
 		if($this->db->query($sql, [$user, $id])->row_array())
 		{
 			return true;
+		}
+
+		return false;
+	}
+
+	// Получить список групп преподавателя
+	public function getTeacherGroups($id)
+	{
+		$sql = 'SELECT 
+					c.id, c.name, c.author, g.id as group_id, g.ts, g.ts_end 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON (c.id = g.course_id) 
+				WHERE 
+					c.author = ? AND g.ts_end > ?   
+				ORDER BY 
+					g.ts_end ASC';
+
+		$bind = [$id, date('y-m-d H:i:s')];
+
+		if($res = $this->db->query($sql, $bind)->result_array())
+		{
+			return $res;
 		}
 
 		return false;

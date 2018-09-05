@@ -103,7 +103,7 @@
 							<div id="subPages3" class="collapse in">
 								<ul class="nav">
 									<li><a href="/teachingcourses/" class="">Курсы</a></li>
-									<li><a href="#" class="">Группы</a></li>
+									<li><a href="/teachinggroups/" class="">Группы</a></li>
 								</ul>
 							</div>
 						</li>

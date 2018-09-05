@@ -7,6 +7,7 @@ class LecturesModel extends APP_Model
 	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	private const TABLE_LECTURES_VIDEO = 'lectures_video';
 	private const TABLE_LECTURES_HOMEWORK = 'lectures_homework';
+	private const TABLE_USERS = 'users';
 	private const TABLE_FILES = 'files';
 	private const TABLE_FIELDS = ['active', 'name', 'description', 'task', 'type', 'course_id', 'video', 'modify', 'sort'];
 	private const LECTURE_VIDEO_TYPES = [
@@ -374,6 +375,37 @@ class LecturesModel extends APP_Model
 						hw.id DESC';
 
 			if($res = $this->db->query($sql, [$user, $group_id, $lecture_id])->result_array())
+			{
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	// Список загруженных юзером файлов в лекции для преподователя
+	public function getTeacherHomeWork($group_id, $lecture_id)
+	{
+		try
+		{
+			$sql = 'SELECT 
+						hw.*, f.ts, f.orig_name as name, u.email as user_name 
+					FROM 
+						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
+					LEFT JOIN 
+						'.self::TABLE_FILES.' as f ON(f.id = hw.file) 
+					LEFT JOIN 
+						'.self::TABLE_USERS.' as u ON(u.id = hw.user)  
+					WHERE 
+						hw.group_id = ? AND hw.lecture_id = ? AND hw.type = 0
+					ORDER BY 
+						hw.id DESC';
+
+			if($res = $this->db->query($sql, [$group_id, $lecture_id])->result_array())
 			{
 				return $res;
 			}
