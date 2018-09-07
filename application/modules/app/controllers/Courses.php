@@ -93,22 +93,26 @@ class Courses extends APP_Controller
 
 	private function prepareCourses(&$data)
 	{
-		$tmp_data = $data;
-		$data = [];
-
-		foreach($tmp_data as $val)
+		if($data)
 		{
-			$data[$val['id']] = [
-				'id' => $val['id'],
-				'service' => $val['service'],
-				'name' => $val['description'],
-				'active' => $val['active'],
-				'ts_end' => $val['ts_end'],
-				'ts_end_mark' => $val['ts_end_mark']
-			];
-		}
+			$tmp_data = $data;
+			$data = [];
 
-		unset($tmp_data);
+		
+			foreach($tmp_data as $val)
+			{
+				$data[$val['id']] = [
+					'id' => $val['id'],
+					'service' => $val['service'],
+					'name' => $val['description'],
+					'active' => $val['active'],
+					'ts_end' => $val['ts_end'],
+					'ts_end_mark' => $val['ts_end_mark']
+				];
+			}
+
+			unset($tmp_data);
+		}
 	}
 
 	private function prepareLectures(&$data, $group)

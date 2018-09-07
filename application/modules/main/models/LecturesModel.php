@@ -364,7 +364,7 @@ class LecturesModel extends APP_Model
 		try
 		{
 			$sql = 'SELECT 
-						hw.*, f.ts, f.orig_name as name
+						hw.*, f.orig_name as name
 					FROM 
 						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
 					LEFT JOIN 
@@ -393,7 +393,7 @@ class LecturesModel extends APP_Model
 		try
 		{
 			$sql = 'SELECT 
-						hw.*, f.ts, f.orig_name as name, u.email as user_name 
+						hw.*, f.orig_name as name, u.email as user_name 
 					FROM 
 						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
 					LEFT JOIN 
@@ -401,12 +401,20 @@ class LecturesModel extends APP_Model
 					LEFT JOIN 
 						'.self::TABLE_USERS.' as u ON(u.id = hw.user)  
 					WHERE 
-						hw.group_id = ? AND hw.lecture_id = ? AND hw.type = 0
+						hw.group_id = ? AND hw.lecture_id = ? 
 					ORDER BY 
 						hw.id DESC';
 
 			if($res = $this->db->query($sql, [$group_id, $lecture_id])->result_array())
 			{
+				foreach($res as &$val)
+				{
+					if($val['type'] == 1)
+					{
+						$val['name'] = 'Review '.date('Y-m-d', strtotime($val['ts']));
+					}
+				}
+
 				return $res;
 			}
 		}
@@ -419,12 +427,13 @@ class LecturesModel extends APP_Model
 	}
 
 	// добавить ревью к лекции
-	public function addReview($lecture_id, $user_id, $url)
+	public function addReview($group_id, $lecture_id, $user_id, $url)
 	{
 		try
 		{
 			$data = [
 				'user' => $user_id,
+				'group_id' => $group_id,
 				'lecture_id' => $lecture_id,
 				'video_url' => $url,
 				'type' => 1 // ревью

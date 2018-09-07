@@ -13,9 +13,9 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		if($this->Auth->Login()) redirect('/admin/');
+		if($this->Auth->login()) redirect('/admin/');
 		
-		$data['form'] = $this->Auth->GetLoginRemember();
+		$data['form'] = $this->Auth->getLoginRemember();
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/login', $data);
@@ -23,7 +23,7 @@ class Auth extends APP_Controller
 
 	public function logout()
 	{
-		$this->Auth->Logout();
+		$this->Auth->logout();
 		redirect('/admin/');
 	}
 }

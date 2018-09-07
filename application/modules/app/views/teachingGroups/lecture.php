@@ -7,6 +7,23 @@
 	<div class="panel-body" style="padding-top: 30px;">
 		<div class="row">
 			<div class="col-xs-12">
+
+				<div class="panel">
+					<div class="panel-body">
+						<h4 class="panel-title" style="margin-bottom: 25px;">Добавить ревью</h4>
+						<?=ShowFlashMessage();?>
+						<form action="" method="post" enctype="multipart/form-data">
+							<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+							<div class="form-group">
+								<input type="text" class="form-control" name="url" placeholder="Url">
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-xs btn-primary">Добавить</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
 				<div class="panel">
 					<div class="panel-body">
 						<h4 class="panel-title" style="margin-bottom: 25px;">Домашние задания</h4>
@@ -38,6 +55,7 @@
 						</table>
 					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>

@@ -9,7 +9,7 @@ class AuthModel extends APP_Model
 		$this->load->model('main/TransactionsModel');
 	}
 
-	public function Login()
+	public function login()
 	{
 		try
 		{
@@ -22,12 +22,12 @@ class AuthModel extends APP_Model
 				throw new Exception($this->form_validation->error_string(), 1);
 			}
 
-			if(($res = $this->UserModel->GetByEmail($data['email'])) == FALSE)
+			if(($res = $this->UserModel->getByEmail($data['email'])) == FALSE)
 			{
 				throw new Exception("User not found", 1);
 			}
 
-			if($this->UserModel->PwdHash($data['password']) !== $res['password'])
+			if($this->UserModel->pwdHash($data['password']) !== $res['password'])
 			{
 				throw new Exception("Invalid email or password", 1);
 			}
@@ -45,9 +45,9 @@ class AuthModel extends APP_Model
 				delete_cookie('email');
 			}
 
-			$res['balance'] = $this->TransactionsModel->BalanceUser($res['id']);
+			$res['balance'] = $this->TransactionsModel->balanceUser($res['id']);
 			$res['last_update'] = time();
-			$this->SetUser($res);
+			$this->setUser($res);
 			
 			return true;
 		}
@@ -60,7 +60,7 @@ class AuthModel extends APP_Model
 		return false;
 	}
 
-	public function Register()
+	public function register()
 	{
 		try
 		{
@@ -75,14 +75,14 @@ class AuthModel extends APP_Model
 
 			$user_fields = [
 				'email' => $data['email'],
-				'password' => $this->UserModel->PwdHash($data['password']),
+				'password' => $this->UserModel->pwdHash($data['password']),
 				'active' => 1,
 				'hash' => sha1(time())
 			];
-			if($user_id = $this->UserModel->Add($user_fields))
+			if($user_id = $this->UserModel->add($user_fields))
 			{
-				$user = $this->UserModel->GetByID($user_id);
-				$this->SetUser($user);
+				$user = $this->UserModel->getByID($user_id);
+				$this->setUser($user);
 			}
 			
 			return true;
@@ -96,7 +96,7 @@ class AuthModel extends APP_Model
 		return false;
 	}
 
-	public function GetLoginRemember()
+	public function getLoginRemember()
 	{
 		return [
 			'email' => get_cookie('email', true),
@@ -104,13 +104,13 @@ class AuthModel extends APP_Model
 		];
 	}
 
-	public function Logout()
+	public function logout()
 	{
 		$this->session->sess_destroy();
 		return true;
 	}
 
-	public function SetUser($user = [])
+	public function setUser($user = [])
 	{
 		$this->session->set_userdata('USER', $user);
 	}
@@ -127,7 +127,7 @@ class AuthModel extends APP_Model
 
 	public function check()
 	{
-		if(($user = $this->User()) == false )
+		if(($user = $this->user()) == false )
 		{
 			return false;
 		}
@@ -140,16 +140,33 @@ class AuthModel extends APP_Model
 		return true;
 	}
 
+	// Проверка доступа
+	public function checkAccess($params = [])
+	{
+		if($user = $this->user())
+		{
+			foreach($params as $val)
+			{
+				if($this->AccessModel->check($user['role'], $val[0], $val[1]) === true)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public function balance()
 	{
-		$user = $this->User();
+		$user = $this->user();
 		return isset($user['balance'])?$user['balance']:0;
 	}
 
 	public function updateBalance()
 	{
-		$user = $this->User();
-		$user['balance'] = $this->TransactionsModel->BalanceUser($user['id']);
+		$user = $this->user();
+		$user['balance'] = $this->TransactionsModel->balanceUser($user['id']);
 		$this->session->set_userdata('USER', $user);
 	}
 }

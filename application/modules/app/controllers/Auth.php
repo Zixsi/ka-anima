@@ -13,9 +13,9 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		if($this->Auth->Login()) redirect('');
+		if($this->Auth->login()) redirect('');
 		
-		$data['form'] = $this->Auth->GetLoginRemember();
+		$data['form'] = $this->Auth->getLoginRemember();
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/login', $data);
@@ -23,7 +23,7 @@ class Auth extends APP_Controller
 
 	public function logout()
 	{
-		$this->Auth->Logout();
+		$this->Auth->logout();
 		redirect('');
 	}
 
@@ -31,7 +31,7 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		if($this->Auth->Register()) redirect('');
+		if($this->Auth->register()) redirect('');
 
 		$data['form']['email'] = $this->input->post('email', true);
 		$data['error'] = $this->Auth->LAST_ERROR;
@@ -43,8 +43,7 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		//if($this->Auth->Login()) redirect('');
-		//$data['form'] = $this->Auth->GetLoginRemember();
+		//$data['form'] = $this->Auth->getLoginRemember();
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/forgot', $data);
@@ -53,9 +52,8 @@ class Auth extends APP_Controller
 	public function confirmation()
 	{
 		$data = [];
-
-		//if($this->Auth->Login()) redirect('');
-		//$data['form'] = $this->Auth->GetLoginRemember();
+		
+		//$data['form'] = $this->Auth->getLoginRemember();
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/confirmation', $data);

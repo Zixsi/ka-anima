@@ -51,7 +51,7 @@ class Course extends APP_Controller
 					'ts_end' => $ts_item->format('Y-m-d 00:00:00')
 				];
 
-				$this->CoursesGroupsModel->Add($data);
+				$this->CoursesGroupsModel->add($data);
 			}
 		}
 	}

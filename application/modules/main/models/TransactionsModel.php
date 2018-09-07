@@ -10,11 +10,11 @@ class TransactionsModel extends APP_Model
 		1 // OUT
 	];
 
-	public function Add($data = [])
+	public function add($data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			if($this->db->insert(self::TABLE, $data))
 			{
@@ -30,11 +30,11 @@ class TransactionsModel extends APP_Model
 		return false;
 	}
 
-	public function Update($id, $data = [])
+	public function update($id, $data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			$this->db->where('id', $id);
 			if($this->db->update(self::TABLE, $data))
@@ -50,7 +50,7 @@ class TransactionsModel extends APP_Model
 		return false;
 	}
 
-	public function GetByID($id)
+	public function getByID($id)
 	{
 		$id = intval($id);
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
@@ -62,7 +62,7 @@ class TransactionsModel extends APP_Model
 		return false;
 	}
 
-	public function List($filter = [], $order = [], $select = [])
+	public function list($filter = [], $order = [], $select = [])
 	{
 		try
 		{
@@ -88,7 +88,7 @@ class TransactionsModel extends APP_Model
 		return false;
 	}
 
-	public function BalanceUser($id)
+	public function balanceUser($id)
 	{
 		try
 		{
@@ -131,7 +131,7 @@ class TransactionsModel extends APP_Model
 		return 0;
 	}
 
-	private function _CheckFields($data = [])
+	private function _checkFields($data = [])
 	{
 		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);

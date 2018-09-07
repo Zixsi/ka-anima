@@ -34,10 +34,12 @@
 					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
 				</div>-->
 				<div class="navbar-btn navbar-left">
-					<span class="nav-balance">
-						Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->balance(), 2, '.', ' ')?> $</span>
-						<a href="/pay/" class="lnr lnr-plus-circle"></a>
-					</span>
+					<?if($CI->Auth->checkAccess([['user', 'view']])):?>
+						<span class="nav-balance">
+							Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->balance(), 2, '.', ' ')?> $</span>
+							<a href="/pay/" class="lnr lnr-plus-circle"></a>
+						</span>
+					<?endif;?>
 				</div>
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
@@ -76,37 +78,29 @@
 				<nav>
 					<ul class="nav">
 						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
-						<li>
-							<a href="#subPages1" data-toggle="collapse" class="collapsed"><i class="lnr lnr-graduation-hat"></i> <span>Обучение</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages1" class="collapse in">
-								<ul class="nav">
-									<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
-									<li><a href="/courses/" class="">Курсы</a></li>
-									<li><a href="/subscription/" class="">Подписка</a></li>
-								</ul>
-							</div>
-						</li>
-						<?/*if($list_groups = $CI->CoursesGroupsModel->getUserGroups($CI->Auth->userID())):?>
+						<?if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
 							<li>
-								<a href="#subPages2" data-toggle="collapse" class="collapsed"><i class="lnr lnr-users"></i> <span>Группы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-								<div id="subPages2" class="collapse in">
+								<a href="#subPages1" data-toggle="collapse" class="collapsed"><i class="lnr lnr-graduation-hat"></i> <span>Обучение</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+								<div id="subPages1" class="collapse in">
 									<ul class="nav">
-										<?foreach($list_groups as $val):?>
-											<li><a href="/groups/<?=$val['id']?>/" class=""><?=$val['name']?></a></li>
-										<?endforeach;?>
+										<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
+										<li><a href="/courses/" class="">Курсы</a></li>
+										<li><a href="/subscription/" class="">Подписка</a></li>
 									</ul>
 								</div>
 							</li>
-						<?endif;*/?>
-						<li>
-							<a href="#subPages3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-							<div id="subPages3" class="collapse in">
-								<ul class="nav">
-									<li><a href="/teachingcourses/" class="">Курсы</a></li>
-									<li><a href="/teachinggroups/" class="">Группы</a></li>
-								</ul>
-							</div>
-						</li>
+						<?endif;?>
+						<?if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
+							<li>
+								<a href="#subPages3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+								<div id="subPages3" class="collapse in">
+									<ul class="nav">
+										<li><a href="/teachingcourses/" class="">Курсы</a></li>
+										<li><a href="/teachinggroups/" class="">Группы</a></li>
+									</ul>
+								</div>
+							</li>
+						<?endif;?>
 					</ul>
 				</nav>
 			</div>

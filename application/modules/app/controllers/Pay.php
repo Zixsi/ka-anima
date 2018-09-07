@@ -30,7 +30,7 @@ class Pay extends APP_Controller
 		}
 		$data['csrf'] = CrGetKey();
 
-		$data['items'] = $this->TransactionsModel->List(['user' => $user_id], ['ts' => 'DESC']);
+		$data['items'] = $this->TransactionsModel->list(['user' => $user_id], ['ts' => 'DESC']);
 
 		$this->load->lview('pay/index', $data);
 	}

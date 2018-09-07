@@ -15,11 +15,11 @@ class CoursesGroupsModel extends APP_Model
 		parent::__construct();
 	}
 
-	public function Add($data = [])
+	public function add($data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			if($this->db->insert(self::TABLE, $data))
 			{
@@ -34,11 +34,11 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	public function Update($id, $data = [])
+	public function update($id, $data = [])
 	{
 		try
 		{
-			$this->_CheckFields($data);
+			$this->_checkFields($data);
 
 			$this->db->where('id', $id);
 			if($this->db->update(self::TABLE, $data))
@@ -280,7 +280,7 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
-	private function _CheckFields(&$data = [])
+	private function _checkFields(&$data = [])
 	{
 		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
