@@ -28,7 +28,9 @@
 										<td><?=$val['name']?></td>
 										<td><?=$val['comment']?></td>
 										<td class="text-right">
-											<a href="javascript:;" class="btn btn-3xs btn-primary">Скачать</a>
+											<?if($val['type'] == 0):?>
+												<a href="/file/download/<?=$val['file']?>" target="_blank" class="btn btn-3xs btn-primary">Скачать</a>
+											<?endif;?>
 										</td>
 									</tr>
 								<?endforeach;?>

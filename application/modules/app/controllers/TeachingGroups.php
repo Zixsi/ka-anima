@@ -27,9 +27,6 @@ class TeachingGroups extends APP_Controller
 
 	public function lecture($group_id = 0, $id = 0)
 	{
-		//$this->load->helper('download');
-		//force_download('/path/to/photo.jpg', NULL);
-
 		$data = [];
 		$data['homework'] = $this->LecturesModel->getTeacherHomeWork($group_id, $id);
 
