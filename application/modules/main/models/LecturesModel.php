@@ -213,11 +213,11 @@ class LecturesModel extends APP_Model
 	{
 		try
 		{
-			$sql = 'SELECT * FROM '.self::TABLE_LECTURES_VIDEO.' WHERE source_id = ? AND source_type = 1 ORDER BY source_id ASC';
+			$sql = 'SELECT * FROM '.self::TABLE_LECTURES_VIDEO.' WHERE source_id = ? AND source_type = ? ORDER BY source_id ASC';
 			$res = $this->db->query($sql, [$id, $type]);
 			if($res = $res->result_array())
 			{
-				$result = [];
+				$result = $res;
 
 				return $result;
 			}
