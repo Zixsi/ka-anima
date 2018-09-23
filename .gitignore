@@ -10,8 +10,8 @@ application/logs/*
 !application/logs/index.html
 !application/*/.htaccess
 
-www/data/*
-!www/data/index.html
+data/*
+!data/index.html
 
 
 # IDE Files

@@ -29,6 +29,7 @@ class SystemHook
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);
 		$check = $this->CI->Auth->check();
+		$user = $this->CI->Auth->user();
 
 		//var_dump($d); die();
 
@@ -41,6 +42,10 @@ class SystemHook
 			elseif($check == true && $c == 'auth' && $a != 'logout')
 			{
 				redirect('/admin/');
+			}
+			elseif($check == true && $user['role'] != 5)
+			{
+				redirect('/');
 			}
 		}
 		else
