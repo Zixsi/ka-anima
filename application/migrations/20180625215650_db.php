@@ -33,11 +33,14 @@ class Migration_db extends CI_Migration
 				],
 				'ts_created' => [
 					'type' => 'TIMESTAMP',
-					'default' => 'CURRENT_TIMESTAMP'
+					'default' => '',
+					'default' => 'CURRENT_TIMESTAMP',
+					'default_string' => false
 				],
 				'ts_modify' => [
 					'type' => 'TIMESTAMP',
-					'default' => 'CURRENT_TIMESTAMP'
+					'default' => 'CURRENT_TIMESTAMP',
+					'default_string' => false
 				],
 		]);
 		$this->dbforge->add_key('id', TRUE);

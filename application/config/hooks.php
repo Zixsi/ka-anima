@@ -12,6 +12,31 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
+
+$hook['post_controller_constructor'][] = array(
+	'class'    => 'SystemHook',
+	'function' => 'InitOptions',
+	'filename' => 'SystemHook.php',
+	'filepath' => 'hooks',
+	'params'   => []
+);
+
+$hook['post_controller_constructor'][] = array(
+	'class'    => 'SystemHook',
+	'function' => 'CheckAuth',
+	'filename' => 'SystemHook.php',
+	'filepath' => 'hooks',
+	'params'   => []
+);
+
+$hook['post_controller_constructor'][] = array(
+	'class'    => 'SystemHook',
+	'function' => 'Profiler',
+	'filename' => 'SystemHook.php',
+	'filepath' => 'hooks',
+	'params'   => []
+);
+
 $hook['pre_controller_constructor'][] = array(
 	'class'    => 'LayoutHook',
 	'function' => 'Default',

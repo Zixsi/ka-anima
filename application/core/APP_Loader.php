@@ -1,14 +1,11 @@
-<?php
+<?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-class APP_Loader extends CI_Loader
+require APPPATH."third_party/MX/Loader.php";
+
+class APP_Loader extends MX_Loader
 {
 	public $layout = 'index';
 	private $_content_view = null;
-
-	public function __construct()
-	{
-		parent::__construct();
-	}
 
 	public function lview($view, $vars = array(), $return = FALSE)
 	{
@@ -21,3 +18,4 @@ class APP_Loader extends CI_Loader
 		$this->view($this->_content_view);
 	}
 }
+
