@@ -280,6 +280,18 @@ class CoursesGroupsModel extends APP_Model
 		return false;
 	}
 
+	// Информация по группе
+	public function getGroupInfo($id)
+	{
+		if($res = $this->getByID($id))
+		{
+			
+			debug($res); die();
+		}
+
+		return false;
+	}
+
 	private function _checkFields(&$data = [])
 	{
 		$this->form_validation->reset_validation();

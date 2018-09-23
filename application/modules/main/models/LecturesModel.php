@@ -105,6 +105,28 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
+	// Список всех лекций курса
+	public function listForCourse($id)
+	{
+		$sql = 'SELECT 
+					id, name 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					course_id = ? AND 
+					active = 1 
+				ORDER BY 
+					sort ASC, 
+					id ASC';
+		$res = $this->db->query($sql, [$id]);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
 	// Список доcтупных для добавления в группу
 	public function listAvailableForAddToGroup($course_id, $offset = 0)
 	{

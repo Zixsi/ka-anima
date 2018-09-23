@@ -226,11 +226,7 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-	public function groupList($user)
-	{
-		return false;
-	}
-
+	// Курсы на которые подписан пользователь
 	public function coursesList($user)
 	{
 		try
@@ -241,7 +237,7 @@ class SubscriptionModel extends APP_Model
 			}
 
 			$sql = 'SELECT 
-						c.id, c.name, c.type, cg.ts, cg.id as course_group 
+						c.id, c.name, c.type, cg.ts, cg.id as course_group  
 					FROM 
 						'.self::TABLE.' as s 
 					LEFT JOIN 

@@ -14,7 +14,7 @@ class Course extends APP_Controller
 	}
 
 	// Добавляем курс в список доступных для подписки
-	// php www/index.php cli course createGroups
+	// php index.php cli course createGroups
 	public function createGroups()
 	{
 		var_dump('Create Groups');
@@ -57,7 +57,7 @@ class Course extends APP_Controller
 	}
 
 	// Делаем доступной следующую лекцию в группе
-	// php www/index.php cli course createLectures
+	// php index.php cli course createLectures
 	public function createLectures()
 	{
 		var_dump('Create Lectures');
@@ -105,7 +105,7 @@ class Course extends APP_Controller
 	}
 
 	// Обновление ссылок на видео
-	// php www/index.php cli course updateLecturesVideoUrl
+	// php index.php cli course updateLecturesVideoUrl
 	public function updateLecturesVideoUrl()
 	{
 		var_dump('Update Lectures Video Url');
@@ -126,7 +126,7 @@ class Course extends APP_Controller
 		}
 	}
 
-	// php www/index.php cli course test
+	// php index.php cli course test
 	public function test()
 	{
 		/*var_dump('Test');

@@ -25,3 +25,15 @@
 .table-courses {}
 .table-courses .row-course {cursor: pointer;}
 .table-courses .row-course.active {background-color: #dff0d8; cursor: auto;}
+
+/*#########################################################################################*/
+
+.video-wrap {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}
+.video-wrap iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
+
+.week-panel {display: flex; flex-wrap: wrap; justify-content: center;}
+.week-panel .week-item {text-align: center; box-sizing: border-box; margin: 0px 20px 20px}
+.week-panel .week-item.active {cursor: pointer;}
+.week-panel .week-item.active .number {background-color: #00AAFF;}
+.week-panel .week-item .number {display: inline-block; width: 40px ;height: 40px; border-radius: 50%; background-color: #ccc; text-align: center; line-height: 38px; color: #fff; font-size: 25px; margin-bottom: 10px;}
+.week-panel .week-item .name {display: block; font-size: 14px;}

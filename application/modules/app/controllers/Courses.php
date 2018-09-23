@@ -19,17 +19,30 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
-
-		$data['courses'] = $this->SubscriptionModel->byUserType($this->user_id, 0);
-		$this->prepareCourses($data['courses']);
 		$data['lectures'] = [];
+
+		//$data['courses'] = $this->SubscriptionModel->coursesList($this->user_id);
+		//$this->prepareCourses($data['courses']);
+		//debug($data['courses']);
+
+		if($this->SubscriptionModel->byUserService($this->user_id, $data['group_id']) == false)
+		{
+			header('Location: /');
+			die();
+		}
+
+		$group = $this->CoursesGroupsModel->getByID($data['group_id']);
+		$data['lectures'] = $this->LecturesModel->listForCourse($group['course_id']);		
 		$data['lecture'] = [];
 
 		if($data['group_id'] > 0)
 		{
-			if(array_key_exists($data['group_id'], $data['courses']) == false)
+			/*if(array_key_exists($data['group_id'], $data['courses']) == false)
 			{
-				header('Location: /courses/');
+				debug($data['group_id']);
+				debug($data['courses']);
+				die();
+				//header('Location: /courses/###');
 			}
 
 			$data['lectures'] = $this->LecturesModel->getAvailableForGroup($data['group_id']);
@@ -51,10 +64,10 @@ class Courses extends APP_Controller
 					$this->uploadHomeWork($data);
 				}
 				$data['csrf'] = CrGetKey();
-			}
+			}*/
 		}
 
-		$data['homework'] = $this->LecturesModel->getUserHomeWork($data['group_id'], $data['lecture_id'], $this->user_id);
+		//$data['homework'] = $this->LecturesModel->getUserHomeWork($data['group_id'], $data['lecture_id'], $this->user_id);
 
 
 		$this->load->lview('courses/index', $data);
@@ -101,9 +114,9 @@ class Courses extends APP_Controller
 		
 			foreach($tmp_data as $val)
 			{
-				$data[$val['id']] = [
+				$data[$val['course_group']] = [
 					'id' => $val['id'],
-					'service' => $val['service'],
+					'service' => $val['course_group'],
 					'name' => $val['description'],
 					'active' => $val['active'],
 					'ts_end' => $val['ts_end'],

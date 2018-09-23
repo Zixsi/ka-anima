@@ -1,4 +1,6 @@
-<?$CI = &get_instance();?>
+<?$CI = &get_instance();
+$user_id = $CI->Auth->userID();
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -78,19 +80,24 @@
 				<nav>
 					<ul class="nav">
 						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
-						<?if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
+						<?//if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
 							<li>
-								<a href="#subPages1" data-toggle="collapse" class="collapsed"><i class="lnr lnr-graduation-hat"></i> <span>Обучение</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-								<div id="subPages1" class="collapse in">
+								<a href="#sub-courses" data-toggle="collapse" class="collapsed"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+								<div id="sub-courses" class="collapse in">
 									<ul class="nav">
-										<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
-										<li><a href="/courses/" class="">Курсы</a></li>
-										<li><a href="/subscription/" class="">Подписка</a></li>
+										<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
+											<?foreach($courses as $item):?>
+												<li><a href="/courses/<?=$item['course_group']?>/" class=""><?=$item['name']?></a></li>
+											<?endforeach;?>
+										<?endif;?>
 									</ul>
 								</div>
 							</li>
-						<?endif;?>
-						<?if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
+							<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
+							<li><a href="/subscription/" class="">Подписка</a></li>
+						<?//endif;?>
+
+						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
 							<li>
 								<a href="#subPages3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 								<div id="subPages3" class="collapse in">
@@ -100,7 +107,8 @@
 									</ul>
 								</div>
 							</li>
-						<?endif;?>
+						<?//endif;?>
+
 					</ul>
 				</nav>
 			</div>

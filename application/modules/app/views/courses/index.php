@@ -1,134 +1,91 @@
 <div class="row">
-	
-	<?if($error):?>
-		<div class="col-xs-12"><?=ShowError($error);?></div>
-	<?endif;?>
 
-	<?if($courses):?>
-		<div class="col-xs-6">
-			<div class="panel">
-				<div class="panel-body">
-					<h4>Курсы</h4>
-					<table class="table table-courses">
-						<?foreach($courses as $val):?>
-							<tr>
-								<td class="row-course <?=($group_id == $val['id'])?'active':''?>">
-									<a href="/courses/<?=$val['id']?>/">
-										<span><?=$val['name']?></span>
-										<?if($val['active'] == false):?>
-											<span class="label label-danger">Истек</span>
-										<?endif;?>
-									</a>
-								</td>
-							</tr>
-						<?endforeach;?>
-					</table>
-				</div>
-			</div>
-			<div class="panel lectures-block">
-				<div class="panel-body">
-					<h4>Лекции</h4>
-					<table class="table">
-						<?if($lectures):?>
-							<?foreach($lectures as $val):?>
-								<tr>
-									<td>
-										<span class="lnr lnr-eye"></span>
-									</td>
-									<td>
-										<div class="row">
-											<div class="col-xs-8">
-												<a href="/courses/<?=$group_id?>/<?=$val['id']?>/"><?=$val['name']?></a>
-											</div>
-											<div class="col-xs-4 text-right">
-												<span class="lnr lnr-sync"></span>
-											</div>
-										</div>
-										<div class="progress progress-xs">
-											<div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%"></div>
-										</div>
-									</td>
-								</tr>
-							<?endforeach;?>
-						<?endif;?>
-					</table>
-				</div>
-			</div>
+	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
+		<a href="#" class="btn btn-primary">Лекции</a>
+		<a href="#" class="btn btn-default disabled">Группа</a>
+		<a href="#" class="btn btn-default disabled">Ревью работ</a>
+		<a href="#" class="btn btn-default disabled">Онлайн встречи</a>
+	</div>
+
+	<div class="col-xs-12">
+		<div class="week-panel">
+			<?$i = 1;?>
+			<?foreach($lectures as $item):?>
+				<span class="week-item <?=($i == 1)?'active':''?>">
+					<span class="number"><?=$i?></span>
+					<span class="name"><?=$item['name']?></span>
+				</span>
+				<?$i++;?>
+			<?endforeach;?>
 		</div>
-		<div class="col-xs-6">
-			<?if($lecture):?>
-				<div class="panel">
-					<div class="panel-body">
-						<h4>Лекция</h4>
-						<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
-							<video src="<?=$lecture['video']?>" poster="<?=TEMPLATE_DIR?>/admin_1/assets/img/video-poster.png" width="100%" height="100%" controls="true"></video>
-						</div>
+	</div>
+
+	<div class="col-xs-12">
+		<h3>Название лекции</h3>
+	</div>
+
+	<div class="col-xs-5">
+		<div class="video-wrap">
+			<iframe src="/video/1" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		</div>
+		<div class="video-info">
+			<h4>Описание</h4>
+			<h4>Задание</h4>
+			<h4>Материалы для лекции</h4>
+		</div>
+	</div>
+	<div class="col-xs-7">
+		<div class="panel panel-headline">
+			<div class="panel-heading">
+				<h3 class="panel-title">Загрузка заданий</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-6" style="font-size: 14px;">
+						<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
+						<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
+
+						<p><b>Требования к загружаемым файлам:</b><br>
+						Картинки и видео – <b>jpg</b>, <b>png</b>, <b>mp4</b> (кодек <b>h264</b> или <b>x264</b>), разрешение <b>1280х720</b> пикселей.
+						Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
+						Максимальный размер файлов: <b>250 МБ</b></p>
 					</div>
-				</div>
-				<div class="panel">
-					<div class="panel-body">
-						<h4>Задание</h4>
-						<div id="lecture-task-text"><?=$lecture['task']?></div>
-					</div>
-				</div>
-				<div class="panel">
-					<div class="panel-body">
-						<h4 class="panel-title" style="margin-bottom: 25px;">Загрузка заданий</h4>
-						<p>Описание к требуемым форматам и размеру загружаемых файлов</p>
-						<form action="" method="post" enctype="multipart/form-data">
-							<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+					<div class="col-xs-6">
+						<form action="" method="post" class="form">
 							<div class="form-group">
-								<input type="file" name="file">
+								<label></label>
+								<input type="file" name="" class="form-control">
 							</div>
 							<div class="form-group">
-								<textarea class="form-control" name="text" placeholder="Комментарий к файлу"></textarea>
-							</div>
-							<div class="form-group">
-								<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
+								<label>Комментарий к файлу</label>
+								<textarea class="form-control" rows="5"></textarea>
 							</div>
 						</form>
 					</div>
 				</div>
-
-				<?if($homework):?>
-					<div class="panel">
-						<div class="panel-body">
-							<h4 class="panel-title" style="margin-bottom: 25px;">Мои загруженные задания</h4>
-							<table class="table table-bordered">
-								<thead>
-									<tr>
-										<th>Дата</th>
-										<th>Название</th>
-										<th>Комментарий</th>
-									</tr>
-								</thead>
-								<?foreach($homework as $val):?>
-									<tr>
-										<td><?=$val['ts']?></td>
-										<td><?=$val['name']?></td>
-										<td><?=$val['comment']?></td>
-									</tr>
-								<?endforeach;?>
-							</table>
-						</div>
-					</div>
-				<?endif;;?>
-
-			<?else:?>
-				<div class="panel">
-					<div class="panel-body">
-						<h4>Лекция</h4>
-						<div id="lectures-video" style="background-color: #333; height: 360px; width: 100%;">
-							<video src="" poster="<?=TEMPLATE_DIR?>/admin_1/assets/img/video-poster.png" width="100%" height="100%" controls="true"></video>
-						</div>
-					</div>
-				</div>
-			<?endif;?>
+			</div>
 		</div>
-	<?else:?>
-		<div class="col-xs-12 text-center">
-			<h4>Еще не подписаны на курсы? Сделайте это прямо сейчас!</h4>
-			<a href="/courses/enroll/" class="btn btn-md btn-primary">Записаться</a>
+
+		<div class="panel panel-headline">
+			<div class="panel-heading">
+				<h3 class="panel-title">Загруженные задания</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table">
+					<tbody>
+						<tr>
+							<td>2018-09-05</td>
+							<td>Вася Пупкин</td>
+							<td>file.ext</td>
+							<td>
+								<a href="#" class="btn btn-primary btn-xs">Скачать</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
-	<?endif;?>
+	</div>
+
 </div>
+
