@@ -7,6 +7,7 @@ class LecturesModel extends APP_Model
 	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	private const TABLE_LECTURES_VIDEO = 'lectures_video';
 	private const TABLE_LECTURES_HOMEWORK = 'lectures_homework';
+	private const TABLE_COURSES_GROUPS = 'courses_groups';
 	private const TABLE_USERS = 'users';
 	private const TABLE_FILES = 'files';
 	private const TABLE_FIELDS = ['active', 'name', 'description', 'task', 'type', 'course_id', 'video', 'modify', 'sort'];
@@ -112,6 +113,30 @@ class LecturesModel extends APP_Model
 					id, name 
 				FROM 
 					'.self::TABLE.' 
+				WHERE 
+					course_id = ? AND 
+					active = 1 
+				ORDER BY 
+					sort ASC, 
+					id ASC';
+		$res = $this->db->query($sql, [$id]);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
+	// Список всех лекций группы
+	public function listForGroup($id)
+	{
+		$sql = 'SELECT 
+					l.id, l.name, 
+				FROM 
+					'.self::TABLE.' as l
+				LEFT JOIN 
+					'.self::TABLE_LECTURES_GROUPS.' as lg ON()
 				WHERE 
 					course_id = ? AND 
 					active = 1 

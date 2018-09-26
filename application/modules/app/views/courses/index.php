@@ -1,7 +1,7 @@
 <div class="row">
 
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
-		<a href="#" class="btn btn-primary">Лекции</a>
+		<a href="/courses/<?=$group_id?>/" class="btn btn-primary">Лекции</a>
 		<a href="#" class="btn btn-default disabled">Группа</a>
 		<a href="#" class="btn btn-default disabled">Ревью работ</a>
 		<a href="#" class="btn btn-default disabled">Онлайн встречи</a>
@@ -11,17 +11,25 @@
 		<div class="week-panel">
 			<?$i = 1;?>
 			<?foreach($lectures as $item):?>
-				<span class="week-item <?=($i == 1)?'active':''?>">
-					<span class="number"><?=$i?></span>
-					<span class="name"><?=$item['name']?></span>
-				</span>
+				<?if($item['active']):?>
+					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
+						<span class="number"><?=$i?></span>
+						<span class="name"><?=$item['name']?></span>
+					</a>
+				<?else:?>
+					<span class="week-item">
+						<span class="number"><?=$i?></span>
+						<span class="name"><?=$item['name']?></span>
+					</span>
+				<?endif;?>
+
 				<?$i++;?>
 			<?endforeach;?>
 		</div>
 	</div>
 
 	<div class="col-xs-12">
-		<h3>Название лекции</h3>
+		<h3><?=$lecture['name']?></h3>
 	</div>
 
 	<div class="col-xs-5">
@@ -29,9 +37,14 @@
 			<iframe src="/video/1" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 		</div>
 		<div class="video-info">
-			<h4>Описание</h4>
+			<?if(!empty($lecture['description'])):?>
+				<h4>Описание</h4>
+				<p><?=$lecture['description']?></p>
+			<?endif;?>
+			<?/*
 			<h4>Задание</h4>
 			<h4>Материалы для лекции</h4>
+			*/?>
 		</div>
 	</div>
 	<div class="col-xs-7">
