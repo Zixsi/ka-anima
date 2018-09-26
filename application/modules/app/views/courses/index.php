@@ -28,77 +28,94 @@
 		</div>
 	</div>
 
-	<div class="col-xs-12">
-		<h3><?=$lecture['name']?></h3>
-	</div>
+	<?if($lectures_is_active):?>
 
-	<div class="col-xs-5">
-		<div class="video-wrap">
-			<iframe src="/video/1" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+		<div class="col-xs-12">
+			<h3><?=$lecture['name']?></h3>
 		</div>
-		<div class="video-info">
-			<?if(!empty($lecture['description'])):?>
-				<h4>Описание</h4>
-				<p><?=$lecture['description']?></p>
-			<?endif;?>
-			<?/*
-			<h4>Задание</h4>
-			<h4>Материалы для лекции</h4>
-			*/?>
-		</div>
-	</div>
-	<div class="col-xs-7">
-		<div class="panel panel-headline">
-			<div class="panel-heading">
-				<h3 class="panel-title">Загрузка заданий</h3>
+
+		<div class="col-xs-5">
+			<div class="video-wrap">
+				<iframe src="/video/<?=$lecture_id?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 			</div>
-			<div class="panel-body">
-				<div class="row">
-					<div class="col-xs-6" style="font-size: 14px;">
-						<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
-						<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
+			<div class="video-info">
+				<?if(!empty($lecture['description'])):?>
+					<h4>Описание</h4>
+					<p><?=$lecture['description']?></p>
+				<?endif;?>
+				<?/*
+				<h4>Задание</h4>
+				<h4>Материалы для лекции</h4>
+				*/?>
+			</div>
+		</div>
+		<div class="col-xs-7">
+			<div class="panel panel-headline">
+				<div class="panel-heading">
+					<h3 class="panel-title">Загрузка заданий</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-xs-6" style="font-size: 14px;">
+							<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
+							<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
 
-						<p><b>Требования к загружаемым файлам:</b><br>
-						Картинки и видео – <b>jpg</b>, <b>png</b>, <b>mp4</b> (кодек <b>h264</b> или <b>x264</b>), разрешение <b>1280х720</b> пикселей.
-						Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
-						Максимальный размер файлов: <b>250 МБ</b></p>
+							<p><b>Требования к загружаемым файлам:</b><br>
+							Картинки и видео – <b>jpg</b>, <b>png</b>, <b>mp4</b> (кодек <b>h264</b> или <b>x264</b>), разрешение <b>1280х720</b> пикселей.
+							Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
+							Максимальный размер файлов: <b>250 МБ</b></p>
+						</div>
+						<div class="col-xs-6">
+							<form action="" method="post" class="form" enctype="multipart/form-data">
+								<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+								<div class="form-group">
+									<label></label>
+									<input type="file" name="file" class="form-control">
+								</div>
+								<div class="form-group">
+									<label>Комментарий к файлу</label>
+									<textarea name="text" class="form-control" rows="5"></textarea>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
+								</div>
+							</form>
+						</div>
 					</div>
-					<div class="col-xs-6">
-						<form action="" method="post" class="form">
-							<div class="form-group">
-								<label></label>
-								<input type="file" name="" class="form-control">
-							</div>
-							<div class="form-group">
-								<label>Комментарий к файлу</label>
-								<textarea class="form-control" rows="5"></textarea>
-							</div>
-						</form>
-					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-headline">
+				<div class="panel-heading">
+					<h3 class="panel-title">Загруженные задания</h3>
+				</div>
+				<div class="panel-body">
+					<?if($lecture_homework):?>
+						<table class="table">
+							<tbody>
+								<?foreach($lecture_homework as $val):?>
+									<tr>
+										<td><?=$val['ts']?></td>
+										<td><?=$val['user_name']?></td>
+										<td><?=$val['name']?></td>
+										<td>
+											<a href="#" class="btn btn-primary btn-xs">Скачать</a>
+										</td>
+									</tr>
+								<?endforeach;?>
+							</tbody>
+						</table>
+					<?else:?>
+						<div class="text-center">Нет загруженных заданий</div>
+					<?endif;?>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel panel-headline">
-			<div class="panel-heading">
-				<h3 class="panel-title">Загруженные задания</h3>
-			</div>
-			<div class="panel-body">
-				<table class="table">
-					<tbody>
-						<tr>
-							<td>2018-09-05</td>
-							<td>Вася Пупкин</td>
-							<td>file.ext</td>
-							<td>
-								<a href="#" class="btn btn-primary btn-xs">Скачать</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+	<?endif;?>
 
 </div>
 
+<?if($lectures_is_active == false):?>
+	<div class="alert alert-danger text-center" style="font-size: 24px;">Нет активных лекций</div>
+<?endif;?>

@@ -28,7 +28,7 @@ $user_id = $CI->Auth->userID();
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo-dark.png" alt="Klorofil Logo" class="img-responsive logo"></a>
+				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_mini.png" alt="Klorofil Logo" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
 				<!--

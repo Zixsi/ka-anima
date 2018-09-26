@@ -8,7 +8,7 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel']);
 
 		$this->user_id = $this->Auth->userID();
 	}
@@ -29,27 +29,24 @@ class Courses extends APP_Controller
 
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$last_active_lecture = $this->prepareLectures($data['lectures']);
+		$data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
 
-		if($last_active_lecture == 0)
+		if($data['lectures_is_active'])
 		{
-			debug('Нет активных лекций'); die();
+			if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
+			{
+				header('Location: /courses/'.$data['group_id'].'/lecture/'.$last_active_lecture);
+				die();
+			}
+
+			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
+			if(CrValidKey())
+			{
+				$this->uploadHomeWork($data);
+			}
+			$data['csrf'] = CrGetKey();
+			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($data['group_id'], $data['lecture_id']);
 		}
-
-		if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
-		{
-			header('Location: /courses/'.$data['group_id'].'/lecture/'.$last_active_lecture);
-			die();
-		}
-
-		$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
-		/*if(CrValidKey())
-		{
-			$this->uploadHomeWork($data);
-		}*/
-		$data['csrf'] = CrGetKey();
-
-		//$data['homework'] = $this->LecturesModel->getUserHomeWork($data['group_id'], $data['lecture_id'], $this->user_id);
-
 
 		$this->load->lview('courses/index', $data);
 	}
@@ -125,7 +122,7 @@ class Courses extends APP_Controller
 		{
 			if($file_id = $this->FilesModel->saveFileArray($this->upload->data()))
 			{
-				$this->LecturesModel->addHomeWork($data['group_id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
+				$this->LecturesHomeworkModel->add($data['group_id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
 			}
 
 			$data['error'] = $this->FilesModel->LAST_ERROR;
