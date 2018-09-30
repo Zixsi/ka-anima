@@ -2,7 +2,7 @@
 
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
 		<a href="/courses/<?=$group_id?>/" class="btn btn-primary">Лекции</a>
-		<a href="#" class="btn btn-default disabled">Группа</a>
+		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
 		<a href="#" class="btn btn-default disabled">Ревью работ</a>
 		<a href="#" class="btn btn-default disabled">Онлайн встречи</a>
 	</div>
@@ -43,10 +43,11 @@
 					<h4>Описание</h4>
 					<p><?=$lecture['description']?></p>
 				<?endif;?>
-				<?/*
-				<h4>Задание</h4>
-				<h4>Материалы для лекции</h4>
-				*/?>
+
+				<?if(!empty($lecture['task'])):?>
+					<h4>Задание</h4>
+					<p><?=$lecture['task']?></p>
+				<?endif;?>
 			</div>
 		</div>
 		<div class="col-xs-7">
@@ -99,7 +100,7 @@
 										<td><?=$val['user_name']?></td>
 										<td><?=$val['name']?></td>
 										<td>
-											<a href="#" class="btn btn-primary btn-xs">Скачать</a>
+											<a href="/file/download/<?=$val['id']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>
 										</td>
 									</tr>
 								<?endforeach;?>

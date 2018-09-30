@@ -14,6 +14,9 @@ class FilesModel extends APP_Model
 	{
 		try
 		{
+			$data['file_path'] = get_rel_path($data['file_path']);
+			$data['full_path'] = get_rel_path($data['full_path']);
+
 			if($this->db->insert(self::TABLE, $data))
 			{
 				return $this->db->insert_id();

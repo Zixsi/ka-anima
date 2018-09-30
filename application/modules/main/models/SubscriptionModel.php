@@ -6,6 +6,7 @@ class SubscriptionModel extends APP_Model
 	private const TABLE = 'subscription';
 	private const TABLE_COURSES = 'courses';
 	private const TABLE_COURSES_GROUPS = 'courses_groups';
+	private const TABLE_USERS = 'users';
 	private const TABLE_FIELDS = ['user', 'type', 'service', 'description', 'ts_start', 'ts_end', 'subscr_type', 'price_month', 'price_full', 'amount'];
 	
 	// Типы сервисов подписки
@@ -436,6 +437,32 @@ class SubscriptionModel extends APP_Model
 		{
 			$this->db->trans_rollback();
 			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	public function getGroupUsers($group)
+	{
+		if($group > 0)
+		{
+			$sql = 'SELECT 
+						u.id, u.email 
+					FROM 
+						'.self::TABLE.' as s 
+					LEFT JOIN 
+						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
+					WHERE 
+						s.service = ? AND type = 0 
+					GROUP BY 
+						s.user 
+					ORDER BY 
+						s.user ASC';
+
+			if($res = $this->db->query($sql, [intval($group)])->result_array())
+			{
+				return $res;
+			}
 		}
 
 		return false;

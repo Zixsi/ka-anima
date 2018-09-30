@@ -24,7 +24,7 @@ class TeachingLectures extends APP_Controller
 		$data = [];
 		$this->checkAccess($course);
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 			$form_data['course_id'] = $course;
@@ -34,7 +34,7 @@ class TeachingLectures extends APP_Controller
 			}
 		}
 
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->LecturesModel->LAST_ERROR;
 
 		$this->load->lview('teachingLectures/add', $data);
@@ -57,7 +57,7 @@ class TeachingLectures extends APP_Controller
 			header('Location: ../');
 		}
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 			$form_data['course_id'] = $course;
@@ -68,7 +68,7 @@ class TeachingLectures extends APP_Controller
 			}
 		}
 
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->LecturesModel->LAST_ERROR;
 
 		$this->load->lview('teachingLectures/edit', $data);

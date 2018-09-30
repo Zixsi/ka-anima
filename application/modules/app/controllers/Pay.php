@@ -14,7 +14,7 @@ class Pay extends APP_Controller
 		$data = [];
 		$user_id = $this->Auth->userID();
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$fields = [
 				'user' => $user_id,
@@ -28,7 +28,7 @@ class Pay extends APP_Controller
 				 $this->Auth->updateBalance();
 			}
 		}
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 
 		$data['items'] = $this->TransactionsModel->list(['user' => $user_id], ['ts' => 'DESC']);
 

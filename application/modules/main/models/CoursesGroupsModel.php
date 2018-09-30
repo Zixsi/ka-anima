@@ -8,6 +8,7 @@ class CoursesGroupsModel extends APP_Model
 	private const TABLE_LECTURES = 'lectures';
 	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	private const TABLE_SUBSCRIPTION = 'subscription';
+	private const TABLE_FILES = 'files';
 	private const TABLE_FIELDS = ['code', 'course_id', 'ts', 'ts_end'];
 
 	public function __construct()
@@ -62,7 +63,7 @@ class CoursesGroupsModel extends APP_Model
 	public function getByID($id)
 	{
 		$sql = 'SELECT 
-					g.*, c.name, c.price_month, c.price_full, 
+					g.*, c.name, c.price_month, c.price_full, c.author, 
 					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other 
 				FROM 
 					'.self::TABLE.' as g 
@@ -150,13 +151,15 @@ class CoursesGroupsModel extends APP_Model
 		$ts = time();
 		$sql = 'SELECT 
 					c.id, c.name, c.type, c.description, c.price_month, 
-					c.price_full, g.id as group_id, g.code, g.ts 
+					c.price_full, g.id as group_id, g.code, g.ts, f.full_path as img_src 
 				FROM 
 					'.self::TABLE_COURSES.' as c 
 				LEFT JOIN 
 					'.self::TABLE.' as g ON(c.id = g.course_id) 
 				LEFT JOIN 
 					'.self::TABLE_SUBSCRIPTION.' as s ON(g.id = s.service AND s.type = 0 AND s.user = ?) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE 
 					c.active = 1 AND 
 					g.id IS NOT NULL AND 
@@ -179,6 +182,7 @@ class CoursesGroupsModel extends APP_Model
 						'id' => $val['id'],
 						'name' => $val['name'],
 						'type' => $val['type'],
+						'img' => $val['img_src'],
 						'description' => $val['description'],
 						'price' => [
 							'month' => $val['price_month'],

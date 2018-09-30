@@ -30,7 +30,7 @@ class TeachingGroups extends APP_Controller
 	{
 		$data = [];
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$url = $this->input->post('url', true);
 			if(!empty($url))
@@ -47,7 +47,7 @@ class TeachingGroups extends APP_Controller
 				SetFlashMessage('error', $this->LecturesModel->LAST_ERROR);
 			}
 		}
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 
 		$data['homework'] = $this->LecturesModel->getTeacherHomeWork($group_id, $id);
 

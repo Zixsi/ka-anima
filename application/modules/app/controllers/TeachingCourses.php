@@ -23,7 +23,7 @@ class TeachingCourses extends APP_Controller
 		$data = [];
 		$data['course_types'] = $this->CoursesModel::TYPES;
 		
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 			$form_data['author'] = $this->Auth->userID();
@@ -34,7 +34,7 @@ class TeachingCourses extends APP_Controller
 			}
 		}
 
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->CoursesModel->LAST_ERROR;
 
 		$this->load->lview('teachingCourses/add', $data);
@@ -56,18 +56,18 @@ class TeachingCourses extends APP_Controller
 			header('Location: ../');
 		}
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 
 			if($id = $this->CoursesModel->update($id, $form_data))
 			{
-				$data['item'] += $form_data;
+				$data['item'] = $this->CoursesModel->getByID($id);
 				SetFlashMessage('success', 'Success');
 			}
 		}
 
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->CoursesModel->LAST_ERROR;
 
 		$this->load->lview('teachingCourses/edit', $data);

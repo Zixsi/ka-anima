@@ -11,7 +11,7 @@
 		<div class="col-xs-12">
 			<?=ShowError($error);?>
 			<?=ShowFlashMessage();?>
-			<form action="./" method="POST">
+			<form action="./" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 				<div class="form-group">
 					<label class="fancy-checkbox">
@@ -36,6 +36,14 @@
 				<div class="form-group">
 					<label for="fperiod">Описание</label>
 					<textarea name="description" id="fdescription" class="form-control" placeholder="Описание"><?=set_value('description', $item['description'], true)?></textarea>
+				</div>
+
+				<div class="form-group">
+					<label>Изображение</label>
+					<input type="file" name="img" class="form-control">
+					<?if($item['img'] > 0):?>
+						<img src="/<?=$item['img_src']?>" class="thumbnail" style="margin: 20px 0px; max-width: 300px; height: auto;">
+					<?endif;?>
 				</div>
 				<div class="form-group">
 					<div class="row">

@@ -5,12 +5,6 @@
 			<div class="course-list-item col-md-12 col-lg-6">
 				<div class="panel">
 					<div class="panel-body">
-						<!--
-						<div class="col-xs-4">
-							<span class="thumbnail">
-								<img src="" alt="">
-							</span>
-						</div>-->
 						<div class="custom-tabs-line tabs-line-bottom left-aligned" style="margin-bottom: 25px;">
 							<ul class="nav" role="tablist">
 								<?$i = 0;?>
@@ -20,8 +14,17 @@
 							</ul>
 						</div>
 						<div class="col-xs-12">
-							<div class="item-title"><?=$item['name']?></div>
-							<p class="item-text"><?=$item['description']?></p>
+							<div class="row">
+								<div class="col-xs-4">
+									<span class="thumbnail">
+										<img src="/<?=$item['img']?>" alt="">
+									</span>
+								</div>
+								<div class="col-xs-8">
+									<div class="item-title"><?=$item['name']?></div>
+									<p class="item-text"><?=$item['description']?></p>
+								</div>
+							</div>
 						</div>
 						<div class="col-xs-12">
 							<div class="text-center">

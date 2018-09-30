@@ -33,7 +33,7 @@ function SetFlashMessage($type, $text)
 	}
 }
 
-function CrGetKey($pref = null)
+function cr_get_key($pref = null)
 {
 	$key = random_string('alnum', 8);
 	$value = random_string('alnum', 16);
@@ -44,12 +44,17 @@ function CrGetKey($pref = null)
 	return array('key' => $key, 'value' => $value);
 }
 
-function CrValidKey($pref = null)
+function cr_valid_key($pref = null)
 {
 	$pref = (empty($pref) == FALSE)?'_'.$pref:$pref;
 		
 	return (!empty($_SESSION['csrfkey'.$pref]) && !empty($_REQUEST[$_SESSION['csrfkey'.$pref]]) && 
 		$_REQUEST[$_SESSION['csrfkey'.$pref]] == $_SESSION['csrfvalue'.$pref])?TRUE:FALSE;
+}
+
+function get_rel_path($path)
+{
+    return str_replace('\\', '/', str_replace(FCPATH, '', $path));
 }
 
 function Debug($data = [])

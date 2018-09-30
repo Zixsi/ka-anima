@@ -16,7 +16,7 @@ class Subscription extends APP_Controller
 
 		$user_id = $this->Auth->userID();
 		
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$data_post = $this->input->post(null, true);
 			if($this->SubscriptionModel->renewItem($data_post['id']) == false)
@@ -24,7 +24,7 @@ class Subscription extends APP_Controller
 				$data['error'] = $this->SubscriptionModel->LAST_ERROR;
 			}
 		}
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 
 		$data['items'] = $this->SubscriptionModel->byUser($user_id);
 		$this->prepareSubscription($data['items']);

@@ -20,12 +20,7 @@ class Courses extends APP_Controller
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
 		
-
-		if($this->SubscriptionModel->byUserService($this->user_id, $data['group_id']) == false)
-		{
-			header('Location: /');
-			die();
-		}
+		$this->checkSubscribeGroup($data['group_id']);
 
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$last_active_lecture = $this->prepareLectures($data['lectures']);
@@ -40,15 +35,32 @@ class Courses extends APP_Controller
 			}
 
 			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
-			if(CrValidKey())
+			if(cr_valid_key())
 			{
 				$this->uploadHomeWork($data);
 			}
-			$data['csrf'] = CrGetKey();
+			$data['csrf'] = cr_get_key();
 			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($data['group_id'], $data['lecture_id']);
 		}
 
 		$this->load->lview('courses/index', $data);
+	}
+
+	public function group($group = 0)
+	{
+		$data = [];
+		$data['error'] = null;
+		$data['group_id'] = intval($group);
+		
+		$this->checkSubscribeGroup($data['group_id']);
+
+		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
+		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
+		$data['teacher'] = $this->UserModel->getById($data['group']['author']);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
+
+		$this->load->lview('courses/group', $data);
 	}
 
 	public function enroll()
@@ -60,7 +72,7 @@ class Courses extends APP_Controller
 		$data['items'] = $this->CoursesGroupsModel->listSubscribe($user);
 		$data['course_types'] = $this->CoursesModel::TYPES;
 
-		if(CrValidKey())
+		if(cr_valid_key())
 		{
 			$subscr_data = [
 				'user' => $user,
@@ -76,10 +88,31 @@ class Courses extends APP_Controller
 			$data['error'] = $this->SubscriptionModel->LAST_ERROR;
 		}
 
-		$data['csrf'] = CrGetKey();
+		$data['csrf'] = cr_get_key();
 		//debug($data['items']); die();
 
 		$this->load->lview('courses/enroll', $data);
+	}
+
+	private function checkSubscribeGroup($id)
+	{
+		if($this->SubscriptionModel->byUserService($this->user_id, $id) == false)
+		{
+			header('Location: /');
+			die();
+		}
+	}
+
+	private function currentGroupWeek($list)
+	{
+		$cnt = 0;
+
+		foreach($list as $val)
+		{
+			$cnt += ($val['active'] == 1)?1:0;
+		}
+
+		return $cnt;
 	}
 
 	private function prepareLectures(&$data)
