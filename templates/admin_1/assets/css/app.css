@@ -29,6 +29,12 @@
 /*#########################################################################################*/
 
 .navbar-default .brand {padding: 0px 30px;}
+#panel-date-time-msk {font-size: 20px; padding-top: 24px;}
+#homework-time-left {display: inline-block; padding-left: 40px; padding-top: 16px;}
+#homework-time-left .icon {font-size: 40px; padding-right: 10px; color: #f00;}
+#homework-time-left .float-left {float: left;}
+#homework-time-left .title {margin-top: 5px;}
+#homework-time-left .title, #homework-time-left .value {display: block; font-size: 14px;}
 
 .video-wrap {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}
 .video-wrap iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}

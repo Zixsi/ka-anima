@@ -15,7 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $hook['post_controller_constructor'][] = array(
 	'class'    => 'SystemHook',
-	'function' => 'InitOptions',
+	'function' => 'initOptions',
 	'filename' => 'SystemHook.php',
 	'filepath' => 'hooks',
 	'params'   => []
@@ -23,7 +23,7 @@ $hook['post_controller_constructor'][] = array(
 
 $hook['post_controller_constructor'][] = array(
 	'class'    => 'SystemHook',
-	'function' => 'CheckAuth',
+	'function' => 'checkAuth',
 	'filename' => 'SystemHook.php',
 	'filepath' => 'hooks',
 	'params'   => []
@@ -31,7 +31,7 @@ $hook['post_controller_constructor'][] = array(
 
 $hook['post_controller_constructor'][] = array(
 	'class'    => 'SystemHook',
-	'function' => 'Profiler',
+	'function' => 'profiler',
 	'filename' => 'SystemHook.php',
 	'filepath' => 'hooks',
 	'params'   => []
@@ -39,7 +39,7 @@ $hook['post_controller_constructor'][] = array(
 
 $hook['pre_controller_constructor'][] = array(
 	'class'    => 'LayoutHook',
-	'function' => 'Default',
+	'function' => 'default',
 	'filename' => 'LayoutHook.php',
 	'filepath' => 'hooks',
 	'params'   => []

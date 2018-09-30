@@ -12,6 +12,7 @@ $user_id = $CI->Auth->userID();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.css">
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css">
@@ -31,21 +32,23 @@ $user_id = $CI->Auth->userID();
 				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_mini.png" alt="Klorofil Logo" class="img-responsive logo"></a>
 			</div>
 			<div class="container-fluid">
-				<!--
-				<div class="navbar-btn">
-					<button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
-				</div>-->
-				<div class="navbar-btn navbar-left">
-					<?if($CI->Auth->checkAccess([['user', 'view']])):?>
-						<span class="nav-balance">
-							Баланс: <span href="" class="nav-balance-value"><?=number_format($CI->Auth->balance(), 2, '.', ' ')?> $</span>
-							<a href="/pay/" class="lnr lnr-plus-circle"></a>
-						</span>
-					<?endif;?>
+				<!--<div class="navbar-btn navbar-left"></div>-->
+				<div class="navbar-left">
+					<span id="homework-time-left">
+						<div class="float-left icon">
+							<span class="lnr lnr-warning"></span>
+						</div>
+						<div class="float-left">
+							<span class="title">До конца сдачи ДЗ осталось</span>
+							<span class="value">2 дня 13 часов 45 минут 18 секунд</span>
+						</div>
+					</span>
 				</div>
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
-						<!--
+						<li>
+							<span id="panel-date-time-msk" style="display: inline-block;">- - -</span>
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
 								<i class="lnr lnr-alarm"></i>
@@ -59,13 +62,12 @@ $user_id = $CI->Auth->userID();
 								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
 								<li><a href="#" class="more">See all notifications</a></li>
 							</ul>
-						</li>-->
+						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
-								<li><a href="#"><i class="lnr lnr-cog"></i> <span>Настройки</span></a></li>
 								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
 							</ul>
 						</li>
@@ -138,6 +140,8 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/holder.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-timezone.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js"></script>
 </body>

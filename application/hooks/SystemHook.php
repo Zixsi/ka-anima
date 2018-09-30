@@ -8,17 +8,19 @@ class SystemHook
 		$this->CI = &get_instance();
 	}
 
-	public function Profiler()
+	public function profiler()
 	{
 		$this->CI->output->enable_profiler(false);
 	}
 
-	public function InitOptions()
+	public function initOptions()
 	{
+		date_default_timezone_set('Europe/Moscow');
+		setlocale(LC_ALL, 'ru_RU.UTF-8');
 		$this->CI->form_validation->set_error_delimiters('<div>', '</div>');
 	}
 
-	public function CheckAuth()
+	public function checkAuth()
 	{
 		if(is_cli() == true)
 		{

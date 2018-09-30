@@ -1,7 +1,7 @@
 <?
 class LayoutHook
 {
-	public function Default()
+	public function default()
 	{
 		$CI =& get_instance();
 		$CI->load->layout = $CI->config->item('default_layout');
