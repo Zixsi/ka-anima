@@ -84,3 +84,9 @@ function compute_day($weekNumber, $dayOfWeek, $monthNumber, $year)
  
     return 1 + $diference + ($weekNumber - 1) * 7;
 }
+
+function next_monday_ts()
+{
+	$date = new \DateTime('next monday');
+	return $date->getTimestamp();
+}

@@ -129,6 +129,8 @@ class Course extends APP_Controller
 	// php index.php cli course test
 	public function test()
 	{
+
+		debug(next_monday_ts());
 		/*var_dump('Test');
 		$this->load->library(['youtube']);
 

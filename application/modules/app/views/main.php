@@ -34,13 +34,13 @@ $user_id = $CI->Auth->userID();
 			<div class="container-fluid">
 				<!--<div class="navbar-btn navbar-left"></div>-->
 				<div class="navbar-left">
-					<span id="homework-time-left">
+					<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
 						<div class="float-left icon">
 							<span class="lnr lnr-warning"></span>
 						</div>
 						<div class="float-left">
 							<span class="title">До конца сдачи ДЗ осталось</span>
-							<span class="value">2 дня 13 часов 45 минут 18 секунд</span>
+							<span class="value">- - -</span>
 						</div>
 					</span>
 				</div>
@@ -142,6 +142,8 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-timezone.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/countdown.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-countdown.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?<?=VERSION?>"></script>
 </body>
