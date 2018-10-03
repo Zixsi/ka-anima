@@ -16,6 +16,9 @@ class FilesModel extends APP_Model
 		{
 			$data['file_path'] = get_rel_path($data['file_path']);
 			$data['full_path'] = get_rel_path($data['full_path']);
+			$data['file_size'] = number_format($data['file_size'], 2, '.', '');
+			$data['image_width'] = intval($data['image_width']);
+			$data['image_height'] = intval($data['image_height']);
 
 			if($this->db->insert(self::TABLE, $data))
 			{

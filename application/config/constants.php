@@ -86,4 +86,4 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 
 
 defined('TEMPLATE_DIR') OR define('TEMPLATE_DIR', '/templates');
-defined('VERSION') OR define('VERSION', '0.0.1a'.time());
+defined('VERSION') OR define('VERSION', '0.0.2a'.time());

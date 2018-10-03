@@ -15,7 +15,7 @@ $user_id = $CI->Auth->userID();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.css">
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css?<?=VERSION?>">
 	<!-- GOOGLE FONTS -->
 	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
 	<!-- ICONS -->
@@ -143,6 +143,6 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-timezone.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?<?=VERSION?>"></script>
 </body>
 </html>
