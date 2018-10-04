@@ -19,22 +19,32 @@ class Course extends APP_Controller
 	{
 		var_dump('Create Groups');
 
-		$start_months = $this->config->item('start_course_months');
-		$current_month = intval(date('n'));
-		$current_year = intval(date('Y'));
-		$next_month_index = round($current_month  / 3) - 1;
-		$next_month = $start_months[$next_month_index];
-		$next_month = ($next_month < 10)?'0'.$next_month:$next_month;
-		$current_year += ($next_month < $current_month)?1:0;
-		$ts = date($current_year.'-'.$next_month.'-01 00:00:00');
-
-		// Высчитываем дату окончания курсов
-		// получаем первый понедельник месяца в котором начинается курс
-		$ts_obj = new DateTime($ts);
-		$day = compute_day(1, 1, $ts_obj->format('n'), $ts_obj->format('Y')) - 1;
-
 		if($res = $this->CoursesGroupsModel->getListNeedCreate())
 		{
+			$start_months = $this->config->item('start_course_months');
+			$current_month = intval(date('n'));
+			$current_year = intval(date('Y'));
+
+			// Высчитать следующий месяц новых курсов
+			$next_month_index = ceil($current_month  / 3) - 1;
+			$next_month_index = ($start_months[$next_month_index] == $current_month)?($next_month_index + 1):$next_month_index;
+			if($next_month_index > (count($start_months) - 1))
+			{
+				$next_month_index = 0;
+			}
+			$next_month = $start_months[$next_month_index];
+			$next_month = ($next_month < 10)?'0'.$next_month:$next_month;
+
+
+			$current_year += ($next_month < $current_month)?1:0;
+			$ts = date($current_year.'-'.$next_month.'-01 00:00:00');
+
+			// Высчитываем дату окончания курсов
+			// получаем первый понедельник месяца в котором начинается курс
+			$ts_obj = new DateTime($ts);
+			$day = compute_day(1, 1, $ts_obj->format('n'), $ts_obj->format('Y')) - 1;
+
+
 			foreach($res as $item)
 			{
 				$info = $this->LecturesModel->getCntByCourse($item['id']);
@@ -51,7 +61,9 @@ class Course extends APP_Controller
 					'ts_end' => $ts_item->format('Y-m-d 00:00:00')
 				];
 
+				//debug($data);
 				$this->CoursesGroupsModel->add($data);
+				//break;
 			}
 		}
 	}
@@ -129,8 +141,7 @@ class Course extends APP_Controller
 	// php index.php cli course test
 	public function test()
 	{
-
-		debug(next_monday_ts());
+		//debug(next_monday_ts());
 		/*var_dump('Test');
 		$this->load->library(['youtube']);
 

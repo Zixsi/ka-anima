@@ -1,3 +1,17 @@
+<div class="panel" id="enroll-top-panel">
+	<div class="panel-body">
+		<div class="col-xs-6">
+			<h3>Запись на курс</h3>
+		</div>	
+		<div class="col-xs-6 text-right balance-block-wrap">
+			<a href="/subscription/" class="btn btn-md btn-primary">Пополнить баланс</a>
+			<span class="balance-block">
+				Ваш баланс: <span href="" class="balance-value">$<?=number_format($balance, 2, '.', ' ')?></span>
+			</span>
+		</div>
+	</div>		
+</div>
+
 <div class="course-list row">
 	<?=ShowError($error);?>
 	<?if($items):?>
@@ -40,31 +54,37 @@
 								<?$i = 0;?>
 								<?foreach($item['groups'] as $group):?>
 									<div class="tab-pane fade in <?=(($i++) == 0)?'active':''?>" id="tab-group-<?=$group['id']?>">
-										<form action="" method="post">
-											<input type="hidden" name="course" value="<?=$item['id']?>">
-											<input type="hidden" name="group" value="<?=$group['id']?>">
-											<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-											<div class="row">
-												<div class="col-xs-6 text-center">
-													<div class="price-info">Цена за первый месяц:</div>
-													<label class="fancy-radio">
-														<input type="radio" name="price" value="month">
-														<span><i></i> <span class="price-value">$ <?=number_format($item['price']['month'], 2, '.', ' ')?></span></span>
-													</label>
-													
-												</div>
-												<div class="col-xs-6 text-center">
-													<div class="price-info">Цена за весь курс:</div>
-													<label class="fancy-radio">
-														<input type="radio" name="price" value="full">
-														<span><i></i> <span class="price-value">$ <?=number_format($item['price']['full'], 2, '.', ' ')?></span></span>
-													</label>
-												</div>
+										<?if($group['subscription']):?>
+											<div class="alert alert-info text-center">
+												<span>Уже подписаны</span>
 											</div>
-											<div class="text-center">
-												<button type="submit" class="btn btn-md btn-primary">Записаться</button>
-											</div>
-										</form>
+										<?else:?>
+											<form action="" method="post">
+												<input type="hidden" name="course" value="<?=$item['id']?>">
+												<input type="hidden" name="group" value="<?=$group['id']?>">
+												<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+												<div class="row">
+													<div class="col-xs-6 text-center">
+														<div class="price-info">Цена за первый месяц:</div>
+														<label class="fancy-radio">
+															<input type="radio" name="price" value="month">
+															<span><i></i> <span class="price-value">$ <?=number_format($item['price']['month'], 2, '.', ' ')?></span></span>
+														</label>
+														
+													</div>
+													<div class="col-xs-6 text-center">
+														<div class="price-info">Цена за весь курс:</div>
+														<label class="fancy-radio">
+															<input type="radio" name="price" value="full">
+															<span><i></i> <span class="price-value">$ <?=number_format($item['price']['full'], 2, '.', ' ')?></span></span>
+														</label>
+													</div>
+												</div>
+												<div class="text-center">
+													<button type="submit" class="btn btn-md btn-primary">Записаться</button>
+												</div>
+											</form>
+										<?endif;?>
 									</div>
 								<?endforeach;?>
 							</div>

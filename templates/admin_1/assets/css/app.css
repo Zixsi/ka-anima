@@ -46,3 +46,9 @@
 .week-panel .week-item.active.current .number:before {content: ""; display: block; position: absolute; top: -15%; left: -15%; width: 130%; height: 130%; border: 3px dotted #00AAFF; border-radius: 50%;}
 .week-panel .week-item .number {display: inline-block; width: 40px ;height: 40px; border-radius: 50%; background-color: #ccc; text-align: center; line-height: 38px; color: #fff; font-size: 25px; margin-bottom: 10px;}
 .week-panel .week-item .name {display: block; font-size: 14px; color: #676a6d;}
+
+#enroll-top-panel {}
+#enroll-top-panel .balance-block-wrap {padding-top: 15px;}
+#enroll-top-panel .balance-block-wrap .btn {margin-top: 0px;}
+#enroll-top-panel .balance-block {font-size: 24px; display: inline-block; padding-left: 30px; vertical-align: top; margin-top: 0px; line-height: 30px;}
+#enroll-top-panel .balance-block .balance-value {color: #00AAFF; font-size: 26px;}

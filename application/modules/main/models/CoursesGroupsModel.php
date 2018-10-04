@@ -148,10 +148,14 @@ class CoursesGroupsModel extends APP_Model
 	public function listSubscribe($user)
 	{
 		//$ts = time() - (3600 * 24 * 30);
-		$ts = time();
+		$bind = [
+			intval($user), 
+			date('Y-m-d 00:00:00', time())
+		];
+
 		$sql = 'SELECT 
 					c.id, c.name, c.type, c.description, c.price_month, 
-					c.price_full, g.id as group_id, g.code, g.ts, f.full_path as img_src 
+					c.price_full, g.id as group_id, g.code, g.ts, f.full_path as img_src, s.user  
 				FROM 
 					'.self::TABLE_COURSES.' as c 
 				LEFT JOIN 
@@ -163,14 +167,11 @@ class CoursesGroupsModel extends APP_Model
 				WHERE 
 					c.active = 1 AND 
 					g.id IS NOT NULL AND 
-					g.ts >= ? AND 
-					s.user IS NULL 
+					g.ts >= ? 
 				ORDER BY 
 					c.id ASC, g.ts ASC';
 
-		$res = $this->db->query($sql, [intval($user), date('Y-m-d 00:00:00', $ts)]);
-
-		if($res = $res->result_array())
+		if($res = $this->db->query($sql, $bind)->result_array())
 		{
 			$result = [];
 
@@ -195,7 +196,8 @@ class CoursesGroupsModel extends APP_Model
 				$result[$val['id']]['groups'][] = [
 					'id' => $val['group_id'],
 					'code' => $val['code'],
-					'ts' => $val['ts']
+					'ts' => $val['ts'],
+					'subscription' => intval($val['user'])?1:0
 				];
 			}
 
@@ -208,6 +210,10 @@ class CoursesGroupsModel extends APP_Model
 	// Выбрать курсы, группы для которых еще не созданы
 	public function getListNeedCreate()
 	{
+		$bind = [
+			date('Y-m-01 00:00:00') // 
+		];
+
 		$sql = 'SELECT 
 					c.id, c.active, g.id as gid, g.ts  
 				FROM 
@@ -220,10 +226,9 @@ class CoursesGroupsModel extends APP_Model
 				ORDER BY 
 					c.id ASC';
 
-		$res = $this->db->query($sql, [date('Y-m-01 00:00:00')]);
-		if($result = $res->result_array())
+		if($res = $this->db->query($sql, $bind)->result_array())
 		{
-			return $result;
+			return $res;
 		}
 
 		return false;

@@ -6,7 +6,7 @@ class Subscription extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/TransactionsModel']);
 	}
 	
 	public function index()
@@ -18,19 +18,50 @@ class Subscription extends APP_Controller
 		
 		if(cr_valid_key())
 		{
+			$this->renewItem($data);
+			$this->pay();
+		}
+		$data['csrf'] = cr_get_key();
+
+		$data['balance'] = $this->Auth->balance();
+		$data['items'] = $this->SubscriptionModel->byUser($user_id);
+		$data['transactions']['in'] = $this->TransactionsModel->listUserTxByType($user_id, 0);
+		$data['transactions']['out'] = $this->TransactionsModel->listUserTxByType($user_id, 1);
+
+		$this->prepareSubscription($data['items']);
+		
+
+		$this->load->lview('subscription/index', $data);
+	}
+
+	private function renewItem(&$data)
+	{
+		if($this->input->post('request_type', true) == 'renew')
+		{
 			$data_post = $this->input->post(null, true);
 			if($this->SubscriptionModel->renewItem($data_post['id']) == false)
 			{
 				$data['error'] = $this->SubscriptionModel->LAST_ERROR;
 			}
 		}
-		$data['csrf'] = cr_get_key();
+	}
 
-		$data['items'] = $this->SubscriptionModel->byUser($user_id);
-		$this->prepareSubscription($data['items']);
-		
+	private function pay()
+	{
+		if($this->input->post('request_type', true) == 'pay')
+		{
+			$fields = [
+				'user' => $this->Auth->userID(),
+				'type' => '0',
+				'amount' => abs($this->input->post('amount', true)),
+				'description' => 'PaySystem'
+			];
 
-		$this->load->lview('subscription/index', $data);
+			if($this->TransactionsModel->add($fields))
+			{
+				 $this->Auth->updateBalance();
+			}
+		}
 	}
 
 	private function prepareSubscription(&$items)

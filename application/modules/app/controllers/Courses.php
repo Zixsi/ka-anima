@@ -71,6 +71,7 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['items'] = $this->CoursesGroupsModel->listSubscribe($user);
 		$data['course_types'] = $this->CoursesModel::TYPES;
+		$data['balance'] = $this->Auth->balance();
 
 		if(cr_valid_key())
 		{
@@ -89,7 +90,6 @@ class Courses extends APP_Controller
 		}
 
 		$data['csrf'] = cr_get_key();
-		//debug($data['items']); die();
 
 		$this->load->lview('courses/enroll', $data);
 	}

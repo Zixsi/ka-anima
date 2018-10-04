@@ -1,4 +1,5 @@
-<?$CI = &get_instance();
+<?
+$CI = &get_instance();
 $user_id = $CI->Auth->userID();
 ?>
 <!doctype html>
@@ -83,18 +84,18 @@ $user_id = $CI->Auth->userID();
 					<ul class="nav">
 						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
 						<?//if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
-							<li>
-								<a href="#sub-courses" data-toggle="collapse" class="collapsed"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-								<div id="sub-courses" class="collapse in">
-									<ul class="nav">
-										<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
+							<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
+								<li>
+									<a href="#sub-courses" data-toggle="collapse" class="collapsed"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+									<div id="sub-courses" class="collapse in">
+										<ul class="nav">
 											<?foreach($courses as $item):?>
-												<li><a href="/courses/<?=$item['course_group']?>/" class=""><?=$item['name']?></a></li>
+												<li><a href="/courses/<?=$item['course_group']?>/" class=""><?=$item['name']?> (<?=strftime("%B %Y", strtotime($item['ts']))?>)</a></li>
 											<?endforeach;?>
-										<?endif;?>
-									</ul>
-								</div>
-							</li>
+										</ul>
+									</div>
+								</li>
+							<?endif;?>
 							<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
 							<li><a href="/subscription/" class="">Подписка</a></li>
 						<?//endif;?>

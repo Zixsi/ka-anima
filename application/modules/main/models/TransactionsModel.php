@@ -88,6 +88,28 @@ class TransactionsModel extends APP_Model
 		return false;
 	}
 
+	public function listUserTxByType($user, $type = 0)
+	{
+		try
+		{
+			$bind = [
+				intval($user), // юзер
+				intval($type) // тип
+			];
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND type = ? ORDER BY id DESC LIMIT 20';
+			if($rows = $this->db->query($sql, $bind)->result_array())
+			{
+				return $rows;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
 	public function balanceUser($id)
 	{
 		try

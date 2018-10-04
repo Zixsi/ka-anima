@@ -174,12 +174,11 @@ class SubscriptionModel extends APP_Model
 				}
 			}
 
-			
 			$data = [
 				'user' => intval($user),
 				'type' => 0,
 				'service' => intval($group),
-				'description' => $item['name'].' ('.date('F Y', strtotime($item['ts'])).')',
+				'description' => $item['name'].' ('.strftime("%B %Y", strtotime($item['ts'])).')',
 				'ts_start' => $item['ts'],
 				'ts_end' => $ts_end,
 				'subscr_type' => $subscr_type,
