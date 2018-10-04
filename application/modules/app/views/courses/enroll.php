@@ -23,7 +23,7 @@
 							<ul class="nav" role="tablist">
 								<?$i = 0;?>
 								<?foreach($item['groups'] as $group):?>
-									<li <?=(($i++) == 0)?'class="active"':''?>><a href="#tab-group-<?=$group['id']?>" role="tab" data-toggle="tab"><?=date('F Y', strtotime($group['ts']))?></a></li>
+									<li <?=(($i++) == 0)?'class="active"':''?>><a href="#tab-group-<?=$group['id']?>" role="tab" data-toggle="tab"><?=strftime("%B %Y", strtotime($group['ts']))?></a></li>
 								<?endforeach;?>
 							</ul>
 						</div>
