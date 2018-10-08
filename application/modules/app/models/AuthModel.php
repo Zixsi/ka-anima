@@ -125,6 +125,26 @@ class AuthModel extends APP_Model
 		return $this->user()['id'];
 	}
 
+	public function userRole()
+	{
+		return intval($this->user()['role']);
+	}
+
+	public function isUser()
+	{
+		return ($this->userRole() === 0)?true:false;
+	}
+
+	public function isTeacher()
+	{
+		return ($this->userRole() === 1)?true:false;
+	}
+
+	public function isAdmin()
+	{
+		return ($this->userRole() === 5)?true:false;
+	}
+
 	public function check()
 	{
 		if(($user = $this->user()) == false )

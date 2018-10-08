@@ -6,7 +6,7 @@ class TeachingGroups extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesGroupsModel', 'main/LecturesModel']);
+		$this->load->model(['main/CoursesGroupsModel', 'main/LecturesModel', 'main/LecturesGroupModel']);
 	}
 
 	public function index()
@@ -21,7 +21,9 @@ class TeachingGroups extends APP_Controller
 	public function group($id = 0)
 	{
 		$data = [];
-		$data['items'] = $this->LecturesModel->getAvailableForGroup($id);
+		$data['group'] = $this->CoursesGroupsModel->getByID($id);
+		$data['items'] = $this->LecturesGroupModel->listForGroup($id);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($id);
 
 		$this->load->lview('teachingGroups/group', $data);
 	}
@@ -49,6 +51,8 @@ class TeachingGroups extends APP_Controller
 		}
 		$data['csrf'] = cr_get_key();
 
+		$data['group'] = $this->CoursesGroupsModel->getByID($group_id);
+		$data['item'] = $this->LecturesModel->getByID($id);
 		$data['homework'] = $this->LecturesModel->getTeacherHomeWork($group_id, $id);
 
 		$this->load->lview('teachingGroups/lecture', $data);

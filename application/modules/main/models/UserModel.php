@@ -44,6 +44,11 @@ class UserModel extends APP_Model
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
 		if($row = $res->row_array())
 		{
+			if(empty($row['img']))
+			{
+				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
+			}
+
 			return $row;
 		}
 
@@ -55,6 +60,11 @@ class UserModel extends APP_Model
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE email = ?', [$email]);
 		if($row = $res->row_array())
 		{
+			if(empty($row['img']))
+			{
+				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
+			}
+			
 			return $row;
 		}
 

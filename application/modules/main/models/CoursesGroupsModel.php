@@ -64,7 +64,7 @@ class CoursesGroupsModel extends APP_Model
 	{
 		$sql = 'SELECT 
 					g.*, c.name, c.price_month, c.price_full, c.author, 
-					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other 
+					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img_src  
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
@@ -73,6 +73,8 @@ class CoursesGroupsModel extends APP_Model
 					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l_all ON(l_all.course_id = g.course_id) 
 				LEFT JOIN 
 					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = g.course_id) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE g.id = ?';
 		if($row = $this->db->query($sql, [$id])->row_array())
 		{
@@ -269,17 +271,23 @@ class CoursesGroupsModel extends APP_Model
 	public function getTeacherGroups($id)
 	{
 		$sql = 'SELECT 
-					c.id, c.name, c.author, g.id as group_id, g.ts, g.ts_end 
+					c.id, c.name, c.author, g.id as group_id, g.ts, g.ts_end, w.cnt as weeks_cnt, wc.cnt as weeks_current, u.cnt as user_cnt   
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON (c.id = g.course_id) 
+				LEFT JOIN 
+					(SELECT count(id) as cnt, course_id FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as w ON(w.course_id = g.course_id) 
+				LEFT JOIN 
+					(SELECT count(*) as cnt, group_id FROM '.self::TABLE_LECTURES_GROUPS.' GROUP BY group_id) as wc ON(wc.group_id = g.id)
+				LEFT JOIN 
+					(SELECT count(DISTINCT(user)) as cnt, service FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as u ON(u.service = g.id) 
 				WHERE 
 					c.author = ? AND g.ts_end > ?   
 				ORDER BY 
 					g.ts_end ASC';
 
-		$bind = [$id, date('y-m-d H:i:s')];
+		$bind = [$id, date('Y-m-d H:i:s')];
 
 		if($res = $this->db->query($sql, $bind)->result_array())
 		{

@@ -35,15 +35,27 @@ $user_id = $CI->Auth->userID();
 			<div class="container-fluid">
 				<!--<div class="navbar-btn navbar-left"></div>-->
 				<div class="navbar-left">
-					<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
-						<div class="float-left icon">
-							<span class="lnr lnr-warning"></span>
-						</div>
-						<div class="float-left">
-							<span class="title">До конца сдачи ДЗ осталось</span>
-							<span class="value">- - -</span>
-						</div>
-					</span>
+					<?if($CI->Auth->isTeacher()):?>
+						<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
+							<div class="float-left icon">
+								<span class="lnr lnr-warning"></span>
+							</div>
+							<div class="float-left">
+								<span class="title">Ближайшая онлайн встреча</span>
+								<span class="value">- - -</span>
+							</div>
+						</span>
+					<?elseif($CI->Auth->isUser()):?>
+						<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
+							<div class="float-left icon">
+								<span class="lnr lnr-warning"></span>
+							</div>
+							<div class="float-left">
+								<span class="title">До конца сдачи ДЗ осталось </span>
+								<span class="value">- - -</span>
+							</div>
+						</span>
+					<?endif;?>
 				</div>
 				<div id="navbar-menu">
 					<ul class="nav navbar-nav navbar-right">
@@ -64,8 +76,11 @@ $user_id = $CI->Auth->userID();
 								<li><a href="#" class="more">See all notifications</a></li>
 							</ul>
 						</li>
+						<li>
+							<span class="label label-success" style="display: inline-block; font-size: 15px; margin-top: 27px;"><?=($CI->Auth->isTeacher())?'Преподаватель':'Ученик'?></span>
+						</li>
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/user.png" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
@@ -101,15 +116,10 @@ $user_id = $CI->Auth->userID();
 						<?//endif;?>
 
 						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-							<li>
-								<a href="#subPages3" data-toggle="collapse" class="collapsed"><i class="lnr lnr-briefcase"></i> <span>Учительская</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-								<div id="subPages3" class="collapse in">
-									<ul class="nav">
-										<li><a href="/teachingcourses/" class="">Курсы</a></li>
-										<li><a href="/teachinggroups/" class="">Группы</a></li>
-									</ul>
-								</div>
-							</li>
+
+							<li><a href="javascript:void(0);">* * * Учительская * * *</a></li>
+							<li><a href="/teachingcourses/" class="">Курсы</a></li>
+							<li><a href="/teachinggroups/" class="">Группы</a></li>
 						<?//endif;?>
 
 					</ul>

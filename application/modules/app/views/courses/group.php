@@ -1,5 +1,7 @@
 <div class="row">
 
+	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
+
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
 		<a href="/courses/<?=$group_id?>/" class="btn btn-default">Лекции</a>
 		<a href="/courses/<?=$group_id?>/group/" class="btn btn-primary">Группа</a>
@@ -30,15 +32,19 @@
 			</div>
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-xs-6">
+					<div class="col-xs-3">
+						<img src="/<?=$group['img_src']?>" class="img-rounded" style="width: 100%; height: auto;">
+					</div>
+					<div class="col-xs-4">
 						<div>
-							<!--<img src="" class="img-circle" width="60" height="60">-->
-							<span class="img-circle" style="display: inline-block; width: 100px; height: 100px; background-color: #ccc;"></span>
+							<a href="javascript:void();">
+								<img src="<?=$teacher['img']?>" width="100" height="100" class="img-circle">
+							</a>
 						</div>
 						<p>Инструктор: <?=$teacher['email']?></p>
 						<p>E-mail: <?=$teacher['email']?></p>
 					</div>
-					<div class="col-xs-6 text-right">
+					<div class="col-xs-5 text-right">
 						<p>Начало обучения: <?=date('Y-m-d', strtotime($group['ts']))?></p>
 						<p>Завершение обучения:  <?=date('Y-m-d', strtotime($group['ts_end']))?></p>
 						<p>Всего недель курса: <?=$group['cnt_all']?></p>
@@ -78,7 +84,9 @@
 				<?if($users):?>
 					<?foreach($users as $val):?>
 						<a href="javascript:void();">
-							<span class="img-circle" style="display: inline-block; width: 50px; height: 50px; background-color: #ccc;"></span>
+							<a href="javascript:void();">
+								<img src="<?=$val['img']?>" width="50" height="50" class="img-circle">
+							</a>
 						</a>
 					<?endforeach;?>
 				<?endif;?>

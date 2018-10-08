@@ -6,7 +6,7 @@
 		<div class="col-xs-6 text-right balance-block-wrap">
 			<a href="/subscription/" class="btn btn-md btn-primary">Пополнить баланс</a>
 			<span class="balance-block">
-				Ваш баланс: <span href="" class="balance-value">$<?=number_format($balance, 2, '.', ' ')?></span>
+				Ваш баланс: <span href="" class="balance-value"><?=number_format($balance, 2, '.', ' ')?>  руб.</span>
 			</span>
 		</div>
 	</div>		
@@ -68,7 +68,7 @@
 														<div class="price-info">Цена за первый месяц:</div>
 														<label class="fancy-radio">
 															<input type="radio" name="price" value="month">
-															<span><i></i> <span class="price-value">$ <?=number_format($item['price']['month'], 2, '.', ' ')?></span></span>
+															<span><i></i> <span class="price-value"><?=number_format($item['price']['month'], 2, '.', ' ')?>  руб.</span></span>
 														</label>
 														
 													</div>
@@ -76,7 +76,7 @@
 														<div class="price-info">Цена за весь курс:</div>
 														<label class="fancy-radio">
 															<input type="radio" name="price" value="full">
-															<span><i></i> <span class="price-value">$ <?=number_format($item['price']['full'], 2, '.', ' ')?></span></span>
+															<span><i></i> <span class="price-value"><?=number_format($item['price']['full'], 2, '.', ' ')?>  руб.</span></span>
 														</label>
 													</div>
 												</div>

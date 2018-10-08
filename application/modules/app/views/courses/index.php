@@ -1,5 +1,7 @@
 <div class="row">
 
+	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
+
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
 		<a href="/courses/<?=$group_id?>/" class="btn btn-primary">Лекции</a>
 		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
@@ -11,7 +13,7 @@
 		<div class="week-panel">
 			<?$i = 1;?>
 			<?foreach($lectures as $item):?>
-				<?if($item['active']):?>
+				<?if($item['active'] && $subscr_is_active):?>
 					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
 						<span class="number"><?=$i?></span>
 						<span class="name"><?=$item['name']?></span>
@@ -28,7 +30,7 @@
 		</div>
 	</div>
 
-	<?if($lectures_is_active):?>
+	<?if($lectures_is_active && $subscr_is_active):?>
 
 		<div class="col-xs-12">
 			<h3><?=$lecture['name']?></h3>
@@ -117,6 +119,8 @@
 
 </div>
 
-<?if($lectures_is_active == false):?>
+<?if($subscr_is_active == false):?>
+	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/subscription/">Продлите чтобы получить доступ.</a></div>
+<?elseif($lectures_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">Нет активных лекций</div>
 <?endif;?>

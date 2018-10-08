@@ -5,7 +5,7 @@
 		</div>	
 		<div class="col-xs-6 text-right balance-block-wrap">
 			<span class="balance-block">
-				Ваш баланс: <span href="" class="balance-value">$<?=number_format($balance, 2, '.', ' ')?></span>
+				Ваш баланс: <span href="" class="balance-value"><?=number_format($balance, 2, '.', ' ')?> руб.</span>
 			</span>
 		</div>
 	</div>		
@@ -52,12 +52,12 @@
 											<input type="hidden" name="id" value="<?=$item['id']?>">
 											<input type="hidden" name="request_type" value="renew">
 											<?if($item['renew'] == 'month'):?>
-												$<?=number_format($item['price_month'], 2, '.', '')?> 
+												<?=number_format($item['price_month'], 2, '.', '')?>  руб.
 												<input type="hidden" name="type" value="month">
 												<button type="submit" class="btn btn-3xs btn-success">Продлить</button>
 											<?elseif($item['renew'] == 'year'):?>
 												<input type="hidden" name="type" value="year">
-												Продлить на год ($<?=number_format($item['price_month'], 2, '.', '')?>) 
+												Продлить на год (<?=number_format($item['price_month'], 2, '.', '')?>  руб.) 
 												<button type="submit" class="btn btn-3xs btn-success">Продлить</button>
 											<?else:?>
 												<span>- - -</span>
@@ -66,7 +66,7 @@
 									</td>
 									<td class="text-center">
 										<?if($item['amount'] > 0):?>
-											$<?=number_format($item['amount'], 2, '.', '')?>
+											<?=number_format($item['amount'], 2, '.', '')?> руб.
 										<?else:?>
 											<span>- - -</span>
 										<?endif;?>
@@ -113,7 +113,7 @@
 						<tbody>
 						<?foreach($transactions['in'] as $item):?>
 							<tr>
-								<td>$<?=number_format($item['amount'], 2, '.', ' ')?></td>
+								<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
 								<td><?=$item['description']?></td>
 								<td>Завершен</td>
 								<td><?=$item['ts']?></td>
@@ -148,7 +148,7 @@
 						<?foreach($transactions['out'] as $item):?>
 							<tr>
 								<td><?=$item['description']?></td>
-								<td>$<?=number_format($item['amount'], 2, '.', ' ')?></td>
+								<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
 								<td><?=$item['ts']?></td>
 							</tr>
 						<?endforeach;?>

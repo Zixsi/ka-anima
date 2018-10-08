@@ -22,7 +22,7 @@ $route['teachingcourses/(.*)'] = 'app/TeachingCourses/$1';
 
 $route['teachinggroups'] = 'app/TeachingGroups';
 $route['teachinggroups/(:num)'] = 'app/TeachingGroups/group/$1';
-$route['teachinggroups/(:num)/(:num)'] = 'app/TeachingGroups/lecture/$1/$2';
+$route['teachinggroups/(:num)/lecture/(:num)'] = 'app/TeachingGroups/lecture/$1/$2';
 $route['teachinggroups/(.*)'] = 'app/TeachingGroups/$1';
 
 

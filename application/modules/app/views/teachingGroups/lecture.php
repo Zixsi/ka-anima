@@ -1,32 +1,44 @@
-<div class="panel">
-	<div class="panel-heading">
-		<div class="col-xs-6">
-			<h3 class="panel-title">Лекция группы</h3>
-		</div>
+<div class="row">
+	<div class="col-xs-12">
+		<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
 	</div>
-	<div class="panel-body" style="padding-top: 30px;">
-		<div class="row">
-			<div class="col-xs-12">
 
-				<div class="panel">
-					<div class="panel-body">
-						<h4 class="panel-title" style="margin-bottom: 25px;">Добавить ревью</h4>
+	<div class="col-xs-12">
+
+		<div class="panel panel-headline panel-color blue">
+			<div class="panel-heading">
+				<h3 class="panel-title"><?=$item['name']?></h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
 						<?=ShowFlashMessage();?>
 						<form action="" method="post" enctype="multipart/form-data">
 							<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 							<div class="form-group">
-								<input type="text" class="form-control" name="url" placeholder="Url">
+								<label>Url</label>
+								<input type="text" class="form-control" name="url">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-xs btn-primary">Добавить</button>
+								<label>Рекомендации</label>
+								<textarea class="form-control" name="text"></textarea>
+							</div>
+							<div class="form-group">
+								<button type="submit" class="btn btn-xs btn-primary">Добавить ревью</button>
 							</div>
 						</form>
 					</div>
 				</div>
+			</div>
+		</div>
 
-				<div class="panel">
-					<div class="panel-body">
-						<h4 class="panel-title" style="margin-bottom: 25px;">Домашние задания</h4>
+		<div class="panel panel-headline panel-color blue">
+			<div class="panel-heading">
+				<h3 class="panel-title">Домашние задания</h3>
+			</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-xs-12">
 						<table class="table table-bordered">
 							<thead>
 								<tr>
@@ -55,8 +67,8 @@
 						</table>
 					</div>
 				</div>
-
 			</div>
 		</div>
+
 	</div>
 </div>

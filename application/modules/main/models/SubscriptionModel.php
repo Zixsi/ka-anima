@@ -379,7 +379,7 @@ class SubscriptionModel extends APP_Model
 						elseif($ts_end_mark < time())
 						{
 							$price = $item['price_month'];
-							$ts_end = new DateTime($item['ts_end']);
+							$ts_end = new DateTime();
 							$ts_end->modify('next year');
 							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
 						}
@@ -460,6 +460,11 @@ class SubscriptionModel extends APP_Model
 
 			if($res = $this->db->query($sql, [intval($group)])->result_array())
 			{
+				foreach($res as &$val)
+				{
+					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+				}
+
 				return $res;
 			}
 		}

@@ -37,7 +37,7 @@ class Youtube
 	{
 		$result = [];
 		$formats = [
-			'242' => ['webm', 144, 11],
+			/*'242' => ['webm', 144, 11],
 			'243' => ['webm', 240, 10],
 			'244' => ['webm', 360, 9],
 			'247' => ['webm', 480, 8],
@@ -47,10 +47,10 @@ class Youtube
 			'134' => ['mp4', 360, 4],
 			'135' => ['mp4', 480, 3],
 			'136' => ['mp4', 720, 2],
-			'137' => ['mp4', 1080, 1]
-			/*'22' => ['mp4', '720'],
+			'137' => ['mp4', 1080, 1]*/
+			'22' => ['mp4', '720'],
 			'18' => ['mp4', '480'],
-			'43' => ['webm', '480']*/
+			'43' => ['webm', '480']
 		];
 
 		$data = urldecode($data);
@@ -71,6 +71,7 @@ class Youtube
 			if(isset($formats[$item_arr['itag']]))
 			{
 				$meta = $formats[$item_arr['itag']];
+				$item = ($pos = strpos($item, ','))?substr($item, 0, $pos):$item;
 				$result[$meta[0]][$meta[1]] = $item;
 			}
 		}

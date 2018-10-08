@@ -19,14 +19,14 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
-		
-		$this->checkSubscribeGroup($data['group_id']);
+		$data['subscr_is_active'] = $this->checkSubscribeGroup($data['group_id']);
 
+		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$last_active_lecture = $this->prepareLectures($data['lectures']);
 		$data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
 
-		if($data['lectures_is_active'])
+		if($data['lectures_is_active'] && $data['subscr_is_active'])
 		{
 			if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
 			{
@@ -52,7 +52,10 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['group_id'] = intval($group);
 		
-		$this->checkSubscribeGroup($data['group_id']);
+		if($this->checkSubscribeGroup($data['group_id']) == false)
+		{
+			header('Location: /courses/'.$data['group_id'].'/');
+		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
@@ -96,11 +99,19 @@ class Courses extends APP_Controller
 
 	private function checkSubscribeGroup($id)
 	{
-		if($this->SubscriptionModel->byUserService($this->user_id, $id) == false)
+		if(($subscr = $this->SubscriptionModel->byUserService($this->user_id, $id)) == false)
 		{
 			header('Location: /');
 			die();
 		}
+
+		if(strtotime($subscr['ts_end']) > time())
+		{
+			return true;
+		}
+
+
+		return false;
 	}
 
 	private function currentGroupWeek($list)
