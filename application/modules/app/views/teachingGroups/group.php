@@ -82,15 +82,6 @@
 			</div>
 		</div>
 
-		<div class="panel panel-headline panel-color blue">
-			<div class="panel-heading">
-				<h3 class="panel-title">Галерея</h3>
-			</div>
-			<div class="panel-body">
-				<h4>НО НАКОЙ ХЕР ОНА ПРЕПОДУ НУЖНА?</h4>
-			</div>
-		</div>
-
 	</div>
 	
 </div>

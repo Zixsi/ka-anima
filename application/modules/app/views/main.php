@@ -36,17 +36,19 @@ $user_id = $CI->Auth->userID();
 				<!--<div class="navbar-btn navbar-left"></div>-->
 				<div class="navbar-left">
 					<?if($CI->Auth->isTeacher()):?>
-						<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
-							<div class="float-left icon">
-								<span class="lnr lnr-warning"></span>
-							</div>
-							<div class="float-left">
-								<span class="title">Ближайшая онлайн встреча</span>
-								<span class="value">- - -</span>
-							</div>
-						</span>
+						<?if($next_stream = $CI->StreamsModel->getNextForAuthor($user_id)):?>
+							<span id="homework-time-left" data-time="<?=$next_stream['ts']?>">
+								<div class="float-left icon">
+									<span class="lnr lnr-warning"></span>
+								</div>
+								<div class="float-left">
+									<span class="title">Ближайшая онлайн встреча</span>
+									<span class="value">- - -</span>
+								</div>
+							</span>
+						<?endif;?>
 					<?elseif($CI->Auth->isUser()):?>
-						<span id="homework-time-left" data-time="<?=date('Ymd', next_monday_ts())?>">
+						<span id="homework-time-left" data-time="<?=date('Y-m-d 00:00:00', next_monday_ts())?>">
 							<div class="float-left icon">
 								<span class="lnr lnr-warning"></span>
 							</div>
@@ -120,6 +122,7 @@ $user_id = $CI->Auth->userID();
 							<li><a href="javascript:void(0);">* * * Учительская * * *</a></li>
 							<li><a href="/teachingcourses/" class="">Курсы</a></li>
 							<li><a href="/teachinggroups/" class="">Группы</a></li>
+							<li><a href="/teachingstreams/" class="">Онлайн встречи</a></li>
 						<?//endif;?>
 
 					</ul>

@@ -31,6 +31,8 @@
 .panel.panel-headline.panel-color .panel-heading {padding-bottom: 10px;}
 .panel.panel-headline.panel-color.blue .panel-heading {border-bottom: 3px solid #00AAFF;}
 
+.table.table-no-bordered > tbody > tr > td {border: 0 none;}
+
 .navbar-default .brand {padding: 0px 30px;}
 #panel-date-time-msk {font-size: 20px; padding-top: 24px;}
 #homework-time-left {display: inline-block; padding-left: 40px; padding-top: 16px;}

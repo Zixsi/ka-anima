@@ -61,5 +61,11 @@ class SystemHook
 				redirect('/');
 			}
 		}
+
+		$this->CI->load->model([
+			'main/CoursesGroupsModel', 
+			'main/VideoModel', 
+			'main/StreamsModel'
+		]);
 	}
 }

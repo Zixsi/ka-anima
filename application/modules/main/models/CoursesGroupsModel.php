@@ -279,15 +279,15 @@ class CoursesGroupsModel extends APP_Model
 				LEFT JOIN 
 					(SELECT count(id) as cnt, course_id FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as w ON(w.course_id = g.course_id) 
 				LEFT JOIN 
-					(SELECT count(*) as cnt, group_id FROM '.self::TABLE_LECTURES_GROUPS.' GROUP BY group_id) as wc ON(wc.group_id = g.id)
+					(SELECT count(*) as cnt, group_id FROM '.self::TABLE_LECTURES_GROUPS.' WHERE ts < ? GROUP BY group_id) as wc ON(wc.group_id = g.id)
 				LEFT JOIN 
 					(SELECT count(DISTINCT(user)) as cnt, service FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as u ON(u.service = g.id) 
 				WHERE 
-					c.author = ? AND g.ts_end > ?   
+					c.author = ? AND g.ts_end > ? 
 				ORDER BY 
 					g.ts_end ASC';
 
-		$bind = [$id, date('Y-m-d H:i:s')];
+		$bind = [date('Y-m-d H:i:s'), $id, date('Y-m-d H:i:s')];
 
 		if($res = $this->db->query($sql, $bind)->result_array())
 		{

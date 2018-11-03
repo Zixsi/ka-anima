@@ -5,8 +5,6 @@ class LecturesGroupModel extends APP_Model
 {
 	private const TABLE = 'lectures';
 	private const TABLE_LECTURES_GROUPS = 'lectures_groups';
-	private const TABLE_LECTURES_VIDEO = 'lectures_video';
-	private const TABLE_LECTURES_HOMEWORK = 'lectures_homework';
 	private const TABLE_COURSES_GROUPS = 'courses_groups';
 
 	public function __construct()
@@ -18,7 +16,7 @@ class LecturesGroupModel extends APP_Model
 	public function listForGroup($id)
 	{
 		$sql = 'SELECT 
-					l.id, l.name, IF(lg.lecture_id > 0, 1, 0) as active, lg.ts  
+					l.id, l.name, IF(lg.ts < ?, 1, 0) as active, lg.ts  
 				FROM 
 					'.self::TABLE_COURSES_GROUPS.' as cg 
 				LEFT JOIN 
@@ -31,7 +29,7 @@ class LecturesGroupModel extends APP_Model
 					l.sort ASC, 
 					l.id ASC';
 					
-		$res = $this->db->query($sql, [$id]);
+		$res = $this->db->query($sql, [date('Y-m-d H:i:s'), $id]);
 		if($res = $res->result_array())
 		{
 			return $res;

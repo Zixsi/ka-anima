@@ -39,6 +39,36 @@ class LecturesHomeworkModel extends APP_Model
 		return false;
 	}
 
+	public function listUsersForLecture($group_id, $lecture_id)
+	{
+		try
+		{
+			$sql = 'SELECT 
+						hw.user, u.email as user_name 
+					FROM 
+						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
+					LEFT JOIN 
+						'.self::TABLE_USERS.' as u ON(u.id = hw.user)  
+					WHERE 
+						hw.group_id = ? AND hw.lecture_id = ? 
+					GROUP BY 
+						hw.user 
+					ORDER BY 
+						hw.user ASC';
+
+			if($res = $this->db->query($sql, [$group_id, $lecture_id])->result_array())
+			{
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
 	// Список загруженных юзерами файлов в лекции
 	public function getListForUsers($group_id, $lecture_id)
 	{

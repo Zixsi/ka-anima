@@ -446,7 +446,7 @@ class SubscriptionModel extends APP_Model
 		if($group > 0)
 		{
 			$sql = 'SELECT 
-						u.id, u.email 
+						u.id, u.email, u.email as user_name  
 					FROM 
 						'.self::TABLE.' as s 
 					LEFT JOIN 

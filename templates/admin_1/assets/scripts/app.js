@@ -25,8 +25,13 @@ function update_time_to_homework()
 	var container = $('#homework-time-left');
 	var value = container.find('.value');
 
-	setInterval(function(){
-		var time = moment(container.data('time'), "YYYYMMDD").countdown().toString();
-		value.text(time);
+	var timer_interval = setInterval(function(){
+		var time = moment(container.data('time'), "YYYY-MM-DD HH:mm:ss").countdown();
+		value.text(time.toString());
+		if(time.days == 0 && time.hours == 0 && time.minutes == 0 && time.seconds == 0)
+		{
+			clearInterval(timer_interval);
+			value.text('Началась');
+		}
 	}, 1000);
 }

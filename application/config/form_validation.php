@@ -132,3 +132,44 @@ $config['courses_groups'] = [
 		'rules' => 'required'
 	]
 ];
+
+$config['review_add'] = [
+	[
+		'field' => 'group_id',
+		'label' => 'Group id',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'lecture_id',
+		'label' => 'Lecture id',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'video_url',
+		'label' => 'Url',
+		'rules' => 'required'
+	]
+];
+
+$config['stream_add'] = [
+	[
+		'field' => 'group_id',
+		'label' => 'Group id',
+		'rules' => 'required|integer|greater_than[0]'
+	],
+	[
+		'field' => 'url',
+		'label' => 'Url',
+		'rules' => 'required|min_length[5]'
+	],
+	[
+		'field' => 'name',
+		'label' => 'Name',
+		'rules' => 'required|min_length[5]'
+	],
+	[
+		'field' => 'ts',
+		'label' => 'Date',
+		'rules' => 'required|min_length[5]'
+	],
+];

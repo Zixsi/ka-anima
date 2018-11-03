@@ -90,3 +90,29 @@ function next_monday_ts()
 	$date = new \DateTime('next monday');
 	return $date->getTimestamp();
 }
+
+
+function set_select2($field, $value = '', $default = false)
+{
+	$CI =& get_instance();
+	if(($input = $CI->input->post($field, false)) === null && ($input = $CI->input->get($field, false)) === null)
+	{
+		return ($default === true) ? ' selected="selected"' : '';
+	}
+
+	$value = (string) $value;
+	if(is_array($input))
+	{
+		foreach($input as &$v)
+		{
+			if($value === $v)
+			{
+				return ' selected="selected"';
+			}
+		}
+
+		return '';
+	}
+
+	return ($input === $value) ? ' selected="selected"' : '';
+}

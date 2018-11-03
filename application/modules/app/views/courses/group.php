@@ -5,8 +5,8 @@
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
 		<a href="/courses/<?=$group_id?>/" class="btn btn-default">Лекции</a>
 		<a href="/courses/<?=$group_id?>/group/" class="btn btn-primary">Группа</a>
-		<a href="#" class="btn btn-default disabled">Ревью работ</a>
-		<a href="#" class="btn btn-default disabled">Онлайн встречи</a>
+		<a href="/courses/<?=$group_id?>/review/" class="btn btn-default">Ревью работ</a>
+		<a href="/courses/<?=$group_id?>/stream/" class="btn btn-default">Онлайн встречи</a>
 	</div>
 
 	<div class="col-xs-6">

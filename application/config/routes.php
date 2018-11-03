@@ -25,8 +25,12 @@ $route['teachinggroups/(:num)'] = 'app/TeachingGroups/group/$1';
 $route['teachinggroups/(:num)/lecture/(:num)'] = 'app/TeachingGroups/lecture/$1/$2';
 $route['teachinggroups/(.*)'] = 'app/TeachingGroups/$1';
 
+$route['teachingstreams'] = 'app/TeachingStreams';
+$route['teachingstreams/(:num)'] = 'app/TeachingStreams/item/$1';
+$route['teachingstreams/(.*)'] = 'app/TeachingStreams/$1';
 
-$route['video/(.*)'] = 'app/video/index/$1';
+
+$route['video/(.*)/(.*)'] = 'app/video/index/$1/$2';
 
 //$route['groups/(:num)'] = 'app/Groups/index/$1';
 $route['courses'] = 'app/courses/index';
@@ -34,5 +38,6 @@ $route['courses/(:num)'] = 'app/courses/index/$1';
 $route['courses/(:num)/lecture/(:num)'] = 'app/courses/index/$1/$2';
 $route['courses/(:num)/group'] = 'app/courses/group/$1';
 $route['courses/(:num)/review'] = 'app/courses/review/$1';
+$route['courses/(:num)/review/(:num)'] = 'app/courses/review/$1/$2';
 $route['courses/(:num)/stream'] = 'app/courses/stream/$1';
 $route['(.*)'] = 'app/$1';

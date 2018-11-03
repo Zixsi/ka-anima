@@ -5,8 +5,8 @@
 	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
 		<a href="/courses/<?=$group_id?>/" class="btn btn-primary">Лекции</a>
 		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
-		<a href="#" class="btn btn-default disabled">Ревью работ</a>
-		<a href="#" class="btn btn-default disabled">Онлайн встречи</a>
+		<a href="/courses/<?=$group_id?>/review/" class="btn btn-default">Ревью работ</a>
+		<a href="/courses/<?=$group_id?>/stream/" class="btn btn-default">Онлайн встречи</a>
 	</div>
 
 	<div class="col-xs-12">
@@ -38,7 +38,7 @@
 
 		<div class="col-xs-5">
 			<div class="video-wrap">
-				<iframe src="/video/<?=$lecture_id?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+				<iframe src="/video/lecture/<?=$lecture_id?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 			</div>
 			<div class="video-info">
 				<?if(!empty($lecture['description'])):?>
@@ -121,6 +121,12 @@
 
 <?if($subscr_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/subscription/">Продлите чтобы получить доступ.</a></div>
+	<div class="text-center" style="padding: 50px 0px;">
+		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
+	</div>
 <?elseif($lectures_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">Нет активных лекций</div>
+	<div class="text-center" style="padding: 50px 0px;">
+		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
+	</div>
 <?endif;?>

@@ -6,7 +6,7 @@ class TeachingGroups extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesGroupsModel', 'main/LecturesModel', 'main/LecturesGroupModel']);
+		$this->load->model(['main/CoursesGroupsModel', 'main/LecturesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel', 'main/ReviewModel']);
 	}
 
 	public function index()
@@ -34,19 +34,16 @@ class TeachingGroups extends APP_Controller
 
 		if(cr_valid_key())
 		{
-			$url = $this->input->post('url', true);
-			if(!empty($url))
+			$params = $this->input->post(null, true);
+			$params['group_id'] = $group_id;
+			$params['lecture_id'] = $id;
+			if($this->ReviewModel->add($params) == false)
 			{
-				if($this->LecturesModel->addReview($group_id, $id, $this->Auth->userID(), $url))
-				{
-					SetFlashMessage('success', 'Success');
-					header('Location: ./');
-				}
+				SetFlashMessage('danger', $this->ReviewModel->LAST_ERROR);
 			}
-
-			if($this->LecturesModel->LAST_ERROR)
+			else
 			{
-				SetFlashMessage('error', $this->LecturesModel->LAST_ERROR);
+				header('Location: ./');
 			}
 		}
 		$data['csrf'] = cr_get_key();
@@ -54,6 +51,8 @@ class TeachingGroups extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByID($group_id);
 		$data['item'] = $this->LecturesModel->getByID($id);
 		$data['homework'] = $this->LecturesModel->getTeacherHomeWork($group_id, $id);
+		$data['homework_users'] = $this->LecturesHomeworkModel->listUsersForLecture($group_id, $id);
+		$data['reviews'] = $this->ReviewModel->getByLecture($group_id, $id);
 
 		$this->load->lview('teachingGroups/lecture', $data);
 	}

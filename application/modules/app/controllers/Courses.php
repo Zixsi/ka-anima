@@ -8,7 +8,7 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel', 'main/ReviewModel', 'main/VideoModel']);
 
 		$this->user_id = $this->Auth->userID();
 	}
@@ -64,6 +64,58 @@ class Courses extends APP_Controller
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
 
 		$this->load->lview('courses/group', $data);
+	}
+
+	public function review($group = 0, $review = 0)
+	{
+		$data = [];
+		$data['group_id'] = intval($group);
+		
+		if($this->checkSubscribeGroup($data['group_id']) == false)
+		{
+			header('Location: /courses/'.$data['group_id'].'/');
+		}
+
+		$data['review_item'] = false; 
+		if($review > 0)
+		{
+			$data['review_item'] = $this->ReviewModel->getByID($review);
+			if($user = $this->UserModel->getByID($data['review_item']['user']))
+			{
+				$data['review_item']['user_name'] = $user['email'];
+			}
+			//debug($data['review_item']); die();
+		}
+
+		$filter = $this->input->get('filter', true);
+		$data['filter_url'] = http_build_query(['filter' => $filter]);
+		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		$data['items'] = $this->ReviewModel->getByGroup($data['group_id'], $filter);
+		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
+
+		$this->load->lview('courses/reviews', $data);
+	}
+
+	public function stream($group = 0)
+	{
+		$data = [];
+		$data['group_id'] = intval($group);
+		
+		if($this->checkSubscribeGroup($data['group_id']) == false)
+		{
+			header('Location: /courses/'.$data['group_id'].'/');
+		}
+
+		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		if(($data['item'] = $this->StreamsModel->byGroup($data['group_id'])))
+		{
+			$this->load->library(['youtube']);
+			$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
+			$data['item']['started'] = (strtotime($data['item']['url']) >= time());
+		}
+
+		$this->load->lview('courses/stream', $data);
 	}
 
 	public function enroll()

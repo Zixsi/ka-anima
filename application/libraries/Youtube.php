@@ -8,6 +8,23 @@ class Youtube
 	private const UA = 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:11.0) Gecko Firefox/11.0';
 
 	private $curl = null;
+
+	private $formats = [
+		/*'242' => ['webm', 144, 11],
+		'243' => ['webm', 240, 10],
+		'244' => ['webm', 360, 9],
+		'247' => ['webm', 480, 8],
+		'248' => ['webm', 720, 7],
+		'160' => ['mp4', 144, 6],
+		'133' => ['mp4', 240, 5],
+		'134' => ['mp4', 360, 4],
+		'135' => ['mp4', 480, 3],
+		'136' => ['mp4', 720, 2],
+		'137' => ['mp4', 1080, 1]*/
+		'22' => ['mp4', '720'],
+		'18' => ['mp4', '480'],
+		'43' => ['webm', '480']
+	];
 	
 	function __construct()
 	{
@@ -33,26 +50,60 @@ class Youtube
 		return $this->curlGet($url);
 	}
 
+	public function prepareData($code)
+	{
+		$data = $this->getInfo($code);
+		$data = urldecode($data);
+		$i = 0;
+		while(strpos($data, 'url=https%3A'))
+		{
+			$data = $this->str_replace_once('url=https%3A', '&video[url]['.$i.']=https%3A', $data);
+			$i++;
+		}
+
+		parse_str($data, $data);
+
+		return $data;
+	}
+
+	public function getVideoFromData($data)
+	{
+		$result = [];
+		$video = $data['video']['url'] ?? [];
+		unset($data);
+		
+		foreach($video as $item)
+		{
+			parse_str(parse_url($item, PHP_URL_QUERY), $item_arr);
+			if(isset($this->formats[$item_arr['itag']]))
+			{
+				$meta = $this->formats[$item_arr['itag']];
+				$item = ($pos = strpos($item, ','))?substr($item, 0, $pos):$item;
+				$result[$meta[0]][$meta[1]] = $item;
+			}
+		}
+
+		return $result;
+	}
+
+	public function getImgFromData($data)
+	{
+		if($data = ($data['player_response'] ?? null))
+		{
+			$data = json_decode($data, true);
+			if($images = ($data['videoDetails']['thumbnail']['thumbnails'] ?? []))
+			{
+				$img = end($images);
+				return $img['url'] ?? false;
+			}
+		}
+
+		return false;
+	}
+
 	private function getUrlMap($data)
 	{
 		$result = [];
-		$formats = [
-			/*'242' => ['webm', 144, 11],
-			'243' => ['webm', 240, 10],
-			'244' => ['webm', 360, 9],
-			'247' => ['webm', 480, 8],
-			'248' => ['webm', 720, 7],
-			'160' => ['mp4', 144, 6],
-			'133' => ['mp4', 240, 5],
-			'134' => ['mp4', 360, 4],
-			'135' => ['mp4', 480, 3],
-			'136' => ['mp4', 720, 2],
-			'137' => ['mp4', 1080, 1]*/
-			'22' => ['mp4', '720'],
-			'18' => ['mp4', '480'],
-			'43' => ['webm', '480']
-		];
-
 		$data = urldecode($data);
 		$i = 0;
 		while(strpos($data, 'url=https%3A'))
@@ -68,9 +119,9 @@ class Youtube
 		foreach($video as $item)
 		{
 			parse_str(parse_url($item, PHP_URL_QUERY), $item_arr);
-			if(isset($formats[$item_arr['itag']]))
+			if(isset($this->formats[$item_arr['itag']]))
 			{
-				$meta = $formats[$item_arr['itag']];
+				$meta = $this->formats[$item_arr['itag']];
 				$item = ($pos = strpos($item, ','))?substr($item, 0, $pos):$item;
 				$result[$meta[0]][$meta[1]] = $item;
 			}
