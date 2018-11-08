@@ -37,6 +37,30 @@ class TeachingStreams extends APP_Controller
 		$this->load->lview('teaching_streams/add', $data);
 	}
 
+	public function edit($id)
+	{
+		$data = [];
+		if(($data['item'] = $this->StreamsModel->getByID($id)) == false)
+		{
+			header('Location: ../../');
+		}
+
+		if(cr_valid_key())
+		{
+			$form_data = $this->input->post(null, true);
+			if($id = $this->StreamsModel->update($id, $form_data))
+			{
+				header('Location: ../../');
+			}
+		}
+
+		$data['error'] = $this->StreamsModel->LAST_ERROR;
+		$data['groups'] = $this->CoursesGroupsModel->getTeacherGroups($this->Auth->userID());
+		$data['csrf'] = cr_get_key();
+
+		$this->load->lview('teaching_streams/edit', $data);
+	}
+
 	public function item($id)
 	{
 		$data = [];

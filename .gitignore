@@ -12,9 +12,10 @@ application/logs/*
 
 data/*
 !data/index.html
-!data/courses
 data/courses/*
 !data/courses/dummy
+data/lectures/*
+!data/lectures/dummy
 
 
 # IDE Files

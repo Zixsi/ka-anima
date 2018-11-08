@@ -16,6 +16,7 @@
 					<th>Тема</th>
 					<th>Дата</th>
 					<th class="text-right">Статус</th>
+					<th class="text-right">Действие</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -27,7 +28,7 @@
 								<?=$item['course_name']?> (<?=strftime("%B %Y", strtotime($item['course_ts']))?>)
 							</td>
 							<td>
-								<a href="./<?=$item['group_id']?>/"><?=$item['name']?></a>
+								<a href="./<?=$item['id']?>/"><?=$item['name']?></a>
 							</td>
 							<td><?=$item['ts']?></td>
 							<td class="text-right">
@@ -35,8 +36,15 @@
 									<span class="label label-success">В процессе</span>
 								<?elseif($item['status'] == -1):?>
 									<span class="label label-danger">Завершено</span>
+								<?elseif($item['status'] == 2):?>
+									<span class="label label-info">Сегодня</span>
 								<?else:?>
 									<span class="label label-warning">Скоро</span>
+								<?endif;?>
+							</td>
+							<td class="text-right">
+								<?if(in_array($item['status'], [1, 2])):?>
+									<a href="./edit/<?=$item['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
 								<?endif;?>
 							</td>
 						</tr>

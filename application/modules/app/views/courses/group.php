@@ -33,7 +33,11 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-xs-3">
-						<img src="/<?=$group['img_src']?>" class="img-rounded" style="width: 100%; height: auto;">
+						<?if(empty($group['img_src'])):?>
+							<span class="img-rounded" style="display: block; width: 100%; height: 100px; background-color: #ccc;"></span>
+						<?else:?>
+							<img src="/<?=$group['img_src']?>" class="img-rounded" style="width: 100%; height: auto;">
+						<?endif;?>
 					</div>
 					<div class="col-xs-4">
 						<div>

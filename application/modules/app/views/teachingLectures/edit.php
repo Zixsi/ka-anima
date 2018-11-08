@@ -16,7 +16,7 @@
 					<label class="fancy-checkbox">
 						<input type="hidden" name="active" value="0">
 						<input type="checkbox" name="active" id="factive" class="form-control" value="1" <?=set_checkbox('active', 1, ($item['active'] == 1))?> >
-						<span>Доступен?</span>
+						<span>Доступена?</span>
 					</label>
 				</div>
 				<div class="form-group">
@@ -39,6 +39,23 @@
 					<label for="fvideo">Видео</label>
 					<input type="text" name="video" id="fvideo" class="form-control" placeholder="Видео" value="<?=set_value('video', $item['video'], true)?>">
 				</div>
+				<?/*
+				<div class="form-group row">
+					<label for="fvideo" class="col-xs-12">Файлы</label>
+					<div class="col-xs-12">
+						<span class="btn btn-success fileinput-button">
+							<i class="glyphicon glyphicon-plus"></i>
+							<span>Выбирете файлы...</span>
+							<input id="fileupload" type="file" name="files[]" multiple>
+						</span>
+						<div id="progress" class="progress">
+							<div class="progress-bar progress-bar-success"></div>
+						</div>
+						<!-- The container for the uploaded files -->
+						<div id="files" class="files"></div>
+					</div>
+				</div>*/?>
+
 				<div class="form-group">
 					<button type="submit" class="btn btn-xs btn-primary">Сохранить</button>
 				</div>

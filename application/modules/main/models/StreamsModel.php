@@ -47,6 +47,39 @@ class StreamsModel extends APP_Model
 
 	public function update($id, $data = [])
 	{
+		try
+		{
+			if(($item = $this->getByID($id)) == false)
+			{
+				throw new Exception("item not found", 1);
+			}
+			
+			$params = [
+				'group_id' => $data['group_id'] ?? $item['group_id'],
+				'url' => $data['url'] ?? $item['url'],
+				'name' => $data['name'] ?? $item['name'],
+				'description' => $data['description'] ?? $item['description'],
+				'ts' => $data['ts'] ?? $item['ts']
+			];
+
+			$this->form_validation->reset_validation();
+			$this->form_validation->set_data($params);
+			if($this->form_validation->run('stream_add') == false)
+			{
+				throw new Exception($this->form_validation->error_string(), 1);
+			}
+
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $params))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
 		return false;
 	}
 
@@ -99,12 +132,12 @@ class StreamsModel extends APP_Model
 		}
 
 		$sql .= ' ORDER BY 
-					s.ts ASC';
+					s.ts DESC';
 
 		if($res = $this->db->query($sql, $bind)->result_array())
 		{
 
-			$ts = time() + (3600 * 12);
+			$ts = time();
 			foreach($res as &$val)
 			{
 				$val['status'] = 1;
@@ -119,7 +152,12 @@ class StreamsModel extends APP_Model
 				{
 					$val['status'] = 0;
 				}
+				elseif(date('Y-m-d') === date('Y-m-d', $ts_start))
+				{
+					$val['status'] = 2;
+				}
 			}
+			//debug($res); die();
 
 			return $res;
 		}
