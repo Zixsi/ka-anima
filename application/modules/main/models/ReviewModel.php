@@ -98,11 +98,15 @@ class ReviewModel extends APP_Model
 	{
 		$bind = [$group_id];
 		$sql = 'SELECT 
-					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_url as src  
+					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_url as src, u.email as user_name, l.name    
 				FROM 
 					'.self::TABLE.' as r  
 				LEFT JOIN 
-					'.self::TABLE_VIDEO.' as rv ON(r.id = rv.source_id AND rv.source_type = \'review\' AND rv.type = \'img\')
+					'.self::TABLE_VIDEO.' as rv ON(r.id = rv.source_id AND rv.source_type = \'review\' AND rv.type = \'img\') 
+				LEFT JOIN
+					'.self::TABLE_USERS.' as u ON(r.user = u.id) 
+				LEFT JOIN
+					'.self::TABLE_LECTURES.' as l ON(r.lecture_id = l.id) 
 				WHERE 
 					r.group_id = ? ';
 

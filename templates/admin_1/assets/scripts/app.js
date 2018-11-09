@@ -75,9 +75,14 @@ function upload_files()
 
 function datetimepiker()
 {
+	if($('#datetimepicker').length < 1)
+	{
+		return;
+	}
+
 	$('#datetimepicker').datetimepicker({
-		format: 'Y-m-d H:i:00',
-		formatDate: 'Y-m-d H:i:00',
+		format: 'd-m-Y H:i:00',
+		formatDate: 'd-m-Y H:i:00',
 		lang:'ru'
 	});
 }

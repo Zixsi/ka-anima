@@ -49,8 +49,8 @@
 								</table>
 							</div>
 						<?else:?>
-							<div class="video-wrap" style="background-color: #ccc;">
-								<div style="color: #fff; text-align: center; text-transform: uppercase; font-size: 40px; padding-top: 24%;">Тут могла быть ваша реклама</div>
+							<div class="text-center" style="background-color: #f6f6f6;">
+								<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="60%" height="auto">
 							</div>
 						<?endif;?>
 					</div>
@@ -85,9 +85,12 @@
 										<div class="thumbnail">
 											<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>"><img src="<?=$item['src']?>" width="100%"></a>
 											<div class="caption">
-												<h3>
-													<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>">Название видео</a>
-												</h3>
+												<h4>
+													<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>">
+														<span><?=($item['user'])?$item['user_name']:'Общий обзор'?></span><br>
+														<span><?=$item['name']?></span>
+													</a>
+												</h4>
 											</div>
 										</div>
 									</div>

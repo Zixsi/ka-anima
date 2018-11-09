@@ -30,7 +30,7 @@
 							<td>
 								<a href="./<?=$item['id']?>/"><?=$item['name']?></a>
 							</td>
-							<td><?=$item['ts']?></td>
+							<td><?=date('d-m-Y H:i:s', strtotime($item['ts']))?></td>
 							<td class="text-right">
 								<?if($item['status'] == 0):?>
 									<span class="label label-success">В процессе</span>
@@ -43,9 +43,9 @@
 								<?endif;?>
 							</td>
 							<td class="text-right">
-								<?if(in_array($item['status'], [1, 2])):?>
+								<?//if(in_array($item['status'], [1, 2])):?>
 									<a href="./edit/<?=$item['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
-								<?endif;?>
+								<?//endif;?>
 							</td>
 						</tr>
 					<?endforeach;?>

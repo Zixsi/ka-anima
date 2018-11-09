@@ -32,7 +32,7 @@
 				</div>
 				<div class="form-group">
 					<label for="datetimepicker">Дата</label>
-					<input type="text" name="ts" id="datetimepicker" class="form-control" value="<?=set_value('ts', '', true)?>">
+					<input type="text" name="ts" id="datetimepicker" class="form-control" autocomplete="off" value="<?=set_value('ts', '', true)?>">
 				</div>
 				<div class="form-group">
 					<label for="fperiod">Описание</label>

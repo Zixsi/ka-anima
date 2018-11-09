@@ -32,6 +32,7 @@ class StreamsModel extends APP_Model
 				throw new Exception($this->form_validation->error_string(), 1);
 			}
 
+			$params['ts'] = date('Y-m-d H:i:s', strtotime($params['ts']));
 			if($this->db->insert(self::TABLE, $params))
 			{
 				return $this->db->insert_id();
@@ -69,6 +70,7 @@ class StreamsModel extends APP_Model
 				throw new Exception($this->form_validation->error_string(), 1);
 			}
 
+			$params['ts'] = date('Y-m-d H:i:s', strtotime($params['ts']));
 			$this->db->where('id', $id);
 			if($this->db->update(self::TABLE, $params))
 			{
@@ -112,7 +114,7 @@ class StreamsModel extends APP_Model
 
 	public function list(int $author = 0)
 	{
-		$bind = [date('Y-m-d H:i:s', time() - (3600 * 24 * 7))];
+		$bind = [date('Y-m-d H:i:s', time() - (3600 * 24 * 30))];
 
 		$sql = 'SELECT 
 					s.*, c.name as course_name, g.ts as course_ts  
