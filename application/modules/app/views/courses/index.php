@@ -1,20 +1,14 @@
 <div class="row">
 
 	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
+	<?$this->load->view('courses/menu');?>
 
-	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
-		<a href="/courses/<?=$group_id?>/" class="btn btn-primary">Лекции</a>
-		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
-		<a href="/courses/<?=$group_id?>/review/" class="btn btn-default">Ревью работ</a>
-		<a href="/courses/<?=$group_id?>/stream/" class="btn btn-default">Онлайн встречи</a>
-	</div>
-
-	<div class="col-xs-12">
-		<div class="week-panel">
+	<div class="col-xs-8 col-xs-push-2">
+		<div class="week-panel owl-carousel">
 			<?$i = 1;?>
 			<?foreach($lectures as $item):?>
 				<?if($item['active'] && $subscr_is_active):?>
-					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
+					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" data-index="<?=($i - 1)?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
 						<span class="number"><?=$i?></span>
 						<span class="name"><?=$item['name']?></span>
 					</a>

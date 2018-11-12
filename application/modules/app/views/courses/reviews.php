@@ -1,13 +1,7 @@
 <div class="row">
 
 	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
-
-	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
-		<a href="/courses/<?=$group_id?>/" class="btn btn-default">Лекции</a>
-		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
-		<a href="/courses/<?=$group_id?>/review/" class="btn btn-primary">Ревью работ</a>
-		<a href="/courses/<?=$group_id?>/stream/" class="btn btn-default">Онлайн встречи</a>
-	</div>
+	<?$this->load->view('courses/menu');?>
 
 	<div class="col-xs-12">
 		<div class="panel panel-headline">

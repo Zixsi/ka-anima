@@ -40,4 +40,5 @@ $route['courses/(:num)/group'] = 'app/courses/group/$1';
 $route['courses/(:num)/review'] = 'app/courses/review/$1';
 $route['courses/(:num)/review/(:num)'] = 'app/courses/review/$1/$2';
 $route['courses/(:num)/stream'] = 'app/courses/stream/$1';
+$route['courses/(:num)/stream/(:num)'] = 'app/courses/stream/$1/$2';
 $route['(.*)'] = 'app/$1';

@@ -16,6 +16,8 @@ $user_id = $CI->Auth->userID();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css?<?=VERSION?>">
@@ -166,6 +168,8 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.iframe-transport.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.full.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>	
+
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?<?=VERSION?>"></script>
 </body>
 </html>

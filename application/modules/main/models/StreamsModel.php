@@ -192,6 +192,53 @@ class StreamsModel extends APP_Model
 		return false;
 	}
 
+	public function byGroupList(int $id)
+	{
+		$bind = [$id];
+
+		$sql = 'SELECT 
+					s.*, c.name as course_name, g.ts as course_ts  
+				FROM 
+					'.self::TABLE.' as s 
+				LEFT JOIN 
+					'.self::TABLE_GROUPS.' as g ON(s.group_id = g.id) 
+				LEFT JOIN 
+					'.self::TABLE_COURSE.' as c ON(g.course_id = c.id) 
+				WHERE 
+					s.group_id = ? 
+				ORDER BY 
+					s.ts ASC';
+
+		if($res = $this->db->query($sql, $bind)->result_array())
+		{
+
+			$ts = time();
+			foreach($res as &$val)
+			{
+				$val['status'] = 1;
+				$ts_start = strtotime($val['ts']);
+				$ts_end = $ts_start + (3600 * 4);
+
+				if($ts > $ts_end)
+				{
+					$val['status'] = -1;
+				}
+				elseif($ts >= $ts_start && $ts < $ts_end)
+				{
+					$val['status'] = 0;
+				}
+				elseif(date('Y-m-d') === date('Y-m-d', $ts_start))
+				{
+					$val['status'] = 2;
+				}
+			}
+
+			return $res;
+		}
+
+		return false;
+	}
+
 	public function getNextForAuthor(int $author)
 	{
 		$bind = [$author, date('Y-m-d H:i:s')];

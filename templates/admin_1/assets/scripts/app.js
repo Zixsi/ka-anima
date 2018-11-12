@@ -10,6 +10,7 @@ $(document).ready(function(){
 	update_time_to_homework();
 	upload_files();
 	datetimepiker();
+	lectures_corusel();
 });
 
 function moscow_date_time()
@@ -84,5 +85,29 @@ function datetimepiker()
 		format: 'd-m-Y H:i:00',
 		formatDate: 'd-m-Y H:i:00',
 		lang:'ru'
+	});
+}
+
+function lectures_corusel()
+{
+	if($('.week-panel.owl-carousel').length < 1)
+	{
+		return;
+	}
+
+	var i = $('.week-panel.owl-carousel').find('.week-item.current').data('index') * 1;
+	var center_var = ($('.week-panel.owl-carousel').find('.week-item').length >= 4)?false:true;
+
+	$(".owl-carousel").owlCarousel({
+		items: 4,
+		margin: 0,
+		center: center_var,
+		mouseDrag: false,
+		touchDrag: false,
+		pullDrag: false,
+		stagePadding: 0,
+		startPosition: i,
+		nav: true,
+		slideBy: 4
 	});
 }

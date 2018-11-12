@@ -17,6 +17,7 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['error'] = null;
+		$data['section'] = 'index';
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
 		$data['subscr_is_active'] = $this->checkSubscribeGroup($data['group_id']);
@@ -50,6 +51,7 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['error'] = null;
+		$data['section'] = 'group';
 		$data['group_id'] = intval($group);
 		
 		if($this->checkSubscribeGroup($data['group_id']) == false)
@@ -69,6 +71,7 @@ class Courses extends APP_Controller
 	public function review($group = 0, $review = 0)
 	{
 		$data = [];
+		$data['section'] = 'review';
 		$data['group_id'] = intval($group);
 		
 		if($this->checkSubscribeGroup($data['group_id']) == false)
@@ -97,9 +100,10 @@ class Courses extends APP_Controller
 		$this->load->lview('courses/reviews', $data);
 	}
 
-	public function stream($group = 0)
+	public function stream($group = 0, $item = 0)
 	{
 		$data = [];
+		$data['section'] = 'stream';
 		$data['group_id'] = intval($group);
 		
 		if($this->checkSubscribeGroup($data['group_id']) == false)
@@ -108,11 +112,34 @@ class Courses extends APP_Controller
 		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		if(($data['item'] = $this->StreamsModel->byGroup($data['group_id'])))
+		$data['list'] = $this->StreamsModel->byGroupList($data['group_id']);
+		$data['item'] = false;
+		$streams_id = $this->getStreamsIds($data['list']);
+
+
+		if(count($streams_id))
 		{
-			$this->load->library(['youtube']);
-			$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
-			$data['item']['started'] = (strtotime($data['item']['url']) >= time());
+			if($item > 0)
+			{
+				$data['item'] = $this->StreamsModel->getByID($item);
+			}
+			else
+			{
+				$data['item'] = $this->StreamsModel->byGroup($data['group_id']);
+			}
+
+			if(!in_array($data['item']['id'], $streams_id))
+			{
+				header('Location: /courses/'.$data['group_id'].'/stream/');
+			}
+
+			if($data['item'])
+			{
+				$this->load->library(['youtube']);
+				$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
+				$data['item']['started'] = boolval(time() >= strtotime($data['item']['ts']));
+			}
+			//debug($data['item']);
 		}
 
 		$this->load->lview('courses/stream', $data);
@@ -223,5 +250,19 @@ class Courses extends APP_Controller
 
 			$data['error'] = $this->FilesModel->LAST_ERROR;
 		}
+	}
+
+	private function getStreamsIds($data = [])
+	{
+		$result = [];
+		if(is_array($data))
+		{
+			foreach($data as $val)
+			{
+				$result[] = $val['id'];
+			}
+		}
+
+		return $result;
 	}
 }

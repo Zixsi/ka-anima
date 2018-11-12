@@ -45,12 +45,23 @@
 .video-wrap iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
 
 .week-panel {display: flex; flex-wrap: wrap; justify-content: center;}
-.week-panel .week-item {text-align: center; box-sizing: border-box; margin: 0px 20px 20px; text-decoration: none;}
+.week-panel .week-item {text-align: center; box-sizing: border-box; padding: 15px 20px 20px; text-decoration: none;}
 .week-panel .week-item.active {cursor: pointer;}
 .week-panel .week-item.active .number {background-color: #00AAFF; position:  relative;}
 .week-panel .week-item.active.current .number:before {content: ""; display: block; position: absolute; top: -15%; left: -15%; width: 130%; height: 130%; border: 3px dotted #00AAFF; border-radius: 50%;}
 .week-panel .week-item .number {display: inline-block; width: 40px ;height: 40px; border-radius: 50%; background-color: #ccc; text-align: center; line-height: 38px; color: #fff; font-size: 25px; margin-bottom: 10px;}
 .week-panel .week-item .name {display: block; font-size: 14px; color: #676a6d;}
+
+.week-panel .owl-item .week-item {display: inline-block; width: 100%;}
+.week-panel.owl-carousel.owl-loaded {padding: 0px 0px; position: relative;}
+.week-panel.owl-dots {display: none;}
+.week-panel .owl-stage-outer {z-index: 10;}
+.week-panel .owl-nav {position: absolute; top: 0px; left: 0px; right: 0px; height: 100%;}
+.week-panel .owl-nav button {position: absolute; top: 50%; margin-top: -45px; height: 70px; width: 40px; background: transparent url('../img/chevron.png') top left no-repeat !important; outline: none;}
+.week-panel .owl-nav button.disabled {display: none;}
+.week-panel .owl-nav button > span {display: none;}
+.week-panel .owl-nav button.owl-prev {left: -40px;}
+.week-panel .owl-nav button.owl-next {right: -40px; background-position: -40px 0px !important;}
 
 #enroll-top-panel {}
 #enroll-top-panel .balance-block-wrap {padding-top: 15px;}

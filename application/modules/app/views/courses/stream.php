@@ -1,21 +1,30 @@
 <div class="row">
-
 	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
+	<?$this->load->view('courses/menu');?>
 
-	<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
-		<a href="/courses/<?=$group_id?>/" class="btn btn-default">Лекции</a>
-		<a href="/courses/<?=$group_id?>/group/" class="btn btn-default">Группа</a>
-		<a href="/courses/<?=$group_id?>/review/" class="btn btn-default">Ревью работ</a>
-		<a href="/courses/<?=$group_id?>/stream/" class="btn btn-primary">Онлайн встречи</a>
-	</div>
-
+	<?if($list):?>
+		<div class="col-xs-8 col-xs-push-2">
+			<div class="week-panel owl-carousel">
+				<?$i = 1;?>
+				<?foreach($list as $stream_item):?>
+					<a href="/courses/<?=$group_id?>/stream/<?=$stream_item['id']?>/" data-index="<?=($i - 1)?>" class="week-item active <?=($item['id'] == $stream_item['id'])?'current':''?>">
+						<span class="number"><?=$i?></span>
+						<span class="name"><?=$stream_item['name']?></span>
+					</a>
+					<?$i++;?>
+				<?endforeach;?>
+			</div>
+		</div>
+	<?endif;?>
 </div>
 
 <?if($item):?>
 	<div class="row">
-		<div class="col-xs-12">
-			<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=$item['ts']?></div>
-		</div>
+		<?if($item['started'] == false):?>
+			<div class="col-xs-12">
+				<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=$item['ts']?></div>
+			</div>
+		<?endif;?>
 		<div class="col-xs-6">
 			<div class="panel">
 				<div class="panel-heading">
