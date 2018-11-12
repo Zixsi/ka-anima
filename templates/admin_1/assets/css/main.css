@@ -990,7 +990,7 @@ ul.activity-list > li {
     *display: inline;
     content: ' ';
     vertical-align: middle;
-    height: 100%; }
+    /*height: 100%;*/ }
   .auth-box .content {
     display: inline-block;
     vertical-align: middle;
