@@ -112,9 +112,9 @@ class StreamsModel extends APP_Model
 		return false;
 	}
 
-	public function list(int $author = 0)
+	public function list(int $author = 0, array $filter = [])
 	{
-		$bind = [date('Y-m-d H:i:s', time() - (3600 * 24 * 30))];
+		$bind = [];
 
 		$sql = 'SELECT 
 					s.*, c.name as course_name, g.ts as course_ts  
@@ -125,7 +125,13 @@ class StreamsModel extends APP_Model
 				LEFT JOIN 
 					'.self::TABLE_COURSE.' as c ON(g.course_id = c.id) 
 				WHERE 
-					s.ts >= ? ';
+					1 ';
+
+		if(isset($filter['active']) && intval($filter['active']) !== 0)
+		{
+			$bind[] = date('Y-m-d H:i:s');
+			$sql .= ($filter['active'] > 0)?' AND s.ts > ? ':' AND s.ts <= ? ';
+		}
 
 		if($author > 0)
 		{

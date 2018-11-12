@@ -12,7 +12,7 @@ class TeachingStreams extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->StreamsModel->list($this->Auth->userID());
+		$data['items'] = $this->StreamsModel->list($this->Auth->userID(), ($_GET['filter'] ?? []));
 
 		$this->load->lview('teaching_streams/index', $data);
 	}

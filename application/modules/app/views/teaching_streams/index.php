@@ -8,6 +8,21 @@
 		</div>
 	</div>
 	<div class="panel-body" style="padding-top: 30px;">
+		
+		<form action="" method="get" class="row">
+			<div class="col-xs-3">
+				<select name="filter[active]" class="form-control">
+					<option value="0" <?=set_select2('filter[active]', 0, true)?>>Все</option>
+					<option value="1" <?=set_select2('filter[active]', 1)?>>Активные</option>
+					<option value="-1" <?=set_select2('filter[active]', -1)?>>Завершенные</option>
+				</select>
+			</div>
+			<div class="col-xs-4">
+				<button class="btn btn-primary btn-md">Применить</button>
+				<a href="./" class="btn btn-default btn-md">Сбросить</a>
+			</div>
+		</from>
+
 		<table class="table table-striped">
 			<thead>
 				<tr>
