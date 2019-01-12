@@ -1,7 +1,7 @@
 <div class="auth-box">
 	<div class="content">
 		<div class="header">
-			<div class="logo text-center"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_mini.png" alt="Klorofil Logo"></div>
+			<div class="logo text-center"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png" alt="Klorofil Logo"></div>
 			<p class="lead">Login to your account</p>
 		</div>
 		<?=ShowError($error);?>
