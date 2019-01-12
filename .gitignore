@@ -12,10 +12,13 @@ application/logs/*
 
 data/*
 !data/index.html
+!data/courses
 data/courses/*
 !data/courses/dummy
+!data/lectures
 data/lectures/*
 !data/lectures/dummy
+!data/homework
 data/homework/*
 !data/homework/dummy
 
