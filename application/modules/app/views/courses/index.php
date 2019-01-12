@@ -48,7 +48,7 @@
 				<?if(!empty($lecture['files'])):?>
 					<h4>Файлы к заданию</h4>
 					<?foreach($lecture['files'] as $val):?>
-						<p><a href="/<?=$val['path'].$val['name']?>" target="_blank"><?=$val['name']?></a></p>
+						<p><a href="/file/download/<?=$val['id']?>" target="_blank"><?=$val['name']?></a></p>
 					<?endforeach;?>
 				<?endif;?>
 			</div>

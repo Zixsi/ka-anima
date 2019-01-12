@@ -39,7 +39,7 @@
 											<td><b>Файлы:</b></td>
 											<td>
 												<?foreach($review_item['files'] as $val):?>
-													<p><a href="/<?=$val['path'].$val['name']?>" target="_blank"><?=$val['name']?></a></p>
+													<p><a href="/file/download/<?=$val['id']?>" target="_blank"><?=$val['name']?></a></p>
 												<?endforeach;?>
 											</td>
 										</tr>
