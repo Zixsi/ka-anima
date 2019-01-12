@@ -30,6 +30,7 @@ class TeachingLectures extends APP_Controller
 			$form_data['course_id'] = $course;
 			if($id = $this->LecturesModel->add($form_data))
 			{
+				$this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures');
 				header('Location: ../');
 			}
 		}
@@ -57,19 +58,33 @@ class TeachingLectures extends APP_Controller
 			header('Location: ../');
 		}
 
+		$data['error'] = null;
+
 		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 			$form_data['course_id'] = $course;
-			if($id = $this->LecturesModel->update($id, $form_data))
+			if($this->LecturesModel->update($id, $form_data))
 			{
 				$data['item'] += $form_data;
+
+				$this->FilesModel->deleteLinkFile(($form_data['del_files'] ?? []), $id, 'lecture');
+				if($this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures'))
+				{
+					$data['error'] = $this->FilesModel->LAST_ERROR;
+				}
+
 				SetFlashMessage('success', 'Success');
+			}
+			else
+			{
+				$data['error'] = $this->LecturesModel->LAST_ERROR;
 			}
 		}
 
+		$data['item']['files'] = $this->FilesModel->listLinkFiles($id, 'lecture');
 		$data['csrf'] = cr_get_key();
-		$data['error'] = $this->LecturesModel->LAST_ERROR;
+		
 
 		$this->load->lview('teachingLectures/edit', $data);
 	}

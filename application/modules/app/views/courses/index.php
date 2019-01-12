@@ -44,6 +44,13 @@
 					<h4>Задание</h4>
 					<p><?=$lecture['task']?></p>
 				<?endif;?>
+
+				<?if(!empty($lecture['files'])):?>
+					<h4>Файлы к заданию</h4>
+					<?foreach($lecture['files'] as $val):?>
+						<p><a href="/<?=$val['path'].$val['name']?>" target="_blank"><?=$val['name']?></a></p>
+					<?endforeach;?>
+				<?endif;?>
 			</div>
 		</div>
 		<div class="col-xs-7">

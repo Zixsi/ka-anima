@@ -35,6 +35,21 @@
 								<label>Рекомендации</label>
 								<textarea class="form-control" name="text"><?=set_value('text', '')?></textarea>
 							</div>
+							<div class="form-group row">
+								<label class="col-xs-12">Файлы</label>
+								<div class="col-xs-3">
+									<input type="file" name="files[]">
+								</div>
+								<div class="col-xs-3">
+									<input type="file" name="files[]">
+								</div>
+								<div class="col-xs-3">
+									<input type="file" name="files[]">
+								</div>
+								<div class="col-xs-3">
+									<input type="file" name="files[]">
+								</div>
+							</div>
 							<div class="form-group">
 								<button type="submit" class="btn btn-xs btn-primary">Добавить ревью</button>
 							</div>

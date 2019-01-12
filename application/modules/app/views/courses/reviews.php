@@ -37,7 +37,11 @@
 									<?if(!empty($review_item['files'])):?>
 										<tr>
 											<td><b>Файлы:</b></td>
-											<td>- - -</td>
+											<td>
+												<?foreach($review_item['files'] as $val):?>
+													<p><a href="/<?=$val['path'].$val['name']?>" target="_blank"><?=$val['name']?></a></p>
+												<?endforeach;?>
+											</td>
 										</tr>
 									<?endif;?>
 								</table>

@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class FilesModel extends APP_Model
 {
 	private const TABLE = 'files';
+	private const TABLE_LINK_FILES = 'link_files';
 
 	public function __construct()
 	{
@@ -52,7 +53,7 @@ class FilesModel extends APP_Model
 
 	public function delete($id)
 	{
-		return false;
+		return $this->db->delete(self::TABLE, ['id' => $id]);
 	}
 
 	public function getByID($id)
@@ -83,5 +84,151 @@ class FilesModel extends APP_Model
 		}
 
 		return false;
+	}
+
+	public function addLink(int $id, int $id_item, string $type)
+	{
+		try
+		{
+			$data = [
+				'file' => $id,
+				'item' => $id_item,
+				'item_type' => $type
+			];
+
+			if($this->db->insert(self::TABLE_LINK_FILES, $data))
+			{
+				return $this->db->insert_id();
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	public function deleteLink($id, $item, $type)
+	{
+		return $this->db->delete(self::TABLE_LINK_FILES, ['file' => $id, 'item' => $item, 'item_type' => $type]);
+	}
+
+	public function deleteLinkFile($id, $item_id, $type)
+	{
+		$ids = is_array($id)?$id:[$id];
+		foreach($ids as $id)
+		{
+			if($item = $this->getByID($id))
+			{
+				$this->deleteLink($item['id'], $item_id, $type);
+				$this->delete($item['id']);
+				unlink($item['full_path']);
+			}
+		}
+	}
+
+	public function listLinkFiles($item, $type)
+	{
+		$sql = 'SELECT 
+					f.id, f.file_type as type, f.file_name as name, f.file_path as path, f.orig_name, f.file_ext as ext, f.is_image 
+				FROM 
+					'.self::TABLE_LINK_FILES.' as lf 
+				LEFT JOIN 
+					'.self::TABLE.' as f ON(f.id = lf.file) 
+				WHERE 
+					lf.item = ? AND lf.item_type = ? 
+				ORDER BY 
+					f.is_image DESC, f.id ASC';
+
+		if($res = $this->db->query($sql, [$item, $type])->result_array())
+		{
+			return $res;
+		}
+
+		return false;
+	}
+
+	public function filesUpload(string $name, int $item_id, string $type, string $config_name)
+	{
+		$files = $_FILES[$name] ?? [];
+		$cnt = count($files);
+		$upload_files = [];
+
+		if(isset($files['name'][0]))
+		{
+			try
+			{
+				$this->db->trans_begin();
+
+				for($i = 0; $i < $cnt; $i++)
+				{
+					if(empty($files['name'][$i]))
+					{
+						continue;
+					}
+
+					$_FILES['file_tmp'] = [
+						'name' => $files['name'][$i],
+						'type' => $files['type'][$i],
+						'tmp_name' => $files['tmp_name'][$i],
+						'error' => $files['error'][$i],
+						'size' => $files['size'][$i]
+					];
+
+					$this->load->config('upload');
+					$upload_config = $this->config->item($config_name);
+					$this->load->library('upload', $upload_config);
+
+					if($this->upload->do_upload('file_tmp') == false)
+					{
+						throw new Exception($this->upload->display_errors(), 1);
+						break;
+					}
+					else
+					{
+						$file = $this->upload->data();
+						$upload_files[] = $file;
+						if(($file_id = $this->saveFileArray($file)) === false)
+						{
+							throw new Exception($this->LAST_ERROR, 1);
+						}
+
+						if($this->addLink($file_id, $item_id, $type) === false)
+						{
+							throw new Exception($this->LAST_ERROR, 1);
+						}
+					}
+				}
+
+				if($this->db->trans_status())
+				{
+					$this->db->trans_commit();
+				}
+				else
+				{
+					throw new Exception('Add files error', 1);
+				}
+			}
+			catch(Exception $e)
+			{
+				if(count($upload_files))
+				{
+					foreach($upload_files as $file)
+					{
+						if(is_file($file['full_path']))
+						{
+							unlink($file['full_path']);
+						}
+					}
+				}
+				 $this->db->trans_rollback();
+
+				$this->LAST_ERROR = $e->getMessage();
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

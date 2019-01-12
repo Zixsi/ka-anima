@@ -42,6 +42,7 @@ class Courses extends APP_Controller
 			}
 			$data['csrf'] = cr_get_key();
 			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($data['group_id'], $data['lecture_id']);
+			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
 		}
 
 		$this->load->lview('courses/index', $data);
@@ -83,6 +84,7 @@ class Courses extends APP_Controller
 		if($review > 0)
 		{
 			$data['review_item'] = $this->ReviewModel->getByID($review);
+			$data['review_item']['files'] = $this->FilesModel->listLinkFiles($data['review_item']['id'], 'review');
 			if($user = $this->UserModel->getByID($data['review_item']['user']))
 			{
 				$data['review_item']['user_name'] = $user['email'];

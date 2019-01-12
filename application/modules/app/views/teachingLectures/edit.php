@@ -10,7 +10,7 @@
 	<div class="panel-body" style="padding-top: 30px;">
 		<div class="col-xs-12">
 			<?=ShowError($error);?>
-			<form action="./" method="POST">
+			<form action="./" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 				<div class="form-group">
 					<label class="fancy-checkbox">
@@ -39,6 +39,31 @@
 					<label for="fvideo">Видео</label>
 					<input type="text" name="video" id="fvideo" class="form-control" placeholder="Видео" value="<?=set_value('video', $item['video'], true)?>">
 				</div>
+
+				<div class="form-group row">
+					<label class="col-xs-12">Файлы</label>
+					<div class="col-xs-3">
+						<input type="file" name="files[]">
+					</div>
+					<div class="col-xs-3">
+						<input type="file" name="files[]">
+					</div>
+					<div class="col-xs-3">
+						<input type="file" name="files[]">
+					</div>
+				</div>
+
+				<div class="row">
+					<?if($item['files']):?>
+						<?foreach($item['files'] as $val):?>
+							<div class="col-xs-3">
+								<a href="/<?=$val['path'].$val['name']?>"><?=$val['name']?></a>
+								<button type="button" class="btn btn-danger btn-xxs btn-remove-file" data-id="<?=$val['id']?>"><i class="lnr lnr-cross"></i></button>
+							</div>
+						<?endforeach;?>
+					<?endif;?>
+				</div>
+				
 				<?/*
 				<div class="form-group row">
 					<label for="fvideo" class="col-xs-12">Файлы</label>
@@ -57,6 +82,7 @@
 				</div>*/?>
 
 				<div class="form-group">
+					<br>
 					<button type="submit" class="btn btn-xs btn-primary">Сохранить</button>
 				</div>
 			</form>

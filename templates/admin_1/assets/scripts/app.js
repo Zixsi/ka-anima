@@ -8,9 +8,10 @@ $(document).ready(function(){
 	}, 1000);
 	
 	update_time_to_homework();
-	upload_files();
 	datetimepiker();
 	lectures_corusel();
+	
+	item_del_files();
 });
 
 function moscow_date_time()
@@ -40,9 +41,9 @@ function update_time_to_homework()
 	}, 1000);
 }
 
-function upload_files()
+/*function upload_files()
 {
-	/*$('#fileupload').fileupload({
+	$('#fileupload').fileupload({
 		url: '/ajax/',
 		dataType: 'json',
 		done: function (e, data) {
@@ -61,18 +62,16 @@ function upload_files()
 			);
 		}
 	}).prop('disabled', !$.support.fileInput)
-		.parent().addClass($.support.fileInput ? undefined : 'disabled');*/
-}
+		.parent().addClass($.support.fileInput ? undefined : 'disabled');
+}*/
 
-/*$.datetimepicker.setDateFormatter({
-    parseDate: function (date, format) {
-        var d = moment(date, format);
-        return d.isValid() ? d.toDate() : false;
-    },
-    formatDate: function (date, format) {
-        return moment(date).format(format);
-    },
-});*/
+function item_del_files()
+{
+	$('.btn-remove-file').on('click', function(){
+		var id = $(this).data('id');
+		$(this).parent().parent().append('<input type="hidden" name="del_files" value="' + id + '">').end().remove();
+	});
+}
 
 function datetimepiker()
 {

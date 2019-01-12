@@ -376,32 +376,6 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
-	// добавить ревью к лекции
-	public function addReview($group_id, $lecture_id, $user_id, $url)
-	{
-		try
-		{
-			$data = [
-				'user' => $user_id,
-				'group_id' => $group_id,
-				'lecture_id' => $lecture_id,
-				'video_url' => $url,
-				'type' => 1 // ревью
-			];
-
-			if($this->db->insert(self::TABLE_LECTURES_HOMEWORK, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
 	private function _CheckFields(&$data = [])
 	{
 		$this->form_validation->reset_validation();

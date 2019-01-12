@@ -37,12 +37,13 @@ class TeachingGroups extends APP_Controller
 			$params = $this->input->post(null, true);
 			$params['group_id'] = $group_id;
 			$params['lecture_id'] = $id;
-			if($this->ReviewModel->add($params) == false)
+			if(($review_id = $this->ReviewModel->add($params)) == false)
 			{
 				SetFlashMessage('danger', $this->ReviewModel->LAST_ERROR);
 			}
 			else
 			{
+				$this->FilesModel->filesUpload('files', $review_id, 'review', 'upload_lectures');
 				header('Location: ./');
 			}
 		}

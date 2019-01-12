@@ -10,7 +10,7 @@ class Ajax extends APP_Controller
 
 	public function index()
 	{
-		$content = ['files' => []];
+		/*$content = ['files' => []];
 		
 		$this->load->config('upload');
 		$upload_config = $this->config->item('upload_lectures');
@@ -38,7 +38,7 @@ class Ajax extends APP_Controller
 		header('Cache-Control: no-store, no-cache, must-revalidate');
 		header('Content-type: application/json');
 
-		echo $json;
+		echo $json;*/
 	}
 
 	private function prepareFiles($name)
