@@ -67,13 +67,13 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<?if($reviews):?>
-							<table class="table table-bordered">
+							<table class="table table-borderedd">
 								<thead>
 									<tr>
-										<th>Дата</th>
+										<th style="width: 200px;">Дата</th>
 										<th>Пользователь</th>
 										<th>Видео</th>
-										<th>Рекомендация</th>
+										<th class="text-right">Действие</th>
 									</tr>
 								</thead>
 								<?if($reviews):?>
@@ -81,8 +81,13 @@
 										<tr>
 											<td><?=$val['ts']?></td>
 											<td><?=$val['user_name']?></td>
-											<td><?=$val['video_url']?></td>
-											<td><?=$val['text']?></td>
+											<td>
+												<span class="text-danger"><?=$val['video_url']?></span>
+											</td>
+											<td class="text-right">
+												<a href="./review/<?=$val['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
+												<a href="#" class="btn btn-xxs btn-danger lnr lnr-trash" title="Удалить"></a>
+											</td>
 										</tr>
 									<?endforeach;?>
 								<?endif;?>

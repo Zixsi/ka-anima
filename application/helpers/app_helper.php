@@ -91,6 +91,15 @@ function next_monday_ts()
 	return $date->getTimestamp();
 }
 
+function days_to_date($date)
+{
+	$date_a = new \DateTime('now');
+	$date_b = new \DateTime($date);
+	$interval = $date_a->diff($date_b);
+	$days = intval($interval->format('%R%a'));
+
+	return ($days > 0)?$days:0;
+}
 
 function set_select2($field, $value = '', $default = false)
 {

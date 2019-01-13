@@ -20,12 +20,13 @@ class LecturesGroupModel extends APP_Model
 				FROM 
 					'.self::TABLE_COURSES_GROUPS.' as cg 
 				LEFT JOIN 
-					'.self::TABLE.' as l ON(cg.course_id = l.course_id) 
+					'.self::TABLE_LECTURES_GROUPS.' as lg ON(lg.group_id = cg.id) 
 				LEFT JOIN 
-					'.self::TABLE_LECTURES_GROUPS.' as lg ON(lg.group_id = cg.id AND lg.lecture_id = l.id) 
+					'.self::TABLE.' as l ON(l.id = lg.lecture_id) 
 				WHERE 
 					cg.id = ?
 				ORDER BY
+					l.type DESC, 
 					l.sort ASC, 
 					l.id ASC';
 					

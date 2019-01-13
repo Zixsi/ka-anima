@@ -8,7 +8,7 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel', 'main/ReviewModel', 'main/VideoModel']);
+		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel', 'main/ReviewModel', 'main/VideoModel', 'main/GroupsModel']);
 
 		$this->user_id = $this->Auth->userID();
 	}
@@ -45,6 +45,8 @@ class Courses extends APP_Controller
 			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
 		}
 
+		//debug($data); die();
+
 		$this->load->lview('courses/index', $data);
 	}
 
@@ -65,6 +67,7 @@ class Courses extends APP_Controller
 		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
 		$data['teacher'] = $this->UserModel->getById($data['group']['author']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
+		$data['images'] = $this->GroupsModel->getImageFiles($data['group_id']);
 
 		$this->load->lview('courses/group', $data);
 	}

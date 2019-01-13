@@ -95,7 +95,8 @@ function lectures_corusel()
 	}
 
 	var i = $('.week-panel.owl-carousel').find('.week-item.current').data('index') * 1;
-	var center_var = ($('.week-panel.owl-carousel').find('.week-item').length >= 4)?false:true;
+	//var center_var = ($('.week-panel.owl-carousel').find('.week-item').length >= 4)?false:true;
+	var center_var = false;
 
 	$(".owl-carousel").owlCarousel({
 		items: 4,

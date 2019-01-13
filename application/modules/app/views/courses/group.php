@@ -43,8 +43,11 @@
 						<p>E-mail: <?=$teacher['email']?></p>
 					</div>
 					<div class="col-xs-5 text-right">
-						<p>Начало обучения: <?=date('Y-m-d', strtotime($group['ts']))?></p>
-						<p>Завершение обучения:  <?=date('Y-m-d', strtotime($group['ts_end']))?></p>
+						<?if(($start_course = days_to_date($group['ts'])) > 0):?>
+							<p>Курс начнется через: <?=$start_course?> дней</p>
+						<?endif;?>
+						<p>Начало обучения: <?=date('d-m-Y', strtotime($group['ts']))?></p>
+						<p>Завершение обучения:  <?=date('d-m-Y', strtotime($group['ts_end']))?></p>
 						<p>Всего недель курса: <?=$group['cnt_all']?></p>
 						<h3>Текущая неделя: <?=$group['current_week']?></h3>
 						<p>Дней до окончания: 0</p>
@@ -73,6 +76,25 @@
 				<?endif;?>
 			</div>
 		</div>
+
+		<?if($images):?>
+			<div class="panel panel-headline">
+				<div class="panel-heading">
+					<h3 class="panel-title">Изображения</h3>
+				</div>
+				<div class="panel-body">
+					<div class="row group-image-gallery">
+						<?foreach($images as $img):?>
+							<div class="col-xs-6 col-md-3">
+								<a href="/<?=$img['src']?>" class="thumbnail" target="_blank">
+									<img src="/<?=$img['src']?>" alt="" class="img-responsive">
+								</a>
+							</div>
+						<?endforeach;?>
+					</div>
+				</div>
+			</div>
+		<?endif;?>
 
 		<div class="panel panel-headline">
 			<div class="panel-heading">

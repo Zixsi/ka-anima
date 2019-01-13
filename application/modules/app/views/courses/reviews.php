@@ -15,6 +15,10 @@
 							<div class="video-info">
 								<table class="table table-no-bordered">
 									<tr>
+										<td><b>Дата:</b></td>
+										<td><?=date('d-m-Y', strtotime($review_item['ts']))?></td>
+									</tr>
+									<tr>
 										<td><b>Лекция:</b></td>
 										<td><?=$review_item['lecture_name']?></td>
 									</tr>
@@ -83,10 +87,10 @@
 										<div class="thumbnail">
 											<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>"><img src="<?=$item['src']?>" width="100%"></a>
 											<div class="caption">
+												<span><?=date('d-m-Y', strtotime($item['ts']))?></span><br>
 												<h4>
 													<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>">
-														<span><?=($item['user'])?$item['user_name']:'Общий обзор'?></span><br>
-														<span><?=$item['name']?></span>
+														<?=($item['user'])?$item['user_name']:'Общий обзор'?> - <?=$item['name']?>
 													</a>
 												</h4>
 											</div>
@@ -94,7 +98,7 @@
 									</div>
 								<?endforeach;?>
 							<?else:?>
-								Empty list
+								<span>Empty list</span>
 							<?endif;?>
 						</div>
 					</div>

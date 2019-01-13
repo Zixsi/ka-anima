@@ -5,10 +5,10 @@
 
 	<div class="col-xs-8 col-xs-push-2">
 		<div class="week-panel owl-carousel">
-			<?$i = 1;?>
+			<?$i = 0;?>
 			<?foreach($lectures as $item):?>
 				<?if($item['active'] && $subscr_is_active):?>
-					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" data-index="<?=($i - 1)?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
+					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" data-index="<?=$i?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
 						<span class="number"><?=$i?></span>
 						<span class="name"><?=$item['name']?></span>
 					</a>
@@ -54,66 +54,69 @@
 			</div>
 		</div>
 		<div class="col-xs-7">
-			<div class="panel panel-headline">
-				<div class="panel-heading">
-					<h3 class="panel-title">Загрузка заданий</h3>
-				</div>
-				<div class="panel-body">
-					<div class="row">
-						<div class="col-xs-6" style="font-size: 14px;">
-							<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
-							<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
+			<?if($lecture['type'] == 0):?>
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<h3 class="panel-title">Загрузка заданий</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-6" style="font-size: 14px;">
+								<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
+								<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
 
-							<p><b>Требования к загружаемым файлам:</b><br>
-							Картинки и видео – <b>jpg</b>, <b>png</b>, <b>mp4</b> (кодек <b>h264</b> или <b>x264</b>), разрешение <b>1280х720</b> пикселей.
-							Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
-							Максимальный размер файлов: <b>250 МБ</b></p>
-						</div>
-						<div class="col-xs-6">
-							<form action="" method="post" class="form" enctype="multipart/form-data">
-								<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-								<div class="form-group">
-									<label></label>
-									<input type="file" name="file" class="form-control">
-								</div>
-								<div class="form-group">
-									<label>Комментарий к файлу</label>
-									<textarea name="text" class="form-control" rows="5"></textarea>
-								</div>
-								<div class="form-group">
-									<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
-								</div>
-							</form>
+								<p><b>Требования к загружаемым файлам:</b><br>
+								Картинки и видео – <b>jpg</b>, <b>png</b>, <b>mp4</b> (кодек <b>h264</b> или <b>x264</b>), разрешение <b>1280х720</b> пикселей.
+								Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
+								Максимальный размер файлов: <b>250 МБ</b></p>
+							</div>
+							<div class="col-xs-6">
+								<form action="" method="post" class="form" enctype="multipart/form-data">
+									<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+									<div class="form-group">
+										<label></label>
+										<input type="file" name="file" class="form-control">
+									</div>
+									<div class="form-group">
+										<label>Комментарий к файлу</label>
+										<textarea name="text" class="form-control" rows="5"></textarea>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
+									</div>
+								</form>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
 
-			<div class="panel panel-headline">
-				<div class="panel-heading">
-					<h3 class="panel-title">Загруженные задания</h3>
+				<div class="panel panel-headline">
+					<div class="panel-heading">
+						<h3 class="panel-title">Загруженные задания</h3>
+					</div>
+					<div class="panel-body">
+						<?if($lecture_homework):?>
+							<table class="table">
+								<tbody>
+									<?foreach($lecture_homework as $val):?>
+										<tr>
+											<td><?=$val['ts']?></td>
+											<td><?=$val['user_name']?></td>
+											<td><?=$val['name']?></td>
+											<td>
+												<a href="/file/download/<?=$val['id']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>
+											</td>
+										</tr>
+									<?endforeach;?>
+								</tbody>
+							</table>
+						<?else:?>
+							<div class="text-center">Нет загруженных заданий</div>
+						<?endif;?>
+					</div>
 				</div>
-				<div class="panel-body">
-					<?if($lecture_homework):?>
-						<table class="table">
-							<tbody>
-								<?foreach($lecture_homework as $val):?>
-									<tr>
-										<td><?=$val['ts']?></td>
-										<td><?=$val['user_name']?></td>
-										<td><?=$val['name']?></td>
-										<td>
-											<a href="/file/download/<?=$val['id']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>
-										</td>
-									</tr>
-								<?endforeach;?>
-							</tbody>
-						</table>
-					<?else:?>
-						<div class="text-center">Нет загруженных заданий</div>
-					<?endif;?>
-				</div>
-			</div>
+				
+			<?endif;?>
 		</div>
 
 	<?endif;?>
@@ -126,7 +129,9 @@
 		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
 	</div>
 <?elseif($lectures_is_active == false):?>
-	<div class="alert alert-danger text-center" style="font-size: 24px;">Нет активных лекций</div>
+	<div class="alert alert-danger text-center" style="font-size: 24px;">
+		<span>Нет активных лекций</span><br>
+	</div>
 	<div class="text-center" style="padding: 50px 0px;">
 		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
 	</div>

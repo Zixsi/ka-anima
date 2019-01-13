@@ -22,7 +22,7 @@
 	<div class="row">
 		<?if($item['started'] == false):?>
 			<div class="col-xs-12">
-				<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=$item['ts']?></div>
+				<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=date('d-m-Y H:i:s', strtotime($item['ts']))?></div>
 			</div>
 		<?endif;?>
 		<div class="col-xs-6">

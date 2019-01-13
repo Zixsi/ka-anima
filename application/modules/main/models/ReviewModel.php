@@ -51,6 +51,35 @@ class ReviewModel extends APP_Model
 
 	public function update($id, $data = [])
 	{
+		try
+		{
+			$params = [
+				'group_id' => $data['group_id'] ?? 0,
+				'lecture_id' => $data['lecture_id'] ?? 0,
+				'user' => $data['user'] ?? 0,
+				'video_url' => $data['video_url'] ?? '',
+				'text' => $data['text'] ?? ''
+			];
+
+			$this->form_validation->reset_validation();
+			$this->form_validation->set_data($params);
+			if($this->form_validation->run('review_add') == false)
+			{
+				throw new Exception($this->form_validation->error_string(), 1);
+			}
+
+			
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $params))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
 		return false;
 	}
 

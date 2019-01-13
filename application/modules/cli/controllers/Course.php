@@ -73,8 +73,12 @@ class Course extends APP_Controller
 					// Добавляем лекции в группу
 					if($list_courses = $this->LecturesModel->listForCourse($item['id']))
 					{
-						//$day
 						$ts_item = clone $ts_start;
+
+						// TODO: брать стартовую лекцию из настроек курса
+						// Добавляем стартувую лекцию
+						$this->LecturesModel->addLectureToGroupTs($group_id, 6, $ts_item->format('Y-m-d 00:00:00'));
+						
 						foreach($list_courses as $course)
 						{
 							$this->LecturesModel->addLectureToGroupTs($group_id, $course['id'], $ts_item->format('Y-m-d 00:00:00'));
