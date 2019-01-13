@@ -65,8 +65,8 @@
 			<div class="panel-body">
 				<?if($users):?>
 					<?foreach($users as $val):?>
-						<a href="javascript:void();">
-							<img src="<?=$val['img']?>" width="50" height="50" class="img-circle">
+						<a href="/profile/<?=$val['id']?>/">
+							<img src="<?=$val['img']?>" width="50" height="50" class="img-circle" title="<?=$val['full_name']?>">
 						</a>
 					<?endforeach;?>
 				<?endif;?>

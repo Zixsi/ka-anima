@@ -34,6 +34,8 @@ class Auth extends APP_Controller
 		if($this->Auth->register()) redirect('');
 
 		$data['form']['email'] = $this->input->post('email', true);
+		$data['form']['name'] = $this->input->post('name', true);
+		$data['form']['lastname'] = $this->input->post('lastname', true);
 		$data['error'] = $this->Auth->LAST_ERROR;
 
 		$this->load->lview('auth/register', $data);

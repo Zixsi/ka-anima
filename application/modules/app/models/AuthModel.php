@@ -75,6 +75,8 @@ class AuthModel extends APP_Model
 
 			$user_fields = [
 				'email' => $data['email'],
+				'name' => $data['name'],
+				'lastname' => $data['lastname'],
 				'password' => $this->UserModel->pwdHash($data['password']),
 				'active' => 1,
 				'hash' => sha1(time())

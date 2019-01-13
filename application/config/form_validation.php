@@ -22,6 +22,16 @@ $config['signup'] = [
 		'rules' => 'required|valid_email|is_unique[users.email]'
 	],
 	[
+		'field' => 'name',
+		'label' => 'Имя',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'lastname',
+		'label' => 'Фамилия',
+		'rules' => 'required|min_length[2]'
+	],
+	[
 		'field' => 'password',
 		'label' => 'Password',
 		'rules' => 'trim|required|min_length[6]|max_length[64]'
@@ -172,4 +182,18 @@ $config['stream_add'] = [
 		'label' => 'Date',
 		'rules' => 'required|min_length[5]'
 	],
+];
+
+
+$config['profile_edit'] = [
+	[
+		'field' => 'name',
+		'label' => 'Имя',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'lastname',
+		'label' => 'Фамилия',
+		'rules' => 'required|min_length[2]'
+	]
 ];

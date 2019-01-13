@@ -9,6 +9,7 @@ $(document).ready(function(){
 	
 	update_time_to_homework();
 	datetimepiker();
+	datepiker();
 	lectures_corusel();
 	
 	item_del_files();
@@ -80,10 +81,26 @@ function datetimepiker()
 		return;
 	}
 
+	$.datetimepicker.setLocale('ru');
 	$('#datetimepicker').datetimepicker({
 		format: 'd-m-Y H:i:00',
 		formatDate: 'd-m-Y H:i:00',
 		lang:'ru'
+	});
+}
+
+function datepiker()
+{
+	if($('.datepiker').length < 1)
+	{
+		return;
+	}
+
+	$.datetimepicker.setLocale('ru');
+	$('.datepiker').datetimepicker({
+		format: 'd-m-Y',
+		formatDate: 'd-m-Y',
+		timepicker: false
 	});
 }
 

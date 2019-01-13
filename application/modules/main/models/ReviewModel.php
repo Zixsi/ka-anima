@@ -103,7 +103,7 @@ class ReviewModel extends APP_Model
 	public function getByLecture($group_id, $id)
 	{
 		$sql = 'SELECT 
-					r.*, u.email as user_name 
+					r.*, CONCAT_WS(\' \', u.name, u.lastname) as user_name
 				FROM 
 					'.self::TABLE.' as r 
 				LEFT JOIN  
@@ -127,7 +127,7 @@ class ReviewModel extends APP_Model
 	{
 		$bind = [$group_id];
 		$sql = 'SELECT 
-					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_url as src, u.email as user_name, l.name    
+					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_url as src, CONCAT_WS(\' \', u.name, u.lastname) as user_name, l.name    
 				FROM 
 					'.self::TABLE.' as r  
 				LEFT JOIN 

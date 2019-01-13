@@ -101,7 +101,7 @@
 									<?foreach($lecture_homework as $val):?>
 										<tr>
 											<td><?=$val['ts']?></td>
-											<td><?=$val['user_name']?></td>
+											<td><?=$val['full_name']?></td>
 											<td><?=$val['name']?></td>
 											<td>
 												<a href="/file/download/<?=$val['id']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>

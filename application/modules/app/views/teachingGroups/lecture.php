@@ -22,7 +22,7 @@
 									<!--<option value="all" <?=set_select('user', 'all')?>>All users</option>-->
 									<?if($homework_users):?>
 										<?foreach($homework_users as $val):?>
-											<option value="<?=$val['user']?>" <?=set_select('user', $val['user'])?>><?=$val['user_name']?></option>
+											<option value="<?=$val['user']?>" <?=set_select('user', $val['user'])?>><?=$val['full_name']?></option>
 										<?endforeach;?>
 									<?endif;?>
 								</select>

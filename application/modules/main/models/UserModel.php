@@ -30,7 +30,32 @@ class UserModel extends APP_Model
 
 	public function update($id, $data = [])
 	{
+		try
+		{
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $data))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
 		return false;
+	}
+
+	public function updateProfile($id, $data = [])
+	{
+		$data = [
+			'name' => $data['name'] ?? '',
+			'lastname' => $data['lastname'] ?? '',
+			'birthday' => date('Y-m-d', strtotime($data['birthday'] ?? '')),
+			'phone' => $data['phone'] ?? ''
+		];
+
+		return $this->update($id, $data);
 	}
 
 	public function delete($id)
@@ -41,7 +66,8 @@ class UserModel extends APP_Model
 	public function getByID($id)
 	{
 		$id = intval($id);
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
+		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE id = ?';
+		$res = $this->db->query($sql, [$id]);
 		if($row = $res->row_array())
 		{
 			if(empty($row['img']))

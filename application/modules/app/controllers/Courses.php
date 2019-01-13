@@ -90,7 +90,7 @@ class Courses extends APP_Controller
 			$data['review_item']['files'] = $this->FilesModel->listLinkFiles($data['review_item']['id'], 'review');
 			if($user = $this->UserModel->getByID($data['review_item']['user']))
 			{
-				$data['review_item']['user_name'] = $user['email'];
+				$data['review_item']['user_name'] = $user['full_name'];
 			}
 			//debug($data['review_item']); die();
 		}

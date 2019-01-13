@@ -33,6 +33,40 @@ function SetFlashMessage($type, $text)
 	}
 }
 
+function alert_error($text)
+{
+	if(!empty($text))
+	{
+		echo '<div class="alert alert-danger">'.$text.'</div>';
+	}
+}
+
+function alert_success($text)
+{
+	if(!empty($text))
+	{
+		echo '<div class="alert alert-success">'.$text.'</div>';
+	}
+}
+
+function show_flash_message()
+{
+	$CI = &get_instance();
+	if($res = $CI->session->flashdata('flash_message'))
+	{
+		echo '<div class="alert alert-'.$res['type'].'">'.$res['value'].'</div>';
+	}
+}
+
+function set_flash_message($type, $text)
+{
+	if(!empty($type) && !empty($text))
+	{
+		$CI = &get_instance();
+		$CI->session->set_flashdata('flash_message', ['type' => strtolower($type), 'value' => $text]);
+	}
+}
+
 function cr_get_key($pref = null)
 {
 	$key = random_string('alnum', 8);

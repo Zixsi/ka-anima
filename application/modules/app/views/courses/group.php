@@ -35,11 +35,11 @@
 					</div>
 					<div class="col-xs-4">
 						<div>
-							<a href="javascript:void();">
+							<a href="/profile/<?=$teacher['id']?>/">
 								<img src="<?=$teacher['img']?>" width="100" height="100" class="img-circle">
 							</a>
 						</div>
-						<p>Инструктор: <?=$teacher['email']?></p>
+						<p>Инструктор: <?=$teacher['full_name']?></p>
 						<p>E-mail: <?=$teacher['email']?></p>
 					</div>
 					<div class="col-xs-5 text-right">
@@ -103,10 +103,8 @@
 			<div class="panel-body">
 				<?if($users):?>
 					<?foreach($users as $val):?>
-						<a href="javascript:void();">
-							<a href="javascript:void();">
-								<img src="<?=$val['img']?>" width="50" height="50" class="img-circle">
-							</a>
+						<a href="/profile/<?=$val['id']?>/">
+							<img src="<?=$val['img']?>" width="50" height="50" class="img-circle" title="<?=$val['full_name']?>">
 						</a>
 					<?endforeach;?>
 				<?endif;?>

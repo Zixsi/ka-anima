@@ -88,7 +88,7 @@ $user_id = $CI->Auth->userID();
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
-								<li><a href="#"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
+								<li><a href="/profile/"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
 								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
 								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
 							</ul>

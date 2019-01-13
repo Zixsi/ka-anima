@@ -343,7 +343,7 @@ class LecturesModel extends APP_Model
 		try
 		{
 			$sql = 'SELECT 
-						hw.*, f.orig_name as name, u.email as user_name 
+						hw.*, f.orig_name as name, CONCAT_WS(\' \', u.name, u.lastname) as user_name  
 					FROM 
 						'.self::TABLE_LECTURES_HOMEWORK.' as hw 
 					LEFT JOIN 

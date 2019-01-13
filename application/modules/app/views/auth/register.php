@@ -11,6 +11,14 @@
 				<input type="text" class="form-control" id="signip-email" name="email" value="<?=set_value('email', $form['email'], true)?>" placeholder="Email">
 			</div>
 			<div class="form-group">
+				<label for="signip-name" class="control-label sr-only">Имя</label>
+				<input type="text" class="form-control" id="signip-name" name="name" value="<?=set_value('name', $form['name'], true)?>" placeholder="Имя">
+			</div>
+			<div class="form-group">
+				<label for="signip-lastname" class="control-label sr-only">Фамилия</label>
+				<input type="text" class="form-control" id="signip-lastname" name="lastname" value="<?=set_value('lastname', $form['lastname'], true)?>" placeholder="Фамилия">
+			</div>
+			<div class="form-group">
 				<label for="signip-password" class="control-label sr-only">Password</label>
 				<input type="password" class="form-control" id="signip-password" name="password" value="" placeholder="Password">
 			</div>

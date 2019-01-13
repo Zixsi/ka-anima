@@ -72,7 +72,7 @@
 								<select class="form-control" name="filter[user]">
 									<option value="0" <?=set_select2('filter[user]', '0', true)?>>-- All users --</option>
 									<?foreach($users as $val):?>
-										<option value="<?=$val['id']?>" <?=set_select2('filter[user]', $val['id'])?>><?=$val['user_name']?></option>
+										<option value="<?=$val['id']?>" <?=set_select2('filter[user]', $val['id'])?>><?=$val['full_name']?></option>
 									<?endforeach;?>
 								</select>
 							</div>
@@ -80,7 +80,7 @@
 								<button type="submit" class="btn btn-md btn-primary">Фильтровать</button>
 							</div>
 						</form>
-						<div class="row">
+						<div class="row group-reviews-list">
 							<?if($items):?>
 								<?foreach($items as $item):?>
 									<div class="col-xs-3">
