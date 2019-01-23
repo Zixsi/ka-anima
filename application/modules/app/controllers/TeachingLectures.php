@@ -58,6 +58,7 @@ class TeachingLectures extends APP_Controller
 			header('Location: ../');
 		}
 
+		$this->load->model(['main/VideoModel']);
 		$data['error'] = null;
 
 		if(cr_valid_key())
@@ -67,6 +68,7 @@ class TeachingLectures extends APP_Controller
 			if($this->LecturesModel->update($id, $form_data))
 			{
 				$data['item'] += $form_data;
+				$this->VideoModel->prepareAndSet($id, 'lecture', $data['item']['video']);
 
 				$this->FilesModel->deleteLinkFile(($form_data['del_files'] ?? []), $id, 'lecture');
 				if($this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures'))

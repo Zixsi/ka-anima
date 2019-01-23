@@ -7,6 +7,8 @@ class LecturesHomeworkModel extends APP_Model
 	private const TABLE_USERS = 'users';
 	private const TABLE_FILES = 'files';
 
+	// type 0 - д/з, 1 - ревью
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -91,6 +93,30 @@ class LecturesHomeworkModel extends APP_Model
 			{
 				return $res;
 			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+	public function listLecturesIdWithHomework($group_id, $user)
+	{
+		try
+		{
+			$result = [];
+			$sql = 'SELECT lecture_id FROM '.self::TABLE_LECTURES_HOMEWORK.' WHERE group_id = ? AND user = ? AND type = 0 GROUP BY lecture_id';
+			if($res = $this->db->query($sql, [$group_id, $user])->result_array())
+			{
+				foreach($res as $val)
+				{
+					$result[] = $val['lecture_id'];
+				}
+			}
+
+			return $result;
 		}
 		catch(Exception $e)
 		{

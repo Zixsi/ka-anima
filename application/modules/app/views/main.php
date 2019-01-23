@@ -119,6 +119,7 @@ $user_id = $CI->Auth->userID();
 							<?endif;?>
 							<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
 							<li><a href="/subscription/" class="">Подписка</a></li>
+							<li><a href="/faq/" class="">FAQ</a></li>
 						<?//endif;?>
 
 						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>

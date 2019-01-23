@@ -16,7 +16,7 @@ class LecturesGroupModel extends APP_Model
 	public function listForGroup($id)
 	{
 		$sql = 'SELECT 
-					l.id, l.name, IF(lg.ts < ?, 1, 0) as active, lg.ts  
+					l.id, l.name, IF(lg.ts < ?, 1, 0) as active, lg.ts, l.type  
 				FROM 
 					'.self::TABLE_COURSES_GROUPS.' as cg 
 				LEFT JOIN 

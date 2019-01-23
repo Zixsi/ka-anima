@@ -9,12 +9,22 @@
 			<?foreach($lectures as $item):?>
 				<?if($item['active'] && $subscr_is_active):?>
 					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" data-index="<?=$i?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
-						<span class="number"><?=$i?></span>
+						<span class="number">
+							<span><?=$i?></span>
+							<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+								<span class="badge bg-danger">!</span>
+							<?endif;?>
+						</span>
 						<span class="name"><?=$item['name']?></span>
 					</a>
 				<?else:?>
 					<span class="week-item">
-						<span class="number"><?=$i?></span>
+						<span class="number">
+							<span><?=$i?></span>
+							<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+								<span class="badge bg-danger">!</span>
+							<?endif;?>
+						</span>
 						<span class="name"><?=$item['name']?></span>
 					</span>
 				<?endif;?>

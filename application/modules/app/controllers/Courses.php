@@ -45,7 +45,9 @@ class Courses extends APP_Controller
 			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
 		}
 
-		//debug($data); die();
+		$this->setHomeworkStatus($data['group_id'], $this->user_id, $data['lectures']);
+
+		//debug($data['lectures']); die();
 
 		$this->load->lview('courses/index', $data);
 	}
@@ -234,6 +236,21 @@ class Courses extends APP_Controller
 		return $last_active_id;
 	}
 
+	private function setHomeworkStatus($group_id, $user_id, &$data)
+	{
+		if(($list = $this->LecturesHomeworkModel->listLecturesIdWithHomework($group_id, $user_id)) !== false)
+		{
+			foreach($data as &$val)
+			{
+				$val['homework_fail'] = false;
+				if($val['active'] == 1 && $val['type'] == 0 && !in_array($val['id'], $list))
+				{
+					$val['homework_fail'] = true;
+				}
+			}
+		}
+	}
+	
 
 	private function uploadHomeWork(&$data)
 	{
