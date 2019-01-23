@@ -5,9 +5,9 @@ class APP_Controller extends MX_Controller
 {
 	public $User = [];
 
-	public function __construct()
+	/*public function __construct()
 	{
         parent::__construct();
         $this->db->conn_id->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-    }
+    }*/
 }
