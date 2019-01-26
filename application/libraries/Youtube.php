@@ -44,11 +44,14 @@ class Youtube
 		return $this->getUrlMap($info);
 	}
 
-	public function getVideo($code)
+	public function getVideo($code, $data = false)
 	{
-		$data = $this->prepareData($code);
+		if(!$data)
+		{
+			$data = $this->prepareData($code);
+		}
+		
 		$data = json_decode($data['player_response'], true);
-		//debug();
 		// Для отображения в лучшем разрешении
 		//debug($data['streamingData']['adaptiveFormats']);
 

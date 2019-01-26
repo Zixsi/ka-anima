@@ -104,7 +104,7 @@ class Course extends APP_Controller
 			foreach($items as $item)
 			{
 				$video_data = $this->youtube->prepareData($item['code']);
-				$video_array = $this->youtube->getVideoFromData($video_data);
+				$video_array = $this->youtube->getVideo($item['code'], $video_data);
 				foreach($video_array as $format => $val)
 				{
 					$video = current($val);
@@ -144,7 +144,8 @@ class Course extends APP_Controller
 		$this->load->library(['youtube']);
 		
 		//$code  = $this->youtube->extractVideoId('https://youtu.be/HhgcOTeaobI');
-		$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=Rmgup1IyZ8A');
+		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=Rmgup1IyZ8A');
+		$code  = 'Rmgup1IyZ8A';
 		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=qn_7TqEUn_g');
 		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=ZMK-_ahhgAw');
 		//$code  = $this->youtube->extractVideoId('https://youtu.be/syT6tZXExBU');
@@ -155,8 +156,8 @@ class Course extends APP_Controller
 		// debug($data);
 		//$video_array = $this->youtube->getVideoFromData($data);
 		//$video_array = $this->youtube->getImgFromData($data);
-		//$video_array = $this->youtube->getVideo($code);
+		$video_array = $this->youtube->getVideo($code);
 		//$video_array = $this->youtube->getVideo2($code);
-		//var_dump($video_array);
+		var_dump($video_array);
 	}
 }
