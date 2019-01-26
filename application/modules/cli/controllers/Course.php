@@ -141,15 +141,22 @@ class Course extends APP_Controller
 	// php index.php cli course test
 	public function test()
 	{
-		/*var_dump('Test');
 		$this->load->library(['youtube']);
-
-		$code  = $this->youtube->extractVideoId('https://youtu.be/HhgcOTeaobI');
+		
+		//$code  = $this->youtube->extractVideoId('https://youtu.be/HhgcOTeaobI');
+		$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=Rmgup1IyZ8A');
+		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=qn_7TqEUn_g');
+		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=ZMK-_ahhgAw');
+		//$code  = $this->youtube->extractVideoId('https://youtu.be/syT6tZXExBU');
 		//var_dump($code);
-		$data = $this->youtube->prepareData($code);
+		// $data = $this->youtube->prepareData($code);
+		// $data = json_decode($data['player_response'], true);
+		// unset($data['captions'], $data['playbackTracking'], $data['playerConfig'], $data['storyboards'],$data['attestation'],$data['messages'],$data['adSafetyReason'], $data['videoDetails']);
+		// debug($data);
 		//$video_array = $this->youtube->getVideoFromData($data);
-		$video_array = $this->youtube->getImgFromData($data);
+		//$video_array = $this->youtube->getImgFromData($data);
 		//$video_array = $this->youtube->getVideo($code);
-		var_dump($video_array);*/
+		//$video_array = $this->youtube->getVideo2($code);
+		//var_dump($video_array);
 	}
 }

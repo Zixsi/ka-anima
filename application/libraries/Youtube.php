@@ -38,10 +38,31 @@ class Youtube
 		return $match[1] ?? '';
 	}
 
-	public function getVideo($code)
+	public function getVideoOld($code)
 	{
 		$info = $this->getInfo($code);
 		return $this->getUrlMap($info);
+	}
+
+	public function getVideo($code)
+	{
+		$data = $this->prepareData($code);
+		$data = json_decode($data['player_response'], true);
+		//debug();
+		// Для отображения в лучшем разрешении
+		//debug($data['streamingData']['adaptiveFormats']);
+
+		$result = [];
+		foreach($data['streamingData']['formats'] as $item)
+		{
+			if(array_key_exists($item['itag'], $this->formats))
+			{
+				$meta = $this->formats[$item['itag']];
+				$result[$meta[0]][$meta[1]] = $item['url'];
+			}
+		}
+
+		return $result;
 	}
 
 	public function getInfo($id)
