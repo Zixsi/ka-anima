@@ -123,12 +123,6 @@ $user_id = $CI->Auth->userID();
 						<?//endif;?>
 
 						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-							<?
-							$cr = $CI->router->fetch_class();		
-							$ar = $CI->router->fetch_method();
-							var_dump($cr);
-							var_dump($ar);
-							?>
 							<li><a href="javascript:void(0);">* * * Учительская * * *</a></li>
 							<li><a href="/teachingcourses/" <?=(is_active_menu_item('teachingcourses') || is_active_menu_item('teachinglectures'))?'class="active"':''?> >Курсы</a></li>
 							<li><a href="/teachinggroups/" <?=is_active_menu_item('teachinggroups')?'class="active"':''?> >Группы</a></li>
