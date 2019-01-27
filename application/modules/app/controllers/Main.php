@@ -5,6 +5,11 @@ class Main extends APP_Controller
 {
 	public function index()
 	{
-		$this->load->lview('main/index');
+		$this->load->model(['main/NewsModel']);
+
+		$data = [];
+		$data['news'] = $this->NewsModel->list('desc');
+
+		$this->load->lview('main/index', $data);
 	}
 }

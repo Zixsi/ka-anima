@@ -34,7 +34,7 @@ $user_id = $CI->Auth->userID();
 		<!-- NAVBAR -->
 		<nav class="navbar navbar-default navbar-fixed-top">
 			<div class="brand">
-				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png?v=<?=VERSION?>" alt="Klorofil Logo" class="img-responsive logo" style="height: 70px;"></a>
+				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png?v=<?=VERSION?>" alt="Logo" class="img-responsive logo" style="height: 70px;"></a>
 			</div>
 			<div class="container-fluid">
 				<!--<div class="navbar-btn navbar-left"></div>-->
@@ -103,11 +103,11 @@ $user_id = $CI->Auth->userID();
 			<div class="sidebar-scroll">
 				<nav>
 					<ul class="nav">
-						<li><a href="/" class="active"><i class="lnr lnr-home"></i> <span>Главная</span></a></li>
+						<li><a href="/" <?=is_active_menu_item('main')?'class="active"':''?>  ><span>Главная</span></a></li>
 						<?//if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
 							<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
 								<li>
-									<a href="#sub-courses" data-toggle="collapse" class="collapsed"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
+									<a href="#sub-courses" data-toggle="collapse" class="collapsed <?=is_active_menu_item('courses')?'active':''?>"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
 									<div id="sub-courses" class="collapse in">
 										<ul class="nav">
 											<?foreach($courses as $item):?>
@@ -117,17 +117,22 @@ $user_id = $CI->Auth->userID();
 									</div>
 								</li>
 							<?endif;?>
-							<li><a href="/courses/enroll/" class="">Запись на курс</a></li>
-							<li><a href="/subscription/" class="">Подписка</a></li>
-							<li><a href="/faq/" class="">FAQ</a></li>
+							<li><a href="/courses/enroll/" <?=is_active_menu_item('courses', 'enroll')?'class="active"':''?> >Запись на курс</a></li>
+							<li><a href="/subscription/" <?=is_active_menu_item('subscription')?'class="active"':''?> >Подписка</a></li>
+							<li><a href="/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
 						<?//endif;?>
 
 						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-
+							<?
+							$cr = $CI->router->fetch_class();		
+							$ar = $CI->router->fetch_method();
+							var_dump($cr);
+							var_dump($ar);
+							?>
 							<li><a href="javascript:void(0);">* * * Учительская * * *</a></li>
-							<li><a href="/teachingcourses/" class="">Курсы</a></li>
-							<li><a href="/teachinggroups/" class="">Группы</a></li>
-							<li><a href="/teachingstreams/" class="">Онлайн встречи</a></li>
+							<li><a href="/teachingcourses/" <?=(is_active_menu_item('teachingcourses') || is_active_menu_item('teachinglectures'))?'class="active"':''?> >Курсы</a></li>
+							<li><a href="/teachinggroups/" <?=is_active_menu_item('teachinggroups')?'class="active"':''?> >Группы</a></li>
+							<li><a href="/teachingstreams/" <?=is_active_menu_item('teachingstreams')?'class="active"':''?> >Онлайн встречи</a></li>
 						<?//endif;?>
 
 					</ul>

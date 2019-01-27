@@ -168,4 +168,49 @@ class ReviewModel extends APP_Model
 
 		return false;
 	}
+
+	public function notViewedItems(int $user, int $group)
+	{	
+		$result = [];
+
+		try
+		{
+			$sql = 'SELECT id FROM '.self::TABLE.' WHERE group_id = ? AND user = ? AND item_is_viewed = 0';
+			if($res = $this->db->query($sql, [intval($group), intval($user)])->result_array())
+			{
+				foreach($res as $val)
+				{
+					$result[] = $val['id'];
+				}
+			}
+		}
+		catch(Exception $e)
+		{
+			// 
+		}
+
+		return $result;
+	}
+
+	public function setViewedStatus(int $id, $status)
+	{
+		try
+		{
+			$params = [
+				'item_is_viewed	' => ($status)?1:0
+			];
+			
+			$this->db->where('id', $id);
+			if($this->db->update(self::TABLE, $params))
+			{
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
 }

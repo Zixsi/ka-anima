@@ -184,7 +184,6 @@ $config['stream_add'] = [
 	],
 ];
 
-
 $config['profile_edit'] = [
 	[
 		'field' => 'name',
@@ -197,3 +196,31 @@ $config['profile_edit'] = [
 		'rules' => 'required|min_length[2]'
 	]
 ];
+
+$config['faq_add'] = [
+	[
+		'field' => 'question',
+		'label' => 'Вопрос',
+		'rules' => 'required|min_length[10]'
+	],
+	[
+		'field' => 'answer',
+		'label' => 'Ответ',
+		'rules' => 'required|min_length[10]'
+	]
+];
+$config['faq_edit'] = $config['faq_add'];
+
+$config['news_add'] = [
+	[
+		'field' => 'title',
+		'label' => 'Заголовок',
+		'rules' => 'required|min_length[3]'
+	],
+	[
+		'field' => 'text',
+		'label' => 'Описание',
+		'rules' => 'required|min_length[10]'
+	]
+];
+$config['news_edit'] = $config['news_add'];

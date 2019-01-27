@@ -1,9 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class FaqModel extends APP_Model
+class NewsModel extends APP_Model
 {
-	const TABLE = 'faq';
+	const TABLE = 'news';
 
 	public function __construct()
 	{
@@ -68,9 +68,9 @@ class FaqModel extends APP_Model
 		return $this->db->delete(self::TABLE, ['id' => $id]);
 	}
 
-	public function list()
+	public function list($sort = 'asc')
 	{
-		$sql = 'SELECT * FROM '.self::TABLE;
+		$sql = 'SELECT * FROM '.self::TABLE.' ORDER BY id '.$sort;
 		if($res = $this->db->query($sql)->result_array())
 		{
 			return $res;

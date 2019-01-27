@@ -85,6 +85,9 @@
 								<?foreach($items as $item):?>
 									<div class="col-xs-3">
 										<div class="thumbnail">
+											<?if(is_array($not_viewed) && in_array($item['id'], $not_viewed)):?>
+												<span class="badge bg-danger" style="position: absolute; top: -8px; right: 5px;">!</span>
+											<?endif;?>
 											<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>"><img src="<?=$item['src']?>" width="100%"></a>
 											<div class="caption">
 												<span><?=date('d-m-Y', strtotime($item['ts']))?></span><br>

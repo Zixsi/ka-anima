@@ -886,7 +886,7 @@ class CI_Loader {
 		{
 			$$_ci_val = isset($_ci_data[$_ci_val]) ? $_ci_data[$_ci_val] : FALSE;
 		}
-
+		
 		$file_exists = FALSE;
 
 		// Set the path to the requested file

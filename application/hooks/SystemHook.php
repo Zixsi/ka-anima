@@ -37,26 +37,35 @@ class SystemHook
 
 		if($d == 'admin')
 		{
-			if($check == false && $c != 'auth')
+			// var_dump($c);
+			// var_dump($a);
+			// var_dump($d);
+			// var_dump($check);
+			// var_dump($user); die();
+			if(!$check)
 			{
-				redirect('/admin/auth/');
+				redirect('/auth/');
 			}
-			elseif($check == true && $c == 'auth' && $a != 'logout')
+			elseif($check && $c === 'auth' && $a !== 'logout')
 			{
 				redirect('/admin/');
 			}
-			elseif($check == true && $user['role'] != 5)
+			elseif($check && intval($user['role']) !== 5)
 			{
 				redirect('/');
 			}
 		}
 		else
 		{
-			if($check == false && $c != 'auth')
+			if(!$check && $c !== 'auth')
 			{
 				redirect('/auth/');
 			}
-			elseif($check == true && $c == 'auth' && $a != 'logout')
+			elseif($check && intval($user['role']) === 5 && $a !== 'logout')
+			{
+				redirect('/admin/');
+			}
+			elseif($check && $c === 'auth' && $a !== 'logout')
 			{
 				redirect('/');
 			}

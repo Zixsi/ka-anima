@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Courses extends APP_Controller
 {
-	private $user_id = null;
+	public $user_id = null;
 
 	public function __construct()
 	{
@@ -88,13 +88,20 @@ class Courses extends APP_Controller
 		$data['review_item'] = false; 
 		if($review > 0)
 		{
-			$data['review_item'] = $this->ReviewModel->getByID($review);
-			$data['review_item']['files'] = $this->FilesModel->listLinkFiles($data['review_item']['id'], 'review');
-			if($user = $this->UserModel->getByID($data['review_item']['user']))
+			$review_item = $this->ReviewModel->getByID($review);
+			// Если юзер не просматривал новое
+			if(intval($review_item['item_is_viewed'] ?? 1) === 0 && intval($review_item['user'] ?? 1) === intval($this->user_id))
 			{
-				$data['review_item']['user_name'] = $user['full_name'];
+				$this->ReviewModel->setViewedStatus($review_item['id'], true);
 			}
-			//debug($data['review_item']); die();
+		
+			$review_item['files'] = $this->FilesModel->listLinkFiles($review_item['id'], 'review');
+			if($user = $this->UserModel->getByID($review_item['user']))
+			{
+				$review_item['user_name'] = $user['full_name'];
+			}
+
+			$data['review_item'] = $review_item;
 		}
 
 		$filter = $this->input->get('filter', true);
@@ -103,6 +110,7 @@ class Courses extends APP_Controller
 		$data['items'] = $this->ReviewModel->getByGroup($data['group_id'], $filter);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
+		$data['not_viewed'] = $this->ReviewModel->notViewedItems($this->user_id, $data['group_id']);
 
 		$this->load->lview('courses/reviews', $data);
 	}
@@ -123,7 +131,6 @@ class Courses extends APP_Controller
 		$data['item'] = false;
 		$streams_id = $this->getStreamsIds($data['list']);
 
-
 		if(count($streams_id))
 		{
 			if($item > 0)
@@ -135,17 +142,19 @@ class Courses extends APP_Controller
 				$data['item'] = $this->StreamsModel->byGroup($data['group_id']);
 			}
 
+			if(empty($data['item']))
+			{
+				$data['item'] = current($data['list']);
+			}
+			
 			if(!in_array($data['item']['id'], $streams_id))
 			{
 				header('Location: /courses/'.$data['group_id'].'/stream/');
 			}
 
-			if($data['item'])
-			{
-				$this->load->library(['youtube']);
-				$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
-				$data['item']['started'] = boolval(time() >= strtotime($data['item']['ts']));
-			}
+			$this->load->library(['youtube']);
+			$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
+			$data['item']['started'] = boolval(time() >= strtotime($data['item']['ts']));
 			//debug($data['item']);
 		}
 

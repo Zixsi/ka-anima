@@ -159,3 +159,14 @@ function set_select2($field, $value = '', $default = false)
 
 	return ($input === $value) ? ' selected="selected"' : '';
 }
+
+function is_active_menu_item($c, $a = null)
+{
+	$CI =& get_instance();
+	$cr = strtolower($CI->router->fetch_class());		
+	$ar = strtolower($CI->router->fetch_method());
+	$c = strtolower($c);
+	$a = strtolower($a);
+	
+	return (($c === $cr) && (empty($a) || $a === null || $a === $ar))?true:false;
+}

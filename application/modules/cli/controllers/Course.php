@@ -144,8 +144,8 @@ class Course extends APP_Controller
 		$this->load->library(['youtube']);
 		
 		//$code  = $this->youtube->extractVideoId('https://youtu.be/HhgcOTeaobI');
-		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=Rmgup1IyZ8A');
-		$code  = 'Rmgup1IyZ8A';
+		$code  = $this->youtube->extractVideoId('https://youtu.be/iEp7xno0LYA');
+		//$code  = 'Rmgup1IyZ8A';
 		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=qn_7TqEUn_g');
 		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=ZMK-_ahhgAw');
 		//$code  = $this->youtube->extractVideoId('https://youtu.be/syT6tZXExBU');
