@@ -14,9 +14,15 @@
 						<div class="col-md-4 stat-item">
 							0 <span>курсов пройдено</span>
 						</div>
-						<div class="col-md-4 stat-item">
-							0 <span>друзей</span>
-						</div>
+						<?if($owner):?>
+							<a href="/profile/friends/" class="col-md-4 stat-item">
+								<?=$friends_cnt?> <span>друзей</span>
+							</a>
+						<?else:?>
+							<div class="col-md-4 stat-item">
+								<?=$friends_cnt?> <span>друзей</span>
+							</div>
+						<?endif;?>
 						<div class="col-md-4 stat-item">
 							0 <span>достижений</span>
 						</div>
@@ -24,6 +30,18 @@
 				</div>
 			</div>
 			<div class="profile-detail">
+				<?if(!$owner):?>
+					<div class="row" style="margin-top: 1px;">
+						<div class="col-xs-12">
+							<?if(!$is_friends):?>
+								<a href="#" class="btn btn-lg btn-block btn-primary">Добавить в друзья</a>
+							<?else:?>
+								<button class="btn btn-lg btn-light btn-block disabled">В друзьях</button>
+							<?endif;?>
+							<a href="/profile/messages/<?=$user['id']?>/" class="btn btn-lg btn-block btn-primary">Написать сообщение</a>
+						</div>
+					</div>
+				<?endif;?>
 				<div class="profile-info">
 					<h4 class="heading">Базовая информация</h4>
 					<ul class="list-unstyled list-justify">

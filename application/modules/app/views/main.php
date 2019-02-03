@@ -68,6 +68,7 @@ $user_id = $CI->Auth->userID();
 						<li>
 							<span id="panel-date-time-msk" style="display: inline-block;">- - -</span>
 						</li>
+						<?/*
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
 								<i class="lnr lnr-alarm"></i>
@@ -81,7 +82,7 @@ $user_id = $CI->Auth->userID();
 								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
 								<li><a href="#" class="more">See all notifications</a></li>
 							</ul>
-						</li>
+						</li>*/?>
 						<li>
 							<span class="label label-success" style="display: inline-block; font-size: 15px; margin-top: 27px;"><?=($CI->Auth->isTeacher())?'Преподаватель':'Ученик'?></span>
 						</li>
@@ -89,7 +90,7 @@ $user_id = $CI->Auth->userID();
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
 							<ul class="dropdown-menu">
 								<li><a href="/profile/"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
-								<li><a href="#"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
+								<li><a href="/profile/messages/"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
 								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
 							</ul>
 						</li>
@@ -119,6 +120,8 @@ $user_id = $CI->Auth->userID();
 							<?endif;?>
 							<li><a href="/courses/enroll/" <?=is_active_menu_item('courses', 'enroll')?'class="active"':''?> >Запись на курс</a></li>
 							<li><a href="/subscription/" <?=is_active_menu_item('subscription')?'class="active"':''?> >Подписка</a></li>
+							<li><a href="/profile/" <?=is_active_menu_item('profile')?'class="active"':''?> >Профиль</a></li>
+							<li><a href="/users/" <?=is_active_menu_item('users')?'class="active"':''?> >Пользователи</a></li>
 							<li><a href="/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
 						<?//endif;?>
 

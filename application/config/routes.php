@@ -17,6 +17,7 @@ $route['admin/(.*)'] = 'admin/$1';
 $route['profile'] = 'app/Profile/index';
 $route['profile/(:num)'] = 'app/Profile/index/$1';
 $route['profile/(.*)'] = 'app/Profile/$1';
+$route['profile/messages/(:num)'] = 'app/Profile/messages/$1';
 
 $route['teachingcourses'] = 'app/TeachingCourses';
 $route['teachingcourses/(:num)/lectures'] = 'app/TeachingLectures/index/$1';

@@ -224,3 +224,11 @@ $config['news_add'] = [
 	]
 ];
 $config['news_edit'] = $config['news_add'];
+
+$config['message'] = [
+	[
+		'field' => 'text',
+		'label' => 'Сообщение',
+		'rules' => 'required|min_length[1]'
+	]
+];

@@ -3,8 +3,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class UserModel extends APP_Model
 {
-	private const TABLE = 'users';
-	private const ROLES = [
+	const TABLE = 'users';
+	const TABLE_USER_FRIENDS = 'user_friends';
+	const ROLES = [
 		0, // юзер / ученик
 		1, // преподаватель
 		2, // резерв
@@ -72,6 +73,7 @@ class UserModel extends APP_Model
 		{
 			if(empty($row['img']))
 			{
+				$row['full_name'] = (!empty($row['full_name']))?$row['full_name']:$row['email'];
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
 			}
 
@@ -99,6 +101,46 @@ class UserModel extends APP_Model
 
 	public function list()
 	{
+		return false;
+	}
+
+	public function listAllForUser($id)
+	{
+		try
+		{
+			$id = intval($id);
+			$bind = [$id];
+
+			$sql = 'SELECT 
+						u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, uf.user as is_friend    
+					FROM 
+						'.self::TABLE.' as u 
+					LEFT JOIN 
+						'.self::TABLE_USER_FRIENDS.' as uf ON(uf.id = u.id AND uf.user = ?) 
+					WHERE 
+						u.role != 5 
+					ORDER BY 
+						u.id ASC';
+
+			$result = [];
+			if($res = $this->db->query($sql, $bind)->result_array())
+			{
+				foreach($res as $val)
+				{
+					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+					$val['full_name'] = (!empty($val['full_name']))?$val['full_name']:$val['email'];
+					$val['is_friend'] = ($val['is_friend'] || intval($val['id']) === $id)?true:false;
+					$result[] = $val;
+				}
+			}
+
+			return $result;
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
 		return false;
 	}
 
