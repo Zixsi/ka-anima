@@ -15,20 +15,13 @@ class VideoModel extends APP_Model
 	}
 
 	// список видео по ресурсу
-	public function bySource($id, $type = 'lecture', $format = null)
+	public function bySource($id, $type = 'lecture')
 	{
 		try
 		{
 			$bind = [$id, $type];
 			$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ?';
-			
-			if($format)
-			{
-				$bind[] = $format;
-				$sql .= ' AND type = ?';
-			}
-
-			if($res = $this->db->query($sql, $bind)->result_array())
+			if($res = $this->db->query($sql, $bind)->row_array())
 			{
 				return $res;
 			}
@@ -50,23 +43,14 @@ class VideoModel extends APP_Model
 				throw new Exception('Invalid video type', 1);
 			}
 
-			$this->load->library(['youtube']);
+			$this->load->library(['ydvideo']);
 
-			$code  = $this->youtube->extractVideoId($url);
-			$video_data = $this->youtube->prepareData($code);
-			$video_array = $this->youtube->getVideoFromData($video_data);
-			foreach($video_array as $format => $val)
+			if($video = $this->ydvideo->getVideo($url))
 			{
-				$video = current($val);
-				$this->set($source_id, $code, $video, $type, $format);
+				$this->set($source_id, $url, $video['player'], $type, 'mp4');
 			}
 
-			if($img = $this->youtube->getImgFromData($video_data))
-			{
-				$this->set($source_id, $code, $img, $type, 'img');
-			}
-
-			return true;
+			return false;
 		}
 		catch(Exception $e)
 		{

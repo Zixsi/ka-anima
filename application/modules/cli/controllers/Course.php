@@ -95,7 +95,7 @@ class Course extends APP_Controller
 	// php index.php cli course updateVideoUrl
 	public function updateVideoUrl()
 	{
-		var_dump('Update Video Url');
+		/*var_dump('Update Video Url');
 		$this->load->model(['main/VideoModel']);
 		$this->load->library(['youtube']);
 
@@ -116,13 +116,13 @@ class Course extends APP_Controller
 					$this->VideoModel->set($item['source_id'], $item['code'], $img, $item['source_type'], 'img');
 				}
 			}
-		}
+		}*/
 	}
 
 	// php index.php cli course addLectureVideo
 	public function addLectureVideo()
 	{
-		var_dump('addLectureVideo');
+		/*var_dump('addLectureVideo');
 		$this->load->model(['main/VideoModel']);
 		$this->load->library(['youtube']);
 
@@ -135,29 +135,6 @@ class Course extends APP_Controller
 					debug($this->VideoModel->LAST_ERROR); die();
 				}
 			}
-		}
-	}
-
-	// php index.php cli course test
-	public function test()
-	{
-		$this->load->library(['youtube']);
-		
-		//$code  = $this->youtube->extractVideoId('https://youtu.be/HhgcOTeaobI');
-		$code  = $this->youtube->extractVideoId('https://youtu.be/iEp7xno0LYA');
-		//$code  = 'Rmgup1IyZ8A';
-		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=qn_7TqEUn_g');
-		//$code  = $this->youtube->extractVideoId('https://www.youtube.com/watch?v=ZMK-_ahhgAw');
-		//$code  = $this->youtube->extractVideoId('https://youtu.be/syT6tZXExBU');
-		//var_dump($code);
-		// $data = $this->youtube->prepareData($code);
-		// $data = json_decode($data['player_response'], true);
-		// unset($data['captions'], $data['playbackTracking'], $data['playerConfig'], $data['storyboards'],$data['attestation'],$data['messages'],$data['adSafetyReason'], $data['videoDetails']);
-		// debug($data);
-		//$video_array = $this->youtube->getVideoFromData($data);
-		//$video_array = $this->youtube->getImgFromData($data);
-		$video_array = $this->youtube->getVideo($code);
-		//$video_array = $this->youtube->getVideo2($code);
-		var_dump($video_array);
+		}*/
 	}
 }

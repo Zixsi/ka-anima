@@ -19,20 +19,10 @@ class Video extends APP_Controller
 		$data['video'] = false;
 		$data['video_img'] = TEMPLATE_DIR.'/admin_1/assets/img/video-preview-bg.jpg';
 
-		$video = $this->VideoModel->bySource($id, $type);
-		foreach($video as $val)
+		if($video = $this->VideoModel->bySource($id, $type))
 		{
-			if($val['type'] == 'img')
-			{
-				//$data['video_img'] = $val['video_url'];
-			}
-			else
-			{
-				$data['video'][] = $val;
-			}
+			$data['video'] = $video['video_url'];
 		}
-		unset($video);
-		//debug($data); die();
 
 		$this->load->lview('video/index', $data);
 	}
