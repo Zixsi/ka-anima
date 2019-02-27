@@ -11,15 +11,19 @@ class Video extends APP_Controller
 		$this->load->layout = 'empty';
 	}
 	
-	public function index($type, $id)
+	public function index($code)
 	{
 		$data = [];
 		$data['user'] = $this->Auth->user();
+
+		// TODO
+		// Проверка юзера на доступ к видео
+		// Если что то пошло не так отображать заглушку
 		
 		$data['video'] = false;
-		$data['video_img'] = TEMPLATE_DIR.'/admin_1/assets/img/video-preview-bg.jpg';
+		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.png';
 
-		if($video = $this->VideoModel->bySource($id, $type))
+		if($video = $this->VideoModel->byVideoCode($code))
 		{
 			$data['video'] = $video['video_url'];
 		}

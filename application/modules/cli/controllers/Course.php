@@ -17,7 +17,7 @@ class Course extends APP_Controller
 	// php index.php cli course createGroups
 	public function createGroups()
 	{
-		var_dump('Create Groups');
+		/*var_dump('Create Groups');
 
 		if($res = $this->CoursesGroupsModel->getListNeedCreate())
 		{
@@ -88,35 +88,27 @@ class Course extends APP_Controller
 				}
 				//break;
 			}
-		}
+		}*/
 	}
 
 	// Обновление ссылок на видео
 	// php index.php cli course updateVideoUrl
 	public function updateVideoUrl()
 	{
-		/*var_dump('Update Video Url');
+		echo 'Update Video Url => Start'.PHP_EOL;
 		$this->load->model(['main/VideoModel']);
-		$this->load->library(['youtube']);
+		$this->load->library(['ydvideo']);
 
-		if($items = $this->VideoModel->forUpdate(300))
+		if($items = $this->VideoModel->forUpdate(3600))
 		{
+			echo 'Count video => '.count($items).PHP_EOL;
 			foreach($items as $item)
 			{
-				$video_data = $this->youtube->prepareData($item['code']);
-				$video_array = $this->youtube->getVideo($item['code'], $video_data);
-				foreach($video_array as $format => $val)
-				{
-					$video = current($val);
-					$this->VideoModel->set($item['source_id'], $item['code'], $video, $item['source_type'], $format);
-				}
-
-				if($img = $this->youtube->getImgFromData($video_data))
-				{
-					$this->VideoModel->set($item['source_id'], $item['code'], $img, $item['source_type'], 'img');
-				}
+				$video = $this->ydvideo->getVideo($item['code']);
+				$this->VideoModel->set($item['source_id'], $item['code'], $video['video'], $item['source_type'], $item['type']);
 			}
-		}*/
+		}
+		echo 'Update Video Url => End'.PHP_EOL;
 	}
 
 	// php index.php cli course addLectureVideo

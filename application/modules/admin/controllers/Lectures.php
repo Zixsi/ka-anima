@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class TeachingLectures extends APP_Controller
+class Lectures extends APP_Controller
 {
 	public function __construct()
 	{
@@ -16,7 +16,7 @@ class TeachingLectures extends APP_Controller
 
 		$data['items'] = $this->LecturesModel->getByCourse($course);
 		
-		$this->load->lview('teachingLectures/index', $data);
+		$this->load->lview('lectures/index', $data);
 	}
 
 	public function add($course = 0)
@@ -30,6 +30,7 @@ class TeachingLectures extends APP_Controller
 			$form_data['course_id'] = $course;
 			if($id = $this->LecturesModel->add($form_data))
 			{
+				$this->VideoModel->prepareAndSet($id, 'lecture', $form_data['video']);
 				$this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures');
 				header('Location: ../');
 			}
@@ -38,7 +39,7 @@ class TeachingLectures extends APP_Controller
 		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->LecturesModel->LAST_ERROR;
 
-		$this->load->lview('teachingLectures/add', $data);
+		$this->load->lview('lectures/add', $data);
 	}
 
 	public function edit($id = 0, $course = 0)
@@ -67,7 +68,7 @@ class TeachingLectures extends APP_Controller
 			$form_data['course_id'] = $course;
 			if($this->LecturesModel->update($id, $form_data))
 			{
-				$data['item'] += $form_data;
+				$data['item'] = $form_data + $data['item'];
 				$this->VideoModel->prepareAndSet($id, 'lecture', $data['item']['video']);
 
 				$this->FilesModel->deleteLinkFile(($form_data['del_files'] ?? []), $id, 'lecture');
@@ -88,7 +89,7 @@ class TeachingLectures extends APP_Controller
 		$data['csrf'] = cr_get_key();
 		
 
-		$this->load->lview('teachingLectures/edit', $data);
+		$this->load->lview('lectures/edit', $data);
 	}
 
 	private function checkAccess($id = 0)
@@ -100,13 +101,10 @@ class TeachingLectures extends APP_Controller
 
 			if(($item = $this->CoursesModel->getByID($id)) == false)
 				throw new Exception("Course not found", 1);
-
-			if($item['author'] !== $this->Auth->userID())
-				throw new Exception("Access denied", 1);
 		}
 		catch(Exception $e)
 		{
-			header('Location: /teachingcourses/');
+			header('Location: /admin/courses/');
 		}
 
 		return true;

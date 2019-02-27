@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class TeachingCourses extends APP_Controller
+class Courses extends APP_Controller
 {
 	public function __construct()
 	{
@@ -12,10 +12,10 @@ class TeachingCourses extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->CoursesModel->list(['author' => $this->Auth->userID()]);
-		//Debug($data); die();
+		$data['items'] = $this->CoursesModel->list();
 
-		$this->load->lview('teachingCourses/index', $data);
+		$this->load->lview('courses/index', $data);
+		//$this->load->lview('courses/calendar', $data);
 	}
 
 	public function add()
@@ -37,7 +37,7 @@ class TeachingCourses extends APP_Controller
 		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->CoursesModel->LAST_ERROR;
 
-		$this->load->lview('teachingCourses/add', $data);
+		$this->load->lview('courses/add', $data);
 	}
 
 	public function edit($id = 0)
@@ -45,13 +45,7 @@ class TeachingCourses extends APP_Controller
 		$data = [];
 		$data['course_types'] = $this->CoursesModel::TYPES;
 		
-		$id = intval($id);
-		if(($data['item'] = $this->CoursesModel->getByID($id)) == false)
-		{
-			header('Location: ../');
-		}
-
-		if($data['item']['author'] !== $this->Auth->userID())
+		if(($data['item'] = $this->CoursesModel->getByID(intval($id))) == false)
 		{
 			header('Location: ../');
 		}
@@ -70,6 +64,6 @@ class TeachingCourses extends APP_Controller
 		$data['csrf'] = cr_get_key();
 		$data['error'] = $this->CoursesModel->LAST_ERROR;
 
-		$this->load->lview('teachingCourses/edit', $data);
+		$this->load->lview('courses/edit', $data);
 	}
 }

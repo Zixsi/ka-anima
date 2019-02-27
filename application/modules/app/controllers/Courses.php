@@ -36,6 +36,12 @@ class Courses extends APP_Controller
 			}
 
 			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
+			$data['lecture']['video_code'] = '';
+			if($res = $this->VideoModel->bySource($data['lecture']['id']))
+			{
+				$data['lecture']['video_code'] = $res['video_code'];
+			}
+
 			if(cr_valid_key())
 			{
 				$this->uploadHomeWork($data);

@@ -14,6 +14,12 @@ class UserModel extends APP_Model
 		5 // админ
 	];
 
+	const ROLES_NAME = [
+		0 => 'ученик',
+		1 => 'преподаватель',
+		5 => 'админ'
+	];
+
 	public function __construct()
 	{
 		parent::__construct();

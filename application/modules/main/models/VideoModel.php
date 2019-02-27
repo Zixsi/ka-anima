@@ -34,6 +34,26 @@ class VideoModel extends APP_Model
 		return false;
 	}
 
+	public function byVideoCode($code)
+	{
+		try
+		{
+			$bind = [$code];
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE video_code = ?';
+			if($res = $this->db->query($sql, $bind)->row_array())
+			{
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+
 	public function prepareAndSet($source_id, $type = 'lecture', $url = '')
 	{
 		try
@@ -44,10 +64,9 @@ class VideoModel extends APP_Model
 			}
 
 			$this->load->library(['ydvideo']);
-
 			if($video = $this->ydvideo->getVideo($url))
 			{
-				$this->set($source_id, $url, $video['player'], $type, 'mp4');
+				$this->set($source_id, $url, $video['video'], $type, 'mp4');
 			}
 
 			return false;
@@ -86,6 +105,7 @@ class VideoModel extends APP_Model
 					'source_id' => $source_id,
 					'source_type' => $type,
 					'code' => $code,
+					'video_code' => random_string('alnum', 25),
 					'video_url' => $url,
 					'type' => $format,
 					'ts' => date('Y-m-d H:i:s')
@@ -99,6 +119,7 @@ class VideoModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
+			debug($e->getMessage()); die();
 			$this->LAST_ERROR = $e->getMessage();
 		}
 

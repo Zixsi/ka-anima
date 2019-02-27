@@ -72,6 +72,7 @@ $user_id = $CI->Auth->userID();
 						<li><a href="/admin/" <?=is_active_menu_item('main')?'class="active"':''?> ><span>Главная</span></a></li>
 						<li><a href="/admin/news/" <?=is_active_menu_item('news')?'class="active"':''?> >Новости</a></li>
 						<li><a href="/admin/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
+						<li><a href="/admin/courses/" <?=is_active_menu_item('courses')?'class="active"':''?> >Курсы</a></li>
 					</ul>
 				</nav>
 			</div>

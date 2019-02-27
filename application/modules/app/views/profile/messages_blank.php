@@ -15,6 +15,9 @@
 									<img class="media-object" src="<?=$val['img']?>" alt="">
 								</div>
 								<div class="media-body">
+									<?if($val['role'] > 0):?>
+										<span class="label label-success message-badge"><?=$val['role_name']?></span>
+									<?endif;?>
 									<h4 class="media-heading"><?=$val['name']?></h4>
 								</div>
 								<a href="/profile/messages/<?=$val['id']?>/" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;"></a>
