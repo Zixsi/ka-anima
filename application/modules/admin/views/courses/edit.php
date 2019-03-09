@@ -4,7 +4,7 @@
 			<h3 class="panel-title">Редактирование</h3>
 		</div>
 		<div class="col-xs-6 text-right">
-			<a href="../" class="btn btn-default btn-xs">Назад</a>
+			<a href="../../" class="btn btn-default btn-xs">Назад</a>
 		</div>
 	</div>
 	<div class="panel-body" style="padding-top: 30px;">

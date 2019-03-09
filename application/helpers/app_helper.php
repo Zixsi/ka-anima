@@ -170,3 +170,34 @@ function is_active_menu_item($c, $a = null)
 	
 	return (($c === $cr) && (empty($a) || $a === null || $a === $ar))?true:false;
 }
+
+function roadmap_months($date)
+{
+	//DATE_MONTHS
+	$result = [];
+	$date_a = new \DateTime('now');
+	$date_b = new \DateTime($date);
+	$interval = $date_a->diff($date_b);
+
+	if($date_b < $date_a)
+		return $result;
+
+	$year = intval($date_a->format('Y'));
+	$month = intval($date_a->format('n'));
+	$month_cnt = (intval($interval->y) * 12) + (intval($interval->m) + 2);
+	$month_cnt = ($month_cnt < 12)?12:$month_cnt;
+
+	for($i = 0; $i < $month_cnt; $i++)
+	{
+		if($month > 12)
+		{
+			$month = 1;
+			$year++;
+		}
+
+		$result[$year][$month] = DATE_MONTHS['ru'][($month - 1)];
+		$month++;
+	}
+
+	return $result;
+}

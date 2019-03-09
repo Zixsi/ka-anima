@@ -13,9 +13,10 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['items'] = $this->CoursesModel->list();
-
-		$this->load->lview('courses/index', $data);
-		//$this->load->lview('courses/calendar', $data);
+		$data['roadmap_months'] = roadmap_months('now'); 
+		
+		//debug($data); die();
+		$this->load->lview('courses/calendar', $data);
 	}
 
 	public function add()
