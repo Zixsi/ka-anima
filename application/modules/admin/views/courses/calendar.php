@@ -2,9 +2,9 @@
 	<div class="roadmap-container">
 		<div class="roadmap-header">
 			<div class="roadmap-roulete">
-				<?if($roadmap_months):?>
+				<?if($roadmap['head']):?>
 					<?$i = 0;?>
-					<?foreach($roadmap_months as $k_year => $v_year):?>
+					<?foreach($roadmap['head'] as $k_year => $v_year):?>
 						<?foreach($v_year as $v_month):?>
 							<div class="r-month">
 								<div class="r-month-title"><?=$v_month?></div>
@@ -30,20 +30,21 @@
 								<div class="tools-wrap">
 									<a href="./edit/<?=$item['id']?>/"><i class="fa fa-pencil"></i></a>
 									<a href="./<?=$item['id']?>/lectures/"><i class="fa fa-list"></i></a>
-									<a href="javascript:void(0);" data-toggle="modal" data-target="#course-group-add"><i class="fa fa-plus"></i></a>
+									<a href="javascript:void(0);" data-value="<?=$item['id']?>" class="btn-add-group"><i class="fa fa-plus"></i></a>
 								</div>
 							</div>
 						</div>
-						<!--<div class="item-row"></div>-->
-					
-						<div class="item-row">
-							<span class="roadmap-mark colored" style="left: 50px;">15.12 - 14.03</span>
-							<span class="roadmap-mark colored" style="left: 700px;">01.07 - 01.10</span>
-						</div>
-						<div class="item-row">
-							<span class="roadmap-mark colored" style="left: 300px;">01.03 - 01.06</span>
-							<span class="roadmap-mark colored" style="left: 900px;">01.09 - 31.11</span>
-						</div>
+						<?if(!empty($roadmap['body'])):?>
+							<?foreach($roadmap['body'][$item['id']] as $val):?>
+								<div class="item-row">
+									<?foreach($val as $v):?>
+										<span class="roadmap-mark colored" style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;"><?=$v['title']?></span>
+									<?endforeach;?>
+								</div>
+							<?endforeach;?>
+						<?else:?>
+							<div class="item-row"></div>
+						<?endif;?>
 					</div>
 				<?endforeach;?>
 			<?endif;?>
@@ -51,18 +52,32 @@
 	</div>
 </div>
 
-<div class="modal fade" id="course-group-add" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-	<div class="modal-dialog">
+<div class="modal fade" id="add-group-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Название модали</h4>
+				<h4 class="modal-title">Новая группа</h4>
 			</div>
 			<div class="modal-body">
-				...
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary">Сохранить</button>
+				<form action="" method="post">
+					<input type="hidden" name="course" value="0">
+					<div class="form-group">
+						<label>Дата начала</label>
+						<input type="text" name="date" value="" class="form-control datepiker" id="datetimepickerr">
+					</div>
+					<div class="form-group">
+						<label>Тип</label>
+						<select name="type" class="form-control">
+							<?foreach(GroupsModel::TYPE as $key => $val):?>
+								<option value="<?=$key?>"><?=$val['title']?></option>
+							<?endforeach;?>
+						</select>
+					</div>
+					<div class="form-group text-right">
+						<button type="submit" class="btn btn-primary">Сохранить</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

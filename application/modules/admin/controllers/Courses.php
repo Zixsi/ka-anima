@@ -6,16 +6,21 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesModel']);
+		$this->load->model(['main/CoursesModel', 'main/GroupsModel']);
 	}
 
 	public function index()
 	{
 		$data = [];
+
 		$data['items'] = $this->CoursesModel->list();
-		$data['roadmap_months'] = roadmap_months('now'); 
-		
+
+		$last_date = 'now';
+		$groups = $this->GroupsModel->getActiveGroups();
+		$data['roadmap'] = $this->GroupsModel->makeRoadmap($groups);
+
 		//debug($data); die();
+
 		$this->load->lview('courses/calendar', $data);
 	}
 

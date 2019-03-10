@@ -1,0 +1,2 @@
+ALTER TABLE `courses_groups` CHANGE `ts` `ts` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+ALTER TABLE `courses_groups` ADD `type` ENUM('standart','advanced','vip','private') NOT NULL DEFAULT 'standart' AFTER `course_id`;
