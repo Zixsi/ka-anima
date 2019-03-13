@@ -6,7 +6,7 @@ class CoursesModel extends APP_Model
 	private const TABLE = 'courses';
 	private const TABLE_LECTURES = 'lectures';
 	private const TABLE_FILES = 'files';
-	private const TABLE_FIELDS = ['name', 'description', 'type', 'period', 'price_month', 'price_full', 'author', 'ts', 'active'];
+	private const TABLE_FIELDS = ['name', 'description', 'type', 'period', 'price_month', 'price_full', 'teacher', 'ts', 'active'];
 	public const TYPES = [
 		0 => 'Самостоятельное обучение',
 		1 => 'Обучение с инструктором'
@@ -21,50 +21,18 @@ class CoursesModel extends APP_Model
 
 	public function add($data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
-
-			if($img_id = $this->uploadImg())
-			{
-				$data['img'] = $img_id;
-			}
-
-			if($this->db->insert(self::TABLE, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
+		if($this->db->insert(self::TABLE, $data))
+			return $this->db->insert_id();
+	
 		return false;
 	}
 
 	public function update($id, $data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
-
-			if($img_id = $this->uploadImg())
-			{
-				$data['img'] = $img_id;
-			}
-
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $data))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
+			
 		return false;
 	}
 
@@ -112,54 +80,5 @@ class CoursesModel extends APP_Model
 		}
 
 		return false;
-	}
-
-	private function uploadImg()
-	{
-		if(isset($_FILES['img']) && !empty($_FILES['img']['name']))
-		{
-			$this->load->model(['main/FilesModel']);
-			$this->load->config('upload');
-			$this->upload_config = $this->config->item('upload_course');
-			$this->load->library('upload', $this->upload_config);
-
-			if($this->upload->do_upload('img') == false)
-			{
-				throw new Exception($this->upload->display_errors(), 1);
-			}
-			else
-			{
-				if($file_id = $this->FilesModel->saveFileArray($this->upload->data()))
-				{
-					return $file_id;
-				}
-				elseif($this->FilesModel->LAST_ERROR)
-				{
-					throw new Exception($this->FilesModel->LAST_ERROR, 1);
-				}
-			}
-		}
-
-		return false;
-	}
-
-	private function _checkFields(&$data = [])
-	{
-		$this->form_validation->reset_validation();
-		$this->form_validation->set_data($data);
-		if($this->form_validation->run('course') == FALSE)
-		{
-			throw new Exception($this->form_validation->error_string(), 1);
-		}
-
-		foreach($data as $key => $val)
-		{
-			if(in_array($key, self::TABLE_FIELDS) == false)
-			{
-				unset($data[$key]);
-			}
-		}
-		
-		return true;
 	}
 }

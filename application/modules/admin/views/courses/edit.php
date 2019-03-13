@@ -9,8 +9,8 @@
 	</div>
 	<div class="panel-body" style="padding-top: 30px;">
 		<div class="col-xs-12">
-			<?=ShowError($error);?>
-			<?=ShowFlashMessage();?>
+			<?=alert_error($error);?>
+			<?=show_flash_message();?>
 			<form action="./" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 				<div class="form-group">
@@ -26,6 +26,15 @@
 						<option selected="true">- - -</option>
 						<?foreach($course_types as $key => $val):?>
 							<option value="<?=$key?>" <?=set_select('type', $key, ($key == intval($item['type'])))?> ><?=$val?></option>
+						<?endforeach;?>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="fteacher">Преподаватель</label>
+					<select name="teacher" id="fteacher" class="form-control">
+						<option selected="true">- - -</option>
+						<?foreach($teachers as $val):?>
+							<option value="<?=$val['id']?>" <?=set_select('teacher', $val['id'], ($val['id'] === $item['teacher']))?> ><?=$val['full_name']?></option>
 						<?endforeach;?>
 					</select>
 				</div>

@@ -50,6 +50,7 @@ class GroupsHelper extends APP_Model
 
 			$data = [
 				'type' => $data['type'],
+				'teacher' => $course['teacher'],
 				'code' => 'c'.$course['id'].'-'.$date_b->format('Ym'),
 				'course_id' => $course['id'],
 				'ts' => $date_b->format('Y-m-d 00:00:00'),

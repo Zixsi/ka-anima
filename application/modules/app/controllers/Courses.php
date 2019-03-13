@@ -73,7 +73,7 @@ class Courses extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
-		$data['teacher'] = $this->UserModel->getById($data['group']['author']);
+		$data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
 		$data['images'] = $this->GroupsModel->getImageFiles($data['group_id']);
 

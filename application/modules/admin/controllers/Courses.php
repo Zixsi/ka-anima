@@ -6,7 +6,7 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesModel', 'main/GroupsModel']);
+		$this->load->model(['main/CoursesModel', 'main/GroupsModel', 'main/courses/CoursesHelper']);
 	}
 
 	public function index()
@@ -28,20 +28,16 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['course_types'] = $this->CoursesModel::TYPES;
+		$data['teachers'] = $this->UserModel->listTeachers();
 		
 		if(cr_valid_key())
 		{
-			$form_data = $this->input->post(null, true);
-			$form_data['author'] = $this->Auth->userID();
-
-			if($id = $this->CoursesModel->add($form_data))
-			{
+			if($this->CoursesHelper->add($this->input->post(null, true)))
 				header('Location: ../');
-			}
 		}
 
 		$data['csrf'] = cr_get_key();
-		$data['error'] = $this->CoursesModel->LAST_ERROR;
+		$data['error'] = $this->CoursesHelper->getLastError();
 
 		$this->load->lview('courses/add', $data);
 	}
@@ -50,25 +46,22 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['course_types'] = $this->CoursesModel::TYPES;
+		$data['teachers'] = $this->UserModel->listTeachers();
 		
 		if(($data['item'] = $this->CoursesModel->getByID(intval($id))) == false)
-		{
 			header('Location: ../');
-		}
 
 		if(cr_valid_key())
 		{
-			$form_data = $this->input->post(null, true);
-
-			if($id = $this->CoursesModel->update($id, $form_data))
+			if($this->CoursesHelper->update($id, $this->input->post(null, true)))
 			{
-				$data['item'] = $this->CoursesModel->getByID($id);
-				SetFlashMessage('success', 'Success');
+				set_flash_message('success', 'Успешно');
+				redirect('/admin/courses/edit/'.$id.'/', 'refresh');
 			}
 		}
 
 		$data['csrf'] = cr_get_key();
-		$data['error'] = $this->CoursesModel->LAST_ERROR;
+		$data['error'] = $this->CoursesHelper->getLastError();
 
 		$this->load->lview('courses/edit', $data);
 	}

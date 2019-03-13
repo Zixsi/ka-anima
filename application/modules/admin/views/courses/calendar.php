@@ -34,7 +34,7 @@
 								</div>
 							</div>
 						</div>
-						<?if(!empty($roadmap['body'])):?>
+						<?if(!empty($roadmap['body'][$item['id']])):?>
 							<?foreach($roadmap['body'][$item['id']] as $val):?>
 								<div class="item-row">
 									<?foreach($val as $v):?>
@@ -48,6 +48,13 @@
 					</div>
 				<?endforeach;?>
 			<?endif;?>
+			<div class="roadmap-item item-color-default">
+				<div class="item-head colored">
+					<span><i class="fa fa-plus"></i></span>
+					<a href="./add/"></a>
+				</div>
+				<div class="item-row"></div>
+			</div>
 		</div>
 	</div>
 </div>

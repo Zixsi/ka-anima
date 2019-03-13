@@ -82,9 +82,9 @@
 .roadmap-roulete {display: flex; flex-wrap: nowrap;}
 .roadmap-roulete .r-month {display: inline-block; height: 40px; flex-shrink: 0;}
 .roadmap-roulete .r-month-title {text-align: center; font-weight: bold; height: 35px; text-transform: uppercase;}
-.roadmap-roulete .r-week {display: inline-block; float: left; position: relative; height: 5px; width: 25px; box-sizing: border-box; border-right: 2px solid #ccc;}
-.roadmap-roulete .r-week.first {border-left: 2px solid #ccc;}
-.roadmap-roulete .r-week.last:after {content: ""; width: 2px; height: 20px; background-color: #ccc; position: absolute; right: -2px; bottom: 0px;}
+.roadmap-roulete .r-week {display: inline-block; float: left; position: relative; height: 5px; width: 25px; box-sizing: border-box; border-right: 2px solid #676a6d;}
+.roadmap-roulete .r-week.first {border-left: 2px solid #676a6d;}
+.roadmap-roulete .r-week.last:after {content: ""; width: 2px; height: 20px; background-color: #676a6d; position: absolute; right: -2px; bottom: 0px;}
 .roadmap-body {/*width: 3600px;*/}
 .roadmap-item {position: relative; margin: 15px 0px;}
 .roadmap-item .item-head {display: flex;  align-items: center; justify-content: center; height: 100%; width: 300px; color: #fff; position: absolute; left: -320px; top: 0px; bottom: 0px; padding: 20px; text-align: center; font-size: 18px; border-radius: 5px;}
@@ -97,7 +97,7 @@
 
 .roadmap-item {min-height: 80px; width: 100%;}
 .roadmap-item .item-row {min-height: 80px; position: relative;}
-.roadmap-item .item-row:before {content: ""; position: absolute; left: 0px; right: 0px; height: 2px; background-color: #ccc; top: 50%; margin-top: 0px;}
+.roadmap-item .item-row:before {content: ""; position: absolute; left: 0px; right: 0px; height: 1px; background-color: #676a6d; top: 50%; margin-top: 0px;}
 .roadmap-item .item-row .roadmap-mark {display: inline-block; position: absolute; height: 30px; top: 25px; box-sizing: border-box; border-radius: 30px; width: 300px; text-align: center; color: #fff; font-size: 13px; font-weight: bold; line-height: 30px;}
 
 .item-color1 .colored {background-color: #0B61A4;}
@@ -108,3 +108,6 @@
 .item-color6 .colored {background-color: #AC3BD4;}
 .item-color7 .colored {background-color: #F93E58;}
 .item-color8 .colored {background-color: #00C618;}
+
+.roadmap-item.item-color-default .item-head {color: #676a6d; border: 1px solid #676a6d;}
+.roadmap-item.item-color-default .item-head a {position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;}
