@@ -13,8 +13,8 @@ class Test extends APP_Controller
 	{
 		var_dump('TEST');
 
-		//$res = $this->ydvideo->getVideo('https://yadi.sk/i/5zTqQ--4gPE3FQ');
+		$res = $this->ydvideo->getVideo('https://yadi.sk/i/A1gCKCnrQOROxw');
 		//$res = $this->ydvideo->getVideo('https://yadi.sk/i/6Ojacwq_-4DMRA');
-		//var_dump($res);
+		var_dump($res);
 	}
 }

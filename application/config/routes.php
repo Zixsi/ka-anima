@@ -11,6 +11,9 @@ $route['cli'] = 'cli/index';
 $route['cli/(.*)'] = 'cli/$1';
 
 $route['admin'] = 'admin/main';
+$route['admin/courses/(:num)/lectures'] = 'admin/Lectures/index/$1';
+$route['admin/courses/(:num)/lectures/(.*)'] = 'admin/Lectures/$2/$1';
+$route['admin/courses/(.*)'] = 'admin/Courses/$1';
 $route['admin/(.*)'] = 'admin/$1';
 
 
@@ -18,11 +21,6 @@ $route['profile'] = 'app/Profile/index';
 $route['profile/(:num)'] = 'app/Profile/index/$1';
 $route['profile/(.*)'] = 'app/Profile/$1';
 $route['profile/messages/(:num)'] = 'app/Profile/messages/$1';
-
-$route['teachingcourses'] = 'app/TeachingCourses';
-$route['teachingcourses/(:num)/lectures'] = 'app/TeachingLectures/index/$1';
-$route['teachingcourses/(:num)/lectures/(.*)'] = 'app/TeachingLectures/$2/$1';
-$route['teachingcourses/(.*)'] = 'app/TeachingCourses/$1';
 
 $route['teachinggroups'] = 'app/TeachingGroups';
 $route['teachinggroups/(:num)'] = 'app/TeachingGroups/group/$1';
@@ -34,7 +32,8 @@ $route['teachingstreams'] = 'app/TeachingStreams';
 $route['teachingstreams/(:num)'] = 'app/TeachingStreams/item/$1';
 $route['teachingstreams/(.*)'] = 'app/TeachingStreams/$1';
 
-$route['video/(.*)/(.*)'] = 'app/video/index/$1/$2';
+//$route['video/(.*)/(.*)'] = 'app/video/index/$1/$2';
+$route['video/(.*)'] = 'app/video/index/$1';
 
 //$route['groups/(:num)'] = 'app/Groups/index/$1';
 $route['courses'] = 'app/courses/index';

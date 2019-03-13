@@ -88,7 +88,7 @@ function cr_valid_key($pref = null)
 
 function get_rel_path($path)
 {
-    return str_replace('\\', '/', str_replace(FCPATH, '', $path));
+	return str_replace('\\', '/', str_replace(FCPATH, '', $path));
 }
 
 function Debug($data = [])
@@ -99,24 +99,24 @@ function Debug($data = [])
 // Получить день месяца у дня недели. Например первого воскресенья августа
 function compute_day($weekNumber, $dayOfWeek, $monthNumber, $year)
 {
-    // порядковый номер дня недели первого дня месяца $monthNumber
-    $dayOfWeekFirstDayOfMonth = date('w', mktime(0, 0, 0, $monthNumber, 1, $year));
+	// порядковый номер дня недели первого дня месяца $monthNumber
+	$dayOfWeekFirstDayOfMonth = date('w', mktime(0, 0, 0, $monthNumber, 1, $year));
  
-    // сколько дней осталось до дня недели $dayOfWeek относительно дня недели $dayOfWeekFirstDayOfMonth
-    $diference = 0;
+	// сколько дней осталось до дня недели $dayOfWeek относительно дня недели $dayOfWeekFirstDayOfMonth
+	$diference = 0;
  
-    // если нужный день недели $dayOfWeek только наступит относительно дня недели $dayOfWeekFirstDayOfMonth
-    if ($dayOfWeekFirstDayOfMonth <= $dayOfWeek)
-    {
-        $diference = $dayOfWeek - $dayOfWeekFirstDayOfMonth;
-    }
-    // если нужный день недели $dayOfWeek уже прошёл относительно дня недели $dayOfWeekFirstDayOfMonth
-    else
-    {
-        $diference = 7 - $dayOfWeekFirstDayOfMonth + $dayOfWeek;
-    }
+	// если нужный день недели $dayOfWeek только наступит относительно дня недели $dayOfWeekFirstDayOfMonth
+	if ($dayOfWeekFirstDayOfMonth <= $dayOfWeek)
+	{
+		$diference = $dayOfWeek - $dayOfWeekFirstDayOfMonth;
+	}
+	// если нужный день недели $dayOfWeek уже прошёл относительно дня недели $dayOfWeekFirstDayOfMonth
+	else
+	{
+		$diference = 7 - $dayOfWeekFirstDayOfMonth + $dayOfWeek;
+	}
  
-    return 1 + $diference + ($weekNumber - 1) * 7;
+	return 1 + $diference + ($weekNumber - 1) * 7;
 }
 
 function next_monday_ts()
@@ -169,4 +169,67 @@ function is_active_menu_item($c, $a = null)
 	$a = strtolower($a);
 	
 	return (($c === $cr) && (empty($a) || $a === null || $a === $ar))?true:false;
+}
+
+function roadmap_months($date)
+{
+	//DATE_MONTHS
+	$result = [];
+	$date_a = new \DateTime('now');
+	$date_a->modify('-1 month');
+	$date_b = new \DateTime($date);
+	$interval = $date_a->diff($date_b);
+
+	if($date_b < $date_a)
+		return $result;
+
+	$year = intval($date_a->format('Y'));
+	$month = intval($date_a->format('n'));
+	$month_cnt = (intval($interval->y) * 12) + (intval($interval->m) + 2);
+	$month_cnt = ($month_cnt < 12)?12:$month_cnt;
+
+	for($i = 0; $i < $month_cnt; $i++)
+	{
+		if($month > 12)
+		{
+			$month = 1;
+			$year++;
+		}
+
+		$result[$year][$month] = DATE_MONTHS['ru'][($month - 1)];
+		$month++;
+	}
+
+	return $result;
+}
+
+function date_diff_months($date1, $date2)
+{
+	$date_a = ($date1 instanceof DateTime)?$date1:new DateTime($date1);
+	$date_b = ($date2 instanceof DateTime)?$date2:new DateTime($date2);
+	return abs((($date_b->format('Y') - $date_a->format('Y')) * 12) + ($date_b->format('n') - $date_a->format('n')));
+}
+
+function roadmap_check_intersect($item, $list)
+{
+	$date_a1 = new DateTime($item['ts']);
+	$date_a2 = new DateTime($item['ts_end']);
+
+	$i = 0;
+	foreach($list as $key => $val)
+	{
+		foreach($val as $v)
+		{
+			$date_b1 = new DateTime($v['ts']);
+			$date_b2 = new DateTime($v['ts_end']);
+
+			if(($date_a1 <= $date_b2) && ($date_a2 >= $date_b1))
+			{
+				$i++;
+				break;
+			}
+		}
+	}
+
+	return $i;
 }

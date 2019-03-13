@@ -93,7 +93,7 @@ class StreamsModel extends APP_Model
 	public function getByID($id)
 	{
 		$sql = 'SELECT 
-					s.*, c.name as course_name, g.ts as course_ts, c.author   
+					s.*, c.name as course_name, g.ts as course_ts, g.teacher   
 				FROM 
 					'.self::TABLE.' as s 
 				LEFT JOIN 
@@ -112,7 +112,7 @@ class StreamsModel extends APP_Model
 		return false;
 	}
 
-	public function list(int $author = 0, array $filter = [])
+	public function list(int $teacher = 0, array $filter = [])
 	{
 		$bind = [];
 
@@ -133,10 +133,10 @@ class StreamsModel extends APP_Model
 			$sql .= ($filter['active'] > 0)?' AND s.ts > ? ':' AND s.ts <= ? ';
 		}
 
-		if($author > 0)
+		if($teacher > 0)
 		{
-			$bind[] = $author;
-			$sql .= ' AND c.author = ? ';
+			$bind[] = $teacher;
+			$sql .= ' AND g.teacher = ? ';
 		}
 
 		$sql .= ' ORDER BY 
@@ -178,7 +178,7 @@ class StreamsModel extends APP_Model
 		$bind = [$id, date('Y-m-d H:i:s', time() - (3600 * 4))];
 
 		$sql = 'SELECT 
-					s.*, c.name as course_name, g.ts as course_ts, c.author   
+					s.*, c.name as course_name, g.ts as course_ts, g.teacher   
 				FROM 
 					'.self::TABLE.' as s 
 				LEFT JOIN 
@@ -245,9 +245,9 @@ class StreamsModel extends APP_Model
 		return false;
 	}
 
-	public function getNextForAuthor(int $author)
+	public function getNextForAuthor(int $teacher)
 	{
-		$bind = [$author, date('Y-m-d H:i:s')];
+		$bind = [$teacher, date('Y-m-d H:i:s')];
 
 		$sql = 'SELECT 
 					s.id, s.ts  
@@ -258,7 +258,7 @@ class StreamsModel extends APP_Model
 				LEFT JOIN 
 					'.self::TABLE_COURSE.' as c ON(g.course_id = c.id) 
 				WHERE 
-					c.author = ? AND s.ts > ? 
+					g.teacher = ? AND s.ts > ? 
 				ORDER BY 
 					s.ts ASC';
 

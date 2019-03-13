@@ -45,18 +45,28 @@ $config['signup'] = [
 
 $config['course'] = [
 	[
+		'field' => 'type',
+		'label' => 'Тип',
+		'rules' => 'required|in_list[0,1]'
+	],
+	[
 		'field' => 'name',
-		'label' => 'Name',
+		'label' => 'Название',
 		'rules' => 'required'
 	],
 	[
+		'field' => 'teacher',
+		'label' => 'Преподаватель',
+		'rules' => 'required|integer'
+	],
+	[
 		'field' => 'price_month',
-		'label' => 'Price month',
+		'label' => 'Стоимость первого месяца',
 		'rules' => 'required|numeric|greater_than[0]'
 	],
 	[
 		'field' => 'price_full',
-		'label' => 'Price full',
+		'label' => 'Стоимость полного курса',
 		'rules' => 'required|numeric|greater_than[0]'
 	]
 ];

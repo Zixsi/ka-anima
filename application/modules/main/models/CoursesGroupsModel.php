@@ -63,7 +63,7 @@ class CoursesGroupsModel extends APP_Model
 	public function getByID($id)
 	{
 		$sql = 'SELECT 
-					g.*, c.name, c.price_month, c.price_full, c.author, 
+					g.*, c.name, c.price_month, c.price_full, g.teacher, 
 					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img_src  
 				FROM 
 					'.self::TABLE.' as g 
@@ -271,7 +271,7 @@ class CoursesGroupsModel extends APP_Model
 	public function getTeacherGroups($id)
 	{
 		$sql = 'SELECT 
-					c.id, c.name, c.author, g.id as group_id, g.ts, g.ts_end, w.cnt as weeks_cnt, wc.cnt as weeks_current, u.cnt as user_cnt   
+					c.id, c.name, g.teacher, g.id as group_id, g.ts, g.ts_end, w.cnt as weeks_cnt, wc.cnt as weeks_current, u.cnt as user_cnt   
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
@@ -283,7 +283,7 @@ class CoursesGroupsModel extends APP_Model
 				LEFT JOIN 
 					(SELECT count(DISTINCT(user)) as cnt, service FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as u ON(u.service = g.id) 
 				WHERE 
-					c.author = ? AND g.ts_end > ? 
+					g.teacher = ? AND g.ts_end > ? 
 				ORDER BY 
 					g.ts_end ASC';
 

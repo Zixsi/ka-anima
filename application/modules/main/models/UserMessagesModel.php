@@ -35,8 +35,8 @@ class UserMessagesModel extends APP_Model
 			$bind = [$user, $user];
 
 			$sql = 'SELECT 
-						m.user, m.target, CONCAT_WS(\' \', u1.name, u1.lastname) as user_full_name, u1.email as user_email, 
-						CONCAT_WS(\' \', u2.name, u2.lastname) as target_full_name, u2.email as target_email 
+						m.user, m.target, CONCAT_WS(\' \', u1.name, u1.lastname) as user_full_name, u1.email as user_email, u1.role as user_role,  
+						CONCAT_WS(\' \', u2.name, u2.lastname) as target_full_name, u2.email as target_email, u2.role as target_role 
 					FROM 
 						'.self::TABLE.' as m 
 					LEFT JOIN 
@@ -56,11 +56,13 @@ class UserMessagesModel extends APP_Model
 					if(intval($val['user']) === $user)
 					{
 						$val['name'] = (!empty($val['target_full_name']))?$val['target_full_name']:$val['target_email'];
+						$val['role'] = $val['target_role'];
 					}
 					else
 					{
 						$val['name'] = (!empty($val['user_full_name']))?$val['user_full_name']:$val['user_email'];
 						$val['target'] = $val['user'];
+						$val['role'] = $val['user_role'];
 					}
 
 					if(!array_key_exists($val['target'], $result))
@@ -68,6 +70,8 @@ class UserMessagesModel extends APP_Model
 						$result[$val['target']] = [
 							'id' => $val['target'],
 							'name'=> $val['name'],
+							'role'=> $val['role'],
+							'role_name'=> UserModel::ROLES_NAME[$val['role']],
 							'img' => $this->imggen->createIconSrc(['seed' => md5('user'.$val['target'])])
 						];
 					}
@@ -91,7 +95,7 @@ class UserMessagesModel extends APP_Model
 			$bind = [$user, $target, $target, $user];
 
 			$sql = 'SELECT 
-						m.*, CONCAT_WS(\' \', u.name, u.lastname) as user_full_name, u.email as user_email 
+						m.*, CONCAT_WS(\' \', u.name, u.lastname) as user_full_name, u.email as user_email, u.role as role  
 					FROM 
 						'.self::TABLE.' as m  
 					LEFT JOIN 
@@ -107,7 +111,8 @@ class UserMessagesModel extends APP_Model
 			{
 				foreach($res as $val)
 				{
-					$val['name'] = (!empty($val['user_full_name']))?$val['user_full_name']:$val['user_email'];;
+					$val['name'] = (!empty($val['user_full_name']))?$val['user_full_name']:$val['user_email'];
+					$val['role_name'] = UserModel::ROLES_NAME[$val['role']];
 					$result[] = $val;
 				}
 			}

@@ -42,7 +42,7 @@
 
 		<div class="col-xs-5">
 			<div class="video-wrap">
-				<iframe src="/video/lecture/<?=$lecture_id?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+				<iframe src="/video/<?=$lecture['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 			</div>
 			<div class="video-info">
 				<?if(!empty($lecture['description'])):?>

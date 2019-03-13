@@ -13,8 +13,9 @@ $user_id = $CI->Auth->userID();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/font-awesome/css/font-awesome.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/linearicons/style.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/toastr/toastr.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
@@ -72,6 +73,7 @@ $user_id = $CI->Auth->userID();
 						<li><a href="/admin/" <?=is_active_menu_item('main')?'class="active"':''?> ><span>Главная</span></a></li>
 						<li><a href="/admin/news/" <?=is_active_menu_item('news')?'class="active"':''?> >Новости</a></li>
 						<li><a href="/admin/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
+						<li><a href="/admin/courses/" <?=is_active_menu_item('courses')?'class="active"':''?> >Курсы</a></li>
 					</ul>
 				</nav>
 			</div>
@@ -112,7 +114,9 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.full.min.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
 
+	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?v=<?=VERSION?>"></script>
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/admin.js?v=<?=VERSION?>"></script>
 </body>
 </html>

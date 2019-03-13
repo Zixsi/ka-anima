@@ -14,6 +14,12 @@ class UserModel extends APP_Model
 		5 // админ
 	];
 
+	const ROLES_NAME = [
+		0 => 'ученик',
+		1 => 'преподаватель',
+		5 => 'админ'
+	];
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -22,9 +28,7 @@ class UserModel extends APP_Model
 	public function add($data = [])
 	{
 		if($this->db->insert(self::TABLE, $data))
-		{
 			return $this->db->insert_id();
-		}
 
 		return false;
 	}
@@ -102,6 +106,17 @@ class UserModel extends APP_Model
 	public function list()
 	{
 		return false;
+	}
+
+	public function listTeachers()
+	{
+		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE role = 1 ORDER BY id ASC';
+		if($res = $this->db->query($sql, []))
+		{
+			return $res->result_array();
+		}
+
+		return [];
 	}
 
 	public function listAllForUser($id)

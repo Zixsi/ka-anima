@@ -105,7 +105,7 @@ $user_id = $CI->Auth->userID();
 				<nav>
 					<ul class="nav">
 						<li><a href="/" <?=is_active_menu_item('main')?'class="active"':''?>  ><span>Главная</span></a></li>
-						<?//if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
+						<?if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
 							<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
 								<li>
 									<a href="#sub-courses" data-toggle="collapse" class="collapsed <?=is_active_menu_item('courses')?'active':''?>"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
@@ -120,17 +120,16 @@ $user_id = $CI->Auth->userID();
 							<?endif;?>
 							<li><a href="/courses/enroll/" <?=is_active_menu_item('courses', 'enroll')?'class="active"':''?> >Запись на курс</a></li>
 							<li><a href="/subscription/" <?=is_active_menu_item('subscription')?'class="active"':''?> >Подписка</a></li>
-							<li><a href="/profile/" <?=is_active_menu_item('profile')?'class="active"':''?> >Профиль</a></li>
-							<li><a href="/users/" <?=is_active_menu_item('users')?'class="active"':''?> >Пользователи</a></li>
-							<li><a href="/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
-						<?//endif;?>
-
-						<?//if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-							<li><a href="javascript:void(0);">* * * Учительская * * *</a></li>
-							<li><a href="/teachingcourses/" <?=(is_active_menu_item('teachingcourses') || is_active_menu_item('teachinglectures'))?'class="active"':''?> >Курсы</a></li>
+						<?endif;?>
+							
+						<?if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
 							<li><a href="/teachinggroups/" <?=is_active_menu_item('teachinggroups')?'class="active"':''?> >Группы</a></li>
 							<li><a href="/teachingstreams/" <?=is_active_menu_item('teachingstreams')?'class="active"':''?> >Онлайн встречи</a></li>
-						<?//endif;?>
+						<?endif;?>
+
+						<li><a href="/profile/" <?=is_active_menu_item('profile')?'class="active"':''?> >Профиль</a></li>
+						<li><a href="/users/" <?=is_active_menu_item('users')?'class="active"':''?> >Пользователи</a></li>
+						<li><a href="/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
 
 					</ul>
 				</nav>

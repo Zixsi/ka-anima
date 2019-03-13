@@ -269,9 +269,7 @@ class LecturesModel extends APP_Model
 			];
 
 			if($this->db->insert(self::TABLE_LECTURES_GROUPS, $data))
-			{
 				return $this->db->insert_id();
-			}
 		}
 		catch(Exception $e)
 		{

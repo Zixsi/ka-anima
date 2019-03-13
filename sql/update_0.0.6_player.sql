@@ -1,0 +1,1 @@
+ALTER TABLE `video` ADD `video_code` VARCHAR(30) NOT NULL AFTER `code`, ADD `params` TEXT NULL AFTER `video_code`;

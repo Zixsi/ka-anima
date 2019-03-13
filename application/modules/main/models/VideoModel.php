@@ -15,20 +15,13 @@ class VideoModel extends APP_Model
 	}
 
 	// список видео по ресурсу
-	public function bySource($id, $type = 'lecture', $format = null)
+	public function bySource($id, $type = 'lecture')
 	{
 		try
 		{
 			$bind = [$id, $type];
 			$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ?';
-			
-			if($format)
-			{
-				$bind[] = $format;
-				$sql .= ' AND type = ?';
-			}
-
-			if($res = $this->db->query($sql, $bind)->result_array())
+			if($res = $this->db->query($sql, $bind)->row_array())
 			{
 				return $res;
 			}
@@ -41,6 +34,26 @@ class VideoModel extends APP_Model
 		return false;
 	}
 
+	public function byVideoCode($code)
+	{
+		try
+		{
+			$bind = [$code];
+			$sql = 'SELECT * FROM '.self::TABLE.' WHERE video_code = ?';
+			if($res = $this->db->query($sql, $bind)->row_array())
+			{
+				return $res;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+
+
 	public function prepareAndSet($source_id, $type = 'lecture', $url = '')
 	{
 		try
@@ -50,23 +63,13 @@ class VideoModel extends APP_Model
 				throw new Exception('Invalid video type', 1);
 			}
 
-			$this->load->library(['youtube']);
-
-			$code  = $this->youtube->extractVideoId($url);
-			$video_data = $this->youtube->prepareData($code);
-			$video_array = $this->youtube->getVideoFromData($video_data);
-			foreach($video_array as $format => $val)
+			$this->load->library(['ydvideo']);
+			if($video = $this->ydvideo->getVideo($url))
 			{
-				$video = current($val);
-				$this->set($source_id, $code, $video, $type, $format);
+				$this->set($source_id, $url, $video['video'], $type, 'mp4');
 			}
 
-			if($img = $this->youtube->getImgFromData($video_data))
-			{
-				$this->set($source_id, $code, $img, $type, 'img');
-			}
-
-			return true;
+			return false;
 		}
 		catch(Exception $e)
 		{
@@ -102,6 +105,7 @@ class VideoModel extends APP_Model
 					'source_id' => $source_id,
 					'source_type' => $type,
 					'code' => $code,
+					'video_code' => random_string('alnum', 25),
 					'video_url' => $url,
 					'type' => $format,
 					'ts' => date('Y-m-d H:i:s')
@@ -115,6 +119,7 @@ class VideoModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
+			debug($e->getMessage()); die();
 			$this->LAST_ERROR = $e->getMessage();
 		}
 

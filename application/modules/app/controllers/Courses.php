@@ -36,6 +36,12 @@ class Courses extends APP_Controller
 			}
 
 			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
+			$data['lecture']['video_code'] = '';
+			if($res = $this->VideoModel->bySource($data['lecture']['id']))
+			{
+				$data['lecture']['video_code'] = $res['video_code'];
+			}
+
 			if(cr_valid_key())
 			{
 				$this->uploadHomeWork($data);
@@ -67,7 +73,7 @@ class Courses extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
-		$data['teacher'] = $this->UserModel->getById($data['group']['author']);
+		$data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
 		$data['images'] = $this->GroupsModel->getImageFiles($data['group_id']);
 
