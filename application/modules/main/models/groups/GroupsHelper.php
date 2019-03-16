@@ -66,8 +66,14 @@ class GroupsHelper extends APP_Model
 				$ts_item = clone $ts_start;				
 				foreach($lectures as $item)
 				{
-					$this->LecturesModel->addLectureToGroupTs($group_id, $item['id'], $ts_item->format('Y-m-d 00:00:00'));
-					$ts_item->add(new DateInterval('P1W')); // +1 неделя
+					$ts = $date_a->format('Y-m-d 00:00:00');
+					if((int) $item['type'] === 0)
+					{
+						$ts = $ts_item->format('Y-m-d 00:00:00');
+						$ts_item->add(new DateInterval('P1W')); // +1 неделя
+					}
+
+					$this->LecturesModel->addLectureToGroupTs($group_id, $item['id'], $ts);
 				}
 			}
 
@@ -75,6 +81,36 @@ class GroupsHelper extends APP_Model
 			{
 				$this->db->trans_rollback();
 				throw new Exception('Ошибка добавления');
+			}
+
+			$this->db->trans_commit();
+
+			return true;
+		}
+		catch(Exception $e)
+		{
+			$this->db->trans_rollback();
+			$this->setLastError($e->getMessage(), $e->getCode());
+		}
+
+		return false;
+	}
+
+	public function remove($id)
+	{
+		try
+		{
+			$this->db->trans_begin();
+
+			if(($item = $this->GroupsModel->getByID((int) $id)) === false)
+				throw new Exception('Группа не найдена');
+
+			$this->GroupsModel->remove($item['id']);
+
+			if($this->db->trans_status() === false)
+			{
+				$this->db->trans_rollback();
+				throw new Exception('Ошибка удаления');
 			}
 
 			$this->db->trans_commit();

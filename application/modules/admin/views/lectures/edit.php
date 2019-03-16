@@ -20,6 +20,14 @@
 					</label>
 				</div>
 				<div class="form-group">
+					<label for="ftype">Тип</label>
+					<select name="type" id="ftype" class="form-control">
+						<?foreach($types as $key => $val):?>
+							<option value="<?=$key?>" <?=set_select('type', $key, ($key == intval($item['type'])))?> ><?=$val['title']?></option>
+						<?endforeach;?>
+					</select>
+				</div>
+				<div class="form-group">
 					<label for="fsort">Сортировка</label>
 					<input type="text" name="sort" id="fsort" class="form-control" placeholder="Сортировка" value="<?=set_value('sort', $item['sort'], true)?>">
 				</div>

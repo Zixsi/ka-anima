@@ -22,7 +22,7 @@ class Lectures extends APP_Controller
 	public function add($course = 0)
 	{
 		$data = [];
-		$this->checkAccess($course);
+		$data['types'] = LecturesModel::TYPES;
 
 		if(cr_valid_key())
 		{
@@ -45,7 +45,7 @@ class Lectures extends APP_Controller
 	public function edit($id = 0, $course = 0)
 	{
 		$data = [];
-		$this->checkAccess($course);
+		$data['types'] = LecturesModel::TYPES;
 		
 		$id = intval($id);
 

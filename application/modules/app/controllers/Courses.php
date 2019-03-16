@@ -91,6 +91,10 @@ class Courses extends APP_Controller
 			header('Location: /courses/'.$data['group_id'].'/');
 		}
 
+		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		if(($data['group']['type'] ?? '') === 'standart')
+			header('Location: /courses/'.$data['group_id'].'/');
+
 		$data['review_item'] = false; 
 		if($review > 0)
 		{
@@ -112,7 +116,6 @@ class Courses extends APP_Controller
 
 		$filter = $this->input->get('filter', true);
 		$data['filter_url'] = http_build_query(['filter' => $filter]);
-		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['items'] = $this->ReviewModel->getByGroup($data['group_id'], $filter);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
@@ -133,6 +136,9 @@ class Courses extends APP_Controller
 		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		if(($data['group']['type'] ?? '') === 'standart')
+			header('Location: /courses/'.$data['group_id'].'/');
+
 		$data['list'] = $this->StreamsModel->byGroupList($data['group_id']);
 		$data['item'] = false;
 		$streams_id = $this->getStreamsIds($data['list']);
@@ -173,7 +179,7 @@ class Courses extends APP_Controller
 
 		$user = $this->Auth->userID();
 		$data['error'] = null;
-		$data['items'] = $this->CoursesGroupsModel->listSubscribe($user);
+		$data['items'] = $this->GroupsModel->listOffers($user);
 		$data['course_types'] = $this->CoursesModel::TYPES;
 		$data['balance'] = $this->Auth->balance();
 

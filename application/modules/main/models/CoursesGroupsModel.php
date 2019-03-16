@@ -283,7 +283,9 @@ class CoursesGroupsModel extends APP_Model
 				LEFT JOIN 
 					(SELECT count(DISTINCT(user)) as cnt, service FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as u ON(u.service = g.id) 
 				WHERE 
-					g.teacher = ? AND g.ts_end > ? 
+					g.deleted = 0 AND 
+					g.teacher = ? AND 
+					g.ts_end > ? 
 				ORDER BY 
 					g.ts_end ASC';
 

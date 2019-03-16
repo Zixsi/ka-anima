@@ -16,6 +16,11 @@ class LecturesModel extends APP_Model
 		'review', // ревью 
 	];
 
+	const TYPES = [
+		'0' => ['title' => 'Обычная', 'value' => 0],
+		'1' => ['title' => 'Вводная', 'value' => 1]
+	];
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -78,7 +83,7 @@ class LecturesModel extends APP_Model
 
 	public function getByCourse($id)
 	{
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE course_id = ? ORDER BY sort ASC, id ASC', [$id]);
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE course_id = ? ORDER BY type DESC, sort ASC, id ASC', [$id]);
 		if($res = $res->result_array())
 		{
 			return $res;
@@ -110,7 +115,7 @@ class LecturesModel extends APP_Model
 	public function listForCourse($id)
 	{
 		$sql = 'SELECT 
-					id, name 
+					id, name, type  
 				FROM 
 					'.self::TABLE.' 
 				WHERE 

@@ -215,19 +215,38 @@ function ajaxApiQuery(method, params, callback)
 function courseListener()
 {
 	// name="course"
+	var roadmap_component = $('.roadmap-component');
 	var add_group_modal = $('#add-group-modal');
 	var add_group_modal_form = add_group_modal.find('form');
+	var remove_group_modal = $('#remove-group-modal');
+	var remove_group_modal_form = remove_group_modal.find('form');
+
+	
 
 	$('.roadmap-component').on('click', '.btn-add-group', function(){
 		add_group_modal_form.find('input[name="course"]').val($(this).data('value'));
 		add_group_modal.modal('show');
 	});
-	
 
 	add_group_modal_form.on('submit', function(){
 		var params = $(this).serializeJSON();
 		ajaxApiQuery('group.create', params, function(res){
-			toastrMsg('success', res);
+			//toastrMsg('success', res);
+			window.location.reload(true);
+		});
+
+		return false;
+	});
+
+	$('.roadmap-component').on('click', '.btn-remove-group', function(){
+		remove_group_modal.find('input[name="id"]').val($(this).data('id'));
+		remove_group_modal.modal('show');
+	});
+
+	remove_group_modal_form.on('submit', function(){
+		var params = $(this).serializeJSON();
+		ajaxApiQuery('group.remove', params, function(res){
+			//toastrMsg('success', res);
 			window.location.reload(true);
 		});
 

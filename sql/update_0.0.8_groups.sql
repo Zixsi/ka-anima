@@ -1,0 +1,1 @@
+ALTER TABLE `courses_groups` ADD `deleted` TINYINT UNSIGNED NOT NULL DEFAULT '0' AFTER `ts_end`;

@@ -20,31 +20,57 @@
 			</div>
 		</div>
 		<div class="roadmap-body">
+			<div class="current-week-mark" style="left: <?=$roadmap['week']['left']?>px"></div>
 			<?if($items):?>
 				<?$i = 0;?>
 				<?foreach($items as $item):?>
 					<div class="roadmap-item item-color<?=(++$i)?>">
 						<div class="item-head colored">
-							<span><?=$item['name']?></span>
-							<div class="tools">
-								<div class="tools-wrap">
-									<a href="./edit/<?=$item['id']?>/"><i class="fa fa-pencil"></i></a>
-									<a href="./<?=$item['id']?>/lectures/"><i class="fa fa-list"></i></a>
-									<a href="javascript:void(0);" data-value="<?=$item['id']?>" class="btn-add-group"><i class="fa fa-plus"></i></a>
-								</div>
+							<span class="title"><?=$item['name']?></span>
+							<span class="btn-menu btn-collapse" data-toggle="collapse" data-target="#items-row-wrap<?=$item['id']?>"><i class="fa fa-angle-up"></i></span>
+							<div class="btn-group">
+								<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="./edit/<?=$item['id']?>/">Редактировать</a></li>
+									<li><a href="./<?=$item['id']?>/lectures/">Лекции</a></li>
+									<li><a href="javascript: void(0);" data-value="<?=$item['id']?>" class="btn-add-group">Добавить группу</a></li>
+								</ul>
 							</div>
 						</div>
-						<?if(!empty($roadmap['body'][$item['id']])):?>
-							<?foreach($roadmap['body'][$item['id']] as $val):?>
-								<div class="item-row">
-									<?foreach($val as $v):?>
-										<span class="roadmap-mark colored" style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;"><?=$v['title']?></span>
-									<?endforeach;?>
-								</div>
-							<?endforeach;?>
-						<?else:?>
-							<div class="item-row"></div>
-						<?endif;?>
+						<div class="items-row-wrap collapse in" id="items-row-wrap<?=$item['id']?>">
+							<?if(!empty($roadmap['body'][$item['id']])):?>
+								<?foreach($roadmap['body'][$item['id']] as $val):?>
+									<div class="item-row">
+										<?foreach($val as $v):?>
+											<span class="roadmap-mark colored"  style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;">
+												<span class="icon colored"><i class="<?=$v['style']?>"></i></span>
+												<span><?=$v['title']?></span>
+												<div class="info">
+													<ul>
+														<li>Тип: <?=$v['type']?></li>
+														<li>Дата: <?=$v['title']?></li>
+														<li>Подписано: <?=$v['subscription_cnt']?></li>
+														<li>Дней до начала: <?=$v['days']?></li>
+													</ul>
+												</div>
+												<div class="btn-group">
+													<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
+													<ul class="dropdown-menu" role="menu">
+														<li><a href="javascript: void(0);">Информация</a></li>
+														<?if($v['subscription_cnt'] === 0):?>
+															<li><a href="javascript: void(0);" class="btn-remove-group" data-id="<?=$v['id']?>">Удалить</a></li>
+														<?endif;?>
+													</ul>
+												</div>
+											</span>
+										<?endforeach;?>
+									</div>
+								<?endforeach;?>
+							<?else:?>
+								<div class="item-row"></div>
+							<?endif;?>
+						</div>
+						<div class="item-row row-collapse"></div>
 					</div>
 				<?endforeach;?>
 			<?endif;?>
@@ -83,6 +109,26 @@
 					</div>
 					<div class="form-group text-right">
 						<button type="submit" class="btn btn-primary">Сохранить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="remove-group-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="post">
+					<input type="hidden" name="id" value="0">
+					<h4 class="text-center">Вы действительно хотите выполнить это действие?</h4>
+					<div class="form-group text-center" style="padding-top: 20px;">
+						<button type="submit" class="btn btn-danger" style="margin-right: 10px;">Удалить</button>
+						<button type="button" class="btn btn-default" style="margin-left: 10px;" data-dismiss="modal">Отмена</button>
 					</div>
 				</form>
 			</div>
