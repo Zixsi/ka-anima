@@ -10,10 +10,10 @@ class GroupsModel extends APP_Model
 	const TABLE_FILES = 'files';
 
 	const TYPE = [
-		'standart' => ['title' => 'Стандартная группа'], // без проверки дз и онлайн встреч
-		'advanced' => ['title' => 'Расширенная группа'], // расширенный (с дз и онлайн встречами)
-		'vip' => ['title' => 'VIP группа'], // advanced + чатик с преподом
-		'private' => ['title' => 'Закрытая группа'] // закрытая группа
+		'standart' => ['title' => 'Стандартная'], // без проверки дз и онлайн встреч
+		'advanced' => ['title' => 'Расширенная'], // расширенный (с дз и онлайн встречами)
+		'vip' => ['title' => 'VIP'], // advanced + старт в ближайший понедельник
+		'private' => ['title' => 'Закрытая'] // закрытая группа
 	]; 
 	
 	public function __construct()
@@ -90,7 +90,7 @@ class GroupsModel extends APP_Model
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
-					(SELECT service, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as s ON(s.service = g.id) 
+					(SELECT target, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE target_type = \'course\' GROUP BY target) as s ON(s.target = g.id) 
 				WHERE 
 					deleted = 0 AND 
 					ts_end > ? 
@@ -115,14 +115,14 @@ class GroupsModel extends APP_Model
 		];
 
 		$sql = 'SELECT 
-					c.id, c.name, c.type, c.description, c.price_month, 
-					c.price_full, g.id as group_id, g.code, g.ts, f.full_path as img_src, s.user  
+					c.id, c.name, c.description, c.price, g.id as group_id, 
+					g.code, g.ts, f.full_path as img_src, s.user  
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
 				LEFT JOIN 
-					'.self::TABLE_SUBSCRIPTION.' as s ON(s.service = g.id AND s.type = 0 AND s.user = ?) 
+					'.self::TABLE_SUBSCRIPTION.' as s ON(s.target = g.id AND s.target_type = \'course\' AND s.user = ?) 
 				LEFT JOIN 
 					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE 
@@ -144,13 +144,9 @@ class GroupsModel extends APP_Model
 					$result[$val['id']] = [
 						'id' => $val['id'],
 						'name' => $val['name'],
-						'type' => $val['type'],
 						'img' => $val['img_src'],
 						'description' => $val['description'],
-						'price' => [
-							'month' => $val['price_month'],
-							'full' => $val['price_full']
-						],
+						'price' => json_decode($val['price'], true),
 						'groups' => []
 					];
 				}

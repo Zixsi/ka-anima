@@ -6,11 +6,6 @@ class CoursesModel extends APP_Model
 	private const TABLE = 'courses';
 	private const TABLE_LECTURES = 'lectures';
 	private const TABLE_FILES = 'files';
-	private const TABLE_FIELDS = ['name', 'description', 'type', 'period', 'price_month', 'price_full', 'teacher', 'ts', 'active'];
-	public const TYPES = [
-		0 => 'Самостоятельное обучение',
-		1 => 'Обучение с инструктором'
-	];
 
 	private $upload_config = null;
 
@@ -57,6 +52,9 @@ class CoursesModel extends APP_Model
 
 		if($row = $this->db->query($sql, [$id])->row_array())
 		{
+			$row['price'] = json_decode($row['price'], true);
+			$this->preparePrice($row['price']);
+
 			return $row;
 		}
 
@@ -80,5 +78,20 @@ class CoursesModel extends APP_Model
 		}
 
 		return false;
+	}
+
+	public function preparePrice(&$data)
+	{
+		if(is_array($data))
+		{
+			foreach($data as &$val)
+			{
+				foreach($val as $k => &$v)
+				{
+					if(in_array($k, ['month', 'full']))
+						$v = number_format((float) $v, 2, '.', '');
+				}
+			}
+		}
 	}
 }

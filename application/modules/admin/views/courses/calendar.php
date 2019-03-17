@@ -102,9 +102,8 @@
 					<div class="form-group">
 						<label>Тип</label>
 						<select name="type" class="form-control">
-							<?foreach(GroupsModel::TYPE as $key => $val):?>
-								<option value="<?=$key?>"><?=$val['title']?></option>
-							<?endforeach;?>
+							<option value="standart">Стандартная</option>
+							<option value="private">Закрытая</option>
 						</select>
 					</div>
 					<div class="form-group text-right">

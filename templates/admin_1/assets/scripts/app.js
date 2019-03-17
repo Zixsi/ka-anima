@@ -85,7 +85,8 @@ function datetimepiker()
 	$('#datetimepicker').datetimepicker({
 		format: 'd-m-Y H:i:00',
 		formatDate: 'd-m-Y H:i:00',
-		lang:'ru'
+		lang:'ru',
+		dayOfWeekStart: 1
 	});
 }
 
@@ -96,11 +97,15 @@ function datepiker()
 		return;
 	}
 
+
 	$.datetimepicker.setLocale('ru');
+
 	$('.datepiker').datetimepicker({
 		format: 'd-m-Y',
 		formatDate: 'd-m-Y',
-		timepicker: false
+		lang:'ru',
+		timepicker: false,
+		dayOfWeekStart: 1
 	});
 }
 

@@ -13,7 +13,6 @@
 </div>
 
 <div class="course-list row">
-	<?=ShowError($error);?>
 	<?if($items):?>
 		<?foreach($items as $item):?>
 			<div class="course-list-item col-md-12 col-lg-6">
@@ -23,7 +22,7 @@
 							<ul class="nav" role="tablist">
 								<?$i = 0;?>
 								<?foreach($item['groups'] as $group):?>
-									<li <?=(($i++) == 0)?'class="active"':''?>><a href="#tab-group-<?=$group['id']?>" role="tab" data-toggle="tab"><?=strftime("%B %Y", strtotime($group['ts']))?></a></li>
+									<li <?=(($i++) == 0)?'class="active"':''?>><a href="#tab-group-<?=$group['id']?>" role="tab" data-toggle="tab"><?=strftime("%d %B %Y", strtotime($group['ts']))?></a></li>
 								<?endforeach;?>
 							</ul>
 						</div>
@@ -41,15 +40,6 @@
 							</div>
 						</div>
 						<div class="col-xs-12">
-							<div class="text-center">
-
-								<span class="type-title"><?=$course_types[$item['type']]?></span>
-								<?if($item['type'] == 0):?>
-									<span class="type-info">(без онлайн встреч и без проверки ваших работ)</span>
-								<?else:?>
-									<span class="type-info">(с онлайн встречами и проверкой ваших работ)</span>
-								<?endif;?>
-							</div>
 							<div class="tab-content">
 								<?$i = 0;?>
 								<?foreach($item['groups'] as $group):?>
@@ -59,31 +49,9 @@
 												<span>Уже подписаны</span>
 											</div>
 										<?else:?>
-											<form action="" method="post">
-												<input type="hidden" name="course" value="<?=$item['id']?>">
-												<input type="hidden" name="group" value="<?=$group['id']?>">
-												<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-												<div class="row">
-													<div class="col-xs-6 text-center">
-														<div class="price-info">Цена за первый месяц:</div>
-														<label class="fancy-radio">
-															<input type="radio" name="price" value="month">
-															<span><i></i> <span class="price-value"><?=number_format($item['price']['month'], 2, '.', ' ')?>  руб.</span></span>
-														</label>
-														
-													</div>
-													<div class="col-xs-6 text-center">
-														<div class="price-info">Цена за весь курс:</div>
-														<label class="fancy-radio">
-															<input type="radio" name="price" value="full">
-															<span><i></i> <span class="price-value"><?=number_format($item['price']['full'], 2, '.', ' ')?>  руб.</span></span>
-														</label>
-													</div>
-												</div>
-												<div class="text-center">
-													<button type="submit" class="btn btn-md btn-primary">Записаться</button>
-												</div>
-											</form>
+											<div class="text-center">
+												<button type="submit" class="btn btn-md btn-primary" data-value="<?=$group['id']?>">Записаться</button>
+											</div>
 										<?endif;?>
 									</div>
 								<?endforeach;?>
@@ -99,3 +67,140 @@
 		</div>
 	<?endif;?>
 </div>
+
+<div class="modal" id="modal-enroll" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<div class="groups-type-wrap">
+					<div class="item">
+						<div class="title">Стандарт</div>
+						<div class="price">
+							<div class="month">
+								<span class="value">8 000</span>
+								<span class="right">
+									<span class="dec">00</span>
+									<span class="info">руб/<i>мес</i></span>
+								</span>
+							</div>
+							<div class="full">
+								<span class="value">42000.00</span>
+								<span class="info">за весь курс</span>
+							</div>
+						</div>
+						<div class="start">
+							<form action="" method="post">
+								<input type="hidden" name="course" value="">
+								<input type="hidden" name="group" value="">
+								<div class="row">
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
+								</div>
+								<button class="btn btn-primary btn-lg">Начать</button>
+							</form>
+						</div>
+						<div class="item-info">
+							<ul>
+								<li class="checked"><i class="fas fa-times"></i>Доступ к программе с записанными лекциями в онлайн доступе</li>
+								<li><i class="fas fa-times"></i>Еженедельный видеоразбор ваших работ</li>
+								<li><i class="fas fa-times"></i>Еженедельный онлайн разбор с преподавателем с возможностью задавать вопросы</li>
+								<li><i class="fas fa-times"></i>Груповые онлайн встечи с преподавателем с возможностью задавать вопросы</li>
+								<li><i class="fas fa-times"></i>Закрытый чат с преподавателем, видео онлайн консультации</li>
+								<li><i class="fas fa-times"></i>Сертификат или диплом по окончании курса</li>
+								<li class="checked"><i class="fas fa-times"></i>Начало курса в назначеную дату</li>
+								<li><i class="fas fa-times"></i>Начало курса в ближайший понедельник</li>
+							</ul>
+						</div>
+					</div>
+					<div class="item active">
+						<div class="popular">Наиболее популярный</div>
+						<div class="title">Расширенный</div>
+						<div class="price">
+							<div class="month">
+								<span class="value">10 000</span>
+								<span class="right">
+									<span class="dec">00</span>
+									<span class="info">руб/<i>мес</i></span>
+								</span>
+							</div>
+							<div class="full">
+								<span class="value">52000.00</span>
+								<span class="info">за весь курс</span>
+							</div>
+						</div>
+						<div class="start">
+							<form action="" method="post">
+								<input type="hidden" name="course" value="">
+								<input type="hidden" name="group" value="">
+								<div class="row">
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
+								</div>
+								<button class="btn btn-danger btn-lg">Начать</button>
+							</form>
+						</div>
+						<div class="item-info">
+							<ul>
+								<li class="checked"><i class="fas fa-times"></i>Доступ к программе с записанными лекциями в онлайн доступе</li>
+								<li class="checked"><i class="fas fa-times"></i>Еженедельный видеоразбор ваших работ</li>
+								<li><i class="fas fa-times"></i>Еженедельный онлайн разбор с преподавателем с возможностью задавать вопросы</li>
+								<li class="checked"><i class="fas fa-times"></i>Груповые онлайн встечи с преподавателем с возможностью задавать вопросы</li>
+								<li><i class="fas fa-times"></i>Закрытый чат с преподавателем, видео онлайн консультации</li>
+								<li class="checked"><i class="fas fa-times"></i>Сертификат или диплом по окончании курса</li>
+								<li class="checked"><i class="fas fa-times"></i>Начало курса в назначеную дату</li>
+								<li><i class="fas fa-times"></i>Начало курса в ближайший понедельник</li>
+							</ul>
+						</div>
+					</div>
+					<div class="item">
+						<div class="title">VIP</div>
+						<div class="price">
+							<div class="month">
+								<span class="value">16 000</span>
+								<span class="right">
+									<span class="dec">00</span>
+									<span class="info">руб/<i>мес</i></span>
+								</span>
+							</div>
+							<div class="full">
+								<span class="value">72000.00</span>
+								<span class="info">за весь курс</span>
+							</div>
+						</div>
+						<div class="start">
+							<form action="" method="post">
+								<input type="hidden" name="course" value="">
+								<input type="hidden" name="group" value="">
+								<div class="row">
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
+									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
+								</div>
+								<button class="btn btn-primary btn-lg">Начать</button>
+							</form>
+						</div>
+						<div class="item-info">
+							<ul>
+								<li class="checked"><i class="fas fa-times"></i>Доступ к программе с записанными лекциями в онлайн доступе</li>
+								<li class="checked"><i class="fas fa-times"></i>Еженедельный видеоразбор ваших работ</li>
+								<li class="checked"><i class="fas fa-times"></i>Еженедельный онлайн разбор с преподавателем с возможностью задавать вопросы</li>
+								<li class="checked"><i class="fas fa-times"></i>Груповые онлайн встечи с преподавателем с возможностью задавать вопросы</li>
+								<li class="checked"><i class="fas fa-times"></i>Закрытый чат с преподавателем, видео онлайн консультации</li>
+								<li class="checked"><i class="fas fa-times"></i>Сертификат или диплом по окончании курса</li>
+								<li><i class="fas fa-times"></i>Начало курса в назначеную дату</li>
+								<li class="checked"><i class="fas fa-times"></i>Начало курса в ближайший понедельник</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#modal-enroll').modal('show');
+	});
+</script>

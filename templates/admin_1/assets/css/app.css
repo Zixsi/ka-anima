@@ -126,3 +126,32 @@
 .roadmap-item.item-color-default .item-head a {position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 10;}
 
 .modal-header {border-bottom: 0 none;}
+
+#modal-enroll .modal-dialog {width: 1200px;}
+.groups-type-wrap {display: flex; color: #000;}
+.groups-type-wrap .item {position: relative; border: 2px solid #666; box-sizing: border-box; margin-top: 20px; padding: 20px; border-radius: 5px; margin-bottom: 20px;}
+.groups-type-wrap .item.active {border-color: #d43f3a; margin-top: 0px; margin-bottom: 0px; padding-top: 40px;}
+.groups-type-wrap .item .popular {position: absolute; top: 0px; left: 50%; width: 160px; margin-left: -80px; color: #fff; background-color: #d43f3a; padding: 5px; border-radius: 3px; font-size: 14px; text-align: center;}
+.groups-type-wrap .item:first-child {border-right: 0 none;}
+.groups-type-wrap .item:last-child {border-left: 0 none;}
+.groups-type-wrap .item .title {text-align: center; font-weight: bold; font-size: 24px; margin-bottom: 20px;}
+.groups-type-wrap .item .price {text-align: center; margin-bottom: 20px;}
+.groups-type-wrap .month {margin-bottom: 15px;}
+.groups-type-wrap .month .value {display: inline-block; font-weight: bold; font-size: 50px; line-height: 40px;}
+.groups-type-wrap .right {display: inline-block;}
+.groups-type-wrap .right span {display: block; text-align: left;}
+.groups-type-wrap .right .dec {font-size: 18px; line-height: 18px; font-weight: bold;}
+.groups-type-wrap .right .info {font-size: 18px; line-height: 18px;}
+.groups-type-wrap .right .info i {font-style: normal; font-size: 12px;}
+.groups-type-wrap .full {color: #999;}
+.groups-type-wrap .full .value {display: block; font-weight: bold; font-size: 20px; line-height: 20px;}
+.groups-type-wrap .full .info {display: block; font-size: 12px; line-height: 12px;}
+.groups-type-wrap .start {text-align: center; margin-bottom: 15px;}
+.groups-type-wrap .start .row {margin: 0 auto; width: 240px; margin-bottom: 10px;}
+.groups-type-wrap .start label {font-weight: normal;}
+
+.groups-type-wrap .item-info {font-size: 14px;}
+.groups-type-wrap .item-info ul {list-style: none;}
+.groups-type-wrap .item-info ul li {position: relative; margin-bottom: 10px;}
+.groups-type-wrap .item-info ul li i {position: absolute; color: #d43f3a; left: -35px; top: 3px; font-size: 16px;}
+.groups-type-wrap .item-info ul li.checked i:before {content: "\f00c"; color: #41B314;}

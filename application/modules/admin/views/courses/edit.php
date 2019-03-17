@@ -21,13 +21,11 @@
 					</label>
 				</div>
 				<div class="form-group">
-					<label for="ftype">Тип</label>
-					<select name="type" id="ftype" class="form-control">
-						<option selected="true">- - -</option>
-						<?foreach($course_types as $key => $val):?>
-							<option value="<?=$key?>" <?=set_select('type', $key, ($key == intval($item['type'])))?> ><?=$val?></option>
-						<?endforeach;?>
-					</select>
+					<label class="fancy-checkbox">
+						<input type="hidden" name="only_standart" value="0">
+						<input type="checkbox" name="only_standart" class="form-control" value="1" <?=set_checkbox('only_standart', 1, ($item['only_standart'] == 1))?> >
+						<span>Только стандартный</span>
+					</label>
 				</div>
 				<div class="form-group">
 					<label for="fteacher">Преподаватель</label>
@@ -55,18 +53,21 @@
 					<?endif;?>
 				</div>
 				<div class="form-group">
-					<div class="row">
-						<div class="col-xs-6">
-							<label for="fprice_month">Стоимость первого месяца</label>
-							<input type="text" name="price_month" id="fprice_month" class="form-control" value="<?=set_value('price_month', $item['price_month'], true)?>">
+					<?foreach($structure['price'] as $key => $val):?>
+						<div class="row">
+							<h4 class="col-xs-12">Стоимость <?=$key?></h4>
+							<div class="col-xs-6">
+								<label for="fprice_month">Первый месяц</label>
+								<input type="text" name="price[<?=$key?>][month]" class="form-control" value="<?=set_value('price['.$key.'][month]', $item['price'][$key]['month'], true)?>">
+							</div>
+							<div class="col-xs-6">
+								<label for="fprice_full">Полный курс</label>
+								<input type="text" name="price[<?=$key?>][full]" class="form-control" value="<?=set_value('price['.$key.'][full]', $item['price'][$key]['full'], true)?>">
+							</div>
 						</div>
-						<div class="col-xs-6">
-							<label for="fprice_full">Стоимость полного курса</label>
-							<input type="text" name="price_full" id="fprice_full" class="form-control" value="<?=set_value('price_full', $item['price_full'], true)?>">
-						</div>
-					</div>
-					
+					<?endforeach;?>
 				</div>
+
 				<div class="form-group">
 					<button type="submit" class="btn btn-xs btn-primary">Сохранить</button>
 				</div>

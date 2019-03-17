@@ -173,34 +173,16 @@ class Courses extends APP_Controller
 		$this->load->lview('courses/stream', $data);
 	}
 
+	// запись на курсы
 	public function enroll()
 	{
+		// https://gyazo.com/54444a0d314d0260e09a34fd21b3d59e
+
 		$data = [];
-
-		$user = $this->Auth->userID();
-		$data['error'] = null;
-		$data['items'] = $this->GroupsModel->listOffers($user);
-		$data['course_types'] = $this->CoursesModel::TYPES;
 		$data['balance'] = $this->Auth->balance();
-
-		if(cr_valid_key())
-		{
-			$subscr_data = [
-				'user' => $user,
-				'group' => $this->input->post('group', true),
-				'price_period' => $this->input->post('price', true)
-			];
-
-			if($this->SubscriptionModel->group($subscr_data['user'], $subscr_data['group'], $subscr_data['price_period']))
-			{
-				header('Location: ./');
-			}
-
-			$data['error'] = $this->SubscriptionModel->LAST_ERROR;
-		}
-
-		$data['csrf'] = cr_get_key();
-
+		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
+		//debug($data['items']); die();
+		
 		$this->load->lview('courses/enroll', $data);
 	}
 
