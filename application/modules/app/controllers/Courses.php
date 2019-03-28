@@ -20,7 +20,8 @@ class Courses extends APP_Controller
 		$data['section'] = 'index';
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
-		$data['subscr_is_active'] = $this->checkSubscribeGroup($data['group_id']);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
+		$data['subscr_is_active'] = ($data['subscr'])?true:false;
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
@@ -64,8 +65,9 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['section'] = 'group';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
+		if($data['subscr'] === false)
 		{
 			header('Location: /courses/'.$data['group_id'].'/');
 		}
@@ -85,14 +87,13 @@ class Courses extends APP_Controller
 		$data = [];
 		$data['section'] = 'review';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
-		{
+		if($data['subscr'] == false)
 			header('Location: /courses/'.$data['group_id'].'/');
-		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		if(($data['group']['type'] ?? '') === 'standart')
+		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /courses/'.$data['group_id'].'/');
 
 		$data['review_item'] = false; 
@@ -129,14 +130,13 @@ class Courses extends APP_Controller
 		$data = [];
 		$data['section'] = 'stream';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
-		{
+		if($data['subscr'] == false)
 			header('Location: /courses/'.$data['group_id'].'/');
-		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		if(($data['group']['type'] ?? '') === 'standart')
+		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /courses/'.$data['group_id'].'/');
 
 		$data['list'] = $this->StreamsModel->byGroupList($data['group_id']);
@@ -176,27 +176,33 @@ class Courses extends APP_Controller
 	// запись на курсы
 	public function enroll()
 	{
-		// https://gyazo.com/54444a0d314d0260e09a34fd21b3d59e
-
 		$data = [];
 		$data['balance'] = $this->Auth->balance();
 		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
+
+		if(count($data['items']))
+		{
+			$subscr_courses = $this->SubscriptionModel->listCoursesId($this->user_id);
+			foreach($data['items'] as &$val)
+			{
+				$val['subscription'] = in_array($val['id'], $subscr_courses);
+			}
+		}
 		//debug($data['items']); die();
 		
 		$this->load->lview('courses/enroll', $data);
 	}
 
-	private function checkSubscribeGroup($id)
+	private function subscrGroup($id)
 	{
-		if(($subscr = $this->SubscriptionModel->byUserService($this->user_id, $id)) == false)
+		if(($subscr = $this->SubscriptionModel->get($this->user_id, $id, 'course')) == false)
 		{
-			header('Location: /');
-			die();
+			header('Location: /'); die();
 		}
 
 		if(strtotime($subscr['ts_end']) > time())
 		{
-			return true;
+			return $subscr;
 		}
 
 
@@ -209,7 +215,7 @@ class Courses extends APP_Controller
 
 		foreach($list as $val)
 		{
-			$cnt += ($val['active'] == 1)?1:0;
+			$cnt += ($val['active'] == 1 && (int) $val['type'] === 0)?1:0;
 		}
 
 		return $cnt;

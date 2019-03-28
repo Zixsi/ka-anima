@@ -43,6 +43,45 @@ class GroupsModel extends APP_Model
 		return false;
 	}
 
+	public function getByIdDetail($id)
+	{
+		$bind = [$id];
+		$sql = 'SELECT 
+					c.id, c.name, c.description, c.price, c.only_standart, c.teacher, g.id as group_id, 
+					g.code, g.ts, g.ts_end, f.full_path as img_src 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
+				WHERE 
+					g.id = ?';
+		if($res = $this->db->query($sql, $bind))
+		{
+			return $res->row_array();
+		}
+
+		return false;
+	}
+
+	// поиск подходящей ближайше вип группы
+	public function getNearVip($course)
+	{
+		$date = new DateTime('now');
+		if(intval($date->format('N')) !== 1)
+			$date->modify('next monday');
+
+		$bind = [$course, $date->format('Y-m-d 00:00:00')];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE course_id = ? AND type = \'vip\' AND deleted = 0 AND ts = ? ';
+		if($res = $this->db->query($sql, $bind))
+		{
+			return $res->row_array();
+		}
+
+		return false;
+	}
+
 	// удаление 
 	public function remove($id)
 	{
@@ -104,25 +143,19 @@ class GroupsModel extends APP_Model
 		return  [];
 	}
 
-	// список автивных групп для юзера 
-	public function listOffers($id)
+	// список предложений 
+	public function listOffers()
 	{
 		$result = [];
-
-		$bind = [
-			intval($id), 
-			date('Y-m-d 00:00:00', time())
-		];
+		$bind = [date('Y-m-d 00:00:00', time())];
 
 		$sql = 'SELECT 
-					c.id, c.name, c.description, c.price, g.id as group_id, 
-					g.code, g.ts, f.full_path as img_src, s.user  
+					c.id, c.name, c.description, c.price, c.only_standart , g.id as group_id, 
+					g.code, g.ts, f.full_path as img_src   
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
-				LEFT JOIN 
-					'.self::TABLE_SUBSCRIPTION.' as s ON(s.target = g.id AND s.target_type = \'course\' AND s.user = ?) 
 				LEFT JOIN 
 					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE 
@@ -145,7 +178,9 @@ class GroupsModel extends APP_Model
 						'id' => $val['id'],
 						'name' => $val['name'],
 						'img' => $val['img_src'],
+						'only_standart' => $val['only_standart'],
 						'description' => $val['description'],
+						'free' => false,
 						'price' => json_decode($val['price'], true),
 						'groups' => []
 					];
@@ -154,9 +189,13 @@ class GroupsModel extends APP_Model
 				$result[$val['id']]['groups'][] = [
 					'id' => $val['group_id'],
 					'code' => $val['code'],
-					'ts' => $val['ts'],
-					'subscription' => intval($val['user'])?1:0
+					'ts' => $val['ts'] 
 				];
+
+				if((int) $result[$val['id']]['only_standart'] === 1 && (int) $result[$val['id']]['price']['month'] === 0)
+				{
+					$result[$val['id']]['free'] = true;
+				}
 			}
 		}
 

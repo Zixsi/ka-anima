@@ -20,6 +20,7 @@ $user_id = $CI->Auth->userID();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
 	<!-- MAIN CSS -->
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css?v=<?=VERSION?>">
@@ -72,23 +73,8 @@ $user_id = $CI->Auth->userID();
 						<li>
 							<span id="panel-date-time-msk" style="display: inline-block;">- - -</span>
 						</li>
-						<?/*
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-								<i class="lnr lnr-alarm"></i>
-								<span class="badge bg-danger">5</span>
-							</a>
-							<ul class="dropdown-menu notifications">
-								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
-								<li><a href="#" class="more">See all notifications</a></li>
-							</ul>
-						</li>*/?>
 						<li>
-							<span class="label label-success" style="display: inline-block; font-size: 15px; margin-top: 27px;"><?=($CI->Auth->isTeacher())?'Преподаватель':'Ученик'?></span>
+							<span class="label label-success" style="display: inline-block; font-size: 15px; margin-top: 27px; margin-left: 15px;"><?=($CI->Auth->isTeacher())?'Преподаватель':'Ученик'?></span>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
@@ -173,7 +159,9 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.iframe-transport.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.full.min.js"></script>	
-	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
 
 	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?v=<?=VERSION?>"></script>
 </body>

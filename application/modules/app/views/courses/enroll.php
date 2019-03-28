@@ -11,7 +11,7 @@
 		</div>
 	</div>		
 </div>
-
+<?//debug($items);?>
 <div class="course-list row">
 	<?if($items):?>
 		<?foreach($items as $item):?>
@@ -44,13 +44,14 @@
 								<?$i = 0;?>
 								<?foreach($item['groups'] as $group):?>
 									<div class="tab-pane fade in <?=(($i++) == 0)?'active':''?>" id="tab-group-<?=$group['id']?>">
-										<?if($group['subscription']):?>
+										<?if($item['subscription']):?>
 											<div class="alert alert-info text-center">
 												<span>Уже подписаны</span>
 											</div>
 										<?else:?>
 											<div class="text-center">
-												<button type="submit" class="btn btn-md btn-primary" data-value="<?=$group['id']?>">Записаться</button>
+												<button type="button" class="btn btn-md btn-primary btn-subscr-group" data-target="#group<?=$group['id']?>-json-data">Записаться</button>
+												<div class="hidden" id="group<?=$group['id']?>-json-data"><?=json_encode(['course' =>  $item['id'], 'group' => $group['id'], 'only_standart' => $item['only_standart'], 'free' => $item['free'], 'price' => $item['price']])?></div>
 											</div>
 										<?endif;?>
 									</div>
@@ -76,30 +77,31 @@
 			</div>
 			<div class="modal-body">
 				<div class="groups-type-wrap">
-					<div class="item">
+					<div class="item item-standart">
 						<div class="title">Стандарт</div>
 						<div class="price">
 							<div class="month">
-								<span class="value">8 000</span>
+								<span class="value">0</span>
 								<span class="right">
 									<span class="dec">00</span>
 									<span class="info">руб/<i>мес</i></span>
 								</span>
 							</div>
 							<div class="full">
-								<span class="value">42000.00</span>
+								<span class="value">0.00</span>
 								<span class="info">за весь курс</span>
 							</div>
 						</div>
 						<div class="start">
-							<form action="" method="post">
+							<form action="" method="post" class="group-subscr-form" id="item-standart-form">
 								<input type="hidden" name="course" value="">
 								<input type="hidden" name="group" value="">
+								<input type="hidden" name="type" value="standart">
 								<div class="row">
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
 								</div>
-								<button class="btn btn-primary btn-lg">Начать</button>
+								<button type="submit" class="btn btn-primary btn-lg">Начать</button>
 							</form>
 						</div>
 						<div class="item-info">
@@ -115,31 +117,32 @@
 							</ul>
 						</div>
 					</div>
-					<div class="item active">
+					<div class="item item-advanced active">
 						<div class="popular">Наиболее популярный</div>
 						<div class="title">Расширенный</div>
 						<div class="price">
 							<div class="month">
-								<span class="value">10 000</span>
+								<span class="value">0</span>
 								<span class="right">
 									<span class="dec">00</span>
 									<span class="info">руб/<i>мес</i></span>
 								</span>
 							</div>
 							<div class="full">
-								<span class="value">52000.00</span>
+								<span class="value">0.00</span>
 								<span class="info">за весь курс</span>
 							</div>
 						</div>
 						<div class="start">
-							<form action="" method="post">
+							<form action="" method="post" class="group-subscr-form">
 								<input type="hidden" name="course" value="">
 								<input type="hidden" name="group" value="">
+								<input type="hidden" name="type" value="advanced">
 								<div class="row">
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
 								</div>
-								<button class="btn btn-danger btn-lg">Начать</button>
+								<button type="submit" class="btn btn-danger btn-lg">Начать</button>
 							</form>
 						</div>
 						<div class="item-info">
@@ -155,30 +158,31 @@
 							</ul>
 						</div>
 					</div>
-					<div class="item">
+					<div class="item item-vip">
 						<div class="title">VIP</div>
 						<div class="price">
 							<div class="month">
-								<span class="value">16 000</span>
+								<span class="value">0</span>
 								<span class="right">
 									<span class="dec">00</span>
 									<span class="info">руб/<i>мес</i></span>
 								</span>
 							</div>
 							<div class="full">
-								<span class="value">72000.00</span>
+								<span class="value">0.00</span>
 								<span class="info">за весь курс</span>
 							</div>
 						</div>
 						<div class="start">
-							<form action="" method="post">
+							<form action="" method="post" class="group-subscr-form">
 								<input type="hidden" name="course" value="">
 								<input type="hidden" name="group" value="">
+								<input type="hidden" name="type" value="vip">
 								<div class="row">
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="month" checked="true"><span><i></i>Месяц</span></label></div>
 									<div class="col-xs-6"><label class="fancy-radio"><input type="radio" name="period" value="full"><span><i></i>Весь курс</span></label></div>
 								</div>
-								<button class="btn btn-primary btn-lg">Начать</button>
+								<button type="submit" class="btn btn-primary btn-lg">Начать</button>
 							</form>
 						</div>
 						<div class="item-info">
@@ -199,8 +203,9 @@
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	$(document).ready(function(){
-		$('#modal-enroll').modal('show');
+		// $('#modal-enroll').modal('show');
 	});
 </script>

@@ -63,7 +63,7 @@ class CoursesGroupsModel extends APP_Model
 	public function getByID($id)
 	{
 		$sql = 'SELECT 
-					g.*, c.name, c.price_month, c.price_full, g.teacher, 
+					g.*, c.name, c.price, g.teacher, 
 					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img_src  
 				FROM 
 					'.self::TABLE.' as g 
@@ -76,9 +76,11 @@ class CoursesGroupsModel extends APP_Model
 				LEFT JOIN 
 					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE g.id = ?';
-		if($row = $this->db->query($sql, [$id])->row_array())
+		if($res = $this->db->query($sql, [$id]))
 		{
-			return $row;
+			$item = $res->row_array();
+			$item['price'] = json_decode($item['price'], true);
+			return $item;
 		}
 
 		return false;

@@ -5,53 +5,64 @@ class Ajax extends APP_Controller
 {
 	public function __construct()
 	{
-		parent::__construct();
+		// Проверка Ajax запроса
+		if(!$this->input->is_ajax_request())
+		{
+			$this->jsonrpc->error(-32600);
+		}
+
+		// Проверка авторизации
+		if(intval($this->Auth->userID() ?? 0) === 0)
+		{
+			$this->jsonrpc->error(-32000);
+		}
+
+		$this->load->model([
+			'main/subscription/SubscriptionHelper',
+		]);
 	}
 
 	public function index()
 	{
-		/*$content = ['files' => []];
-		
-		$this->load->config('upload');
-		$upload_config = $this->config->item('upload_lectures');
-		$this->load->library('upload', $upload_config);
-
-		$this->prepareFiles('files');
-		if($this->upload->do_upload('files') == false)
+		// разбираем запрос
+		$data = file_get_contents("php://input");
+		if(empty($data) && !empty($_POST['query']))
 		{
-			$content['error'] = $this->upload->display_errors();
-		}
-		else
-		{
-			if(($file_id = $this->FilesModel->saveFileArray($this->upload->data())) == false)
-			{
-				$content['error'] = $this->FilesModel->LAST_ERROR;
-			}
-			
-			$_FILES['files']['id'] = $file_id;
-			$content['files'][] = $_FILES['files'];
+			$data = $_POST['query'];
 		}
 
-		$json = json_encode($content);
+		$this->request = $this->jsonrpc->parse($data);
+		$this->user = $this->Auth->user();
 
-		header('Pragma: no-cache');
-		header('Cache-Control: no-store, no-cache, must-revalidate');
-		header('Content-type: application/json');
-
-		echo $json;*/
+		switch(($this->request['method'] ?? ''))
+		{
+			case 'subscr.group':
+				$this->subscrGroup();
+			break;
+			default:
+				$this->jsonrpc->error(-32600);
+			break;
+		}
 	}
 
-	private function prepareFiles($name)
+	// подписка на группу
+	private function subscrGroup()
 	{
-		if(isset($_FILES[$name]) && is_array($_FILES[$name]))
+		try
 		{
-			$files = [];
-			foreach($_FILES[$name] as $key => $val)
-			{
-				$files[$key] = $val[0];
-			}
+			$params = ($this->request['params'] ?? []);
+			$params['user'] = $this->user['id'];
 
-			$_FILES[$name] = $files;
+			if($this->SubscriptionHelper->group($params) === false)
+				throw new Exception($this->SubscriptionHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
 		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
 	}
 }

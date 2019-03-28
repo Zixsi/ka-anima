@@ -75,11 +75,9 @@ class UserModel extends APP_Model
 		$res = $this->db->query($sql, [$id]);
 		if($row = $res->row_array())
 		{
+			$val['role_name'] = self::ROLES_NAME[$val['role']];
 			if(empty($row['img']))
-			{
-				$row['full_name'] = (!empty($row['full_name']))?$row['full_name']:$row['email'];
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
-			}
 
 			return $row;
 		}
@@ -93,9 +91,7 @@ class UserModel extends APP_Model
 		if($row = $res->row_array())
 		{
 			if(empty($row['img']))
-			{
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
-			}
 			
 			return $row;
 		}
@@ -105,7 +101,29 @@ class UserModel extends APP_Model
 
 	public function list()
 	{
-		return false;
+		$bind = [];
+		$sql = 'SELECT 
+					* , CONCAT_WS(\' \', name, lastname) as full_name 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					id IS NOT NULL 
+				ORDER BY 
+					id ASC';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			foreach($res as &$val)
+			{
+				$val['role_name'] = self::ROLES_NAME[$val['role']];
+				if(empty($val['img']))
+					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+			}
+			return $res;
+		}
+
+		return [];
 	}
 
 	public function listTeachers()
@@ -114,6 +132,44 @@ class UserModel extends APP_Model
 		if($res = $this->db->query($sql, []))
 		{
 			return $res->result_array();
+		}
+
+		return [];
+	}
+
+	public function listForSelect($filter = [])
+	{
+		$bind = [];
+		$where = '';
+		if(isset($filter['role']))
+		{
+			$bind[] = $filter['role'];
+			$where .= ' AND role = ? ';
+		}
+
+		if(isset($filter['search']) && mb_strlen($filter['search']) >= 3)
+		{
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+
+			$where .= ' AND (name LIKE ? OR lastname LIKE ? OR email LIKE ?) ';
+		}
+
+		$sql = 'SELECT id, CONCAT_WS(\' \', name, lastname) as full_name, email FROM '.self::TABLE.' WHERE id IS NOT NULL '.$where.' ORDER BY id ASC';
+		if($res = $this->db->query($sql, $bind))
+		{
+			$result = [];
+			$res = $res->result_array();
+			foreach($res as $val)
+			{
+				$result[] = [
+					'id' => $val['id'],
+					'text' => $val['email']
+				];
+			}
+
+			return $result;
 		}
 
 		return [];

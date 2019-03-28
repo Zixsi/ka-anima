@@ -128,12 +128,14 @@
 .modal-header {border-bottom: 0 none;}
 
 #modal-enroll .modal-dialog {width: 1200px;}
+#modal-enroll .modal-body {padding: 40px;}
+
 .groups-type-wrap {display: flex; color: #000;}
-.groups-type-wrap .item {position: relative; border: 2px solid #666; box-sizing: border-box; margin-top: 20px; padding: 20px; border-radius: 5px; margin-bottom: 20px;}
-.groups-type-wrap .item.active {border-color: #d43f3a; margin-top: 0px; margin-bottom: 0px; padding-top: 40px;}
+.groups-type-wrap .item {position: relative; border: 2px solid #666; box-sizing: border-box; margin-top: 20px; padding: 20px; border-radius: 5px; margin-bottom: 20px; z-index: 10;}
+.groups-type-wrap .item.active {border-color: #d43f3a; margin-top: 0px; margin-bottom: 0px; padding-top: 40px; margin-left: -2px; margin-right: -2px; z-index: 5;}
 .groups-type-wrap .item .popular {position: absolute; top: 0px; left: 50%; width: 160px; margin-left: -80px; color: #fff; background-color: #d43f3a; padding: 5px; border-radius: 3px; font-size: 14px; text-align: center;}
-.groups-type-wrap .item:first-child {border-right: 0 none;}
-.groups-type-wrap .item:last-child {border-left: 0 none;}
+.groups-type-wrap .item:first-child {/*border-right: 0 none;*/}
+.groups-type-wrap .item:last-child {/*border-left: 0 none;*/}
 .groups-type-wrap .item .title {text-align: center; font-weight: bold; font-size: 24px; margin-bottom: 20px;}
 .groups-type-wrap .item .price {text-align: center; margin-bottom: 20px;}
 .groups-type-wrap .month {margin-bottom: 15px;}
@@ -155,3 +157,11 @@
 .groups-type-wrap .item-info ul li {position: relative; margin-bottom: 10px;}
 .groups-type-wrap .item-info ul li i {position: absolute; color: #d43f3a; left: -35px; top: 3px; font-size: 16px;}
 .groups-type-wrap .item-info ul li.checked i:before {content: "\f00c"; color: #41B314;}
+
+.groups-type-wrap .item.disabled {border-color: #ccc; color: #ccc; z-index: 1;}
+.groups-type-wrap .item.disabled:before {content: ""; position: absolute; top: 0; left: 0; bottom: 0; right: 0; z-index: 10;}
+.groups-type-wrap .item.disabled .full {color: #ccc;}
+.groups-type-wrap .item.disabled .popular  {display: none;}
+.groups-type-wrap .item.disabled .item-info ul li i,
+.groups-type-wrap .item.disabled .item-info ul li.checked i:before {color: #ccc;}
+.groups-type-wrap .item.disabled .btn {background-color: #ccc; border-color: #ccc;}

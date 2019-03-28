@@ -13,25 +13,70 @@ $(document).ready(function(){
 
 function appMain()
 {	
-	$.fn.serializeJSON=function() {
-		var json = {};
-		jQuery.map($(this).serializeArray(), function(n, i){
-			if((n['name'].indexOf('[') > 0) && (n['name'].indexOf(']') > 0))
-			{
-				if(json[n['name']] === null || json[n['name']] === undefined)
-				{
-					json[n['name']] = [];
-				}
+	$.fn.serializeObject = function(){
 
-				json[n['name']].push(n['value']);
-			}
-			else
-			{
-				json[n['name']] = n['value'];
-			}
-		});
-		return json;
-	};
+        var self = this,
+            json = {},
+            push_counters = {},
+            patterns = {
+                "validate": /^[a-zA-Z][a-zA-Z0-9_]*(?:\[(?:\d*|[a-zA-Z0-9_]+)\])*$/,
+                "key":      /[a-zA-Z0-9_]+|(?=\[\])/g,
+                "push":     /^$/,
+                "fixed":    /^\d+$/,
+                "named":    /^[a-zA-Z0-9_]+$/
+            };
+
+
+        this.build = function(base, key, value){
+            base[key] = value;
+            return base;
+        };
+
+        this.push_counter = function(key){
+            if(push_counters[key] === undefined){
+                push_counters[key] = 0;
+            }
+            return push_counters[key]++;
+        };
+
+        $.each($(this).serializeArray(), function(){
+
+            // skip invalid keys
+            if(!patterns.validate.test(this.name)){
+                return;
+            }
+
+            var k,
+                keys = this.name.match(patterns.key),
+                merge = this.value,
+                reverse_key = this.name;
+
+            while((k = keys.pop()) !== undefined){
+
+                // adjust reverse_key
+                reverse_key = reverse_key.replace(new RegExp("\\[" + k + "\\]$"), '');
+
+                // push
+                if(k.match(patterns.push)){
+                    merge = self.build([], self.push_counter(reverse_key), merge);
+                }
+
+                // fixed
+                else if(k.match(patterns.fixed)){
+                    merge = self.build([], k, merge);
+                }
+
+                // named
+                else if(k.match(patterns.named)){
+                    merge = self.build({}, k, merge);
+                }
+            }
+
+            json = $.extend(true, json, merge);
+        });
+
+        return json;
+    };
 
 	$('input.type-int-number').on('change keyup input click', function() {
 		if($(this).val().match(/[^0-9]/g))
@@ -221,15 +266,13 @@ function courseListener()
 	var remove_group_modal = $('#remove-group-modal');
 	var remove_group_modal_form = remove_group_modal.find('form');
 
-	
-
 	$('.roadmap-component').on('click', '.btn-add-group', function(){
 		add_group_modal_form.find('input[name="course"]').val($(this).data('value'));
 		add_group_modal.modal('show');
 	});
 
 	add_group_modal_form.on('submit', function(){
-		var params = $(this).serializeJSON();
+		var params = $(this).serializeObject();
 		ajaxApiQuery('group.create', params, function(res){
 			//toastrMsg('success', res);
 			window.location.reload(true);
@@ -238,18 +281,40 @@ function courseListener()
 		return false;
 	});
 
+	add_group_modal_form.on('change', 'select[name="type"]', function(){
+		if($(this).val() == 'private')
+			add_group_modal_form.find('.users-block').removeClass('hidden');
+		else
+			add_group_modal_form.find('.users-block').addClass('hidden');
+	});
+
 	$('.roadmap-component').on('click', '.btn-remove-group', function(){
 		remove_group_modal.find('input[name="id"]').val($(this).data('id'));
 		remove_group_modal.modal('show');
 	});
 
 	remove_group_modal_form.on('submit', function(){
-		var params = $(this).serializeJSON();
+		var params = $(this).serializeObject();
 		ajaxApiQuery('group.remove', params, function(res){
 			//toastrMsg('success', res);
 			window.location.reload(true);
 		});
 
 		return false;
+	});
+
+	$('#select2-users').select2({
+		//placeholder: 'Select an item',
+		ajax: {
+			url: '/admin/users/listForSelect/',
+			dataType: 'json',
+			delay: 250,
+			processResults: function(data) {
+				return {
+					results: data
+				};
+			},
+			cache: true
+		}
 	});
 }
