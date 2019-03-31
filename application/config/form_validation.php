@@ -227,3 +227,39 @@ $config['message'] = [
 		'rules' => 'required|min_length[1]'
 	]
 ];
+
+//========================================================================//
+
+// создание пользователя
+$config['user_add'] = [
+	[
+		'field' => 'role',
+		'label' => 'Роль',
+		'rules' => 'required|in_list[0,1]'
+	],
+	[
+		'field' => 'email',
+		'label' => 'E-mail',
+		'rules' => 'required|valid_email|is_unique[users.email]'
+	],
+	[
+		'field' => 'name',
+		'label' => 'Имя',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'lastname',
+		'label' => 'Фамилия',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'password',
+		'label' => 'Пароль',
+		'rules' => 'trim|required|min_length[6]|max_length[64]'
+	],
+	[
+		'field' => 're_password',
+		'label' => 'Повтор пароля',
+		'rules' => 'trim|matches[password]'
+	]
+];

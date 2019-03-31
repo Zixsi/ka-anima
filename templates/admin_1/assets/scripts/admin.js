@@ -8,6 +8,7 @@ $(document).ready(function(){
 	});
 
 	appMain();
+	usersListener();
 	courseListener();
 });
 
@@ -317,4 +318,108 @@ function courseListener()
 			cache: true
 		}
 	});
+}
+
+function usersListener()
+{
+	var add_item_modal = $('#add-user-modal');
+	var add_item_modal_form = add_item_modal.find('form');
+	var remove_item_modal = $('#remove-user-modal');
+	var remove_item_modal_form = remove_item_modal.find('form');
+	var block_item_modal = $('#block-user-modal');
+	var block_item_modal_form = block_item_modal.find('form');
+	var filter_form = $('#filter-user-form');
+	var edit_form = $('#form-user-params');
+	
+	// создание пользователя
+	add_item_modal.on('show.bs.modal', function(){
+		clearInput(add_item_modal_form);
+	});
+
+	add_item_modal_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('user.add', params, function(res){
+			add_item_modal.modal('hide');
+			clearInput(add_item_modal_form);
+			toastrMsg('success', res);
+
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
+	// блокировка пользователя
+	$('.btn-user-block').on('click', function(){
+		var id = $(this).data('id');
+		block_item_modal_form.find('input[name="id"]').val(id);
+		block_item_modal.modal('show');
+		return false;
+	});
+
+	block_item_modal_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('user.block', params.id, function(res){
+			toastrMsg('success', res);
+			block_item_modal.modal('hide');
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
+	// разблокировка пользователя
+	$('.btn-user-unblock').on('click', function(){
+		var id = $(this).data('id');
+		ajaxApiQuery('user.unblock', id, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
+	// удаление пользователя
+	$('.btn-user-remove').on('click', function(){
+		var id = $(this).data('id');
+		remove_item_modal_form.find('input[name="id"]').val(id);
+		remove_item_modal.modal('show');
+		return false;
+	});
+
+	remove_item_modal_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('user.remove', params.id, function(res){
+			toastrMsg('success', res);
+			remove_item_modal.modal('hide');
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
+	filter_form.on('change', 'input[type="radio"]', function(){
+		filter_form.submit();
+	});
+
+	edit_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('user.edit', params, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
 }

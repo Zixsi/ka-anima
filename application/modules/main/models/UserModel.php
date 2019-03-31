@@ -35,18 +35,9 @@ class UserModel extends APP_Model
 
 	public function update($id, $data = [])
 	{
-		try
-		{
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $data))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
 
 		return false;
 	}
@@ -99,17 +90,58 @@ class UserModel extends APP_Model
 		return false;
 	}
 
-	public function list()
+	public function list($filter = [], $order = ['id' => 'desc'])
 	{
 		$bind = [];
+
 		$sql = 'SELECT 
 					* , CONCAT_WS(\' \', name, lastname) as full_name 
 				FROM 
 					'.self::TABLE.' 
 				WHERE 
-					id IS NOT NULL 
-				ORDER BY 
-					id ASC';
+					id IS NOT NULL';
+
+		// роль
+		if(isset($filter['role']) && $filter['role'] !== 'all' && $filter['role'] !== '')
+		{
+			$sql .= ' AND role = '.((int) $filter['role']).' ';
+		}
+
+		// группа
+		if(isset($filter['group']) && $filter['group'] !== 'all' && $filter['group'] !== '')
+		{
+			switch($filter['group'])
+			{
+				case 'active':
+					$sql .= ' AND deleted = 0 AND blocked = 0 ';
+				break;
+				case 'blocked':
+					$sql .= ' AND blocked = 1 ';
+				break;
+				case 'deleted':
+					$sql .= ' AND deleted = 1 ';
+				break;
+			}
+		}
+		else
+		{
+			// отображать только не удаленных
+			$sql .= ' AND deleted = 0 ';
+		}
+
+		if(count($order))
+		{
+			$sql_order = [];
+			foreach($order as $key => $val)
+			{
+				$sql_order[] = $key.' '.$val;
+			}
+
+			if(count($sql_order))
+				$sql .= ' ORDER BY '.implode(', ', $sql_order);
+
+			unset($sql_order);
+		}
 
 		if($res = $this->db->query($sql, $bind))
 		{
@@ -128,7 +160,7 @@ class UserModel extends APP_Model
 
 	public function listTeachers()
 	{
-		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE role = 1 ORDER BY id ASC';
+		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE role = 1 AND deleted = 0 AND blocked = 0 ORDER BY id ASC';
 		if($res = $this->db->query($sql, []))
 		{
 			return $res->result_array();
@@ -156,7 +188,7 @@ class UserModel extends APP_Model
 			$where .= ' AND (name LIKE ? OR lastname LIKE ? OR email LIKE ?) ';
 		}
 
-		$sql = 'SELECT id, CONCAT_WS(\' \', name, lastname) as full_name, email FROM '.self::TABLE.' WHERE id IS NOT NULL '.$where.' ORDER BY id ASC';
+		$sql = 'SELECT id, CONCAT_WS(\' \', name, lastname) as full_name, email FROM '.self::TABLE.' WHERE id IS NOT NULL AND deleted = 0 AND blocked = 0 '.$where.' ORDER BY id ASC';
 		if($res = $this->db->query($sql, $bind))
 		{
 			$result = [];
@@ -189,7 +221,9 @@ class UserModel extends APP_Model
 					LEFT JOIN 
 						'.self::TABLE_USER_FRIENDS.' as uf ON(uf.id = u.id AND uf.user = ?) 
 					WHERE 
-						u.role != 5 
+						u.role != 5 AND 
+						u.deleted = 0 AND 
+						u.blocked = 0
 					ORDER BY 
 						u.id ASC';
 

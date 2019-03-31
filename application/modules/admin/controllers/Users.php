@@ -12,7 +12,9 @@ class Users extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->UserModel->list();
+		$data['filter'] = $this->input->get();
+		$data['items'] = $this->UserModel->list($data['filter'], ['id' => 'desc']);
+		$data['roles'] = UserModel::ROLES_NAME;
 
 		$this->load->lview('users/index', $data);
 	}
