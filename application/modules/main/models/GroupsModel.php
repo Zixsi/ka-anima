@@ -147,7 +147,21 @@ class GroupsModel extends APP_Model
 	public function listOffers()
 	{
 		$result = [];
-		$bind = [date('Y-m-d 00:00:00', time())];
+		$now = new DateTime('now');
+		$now->setTime(0, 0, 0);
+		$start_ts = clone $now;
+		$start_ts->modify('-2 weeks'); // за 2 недели после старата
+		$end_ts = clone $now;
+		$end_ts->modify('+3 months'); // за 3 месяца до старта
+		
+		// debug($start_ts->format('Y-m-d 00:00:00')); die();
+
+
+		$bind = [
+			$start_ts->format('Y-m-d 00:00:00'), 
+			$end_ts->format('Y-m-d 00:00:00'), 
+			$now->format('Y-m-d 00:00:00')
+		];
 
 		$sql = 'SELECT 
 					c.id, c.name, c.description, c.price, c.only_standart , g.id as group_id, 
@@ -161,6 +175,7 @@ class GroupsModel extends APP_Model
 				WHERE 
 					c.active = 1 AND 
 					g.deleted = 0 AND 
+					(g.ts > ? AND g.ts < ?) AND 
 					g.ts_end > ? AND 
 					g.type NOT IN(\'vip\', \'private\')
 				ORDER BY 

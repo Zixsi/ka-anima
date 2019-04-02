@@ -11,28 +11,28 @@
 							<input type="radio" name="role" id="from-filter-role1" <?=(!isset($filter['role']) || ($filter['role'] ?? '') === 'all')?'checked':''?> value="all">
 							<label for="from-filter-role1">
 								<span>Все</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right"><?=$cnt_roles['all']?></span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="role" id="from-filter-role2" <?=(($filter['role'] ?? '') === '5')?'checked':''?> value="5">
 							<label for="from-filter-role2">
 								<span>Администраторы</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right"><?=$cnt_roles[5]?></span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="role" id="from-filter-role3" <?=(($filter['role'] ?? '') === '1')?'checked':''?> value="1">
 							<label for="from-filter-role3">
 								<span>Преподаватели</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right"><?=$cnt_roles[1]?></span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="role" id="from-filter-role4" <?=(($filter['role'] ?? '') === '0')?'checked':''?> value="0">
 							<label for="from-filter-role4">
 								<span>Ученики</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right"><?=$cnt_roles[0]?></span>-->
 							</label>
 						</li>
 					</ul>
@@ -42,28 +42,28 @@
 							<input type="radio" name="group" id="from-filter-group1" <?=(!isset($filter['group']) || ($filter['group'] ?? '') === 'all')?'checked':''?> checked value="all">
 							<label for="from-filter-group1">
 								<span>Все</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group2" <?=(($filter['group'] ?? '') === 'active')?'checked':''?> value="active">
 							<label for="from-filter-group2">
 								<span>Активные</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group3" <?=(($filter['group'] ?? '') === 'blocked')?'checked':''?> value="blocked">
 							<label for="from-filter-group3">
 								<span>Заблокированные</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group4" <?=(($filter['group'] ?? '') === 'deleted')?'checked':''?> value="deleted">
 							<label for="from-filter-group4">
 								<span>Удаленные</span>
-								<span class="label label-primary label-pill pull-right">0</span>
+								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
 					</ul>

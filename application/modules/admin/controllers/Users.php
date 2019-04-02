@@ -15,6 +15,8 @@ class Users extends APP_Controller
 		$data['filter'] = $this->input->get();
 		$data['items'] = $this->UserModel->list($data['filter'], ['id' => 'desc']);
 		$data['roles'] = UserModel::ROLES_NAME;
+		$data['cnt_roles'] = $this->UserModel->cntRoles();
+		// debug($data['cnt_roles']); die();
 
 		$this->load->lview('users/index', $data);
 	}
@@ -25,6 +27,7 @@ class Users extends APP_Controller
 		if(($data['item'] = $this->UserModel->getByID($id)) === false)
 			header('Location: ../');
 		$data['roles'] = UserModel::ROLES_NAME;
+		$data['balance'] = $this->TransactionsModel->balanceUser($id);
 
 		$this->load->lview('users/item', $data);
 	}

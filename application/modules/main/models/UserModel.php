@@ -249,6 +249,30 @@ class UserModel extends APP_Model
 		return false;
 	}
 
+	// кол-во юзеров по ролям
+	public function cntRoles()
+	{
+		$result = [];
+		$result['all'] = 0;
+		foreach(self::ROLES as $val)
+		{
+			$result[$val] = 0;
+		}
+
+		$sql = 'SELECT count(*) as cnt, role FROM '.self::TABLE.' GROUP BY role';
+		if($res = $this->db->query($sql, []))
+		{
+			$res = $res->result_array();
+			foreach($res as $val)
+			{
+				$result[$val['role']] = (int) $val['cnt'];
+				$result['all'] += (int) $val['cnt'];
+			}
+		}
+
+		return $result;
+	}
+
 	public function pwdHash($password, $salt = false)
 	{
 		return ($salt !== false)?sha1($password.$salt):sha1($password);

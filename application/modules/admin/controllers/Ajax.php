@@ -20,6 +20,7 @@ class Ajax extends APP_Controller
 		$this->load->model([
 			'main/groups/GroupsHelper',
 			'main/users/UsersHelper',
+			'main/lectures/LecturesHelper',
 		]);
 	}
 
@@ -43,6 +44,10 @@ class Ajax extends APP_Controller
 			case 'group.remove':
 				$this->groupRemove();
 			break;
+			case 'lecture.remove':
+				$this->lectureRemove();
+			break;
+
 			case 'user.add':
 				$this->userAdd();
 			break;
@@ -86,6 +91,24 @@ class Ajax extends APP_Controller
 		{
 			if($this->GroupsHelper->remove((int) ($this->request['params']['id'] ?? 0)) === false)
 				throw new Exception($this->GroupsHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// удаление лекции
+	private function lectureRemove()
+	{
+		try
+		{
+			if($this->LecturesHelper->remove((int) ($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->LecturesHelper->getLastError());
 
 			$this->jsonrpc->result('Успешно');
 		}

@@ -86,13 +86,37 @@
 				<h3 class="panel-title">Статистика</h3>
 			</div>
 			<div class="panel-body">
-				<ul>
-					<li>Дата регистрации</li>
-					<li>Дата последней активности</li>
-					<li>Баланс</li>
-					<li>Список транзакций</li>
-					<li>Список подписок</li>
-				</ul>
+				<p>
+					<?if($item['blocked'] == 1 || $item['deleted'] == 1):?>
+						<?if($item['blocked'] == 1):?>
+							<button class="btn btn-danger"><i class="fas fa-lock"></i> Заблокирован </button>
+						<?endif;?>
+						<?if($item['deleted'] == 1):?>
+							<button class="btn btn-danger"><i class="fas fa-trash-alt"></i> Удален</button>
+						<?endif;?>
+					<?else:?>
+						<button class="btn btn-success"><i class="fas fa-check"></i> Активен</button>
+					<?endif;?>
+				</p>
+				<p>Дата регистрации: <?=date('d.m.Y H:i:s', strtotime($item['ts_created']))?></p>
+				<p>Дата последней активности: 00.00.000 00:00:00</p>
+				<p>Баланс: <?=number_format($balance, 2, '.', ' ')?></p>
+			</div>
+		</div>
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Последние транзакции</h3>
+			</div>
+			<div class="panel-body">
+				<p>Последние транзакции</p>
+			</div>
+		</div>
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">Список подписок</h3>
+			</div>
+			<div class="panel-body">
+				<p>Список подписок</p>
 			</div>
 		</div>
 	</div>
@@ -102,7 +126,7 @@
 				<h3 class="panel-title">Лог действий</h3>
 			</div>
 			<div class="panel-body">
-				Действия совершенные пользователем
+				<p>Действия совершенные пользователем</p>
 			</div>
 		</div>
 	</div>

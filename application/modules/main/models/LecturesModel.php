@@ -65,8 +65,12 @@ class LecturesModel extends APP_Model
 		return false;
 	}
 
-	public function delete($id)
+	// удаление 
+	public function remove($id)
 	{
+		$this->db->where('id', $id);
+		$this->db->delete(self::TABLE);
+			
 		return false;
 	}
 

@@ -266,7 +266,10 @@ function courseListener()
 	var add_group_modal_form = add_group_modal.find('form');
 	var remove_group_modal = $('#remove-group-modal');
 	var remove_group_modal_form = remove_group_modal.find('form');
-
+	var admin_lectures_table = $('#admin-lectures-table');
+	var admin_remove_lecture_modal = $('#admin-remove-lecture-modal');
+	var admin_remove_lecture_form = admin_remove_lecture_modal.find('form');
+	
 	$('.roadmap-component').on('click', '.btn-add-group', function(){
 		add_group_modal_form.find('input[name="course"]').val($(this).data('value'));
 		add_group_modal.modal('show');
@@ -318,6 +321,28 @@ function courseListener()
 			cache: true
 		}
 	});
+
+	//===== лекции =====//
+
+	admin_lectures_table.on('click', '.btn-item-remove', function(){
+		var id = $(this).data('id');
+		admin_remove_lecture_form.find('input[name="id"]').val(id);
+		admin_remove_lecture_modal.modal('show');
+		return false;
+	});
+
+	admin_remove_lecture_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('lecture.remove', params.id, function(res){
+			toastrMsg('success', res);
+			admin_remove_lecture_modal.modal('hide');
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+		return false;
+	});
+
 }
 
 function usersListener()

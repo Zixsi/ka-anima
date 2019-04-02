@@ -38,4 +38,13 @@ class LecturesGroupModel extends APP_Model
 
 		return false;
 	}
+
+	public function removeByLecture($id)
+	{
+		$this->db->where('lecture_id', $id);
+		$this->db->delete(self::TABLE_LECTURES_GROUPS);
+			
+		return false;
+	}
+
 }
