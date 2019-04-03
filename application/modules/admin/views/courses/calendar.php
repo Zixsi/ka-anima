@@ -86,7 +86,7 @@
 </div>
 
 <div class="modal fade" id="add-group-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-	<div class="modal-dialog modal-sm">
+	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -102,10 +102,15 @@
 					<div class="form-group">
 						<label>Тип</label>
 						<select name="type" class="form-control">
-							<?foreach(GroupsModel::TYPE as $key => $val):?>
-								<option value="<?=$key?>"><?=$val['title']?></option>
-							<?endforeach;?>
+							<option value="standart">Стандартная</option>
+							<option value="private">Закрытая</option>
 						</select>
+					</div>
+					<div class="form-group users-block hidden">
+						<label>Ученики</label>
+						<div>
+							<select name="users[]" class="form-control" id="select2-users" multiple="true" style="width: 100%;"></select>
+						</div>
 					</div>
 					<div class="form-group text-right">
 						<button type="submit" class="btn btn-primary">Сохранить</button>

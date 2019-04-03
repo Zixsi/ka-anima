@@ -45,11 +45,6 @@ $config['signup'] = [
 
 $config['course'] = [
 	[
-		'field' => 'type',
-		'label' => 'Тип',
-		'rules' => 'required|in_list[0,1]'
-	],
-	[
 		'field' => 'name',
 		'label' => 'Название',
 		'rules' => 'required'
@@ -58,16 +53,6 @@ $config['course'] = [
 		'field' => 'teacher',
 		'label' => 'Преподаватель',
 		'rules' => 'required|integer'
-	],
-	[
-		'field' => 'price_month',
-		'label' => 'Стоимость первого месяца',
-		'rules' => 'required|numeric|greater_than[0]'
-	],
-	[
-		'field' => 'price_full',
-		'label' => 'Стоимость полного курса',
-		'rules' => 'required|numeric|greater_than[0]'
 	]
 ];
 
@@ -240,5 +225,41 @@ $config['message'] = [
 		'field' => 'text',
 		'label' => 'Сообщение',
 		'rules' => 'required|min_length[1]'
+	]
+];
+
+//========================================================================//
+
+// создание пользователя
+$config['user_add'] = [
+	[
+		'field' => 'role',
+		'label' => 'Роль',
+		'rules' => 'required|in_list[0,1]'
+	],
+	[
+		'field' => 'email',
+		'label' => 'E-mail',
+		'rules' => 'required|valid_email|is_unique[users.email]'
+	],
+	[
+		'field' => 'name',
+		'label' => 'Имя',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'lastname',
+		'label' => 'Фамилия',
+		'rules' => 'required|min_length[2]'
+	],
+	[
+		'field' => 'password',
+		'label' => 'Пароль',
+		'rules' => 'trim|required|min_length[6]|max_length[64]'
+	],
+	[
+		'field' => 're_password',
+		'label' => 'Повтор пароля',
+		'rules' => 'trim|matches[password]'
 	]
 ];

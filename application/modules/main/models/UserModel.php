@@ -35,18 +35,9 @@ class UserModel extends APP_Model
 
 	public function update($id, $data = [])
 	{
-		try
-		{
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $data))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
 
 		return false;
 	}
@@ -75,11 +66,9 @@ class UserModel extends APP_Model
 		$res = $this->db->query($sql, [$id]);
 		if($row = $res->row_array())
 		{
+			$val['role_name'] = self::ROLES_NAME[$val['role']];
 			if(empty($row['img']))
-			{
-				$row['full_name'] = (!empty($row['full_name']))?$row['full_name']:$row['email'];
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
-			}
 
 			return $row;
 		}
@@ -93,9 +82,7 @@ class UserModel extends APP_Model
 		if($row = $res->row_array())
 		{
 			if(empty($row['img']))
-			{
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
-			}
 			
 			return $row;
 		}
@@ -103,17 +90,118 @@ class UserModel extends APP_Model
 		return false;
 	}
 
-	public function list()
+	public function list($filter = [], $order = ['id' => 'desc'])
 	{
-		return false;
+		$bind = [];
+
+		$sql = 'SELECT 
+					* , CONCAT_WS(\' \', name, lastname) as full_name 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					id IS NOT NULL';
+
+		// роль
+		if(isset($filter['role']) && $filter['role'] !== 'all' && $filter['role'] !== '')
+		{
+			$sql .= ' AND role = '.((int) $filter['role']).' ';
+		}
+
+		// группа
+		if(isset($filter['group']) && $filter['group'] !== 'all' && $filter['group'] !== '')
+		{
+			switch($filter['group'])
+			{
+				case 'active':
+					$sql .= ' AND deleted = 0 AND blocked = 0 ';
+				break;
+				case 'blocked':
+					$sql .= ' AND blocked = 1 ';
+				break;
+				case 'deleted':
+					$sql .= ' AND deleted = 1 ';
+				break;
+			}
+		}
+		else
+		{
+			// отображать только не удаленных
+			$sql .= ' AND deleted = 0 ';
+		}
+
+		if(count($order))
+		{
+			$sql_order = [];
+			foreach($order as $key => $val)
+			{
+				$sql_order[] = $key.' '.$val;
+			}
+
+			if(count($sql_order))
+				$sql .= ' ORDER BY '.implode(', ', $sql_order);
+
+			unset($sql_order);
+		}
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			foreach($res as &$val)
+			{
+				$val['role_name'] = self::ROLES_NAME[$val['role']];
+				if(empty($val['img']))
+					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+			}
+			return $res;
+		}
+
+		return [];
 	}
 
 	public function listTeachers()
 	{
-		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE role = 1 ORDER BY id ASC';
+		$sql = 'SELECT *, CONCAT_WS(\' \', name, lastname) as full_name FROM '.self::TABLE.' WHERE role = 1 AND deleted = 0 AND blocked = 0 ORDER BY id ASC';
 		if($res = $this->db->query($sql, []))
 		{
 			return $res->result_array();
+		}
+
+		return [];
+	}
+
+	public function listForSelect($filter = [])
+	{
+		$bind = [];
+		$where = '';
+		if(isset($filter['role']))
+		{
+			$bind[] = $filter['role'];
+			$where .= ' AND role = ? ';
+		}
+
+		if(isset($filter['search']) && mb_strlen($filter['search']) >= 3)
+		{
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+
+			$where .= ' AND (name LIKE ? OR lastname LIKE ? OR email LIKE ?) ';
+		}
+
+		$sql = 'SELECT id, CONCAT_WS(\' \', name, lastname) as full_name, email FROM '.self::TABLE.' WHERE id IS NOT NULL AND deleted = 0 AND blocked = 0 '.$where.' ORDER BY id ASC';
+		if($res = $this->db->query($sql, $bind))
+		{
+			$result = [];
+			$res = $res->result_array();
+			foreach($res as $val)
+			{
+				$result[] = [
+					'id' => $val['id'],
+					'text' => $val['email']
+				];
+			}
+
+			return $result;
 		}
 
 		return [];
@@ -133,7 +221,9 @@ class UserModel extends APP_Model
 					LEFT JOIN 
 						'.self::TABLE_USER_FRIENDS.' as uf ON(uf.id = u.id AND uf.user = ?) 
 					WHERE 
-						u.role != 5 
+						u.role != 5 AND 
+						u.deleted = 0 AND 
+						u.blocked = 0
 					ORDER BY 
 						u.id ASC';
 
@@ -157,6 +247,30 @@ class UserModel extends APP_Model
 		}
 
 		return false;
+	}
+
+	// кол-во юзеров по ролям
+	public function cntRoles()
+	{
+		$result = [];
+		$result['all'] = 0;
+		foreach(self::ROLES as $val)
+		{
+			$result[$val] = 0;
+		}
+
+		$sql = 'SELECT count(*) as cnt, role FROM '.self::TABLE.' GROUP BY role';
+		if($res = $this->db->query($sql, []))
+		{
+			$res = $res->result_array();
+			foreach($res as $val)
+			{
+				$result[$val['role']] = (int) $val['cnt'];
+				$result['all'] += (int) $val['cnt'];
+			}
+		}
+
+		return $result;
 	}
 
 	public function pwdHash($password, $salt = false)

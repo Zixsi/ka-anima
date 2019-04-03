@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class TransactionsModel extends APP_Model
 {
 	private const TABLE = 'transactions';
-	private const TABLE_FIELDS = ['user', 'type', 'amount', 'description', 'service', 'service_id'];
 	private const TYPES = [
 		0, // IN
 		1 // OUT
@@ -12,40 +11,17 @@ class TransactionsModel extends APP_Model
 
 	public function add($data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
-
-			if($this->db->insert(self::TABLE, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			var_dump($e->getMessage().'###'); die();
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		if($this->db->insert(self::TABLE, $data))
+			return $this->db->insert_id();
 
 		return false;
 	}
 
 	public function update($id, $data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
-
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $data))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
 
 		return false;
 	}
@@ -151,25 +127,5 @@ class TransactionsModel extends APP_Model
 		}
 
 		return 0;
-	}
-
-	private function _checkFields($data = [])
-	{
-		$this->form_validation->reset_validation();
-		$this->form_validation->set_data($data);
-		if($this->form_validation->run('transaction') == FALSE)
-		{
-			throw new Exception($this->form_validation->error_string(), 1);
-		}
-
-		foreach($data as $key => $val)
-		{
-			if(in_array($key, self::TABLE_FIELDS) == false)
-			{
-				unset($data[$key]);
-			}
-		}
-		
-		return true;
 	}
 }

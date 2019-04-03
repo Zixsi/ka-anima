@@ -15,11 +15,9 @@ class Courses extends APP_Controller
 
 		$data['items'] = $this->CoursesModel->list();
 
-		$last_date = 'now';
 		$groups = $this->GroupsModel->getActiveGroups();
 		$data['roadmap'] = $this->GroupsModel->makeRoadmap($groups);
-
-		//debug($data); die();
+		unset($groups);
 
 		$this->load->lview('courses/calendar', $data);
 	}
@@ -27,7 +25,7 @@ class Courses extends APP_Controller
 	public function add()
 	{
 		$data = [];
-		$data['course_types'] = $this->CoursesModel::TYPES;
+		$data['structure']['price'] = CoursesHelper::PRICE_STRUCTURE;
 		$data['teachers'] = $this->UserModel->listTeachers();
 		
 		if(cr_valid_key())
@@ -45,12 +43,14 @@ class Courses extends APP_Controller
 	public function edit($id = 0)
 	{
 		$data = [];
-		$data['course_types'] = $this->CoursesModel::TYPES;
-		$data['teachers'] = $this->UserModel->listTeachers();
-		
+
 		if(($data['item'] = $this->CoursesModel->getByID(intval($id))) == false)
 			header('Location: ../');
 
+		//debug($data['item']); die();
+		$data['structure']['price'] = CoursesHelper::PRICE_STRUCTURE;
+		$data['teachers'] = $this->UserModel->listTeachers();
+		
 		if(cr_valid_key())
 		{
 			if($this->CoursesHelper->update($id, $this->input->post(null, true)))

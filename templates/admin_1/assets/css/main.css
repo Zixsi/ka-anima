@@ -880,7 +880,7 @@ ul.activity-list > li {
 
 .toast .toast-message {
   font-size: 14px;
-  line-height: 2; }
+  line-height: 1.5; }
 
 .toast-info {
   background-color: #00AAFF; }

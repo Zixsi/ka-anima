@@ -14,6 +14,16 @@ class VideoModel extends APP_Model
 		parent::__construct();
 	}
 
+	// удаление 
+	public function remove($target, $type = 'lecture')
+	{
+		$this->db->where('source_id', $target);
+		$this->db->where('source_type', $type);
+		$this->db->delete(self::TABLE);
+			
+		return false;
+	}
+
 	// список видео по ресурсу
 	public function bySource($id, $type = 'lecture')
 	{

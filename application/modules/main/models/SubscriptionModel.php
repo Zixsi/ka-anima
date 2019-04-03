@@ -3,24 +3,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SubscriptionModel extends APP_Model
 {
-	private const TABLE = 'subscription';
-	private const TABLE_COURSES = 'courses';
-	private const TABLE_COURSES_GROUPS = 'courses_groups';
-	private const TABLE_USERS = 'users';
-	private const TABLE_FIELDS = ['user', 'type', 'service', 'description', 'ts_start', 'ts_end', 'subscr_type', 'price_month', 'price_full', 'amount'];
-	
-	// Типы сервисов подписки
-	private const TYPES = [
-		0, // курсы
-		1, // резерв
-		2 // резерв
-	];
+	const TABLE = 'subscription';
+	const TABLE_COURSES = 'courses';
+	const TABLE_COURSES_GROUPS = 'courses_groups';
+	const TABLE_USERS = 'users';
 
 	// Тип подписки
-	private const TYPES_SUBSCR = [
+	const TYPES_SUBSCR = [
 		0, // полная (подписка произведена на весь срок)
 		1, // частичная (подписка на месяц / несколько месяцев)
 		2 // продление
+	];
+
+	// тип объекта подписки
+	const TYPES_TARGET = [
+		'course', // курс
+	];
+
+	// вариант подписки 
+	const TYPES = [
+		'standart' => ['title' => 'Стандартная'],
+		'advanced' => ['title' => 'Расширенная'],
+		'vip' => ['title' => 'VIP'],
+		'private' => ['title' => 'Закрытая']
 	];
 
 	public function __construct()
@@ -31,45 +36,18 @@ class SubscriptionModel extends APP_Model
 
 	public function add($data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
-
-			if($this->db->insert(self::TABLE, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		if($this->db->insert(self::TABLE, $data))
+			return $this->db->insert_id();
 
 		return false;
 	}
 
 	public function update($id, $data = [])
 	{
-		try
-		{
-			$this->_checkFields($data);
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
 
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $data))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
-	public function delete($id)
-	{
 		return false;
 	}
 
@@ -84,19 +62,35 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
-
-
-	public function CheckSubscibe($user, $service, $type = 0)
+	
+	public function сheck($user, $target, $target_type = 'course')
 	{
-		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE user = ? AND service = ? AND type = ?', [$user, $service, $type]);
+		$bind = [$user, $target, $target_type];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND target = ? AND target_type = ?';
+		$res = $this->db->query($sql, $bind);
 		if($res->row())
-		{
 			return true;
-		}
-
+		
 		return false;
 	}
 
+	public function get($user, $target, $target_type = 'course')
+	{
+		$bind = [$user, $target, $target_type];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND target = ? AND target_type = ?';
+		$res = $this->db->query($sql, $bind);
+		if($item = $res->row_array())
+		{
+			$item['active'] = (strtotime($item['ts_end']) > time())?true:false;
+			return $item;
+		}
+		
+		return false;
+	}
+
+	
+	
+	/*
 	public function List($filter = [], $order = [], $select = [])
 	{
 		$select = count($select)?implode(', ', $select):'*';
@@ -225,77 +219,78 @@ class SubscriptionModel extends APP_Model
 
 		return false;
 	}
+	*/
 
-	// Курсы на которые подписан пользователь
+	// курсы на которые подписан пользователь
 	public function coursesList($user)
 	{
-		try
+		if( (int) $user === 0)
+			return [];
+
+		$bind = [(int) $user, date('Y-m-d H:i:s')];
+		$sql = 'SELECT 
+					c.id, c.name, cg.ts, cg.ts_end, cg.id as course_group  
+				FROM 
+					'.self::TABLE.' as s 
+				LEFT JOIN 
+					'.self::TABLE_COURSES_GROUPS.' as cg ON(cg.id = s.target AND s.target_type = \'course\') 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = cg.course_id) 
+				WHERE 
+					s.user = ? AND cg.ts_end > ? 
+				ORDER BY 
+					cg.id ASC';
+
+		if($res = $this->db->query($sql, $bind))
 		{
-			if(intval($user) == 0)
+			$res = $res->result_array();
+			foreach($res as $key => &$val)
 			{
-				throw new Exception('User not found', 1);
+				$val['ts_f'] = date('F Y', strtotime($val['ts']));
 			}
 
-			$sql = 'SELECT 
-						c.id, c.name, c.type, cg.ts, cg.id as course_group  
-					FROM 
-						'.self::TABLE.' as s 
-					LEFT JOIN 
-						'.self::TABLE_COURSES_GROUPS.' as cg ON(s.service = cg.id AND s.type = 0) 
-					LEFT JOIN 
-						'.self::TABLE_COURSES.' as c ON(cg.course_id = c.id) 
-					WHERE 
-						s.user = ? 
-					ORDER BY 
-						cg.id ASC';
-
-			$res = $this->db->query($sql, [intval($user)]);
-			if($res = $res->result_array())
-			{
-				foreach($res as $key => &$val)
-				{
-					$val['ts_f'] = date('F Y', strtotime($val['ts']));
-				}
-
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
+			return $res;
 		}
 
-		return false;
+		return [];
 	}
 
+	// список идентификаторов курсов на которые подписан пользователь
+	public function listCoursesId($user)
+	{
+		$result = [];
+		if($res = $this->coursesList($user))
+		{
+			foreach($res as $val)
+			{
+				$result[] = $val['id'];
+			}
+		}
+
+		return $result;
+	}
+
+	
 	// Подписки пользователя
 	public function byUser($user)
 	{
-		try
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
+		$res = $this->db->query($sql, [intval($user)]);
+		if($res = $res->result_array())
 		{
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
-			$res = $this->db->query($sql, [intval($user)]);
-			if($res = $res->result_array())
+			foreach($res as &$val)
 			{
-				$result = [];
-
-				foreach($res as &$val)
-				{
-					$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
-					$result[] = $val;
-				}
-
-				return $result;
+				$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
 			}
+
+			return $res;
 		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+
 
 		return false;
 	}
 
+	/*
 	// Подписки пользователя по сервису
 	public function byUserService($user, $service_id, $type = 0)
 	{
@@ -440,6 +435,7 @@ class SubscriptionModel extends APP_Model
 
 		return false;
 	}
+	*/
 
 	public function getGroupUsers($group)
 	{
@@ -452,14 +448,15 @@ class SubscriptionModel extends APP_Model
 					LEFT JOIN 
 						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
 					WHERE 
-						s.service = ? AND type = 0 
+						s.target = ? AND s.target_type = \'course\' 
 					GROUP BY 
 						s.user 
 					ORDER BY 
 						s.user ASC';
 
-			if($res = $this->db->query($sql, [intval($group)])->result_array())
+			if($res = $this->db->query($sql, [intval($group)]))
 			{
+				$res = $res->result_array();
 				foreach($res as &$val)
 				{
 					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
@@ -470,25 +467,5 @@ class SubscriptionModel extends APP_Model
 		}
 
 		return false;
-	}
-
-	private function _checkFields(&$data = [])
-	{
-		$this->form_validation->reset_validation();
-		$this->form_validation->set_data($data);
-		if($this->form_validation->run('subscription') == FALSE)
-		{
-			throw new Exception($this->form_validation->error_string(), 1);
-		}
-
-		foreach($data as $key => $val)
-		{
-			if(in_array($key, self::TABLE_FIELDS) == false)
-			{
-				unset($data[$key]);
-			}
-		}
-		
-		return true;
 	}
 }

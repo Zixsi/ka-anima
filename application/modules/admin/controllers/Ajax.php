@@ -19,6 +19,8 @@ class Ajax extends APP_Controller
 
 		$this->load->model([
 			'main/groups/GroupsHelper',
+			'main/users/UsersHelper',
+			'main/lectures/LecturesHelper',
 		]);
 	}
 
@@ -41,6 +43,25 @@ class Ajax extends APP_Controller
 			break;
 			case 'group.remove':
 				$this->groupRemove();
+			break;
+			case 'lecture.remove':
+				$this->lectureRemove();
+			break;
+
+			case 'user.add':
+				$this->userAdd();
+			break;
+			case 'user.edit':
+				$this->userEdit();
+			break;
+			case 'user.remove':
+				$this->userRemove();
+			break;
+			case 'user.block':
+				$this->userBlock();
+			break;
+			case 'user.unblock':
+				$this->userUnBlock();
 			break;
 		}
 	}
@@ -70,6 +91,114 @@ class Ajax extends APP_Controller
 		{
 			if($this->GroupsHelper->remove((int) ($this->request['params']['id'] ?? 0)) === false)
 				throw new Exception($this->GroupsHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// удаление лекции
+	private function lectureRemove()
+	{
+		try
+		{
+			if($this->LecturesHelper->remove((int) ($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->LecturesHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// создание пользователя
+	private function userAdd()
+	{
+		try
+		{
+			if($this->UsersHelper->add(($this->request['params'] ?? [])) === false)
+				throw new Exception($this->UsersHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// редактирование пользователя
+	private function userEdit()
+	{
+		try
+		{
+			if($this->UsersHelper->edit(($this->request['params']['id'] ?? 0), ($this->request['params'] ?? [])) === false)
+				throw new Exception($this->UsersHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// удаление пользователя
+	private function userRemove()
+	{
+		try
+		{
+			if($this->UsersHelper->remove(($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->UsersHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// заблокировать пользователя
+	private function userBlock()
+	{
+		try
+		{
+			if($this->UsersHelper->block(($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->UsersHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// разблокировать пользователя
+	private function userUnBlock()
+	{
+		try
+		{
+			if($this->UsersHelper->unblock(($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->UsersHelper->getLastError());
 
 			$this->jsonrpc->result('Успешно');
 		}

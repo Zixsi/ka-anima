@@ -8,7 +8,7 @@
 		</div>
 	</div>
 	<div class="panel-body" style="padding-top: 30px;">
-		<table class="table table-striped">
+		<table class="table table-striped" id="admin-lectures-table">
 			<thead>
 				<tr>
 					<th>Id</th>
@@ -34,12 +34,32 @@
 							<td><?=$item['sort']?></td>
 							<td class="text-right">
 								<a href="./edit/<?=$item['id']?>/" class="btn btn-xxs btn-default lnr lnr-pencil" title="Редактировать"></a>
-								<a href="#" class="btn btn-xxs btn-danger lnr lnr-trash" title="Удалить"></a>
+								<a href="javascript:void(0);" class="btn btn-xxs btn-danger lnr lnr-trash btn-item-remove" data-id="<?=$item['id']?>" title="Удалить"></a>
 							</td>
 						</tr>
 					<?endforeach;?>
 				<?endif;?>
 			</tbody>
 		</table>
+	</div>
+</div>
+
+<div class="modal fade" id="admin-remove-lecture-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="post">
+					<input type="hidden" name="id" value="0">
+					<h4 class="text-center">Вы действительно хотите удалить эту лекцию?</h4>
+					<div class="form-group text-center" style="padding-top: 20px;">
+						<button type="submit" class="btn btn-danger" style="margin-right: 10px;">Удалить</button>
+						<button type="button" class="btn btn-default" style="margin-left: 10px;" data-dismiss="modal">Отмена</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 </div>

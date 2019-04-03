@@ -10,10 +10,10 @@ class GroupsModel extends APP_Model
 	const TABLE_FILES = 'files';
 
 	const TYPE = [
-		'standart' => ['title' => 'Стандартная группа'], // без проверки дз и онлайн встреч
-		'advanced' => ['title' => 'Расширенная группа'], // расширенный (с дз и онлайн встречами)
-		'vip' => ['title' => 'VIP группа'], // advanced + чатик с преподом
-		'private' => ['title' => 'Закрытая группа'] // закрытая группа
+		'standart' => ['title' => 'Стандартная'], // без проверки дз и онлайн встреч
+		'advanced' => ['title' => 'Расширенная'], // расширенный (с дз и онлайн встречами)
+		'vip' => ['title' => 'VIP'], // advanced + старт в ближайший понедельник
+		'private' => ['title' => 'Закрытая'] // закрытая группа
 	]; 
 	
 	public function __construct()
@@ -35,6 +35,45 @@ class GroupsModel extends APP_Model
 	{
 		$bind = [$id];
 		$sql = 'SELECT * FROM '.self::TABLE.' WHERE id = ?';
+		if($res = $this->db->query($sql, $bind))
+		{
+			return $res->row_array();
+		}
+
+		return false;
+	}
+
+	public function getByIdDetail($id)
+	{
+		$bind = [$id];
+		$sql = 'SELECT 
+					c.id, c.name, c.description, c.price, c.only_standart, c.teacher, g.id as group_id, 
+					g.code, g.ts, g.ts_end, f.full_path as img_src 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
+				WHERE 
+					g.id = ?';
+		if($res = $this->db->query($sql, $bind))
+		{
+			return $res->row_array();
+		}
+
+		return false;
+	}
+
+	// поиск подходящей ближайше вип группы
+	public function getNearVip($course)
+	{
+		$date = new DateTime('now');
+		if(intval($date->format('N')) !== 1)
+			$date->modify('next monday');
+
+		$bind = [$course, $date->format('Y-m-d 00:00:00')];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE course_id = ? AND type = \'vip\' AND deleted = 0 AND ts = ? ';
 		if($res = $this->db->query($sql, $bind))
 		{
 			return $res->row_array();
@@ -90,7 +129,7 @@ class GroupsModel extends APP_Model
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
-					(SELECT service, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE type = 0 GROUP BY service) as s ON(s.service = g.id) 
+					(SELECT target, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE target_type = \'course\' GROUP BY target) as s ON(s.target = g.id) 
 				WHERE 
 					deleted = 0 AND 
 					ts_end > ? 
@@ -104,30 +143,39 @@ class GroupsModel extends APP_Model
 		return  [];
 	}
 
-	// список автивных групп для юзера 
-	public function listOffers($id)
+	// список предложений 
+	public function listOffers()
 	{
 		$result = [];
+		$now = new DateTime('now');
+		$now->setTime(0, 0, 0);
+		$start_ts = clone $now;
+		$start_ts->modify('-2 weeks'); // за 2 недели после старата
+		$end_ts = clone $now;
+		$end_ts->modify('+3 months'); // за 3 месяца до старта
+		
+		// debug($start_ts->format('Y-m-d 00:00:00')); die();
+
 
 		$bind = [
-			intval($id), 
-			date('Y-m-d 00:00:00', time())
+			$start_ts->format('Y-m-d 00:00:00'), 
+			$end_ts->format('Y-m-d 00:00:00'), 
+			$now->format('Y-m-d 00:00:00')
 		];
 
 		$sql = 'SELECT 
-					c.id, c.name, c.type, c.description, c.price_month, 
-					c.price_full, g.id as group_id, g.code, g.ts, f.full_path as img_src, s.user  
+					c.id, c.name, c.description, c.price, c.only_standart , g.id as group_id, 
+					g.code, g.ts, f.full_path as img_src   
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
 				LEFT JOIN 
-					'.self::TABLE_SUBSCRIPTION.' as s ON(s.service = g.id AND s.type = 0 AND s.user = ?) 
-				LEFT JOIN 
 					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE 
 					c.active = 1 AND 
 					g.deleted = 0 AND 
+					(g.ts > ? AND g.ts < ?) AND 
 					g.ts_end > ? AND 
 					g.type NOT IN(\'vip\', \'private\')
 				ORDER BY 
@@ -144,13 +192,11 @@ class GroupsModel extends APP_Model
 					$result[$val['id']] = [
 						'id' => $val['id'],
 						'name' => $val['name'],
-						'type' => $val['type'],
 						'img' => $val['img_src'],
+						'only_standart' => $val['only_standart'],
 						'description' => $val['description'],
-						'price' => [
-							'month' => $val['price_month'],
-							'full' => $val['price_full']
-						],
+						'free' => false,
+						'price' => json_decode($val['price'], true),
 						'groups' => []
 					];
 				}
@@ -158,9 +204,13 @@ class GroupsModel extends APP_Model
 				$result[$val['id']]['groups'][] = [
 					'id' => $val['group_id'],
 					'code' => $val['code'],
-					'ts' => $val['ts'],
-					'subscription' => intval($val['user'])?1:0
+					'ts' => $val['ts'] 
 				];
+
+				if((int) $result[$val['id']]['only_standart'] === 1 && (int) $result[$val['id']]['price']['month'] === 0)
+				{
+					$result[$val['id']]['free'] = true;
+				}
 			}
 		}
 

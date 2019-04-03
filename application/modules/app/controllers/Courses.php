@@ -20,7 +20,8 @@ class Courses extends APP_Controller
 		$data['section'] = 'index';
 		$data['group_id'] = intval($group);
 		$data['lecture_id'] = intval($lecture);
-		$data['subscr_is_active'] = $this->checkSubscribeGroup($data['group_id']);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
+		$data['subscr_is_active'] = ($data['subscr'])?true:false;
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
@@ -64,8 +65,9 @@ class Courses extends APP_Controller
 		$data['error'] = null;
 		$data['section'] = 'group';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
+		if($data['subscr'] === false)
 		{
 			header('Location: /courses/'.$data['group_id'].'/');
 		}
@@ -85,14 +87,13 @@ class Courses extends APP_Controller
 		$data = [];
 		$data['section'] = 'review';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
-		{
+		if($data['subscr'] == false)
 			header('Location: /courses/'.$data['group_id'].'/');
-		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		if(($data['group']['type'] ?? '') === 'standart')
+		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /courses/'.$data['group_id'].'/');
 
 		$data['review_item'] = false; 
@@ -129,14 +130,13 @@ class Courses extends APP_Controller
 		$data = [];
 		$data['section'] = 'stream';
 		$data['group_id'] = intval($group);
+		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
-		if($this->checkSubscribeGroup($data['group_id']) == false)
-		{
+		if($data['subscr'] == false)
 			header('Location: /courses/'.$data['group_id'].'/');
-		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		if(($data['group']['type'] ?? '') === 'standart')
+		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /courses/'.$data['group_id'].'/');
 
 		$data['list'] = $this->StreamsModel->byGroupList($data['group_id']);
@@ -173,48 +173,36 @@ class Courses extends APP_Controller
 		$this->load->lview('courses/stream', $data);
 	}
 
+	// запись на курсы
 	public function enroll()
 	{
 		$data = [];
-
-		$user = $this->Auth->userID();
-		$data['error'] = null;
-		$data['items'] = $this->GroupsModel->listOffers($user);
-		$data['course_types'] = $this->CoursesModel::TYPES;
 		$data['balance'] = $this->Auth->balance();
+		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
 
-		if(cr_valid_key())
+		if(count($data['items']))
 		{
-			$subscr_data = [
-				'user' => $user,
-				'group' => $this->input->post('group', true),
-				'price_period' => $this->input->post('price', true)
-			];
-
-			if($this->SubscriptionModel->group($subscr_data['user'], $subscr_data['group'], $subscr_data['price_period']))
+			$subscr_courses = $this->SubscriptionModel->listCoursesId($this->user_id);
+			foreach($data['items'] as &$val)
 			{
-				header('Location: ./');
+				$val['subscription'] = in_array($val['id'], $subscr_courses);
 			}
-
-			$data['error'] = $this->SubscriptionModel->LAST_ERROR;
 		}
-
-		$data['csrf'] = cr_get_key();
-
+		//debug($data['items']); die();
+		
 		$this->load->lview('courses/enroll', $data);
 	}
 
-	private function checkSubscribeGroup($id)
+	private function subscrGroup($id)
 	{
-		if(($subscr = $this->SubscriptionModel->byUserService($this->user_id, $id)) == false)
+		if(($subscr = $this->SubscriptionModel->get($this->user_id, $id, 'course')) == false)
 		{
-			header('Location: /');
-			die();
+			header('Location: /'); die();
 		}
 
 		if(strtotime($subscr['ts_end']) > time())
 		{
-			return true;
+			return $subscr;
 		}
 
 
@@ -227,7 +215,7 @@ class Courses extends APP_Controller
 
 		foreach($list as $val)
 		{
-			$cnt += ($val['active'] == 1)?1:0;
+			$cnt += ($val['active'] == 1 && (int) $val['type'] === 0)?1:0;
 		}
 
 		return $cnt;
