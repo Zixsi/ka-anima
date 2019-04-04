@@ -291,52 +291,6 @@ class SubscriptionModel extends APP_Model
 	}
 
 	/*
-	// Подписки пользователя по сервису
-	public function byUserService($user, $service_id, $type = 0)
-	{
-		try
-		{
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND service = ? AND type = ? ORDER BY id DESC';
-			if($res = $this->db->query($sql, [intval($user), intval($service_id), $type])->row_array())
-			{
-				$res['active'] = (strtotime($res['ts_end']) > time())?true:false;
-
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
-	// Подписки пользователя по типу
-	public function byUserType($user, $type = 0)
-	{
-		try
-		{
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND type = ? ORDER BY id DESC';
-			if($res = $this->db->query($sql, [intval($user), intval($type)])->result_array())
-			{
-				foreach($res as &$val)
-				{
-					$val['ts_end_mark'] = strtotime($val['ts_end']);
-					$val['active'] = ($val['ts_end_mark'] > time())?true:false;
-				}
-				
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
 	// Продление подписки
 	public function renewItem($id)
 	{
@@ -437,10 +391,20 @@ class SubscriptionModel extends APP_Model
 	}
 	*/
 
-	public function getGroupUsers($group)
+	// пользователи группы
+	public function getGroupUsers($group,  $type = null)
 	{
 		if($group > 0)
 		{
+			$bind = [(int) $group];
+			$sql_where = '';
+
+			if($type && array_key_exists($type, self::TYPES))
+			{
+				$bind[] = $type;
+				$sql_where .= ' AND s.type = ? ';
+			}
+
 			$sql = 'SELECT 
 						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name
 					FROM 
@@ -448,14 +412,15 @@ class SubscriptionModel extends APP_Model
 					LEFT JOIN 
 						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
 					WHERE 
-						s.target = ? AND s.target_type = \'course\' 
+						s.target = ? AND s.target_type = \'course\' '.$sql_where.' 
 					GROUP BY 
 						s.user 
 					ORDER BY 
 						s.user ASC';
 
-			if($res = $this->db->query($sql, [intval($group)]))
+			if($res = $this->db->query($sql, $bind))
 			{
+				// debug($res); die();
 				$res = $res->result_array();
 				foreach($res as &$val)
 				{

@@ -172,3 +172,15 @@
 .list-group-filter .list-group-item label {display: block; cursor: pointer; padding: 10px 15px; margin: 0; font-weight: normal;}
 .list-group-filter .list-group-item input[type="radio"]:checked + label {background-color: #337ab7; color: #fff;}
 .list-group-filter .list-group-item input[type="radio"] {position: absolute; left: -9999px;}
+
+#group-user-lectures {display: flex; flex-flow: row wrap;}
+#group-user-lectures .card {display: flex; flex: 0 0 33.33%; flex-direction: column; box-sizing: border-box; padding: 0px 20px; padding-bottom: 20px;}
+#group-user-lectures .card .head {padding-bottom: 10px;}
+#group-user-lectures .card .head .title {font-size: 18px;}
+#group-user-lectures .card .body {border: 1px solid #000; height: 250px; position: relative; padding: 15px;}
+#group-user-lectures .card .body .title {text-align: center; font-size: 16px;}
+#group-user-lectures .card .body .title.empty {}
+#group-user-lectures .card .btn-remove {position: absolute; top: 10px; right: 10px;}
+#group-user-lectures .card .actions {}
+#group-user-lectures .card .actions .btn {display: block;}
+#group-user-lectures .card .body p {}

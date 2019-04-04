@@ -16,17 +16,21 @@ $route['admin/courses/(:num)/lectures/(.*)'] = 'admin/Lectures/$2/$1';
 $route['admin/courses/(.*)'] = 'admin/Courses/$1';
 $route['admin/(.*)'] = 'admin/$1';
 
-
 $route['profile'] = 'app/Profile/index';
 $route['profile/(:num)'] = 'app/Profile/index/$1';
 $route['profile/(.*)'] = 'app/Profile/$1';
 $route['profile/messages/(:num)'] = 'app/Profile/messages/$1';
 
-$route['teachinggroups'] = 'app/TeachingGroups';
-$route['teachinggroups/(:num)'] = 'app/TeachingGroups/group/$1';
-$route['teachinggroups/(:num)/lecture/(:num)'] = 'app/TeachingGroups/lecture/$1/$2';
-$route['teachinggroups/(:num)/lecture/(:num)/review/(:num)'] = 'app/TeachingGroups/review/$1/$2/$3';
-$route['teachinggroups/(.*)'] = 'app/TeachingGroups/$1';
+
+
+$route['groups/(:any)'] = 'app/groups/item/$1';
+$route['groups/(:any)/(.*)'] = 'app/groups/$2/$1';
+
+// $route['teachinggroups'] = 'app/TeachingGroups';
+// $route['teachinggroups/(:num)'] = 'app/TeachingGroups/group/$1';
+// $route['teachinggroups/(:num)/lecture/(:num)'] = 'app/TeachingGroups/lecture/$1/$2';
+// $route['teachinggroups/(:num)/lecture/(:num)/review/(:num)'] = 'app/TeachingGroups/review/$1/$2/$3';
+// $route['teachinggroups/(.*)'] = 'app/TeachingGroups/$1';
 
 $route['teachingstreams'] = 'app/TeachingStreams';
 $route['teachingstreams/(:num)'] = 'app/TeachingStreams/item/$1';

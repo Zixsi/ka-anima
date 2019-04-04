@@ -43,6 +43,35 @@ class GroupsModel extends APP_Model
 		return false;
 	}
 
+	// группа по коду
+	public function getByCode($code)
+	{
+		$bind = [$code];
+		$sql = 'SELECT 
+					g.*, c.name 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				WHERE 
+					g.code = ?';
+		if($res = $this->db->query($sql, $bind))
+		{
+			if($val = $res->row_array())
+			{
+				$now_ts = time();
+				
+				$val['timestamp_start'] = strtotime($val['ts']);
+				$val['timestamp_end'] = strtotime($val['ts_end']);
+				$val['status'] = ($val['timestamp_end'] > $now_ts)?(($val['timestamp_start'] > $now_ts)?1:0):-1;
+
+				return $val;
+			}
+		}
+
+		return false;
+	}
+
 	public function getByIdDetail($id)
 	{
 		$bind = [$id];
@@ -138,6 +167,51 @@ class GroupsModel extends APP_Model
 		if($res = $this->db->query($sql, $bind))
 		{
 			return $res->result_array();
+		}
+
+		return  [];
+	}
+
+	// список групп преподавателя
+	public function getTeacherGroups($teacher, $active = true)
+	{
+		$now = new DateTime('now');
+		$now_ts = $now->getTimestamp();
+		$bind = [$teacher];
+		$sql_where = '';
+
+		// только автивные группы
+		if($active)
+		{
+			$bind[] = $now->format('Y-m-d H:i:s');
+			$bind[] = $now->format('Y-m-d H:i:s');
+			$sql_where .= ' AND (g.ts <= ? AND g.ts_end > ?) ';
+		}
+
+		$sql = 'SELECT 
+					g.*, c.name
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				WHERE 
+					g.deleted = 0 AND 
+					g.teacher = ? 
+					'.$sql_where.' 
+				ORDER BY 
+					g.ts_end ASC, g.ts ASC';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			foreach($res as &$val)
+			{
+				$val['timestamp_start'] = strtotime($val['ts']);
+				$val['timestamp_end'] = strtotime($val['ts_end']);
+				$val['status'] = ($val['timestamp_end'] > $now_ts)?(($val['timestamp_start'] > $now_ts)?1:0):-1;
+			}
+
+			return $res;
 		}
 
 		return  [];

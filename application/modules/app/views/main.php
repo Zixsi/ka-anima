@@ -113,7 +113,7 @@ $user_id = $CI->Auth->userID();
 						<?endif;?>
 							
 						<?if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-							<li><a href="/teachinggroups/" <?=is_active_menu_item('teachinggroups')?'class="active"':''?> >Группы</a></li>
+							<li><a href="/groups/" <?=is_active_menu_item('groups')?'class="active"':''?> >Группы</a></li>
 							<li><a href="/teachingstreams/" <?=is_active_menu_item('teachingstreams')?'class="active"':''?> >Онлайн встречи</a></li>
 						<?endif;?>
 
