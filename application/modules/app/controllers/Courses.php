@@ -31,22 +31,28 @@ class Courses extends APP_Controller
 		if($data['lectures_is_active'] && $data['subscr_is_active'])
 		{
 			if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
-			{
 				header('Location: /courses/'.$data['group_id'].'/lecture/'.$last_active_lecture);
-				die();
-			}
 
 			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
+			$data['lecture']['ts'] = $data['lectures'][$data['lecture_id']]['ts'];
+			$data['lecture']['can_upload_files'] = true;
+			// если прошла 3 недели после запуска
+			// запрещаем закружать в эту лекцию файлы
+			// $ts_now = new DateTime('now');
+			// $ts_lecture_start = new DateTime($data['lecture']['ts']);
+			// $diff = $ts_now->diff($ts_lecture_start);
+			// if((int) $diff->days > 21)
+			// 	$data['lecture']['can_upload_files'] = false;
+			// unset($ts_now, $ts_lecture_start, $diff);
+
+
 			$data['lecture']['video_code'] = '';
 			if($res = $this->VideoModel->bySource($data['lecture']['id']))
-			{
 				$data['lecture']['video_code'] = $res['video_code'];
-			}
 
 			if(cr_valid_key())
-			{
 				$this->uploadHomeWork($data);
-			}
+			
 			$data['csrf'] = cr_get_key();
 			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($data['group_id'], $data['lecture_id']);
 			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
@@ -54,7 +60,7 @@ class Courses extends APP_Controller
 
 		$this->setHomeworkStatus($data['group_id'], $this->user_id, $data['lectures']);
 
-		//debug($data['lectures']); die();
+		// debug($data['lectures']); die();
 
 		$this->load->lview('courses/index', $data);
 	}
@@ -64,13 +70,11 @@ class Courses extends APP_Controller
 		$data = [];
 		$data['error'] = null;
 		$data['section'] = 'group';
-		$data['group_id'] = intval($group);
+		$data['group_id'] = (int) $group;
 		$data['subscr'] = $this->subscrGroup($data['group_id']);
 		
 		if($data['subscr'] === false)
-		{
 			header('Location: /courses/'.$data['group_id'].'/');
-		}
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
@@ -79,6 +83,9 @@ class Courses extends APP_Controller
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
 		$data['images'] = $this->GroupsModel->getImageFiles($data['group_id']);
 
+		$data['wall'] = $this->WallModel->list($data['group_id']);
+		// debug($data['wall']); die();
+
 		$this->load->lview('courses/group', $data);
 	}
 
@@ -86,9 +93,9 @@ class Courses extends APP_Controller
 	{
 		$data = [];
 		$data['section'] = 'review';
-		$data['group_id'] = intval($group);
+		$data['group_id'] = (int) $group;
 		$data['subscr'] = $this->subscrGroup($data['group_id']);
-		
+
 		if($data['subscr'] == false)
 			header('Location: /courses/'.$data['group_id'].'/');
 
@@ -102,15 +109,10 @@ class Courses extends APP_Controller
 			$review_item = $this->ReviewModel->getByID($review);
 			// Если юзер не просматривал новое
 			if(intval($review_item['item_is_viewed'] ?? 1) === 0 && intval($review_item['user'] ?? 1) === intval($this->user_id))
-			{
 				$this->ReviewModel->setViewedStatus($review_item['id'], true);
-			}
 		
-			$review_item['files'] = $this->FilesModel->listLinkFiles($review_item['id'], 'review');
 			if($user = $this->UserModel->getByID($review_item['user']))
-			{
 				$review_item['user_name'] = $user['full_name'];
-			}
 
 			$data['review_item'] = $review_item;
 		}
@@ -122,6 +124,7 @@ class Courses extends APP_Controller
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
 		$data['not_viewed'] = $this->ReviewModel->notViewedItems($this->user_id, $data['group_id']);
 
+		// debug($data); die();
 		$this->load->lview('courses/reviews', $data);
 	}
 
@@ -196,15 +199,10 @@ class Courses extends APP_Controller
 	private function subscrGroup($id)
 	{
 		if(($subscr = $this->SubscriptionModel->get($this->user_id, $id, 'course')) == false)
-		{
-			header('Location: /'); die();
-		}
+			header('Location: /');
 
 		if(strtotime($subscr['ts_end']) > time())
-		{
 			return $subscr;
-		}
-
 
 		return false;
 	}

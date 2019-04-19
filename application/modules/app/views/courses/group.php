@@ -4,22 +4,69 @@
 	<?$this->load->view('courses/menu');?>
 
 	<div class="col-xs-6">
-		<div class="panel panel-headline">
-			<div class="panel-body">
-				<form action="" method="post" class="form">
-					<div class="form-group">
-						<label>Разместить сообщение</label>
-						<textarea name="text" class="form-control" rows="5" placeholder="Поделитесь вашими мыслями..."></textarea>
+
+		<div id="wall-component">
+			<?$this->load->view('tpls/wall');?>
+			<div class="panel panel-headline wall-panel">
+				<div class="panel-body">
+					<form action="" method="post" class="form wall-from" id="wall-main-form">
+						<input type="hidden" name="group" value="<?=$group['id']?>" data-const="true">
+						<div class="wall-from--input-wrap">
+							<textarea name="text" class="wall-from--text-input" placeholder="Напишите сообщение..."></textarea>
+							<button type="submit" class="btn wall-from--btn-send">
+								<i class="fab fa-telegram-plane"></i>
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="media-list" id="wall-main-list">
+				<?foreach($wall as $val):?>
+					<div class="panel panel-headline wall-panel" id="wall-panel-id<?=$val['id']?>">
+						<div class="panel-body">
+							<div class="media">
+								<a class="pull-left" href="/profile/<?=$val['user']?>/" target="_blank">
+									<img class="media-object" src="<?=$val['img']?>" alt="<?=$val['full_name']?>">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">
+										<a href="/profile/<?=$val['user']?>/" target="_blank"><?=$val['full_name']?></a>
+										<?if($val['role'] > 0):?>
+											<small><span class="label label-success"><?=$val['role_name']?></span></small>
+										<?endif;?>
+										<br><small><?=$val['ts']?></small>
+									</h4>
+									<?=htmlspecialchars($val['text'])?>
+									<hr>
+									<div class="wall-item-tools">
+										<button type="button" class="btn btn-comments" data-id="<?=$val['id']?>">
+											<i class="far fa-comment-alt"></i> <span class="info-child-cnt"><?=($val['child_cnt'] ?? '')?></span>
+										</button>
+									</div>
+									<div class="wall-wrap-childs">
+										<hr>
+										<div class="wall-childs" id="wall-childs-id<?=$val['id']?>"></div>
+										<form action="" method="post" class="form wall-from wall-child-from">
+											<input type="hidden" name="group" value="<?=$group['id']?>" data-const="true">
+											<input type="hidden" name="target" value="<?=$val['id']?>" data-const="true">
+											<div class="wall-from--input-wrap">
+												<textarea name="text" class="wall-from--text-input" placeholder="Напишите сообщение..."></textarea>
+												<button type="submit" class="btn wall-from--btn-send">
+													<i class="fab fa-telegram-plane"></i>
+												</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="form-group text-right">
-						<button type="submit" class="btn btn-primary btn-xxs">Разместить</button>
-					</div>
-				</form>
+				<?endforeach;?>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6">
-
 		<div class="panel panel-headline">
 			<div class="panel-heading">
 				<h3 class="panel-title"><?=$group['name']?></h3>

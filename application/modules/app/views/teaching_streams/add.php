@@ -18,7 +18,7 @@
 					<select name="group_id" id="fgroup" class="form-control">
 						<option value="0" selected="true">--- none ---</option>
 						<?foreach($groups as $val):?>
-							<option value="<?=$val['id']?>" <?=set_select('group_id', $val['id'])?> ><?=$val['name']?> (<?=strftime("%B %Y", strtotime($val['ts']))?>)</option>
+							<option value="<?=$val['id']?>" <?=set_select('group_id', $val['id'])?> ><?=$val['name']?> (<?=date('d.m.Y', $val['timestamp_start'])?> - <?=date('d.m.Y', $val['timestamp_end'])?>)</option>
 						<?endforeach;?>
 					</select>
 				</div>

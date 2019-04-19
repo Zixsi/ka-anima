@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class VideoModel extends APP_Model
 {
-	private const TABLE = 'video';
-	private const VIDEO_TYPES = [
+	const TABLE = 'video';
+	const VIDEO_TYPES = [
 		'lecture', // лекция
 		'review', // ревью 
 	];
@@ -21,7 +21,7 @@ class VideoModel extends APP_Model
 		$this->db->where('source_type', $type);
 		$this->db->delete(self::TABLE);
 			
-		return false;
+		return true;
 	}
 
 	// список видео по ресурсу

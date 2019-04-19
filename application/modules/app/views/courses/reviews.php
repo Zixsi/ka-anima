@@ -10,7 +10,7 @@
 					<div class="col-xs-5">
 						<?if($review_item):?>
 							<div class="video-wrap">
-								<iframe src="/video/review/<?=$review_item['id']?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+								<iframe src="/video/<?=$review_item['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 							</div>
 							<div class="video-info">
 								<table class="table table-no-bordered">
@@ -38,13 +38,11 @@
 											<td><?=$review_item['text']?></td>
 										</tr>
 									<?endif;?>
-									<?if(!empty($review_item['files'])):?>
+									<?if(!empty($review_item['file_url'])):?>
 										<tr>
-											<td><b>Файлы:</b></td>
+											<td><b>Приложение:</b></td>
 											<td>
-												<?foreach($review_item['files'] as $val):?>
-													<p><a href="/file/download/<?=$val['id']?>" target="_blank"><?=$val['name']?></a></p>
-												<?endforeach;?>
+												<a href="<?=$review_item['file_url']?>" target="_blank">Скачать</a>
 											</td>
 										</tr>
 									<?endif;?>
@@ -88,11 +86,13 @@
 											<?if(is_array($not_viewed) && in_array($item['id'], $not_viewed)):?>
 												<span class="badge bg-danger" style="position: absolute; top: -8px; right: 5px;">!</span>
 											<?endif;?>
-											<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>"><img src="<?=$item['src']?>" width="100%"></a>
+											<a href="/courses/<?=$item['group_id']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
+												<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="100%">
+											</a>
 											<div class="caption">
 												<span><?=date('d-m-Y', strtotime($item['ts']))?></span><br>
 												<h4>
-													<a href="/courses/1/review/<?=$item['id']?>/?<?=$filter_url?>">
+													<a href="/courses/<?=$item['group_id']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
 														<?=($item['user'])?$item['user_name']:'Общий обзор'?> - <?=$item['name']?>
 													</a>
 												</h4>

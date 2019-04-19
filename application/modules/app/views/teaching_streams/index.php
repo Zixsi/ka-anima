@@ -40,7 +40,7 @@
 						<tr>
 							<td><?=$item['id']?></td>
 							<td>
-								<?=$item['course_name']?> (<?=strftime("%B %Y", strtotime($item['course_ts']))?>)
+								<?=$item['course_name']?> (<?=date('d.m.Y', strtotime($item['course_ts']))?> - <?=date('d.m.Y', strtotime($item['course_ts_end']))?>)
 							</td>
 							<td>
 								<a href="./<?=$item['id']?>/"><?=$item['name']?></a>

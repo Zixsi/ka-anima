@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<div class="col-xs-7">
-			<?if($lecture['type'] == 0):?>
+			<?if($lecture['type'] == 0 && $lecture['can_upload_files'] && ($data['subscr']['type'] ?? '') !== 'standart'):?>
 				<div class="panel panel-headline">
 					<div class="panel-heading">
 						<h3 class="panel-title">Загрузка заданий</h3>

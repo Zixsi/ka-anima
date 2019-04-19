@@ -170,7 +170,7 @@ $config['stream_add'] = [
 	[
 		'field' => 'name',
 		'label' => 'Name',
-		'rules' => 'required|min_length[5]'
+		'rules' => 'required|min_length[3]'
 	],
 	[
 		'field' => 'ts',

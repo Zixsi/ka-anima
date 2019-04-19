@@ -227,4 +227,42 @@ class GroupsHelper extends APP_Model
 
 		return false;
 	}
+
+	// проставляем пользователям статус домашних заданий
+	public function setUsersHomeworkStatus($id, &$users)
+	{
+		if(!$users)
+			return;
+
+		$status = $this->GroupsModel->groupHomeworkStatus($id);
+		foreach($users as $key => &$val)
+		{
+			$val['homeworks'] = (int) ($status[$val['id']]['homeworks'] ?? 0);
+			$val['reviews'] = (int) ($status[$val['id']]['reviews'] ?? 0);
+		}
+	}
+
+	// подготовить список групп для преподавателя
+	public function prepareListForTeacher(&$data = [])
+	{
+		// получаем идентификаторы групп
+		$ids = [];
+		foreach($data as $val)
+		{
+			$ids[] = $val['id'];
+		}
+
+		// получаем информацию по кол-ву подписок 
+		$subscr_stat = [];
+		if(count($ids))
+			$subscr_stat = $this->SubscriptionModel->statForIds($ids);
+
+		// проставляем информацию для каждой группы
+		foreach($data as &$val)
+		{
+			$val['subscr_cnt'] = 0;
+			if(array_key_exists($val['id'], $subscr_stat))
+				$val['subscr_cnt'] = $subscr_stat[$val['id']]['cnt'];
+		}
+	}
 }

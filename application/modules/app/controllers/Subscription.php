@@ -6,7 +6,6 @@ class Subscription extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/TransactionsModel']);
 	}
 	
 	public function index()
@@ -67,7 +66,6 @@ class Subscription extends APP_Controller
 	private function prepareSubscription(&$items)
 	{
 		$user_id = $this->Auth->userID();
-		$this->load->model(['main/TransactionsModel', 'main/LecturesModel']);
 		//debug($items); die();
 		//debug($user); die();
 

@@ -6,8 +6,11 @@ class GroupsModel extends APP_Model
 	const TABLE = 'courses_groups';
 	const TABLE_COURSES = 'courses';
 	const TABLE_SUBSCRIPTION = 'subscription';
+	const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	const TABLE_HOMEWORK = 'lectures_homework';
+	const TABLE_LECTURES = 'lectures';
 	const TABLE_FILES = 'files';
+	const TABLE_REVIEW = 'review';
 
 	const TYPE = [
 		'standart' => ['title' => 'Стандартная'], // без проверки дз и онлайн встреч
@@ -48,11 +51,13 @@ class GroupsModel extends APP_Model
 	{
 		$bind = [$code];
 		$sql = 'SELECT 
-					g.*, c.name 
+					g.*, c.name, lg.cnt as cnt 
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN
+					(SELECT COUNT(*) as cnt, tlg.group_id FROM '.self::TABLE_LECTURES_GROUPS.' as tlg LEFT JOIN '.self::TABLE_LECTURES.' as tl ON(tl.id = tlg.lecture_id) WHERE tl.type = 0 GROUP BY tlg.group_id) as lg ON(lg.group_id = g.id) 
 				WHERE 
 					g.code = ?';
 		if($res = $this->db->query($sql, $bind))
@@ -121,7 +126,6 @@ class GroupsModel extends APP_Model
 		return false;
 	}
 	
-
 	public function getImageFiles($id)
 	{
 		try
@@ -398,6 +402,46 @@ class GroupsModel extends APP_Model
 		}
 
 		$result['body'] = $courses;
+
+		return $result;
+	}
+
+	// статус домашних заданий для группы
+	public function groupHomeworkStatus($id)
+	{
+		$bind = [$id];
+		$sql = 'SELECT 
+					MAX(lh.id) as id, lh.group_id, lh.lecture_id, lh.user, lr.id as review  
+				FROM 
+					'.self::TABLE_HOMEWORK.' as lh 
+				LEFT JOIN
+					(SELECT MAX(id) as id, group_id, lecture_id, user FROM '.self::TABLE_REVIEW.' GROUP BY group_id, lecture_id, user) as lr ON(lr.group_id = lh.group_id AND lr.lecture_id = lh.lecture_id AND lr.user = lh.user) 
+				WHERE 
+					lh.group_id = ? 
+				GROUP BY 
+					lh.group_id, lh.lecture_id, lh.user';
+
+		$result = [];			
+		if($res = $this->db->query($sql, $bind))
+		{
+			if($res = $res->result_array())
+			{
+				foreach($res as $val)
+				{
+					if(!array_key_exists($val['user'], $result))
+					{
+						$result[$val['user']] = [
+							'homeworks' => 0,
+							'reviews' => 0
+						];
+					}
+
+					$result[$val['user']]['homeworks']++;
+					if((int) $val['review'] > 0)
+						$result[$val['user']]['reviews']++;
+				}
+			}
+		}
 
 		return $result;
 	}

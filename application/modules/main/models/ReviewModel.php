@@ -11,89 +11,46 @@ class ReviewModel extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/VideoModel']);
 	}
 
 	public function add($data = [])
 	{
-		try
-		{
-			$params = [
-				'group_id' => $data['group_id'] ?? 0,
-				'lecture_id' => $data['lecture_id'] ?? 0,
-				'user' => $data['user'] ?? 0,
-				'video_url' => $data['video_url'] ?? '',
-				'text' => $data['text'] ?? ''
-			];
+		$params = [
+			'group_id' => ($data['group_id'] ?? 0),
+			'lecture_id' => ($data['lecture_id'] ?? 0),
+			'user' => ($data['user'] ?? 0),
+			'video_url' => ($data['video_url'] ?? ''),
+			'file_url' => ($data['file_url'] ?? ''),
+			'text' => ($data['text'] ?? '')
+		];
 
-			$this->form_validation->reset_validation();
-			$this->form_validation->set_data($params);
-			if($this->form_validation->run('review_add') == false)
-			{
-				throw new Exception($this->form_validation->error_string(), 1);
-			}
-
-			if($this->db->insert(self::TABLE, $params))
-			{
-				$id = $this->db->insert_id();
-				$this->VideoModel->prepareAndSet($id, 'review', $params['video_url']);
-
-				return $id;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
-	public function update($id, $data = [])
-	{
-		try
-		{
-			$params = [
-				'group_id' => $data['group_id'] ?? 0,
-				'lecture_id' => $data['lecture_id'] ?? 0,
-				'user' => $data['user'] ?? 0,
-				'video_url' => $data['video_url'] ?? '',
-				'text' => $data['text'] ?? ''
-			];
-
-			$this->form_validation->reset_validation();
-			$this->form_validation->set_data($params);
-			if($this->form_validation->run('review_add') == false)
-			{
-				throw new Exception($this->form_validation->error_string(), 1);
-			}
-
-			
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $params))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		if($this->db->insert(self::TABLE, $params))
+			return $this->db->insert_id();
 
 		return false;
 	}
 
 	public function delete($id)
 	{
-		return false;
+		return $this->db->delete(self::TABLE, ['id' => $id]);
 	}
 
 	public function getByID($id)
 	{
-		$sql = 'SELECT r.*, l.name as lecture_name FROM '.self::TABLE.' as r LEFT JOIN '.self::TABLE_LECTURES.' as l ON(r.lecture_id = l.id) WHERE r.id = ?';
-		if($res = $this->db->query($sql, [$id])->row_array())
+		$sql = 'SELECT 
+					r.*, l.name as lecture_name, rv.video_code as video_code 
+				FROM 
+					'.self::TABLE.' as r 
+				LEFT JOIN 
+					'.self::TABLE_LECTURES.' as l ON(r.lecture_id = l.id) 
+				LEFT JOIN 
+					'.self::TABLE_VIDEO.' as rv ON(r.id = rv.source_id AND rv.source_type = \'review\') 
+				WHERE 
+					r.id = ?';
+		if($res = $this->db->query($sql, [$id]))
 		{
-			return $res;
+			if($res = $res->row_array())
+				return $res;
 		}
 
 		return false;
@@ -127,11 +84,11 @@ class ReviewModel extends APP_Model
 	{
 		$bind = [$group_id];
 		$sql = 'SELECT 
-					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_url as src, CONCAT_WS(\' \', u.name, u.lastname) as user_name, l.name    
+					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_code as video_code, CONCAT_WS(\' \', u.name, u.lastname) as user_name, l.name    
 				FROM 
 					'.self::TABLE.' as r  
 				LEFT JOIN 
-					'.self::TABLE_VIDEO.' as rv ON(r.id = rv.source_id AND rv.source_type = \'review\' AND rv.type = \'img\') 
+					'.self::TABLE_VIDEO.' as rv ON(r.id = rv.source_id AND rv.source_type = \'review\') 
 				LEFT JOIN
 					'.self::TABLE_USERS.' as u ON(r.user = u.id) 
 				LEFT JOIN
@@ -160,7 +117,7 @@ class ReviewModel extends APP_Model
 		{
 			foreach($res as &$val)
 			{
-				$val['url'] = '/video/review/'.$val['id'];
+				$val['url'] = '/video/'.$val['video_code'].'/';
 			}
 
 			return $res;
