@@ -65,8 +65,9 @@ class SubscriptionHelper extends APP_Model
 				throw new Exception('Неверные параметры', 1);
 
 			$price = $item['price'][$data['type']][$data['period']];
-			if((int) $price === 0 && (int) $course_item['only_standart'] !== 1)
-				throw new Exception('Ошибка подписки', 1);
+			
+			// if((int) $price === 0 && (int) $course_item['only_standart'] !== 1)
+			// 	throw new Exception('Ошибка подписки', 1);
 
 			if((int) $this->Auth->balance() < $price)
 				throw new Exception('Недостаточно средств на счету', 1);
