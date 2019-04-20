@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', 'session', 'uri', 'imggen', 'main/jsonrpc');
+$autoload['libraries'] = array('database', 'security', 'form_validation', 'session', 'uri', 'zip', 'imggen', 'main/jsonrpc', 'wall');
 
 /*
 | -------------------------------------------------------------------
@@ -132,4 +132,25 @@ $autoload['language'] = array();
 |
 |	$autoload['model'] = array('first_model' => 'first');
 */
-$autoload['model'] = array('app/AuthModel' => 'Auth', 'main/UserModel', 'main/CoursesGroupsModel', 'main/AccessModel', 'main/SubscriptionModel', 'main/FilesModel');
+$autoload['model'] = [
+	'app/AuthModel' => 'Auth', 
+	'main/FilesModel',
+	'main/AccessModel', 
+	'main/UserModel', 
+	'main/CoursesModel', 
+	'main/GroupsModel', 
+	'main/groups/GroupsHelper', 
+	'main/CoursesGroupsModel', 
+	'main/SubscriptionModel', 
+	'main/LecturesModel', 
+	'main/LecturesGroupModel', 
+	'main/LecturesHomeworkModel', 
+	'main/ReviewModel',
+	'main/VideoModel',
+	'main/StreamsModel',
+	'main/TransactionsModel',
+	'main/review/ReviewHelper',
+	'main/homework/HomeworkHelper',
+	'main/wall/WallModel',
+	'main/wall/WallHelper',
+];

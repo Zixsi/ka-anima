@@ -4,22 +4,9 @@
 	<?$this->load->view('courses/menu');?>
 
 	<div class="col-xs-6">
-		<div class="panel panel-headline">
-			<div class="panel-body">
-				<form action="" method="post" class="form">
-					<div class="form-group">
-						<label>Разместить сообщение</label>
-						<textarea name="text" class="form-control" rows="5" placeholder="Поделитесь вашими мыслями..."></textarea>
-					</div>
-					<div class="form-group text-right">
-						<button type="submit" class="btn btn-primary btn-xxs">Разместить</button>
-					</div>
-				</form>
-			</div>
-		</div>
+		<?=$this->wall->show($group['id'])?>
 	</div>
 	<div class="col-xs-6">
-
 		<div class="panel panel-headline">
 			<div class="panel-heading">
 				<h3 class="panel-title"><?=$group['name']?></h3>

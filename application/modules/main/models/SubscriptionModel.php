@@ -88,8 +88,252 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
+	// курсы на которые подписан пользователь
+	public function coursesList($user)
+	{
+		if( (int) $user === 0)
+			return [];
+
+		$bind = [(int) $user, date('Y-m-d H:i:s')];
+		$sql = 'SELECT 
+					c.id, c.name, cg.ts, cg.ts_end, cg.id as course_group  
+				FROM 
+					'.self::TABLE.' as s 
+				LEFT JOIN 
+					'.self::TABLE_COURSES_GROUPS.' as cg ON(cg.id = s.target AND s.target_type = \'course\') 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = cg.course_id) 
+				WHERE 
+					s.user = ? AND cg.ts_end > ? 
+				ORDER BY 
+					cg.id ASC';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			foreach($res as $key => &$val)
+			{
+				$val['ts_f'] = date('F Y', strtotime($val['ts']));
+			}
+
+			return $res;
+		}
+
+		return [];
+	}
+
+	// список идентификаторов курсов на которые подписан пользователь
+	public function listCoursesId($user)
+	{
+		$result = [];
+		if($res = $this->coursesList($user))
+		{
+			foreach($res as $val)
+			{
+				$result[] = $val['id'];
+			}
+		}
+
+		return $result;
+	}
+
 	
-	
+	// Подписки пользователя
+	public function byUser($user)
+	{
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
+		$res = $this->db->query($sql, [intval($user)]);
+		if($res = $res->result_array())
+		{
+			foreach($res as &$val)
+			{
+				$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
+			}
+
+			return $res;
+		}
+
+
+		return false;
+	}
+
+	// пользователи группы
+	public function getGroupUsers($group,  $type = null)
+	{
+		if($group > 0)
+		{
+			$bind = [(int) $group];
+			$sql_where = '';
+
+			if($type && array_key_exists($type, self::TYPES))
+			{
+				$bind[] = $type;
+				$sql_where .= ' AND s.type = ? ';
+			}
+
+			$sql = 'SELECT 
+						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name
+					FROM 
+						'.self::TABLE.' as s 
+					LEFT JOIN 
+						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
+					WHERE 
+						s.target = ? AND s.target_type = \'course\' '.$sql_where.' 
+					GROUP BY 
+						s.user 
+					ORDER BY 
+						s.user ASC';
+
+			if($res = $this->db->query($sql, $bind))
+			{
+				// debug($res); die();
+				$result = [];
+				$res = $res->result_array();
+				foreach($res as $val)
+				{
+					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+					$result[$val['id']] = $val;
+				}
+
+				unset($res);
+				return $result;
+			}
+		}
+
+		return false;
+	}
+
+	public function statForIds($ids = [])
+	{
+		$bind = [];
+		$sql = 'SELECT 
+					target as id, count(*) as cnt 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					target IN('.implode(',', $ids).') AND 
+					target_type = \'course\' AND 
+					type != \'standart\' 
+				GROUP BY 
+					target';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			$result = [];
+			foreach($res as $val)
+			{
+				$result[$val['id']] = $val;
+			}
+			
+			unset($res);
+			return $result;
+		}
+
+		return [];
+	}
+
+	/*
+	// Продление подписки
+	public function renewItem($id)
+	{
+		try
+		{
+			if($item = $this->getByID($id))
+			{
+				unset($item['id']);
+				$price = 0;
+				$item['amount'] = floatval($item['amount']);
+				$item['price_month'] = floatval($item['price_month']);
+				$ts_end_mark = strtotime($item['ts_end']);
+
+				switch($item['type'])
+				{
+					case '0':
+						// Продление на месяц
+						if($item['amount'] > 0)
+						{
+							if(($service = $this->CoursesGroupsModel->getByID($item['service'])) == false)
+							{
+								throw new Exception('Group not found', 1);
+							}
+
+							$price = ($item['amount'] > $item['price_month'])?($item['amount'] - $item['price_month']):$item['price_month'];
+
+							$ts_end = new DateTime($item['ts_end']);
+							$ts_end->modify('next month');
+							$ts_end_format = $ts_end->format('Y-m-d 00:00:00');
+
+							$item['ts_end'] = (strtotime($ts_end_format) > strtotime($service['ts_end']))?$service['ts_end']:$ts_end_format;
+							$item['amount'] -= $price;
+						}
+						// Продление на год
+						elseif($ts_end_mark < time())
+						{
+							$price = $item['price_month'];
+							$ts_end = new DateTime();
+							$ts_end->modify('next year');
+							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
+						}
+					break;
+					default:
+						// empty	
+					break;
+				}
+
+				$this->db->trans_begin();
+
+				if($this->Auth->balance() < $price)
+				{
+					throw new Exception('Insufficient funds', 1);
+				}
+
+				if($this->update($id, $item) == false)
+				{
+					throw new Exception('Update error', 1);
+				}
+
+				if($price > 0)
+				{
+					$tx = [
+						'user' => $item['user'],
+						'type' => '1',
+						'amount' => $price,
+						'description' => $item['description'],
+						'service' => 'group',
+						'service_id' => $item['service']
+					];
+
+					if($this->TransactionsModel->add($tx))
+					{
+						$this->Auth->updateBalance();
+					}
+					else
+					{
+						throw new Exception('Pay error', 1);
+					}
+				}
+
+				if($this->db->trans_status() === FALSE)
+				{
+					throw new Exception('Renew error', 1);
+				}
+
+				$this->db->trans_commit();
+
+				return true;
+			}
+		}
+		catch(Exception $e)
+		{
+			$this->db->trans_rollback();
+			$this->LAST_ERROR = $e->getMessage();
+		}
+
+		return false;
+	}
+	*/
+
 	/*
 	public function List($filter = [], $order = [], $select = [])
 	{
@@ -221,251 +465,4 @@ class SubscriptionModel extends APP_Model
 	}
 	*/
 
-	// курсы на которые подписан пользователь
-	public function coursesList($user)
-	{
-		if( (int) $user === 0)
-			return [];
-
-		$bind = [(int) $user, date('Y-m-d H:i:s')];
-		$sql = 'SELECT 
-					c.id, c.name, cg.ts, cg.ts_end, cg.id as course_group  
-				FROM 
-					'.self::TABLE.' as s 
-				LEFT JOIN 
-					'.self::TABLE_COURSES_GROUPS.' as cg ON(cg.id = s.target AND s.target_type = \'course\') 
-				LEFT JOIN 
-					'.self::TABLE_COURSES.' as c ON(c.id = cg.course_id) 
-				WHERE 
-					s.user = ? AND cg.ts_end > ? 
-				ORDER BY 
-					cg.id ASC';
-
-		if($res = $this->db->query($sql, $bind))
-		{
-			$res = $res->result_array();
-			foreach($res as $key => &$val)
-			{
-				$val['ts_f'] = date('F Y', strtotime($val['ts']));
-			}
-
-			return $res;
-		}
-
-		return [];
-	}
-
-	// список идентификаторов курсов на которые подписан пользователь
-	public function listCoursesId($user)
-	{
-		$result = [];
-		if($res = $this->coursesList($user))
-		{
-			foreach($res as $val)
-			{
-				$result[] = $val['id'];
-			}
-		}
-
-		return $result;
-	}
-
-	
-	// Подписки пользователя
-	public function byUser($user)
-	{
-		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
-		$res = $this->db->query($sql, [intval($user)]);
-		if($res = $res->result_array())
-		{
-			foreach($res as &$val)
-			{
-				$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
-			}
-
-			return $res;
-		}
-
-
-		return false;
-	}
-
-	/*
-	// Подписки пользователя по сервису
-	public function byUserService($user, $service_id, $type = 0)
-	{
-		try
-		{
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND service = ? AND type = ? ORDER BY id DESC';
-			if($res = $this->db->query($sql, [intval($user), intval($service_id), $type])->row_array())
-			{
-				$res['active'] = (strtotime($res['ts_end']) > time())?true:false;
-
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
-	// Подписки пользователя по типу
-	public function byUserType($user, $type = 0)
-	{
-		try
-		{
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND type = ? ORDER BY id DESC';
-			if($res = $this->db->query($sql, [intval($user), intval($type)])->result_array())
-			{
-				foreach($res as &$val)
-				{
-					$val['ts_end_mark'] = strtotime($val['ts_end']);
-					$val['active'] = ($val['ts_end_mark'] > time())?true:false;
-				}
-				
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-
-	// Продление подписки
-	public function renewItem($id)
-	{
-		try
-		{
-			if($item = $this->getByID($id))
-			{
-				unset($item['id']);
-				$price = 0;
-				$item['amount'] = floatval($item['amount']);
-				$item['price_month'] = floatval($item['price_month']);
-				$ts_end_mark = strtotime($item['ts_end']);
-
-				switch($item['type'])
-				{
-					case '0':
-						// Продление на месяц
-						if($item['amount'] > 0)
-						{
-							if(($service = $this->CoursesGroupsModel->getByID($item['service'])) == false)
-							{
-								throw new Exception('Group not found', 1);
-							}
-
-							$price = ($item['amount'] > $item['price_month'])?($item['amount'] - $item['price_month']):$item['price_month'];
-
-							$ts_end = new DateTime($item['ts_end']);
-							$ts_end->modify('next month');
-							$ts_end_format = $ts_end->format('Y-m-d 00:00:00');
-
-							$item['ts_end'] = (strtotime($ts_end_format) > strtotime($service['ts_end']))?$service['ts_end']:$ts_end_format;
-							$item['amount'] -= $price;
-						}
-						// Продление на год
-						elseif($ts_end_mark < time())
-						{
-							$price = $item['price_month'];
-							$ts_end = new DateTime();
-							$ts_end->modify('next year');
-							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
-						}
-					break;
-					default:
-						// empty	
-					break;
-				}
-
-				$this->db->trans_begin();
-
-				if($this->Auth->balance() < $price)
-				{
-					throw new Exception('Insufficient funds', 1);
-				}
-
-				if($this->update($id, $item) == false)
-				{
-					throw new Exception('Update error', 1);
-				}
-
-				if($price > 0)
-				{
-					$tx = [
-						'user' => $item['user'],
-						'type' => '1',
-						'amount' => $price,
-						'description' => $item['description'],
-						'service' => 'group',
-						'service_id' => $item['service']
-					];
-
-					if($this->TransactionsModel->add($tx))
-					{
-						$this->Auth->updateBalance();
-					}
-					else
-					{
-						throw new Exception('Pay error', 1);
-					}
-				}
-
-				if($this->db->trans_status() === FALSE)
-				{
-					throw new Exception('Renew error', 1);
-				}
-
-				$this->db->trans_commit();
-
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->db->trans_rollback();
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-	*/
-
-	public function getGroupUsers($group)
-	{
-		if($group > 0)
-		{
-			$sql = 'SELECT 
-						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name
-					FROM 
-						'.self::TABLE.' as s 
-					LEFT JOIN 
-						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
-					WHERE 
-						s.target = ? AND s.target_type = \'course\' 
-					GROUP BY 
-						s.user 
-					ORDER BY 
-						s.user ASC';
-
-			if($res = $this->db->query($sql, [intval($group)]))
-			{
-				$res = $res->result_array();
-				foreach($res as &$val)
-				{
-					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
-				}
-
-				return $res;
-			}
-		}
-
-		return false;
-	}
 }

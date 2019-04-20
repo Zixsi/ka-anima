@@ -3,16 +3,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class TeachingStreams extends APP_Controller
 {
+	private $user;
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesGroupsModel', 'main/VideoModel', 'main/StreamsModel']);
+		$this->user = $this->Auth->user();
 	}
 
 	public function index()
 	{
 		$data = [];
 		$data['items'] = $this->StreamsModel->list($this->Auth->userID(), ($_GET['filter'] ?? []));
+		// debug($data['items']); die();
 
 		$this->load->lview('teaching_streams/index', $data);
 	}
@@ -25,13 +28,11 @@ class TeachingStreams extends APP_Controller
 		{
 			$form_data = $this->input->post(null, true);
 			if($id = $this->StreamsModel->add($form_data))
-			{
 				header('Location: ../');
-			}
 		}
 
 		$data['error'] = $this->StreamsModel->LAST_ERROR;
-		$data['groups'] = $this->CoursesGroupsModel->getTeacherGroups($this->Auth->userID());
+		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
 		$data['csrf'] = cr_get_key();
 
 		$this->load->lview('teaching_streams/add', $data);
@@ -41,21 +42,17 @@ class TeachingStreams extends APP_Controller
 	{
 		$data = [];
 		if(($data['item'] = $this->StreamsModel->getByID($id)) == false)
-		{
 			header('Location: ../../');
-		}
 
 		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
 			if($id = $this->StreamsModel->update($id, $form_data))
-			{
 				header('Location: ../../');
-			}
 		}
 
 		$data['error'] = $this->StreamsModel->LAST_ERROR;
-		$data['groups'] = $this->CoursesGroupsModel->getTeacherGroups($this->Auth->userID());
+		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
 		$data['csrf'] = cr_get_key();
 
 		$this->load->lview('teaching_streams/edit', $data);
@@ -65,9 +62,7 @@ class TeachingStreams extends APP_Controller
 	{
 		$data = [];
 		if(($data['item'] = $this->StreamsModel->getByID($id)) == false)
-		{
 			header('Location: ../');
-		}
 
 		$this->load->library(['youtube']);
 

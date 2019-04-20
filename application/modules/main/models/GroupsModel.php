@@ -6,8 +6,11 @@ class GroupsModel extends APP_Model
 	const TABLE = 'courses_groups';
 	const TABLE_COURSES = 'courses';
 	const TABLE_SUBSCRIPTION = 'subscription';
+	const TABLE_LECTURES_GROUPS = 'lectures_groups';
 	const TABLE_HOMEWORK = 'lectures_homework';
+	const TABLE_LECTURES = 'lectures';
 	const TABLE_FILES = 'files';
+	const TABLE_REVIEW = 'review';
 
 	const TYPE = [
 		'standart' => ['title' => 'Стандартная'], // без проверки дз и онлайн встреч
@@ -38,6 +41,37 @@ class GroupsModel extends APP_Model
 		if($res = $this->db->query($sql, $bind))
 		{
 			return $res->row_array();
+		}
+
+		return false;
+	}
+
+	// группа по коду
+	public function getByCode($code)
+	{
+		$bind = [$code];
+		$sql = 'SELECT 
+					g.*, c.name, lg.cnt as cnt 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN
+					(SELECT COUNT(*) as cnt, tlg.group_id FROM '.self::TABLE_LECTURES_GROUPS.' as tlg LEFT JOIN '.self::TABLE_LECTURES.' as tl ON(tl.id = tlg.lecture_id) WHERE tl.type = 0 GROUP BY tlg.group_id) as lg ON(lg.group_id = g.id) 
+				WHERE 
+					g.code = ?';
+		if($res = $this->db->query($sql, $bind))
+		{
+			if($val = $res->row_array())
+			{
+				$now_ts = time();
+				
+				$val['timestamp_start'] = strtotime($val['ts']);
+				$val['timestamp_end'] = strtotime($val['ts_end']);
+				$val['status'] = ($val['timestamp_end'] > $now_ts)?(($val['timestamp_start'] > $now_ts)?1:0):-1;
+
+				return $val;
+			}
 		}
 
 		return false;
@@ -92,7 +126,6 @@ class GroupsModel extends APP_Model
 		return false;
 	}
 	
-
 	public function getImageFiles($id)
 	{
 		try
@@ -138,6 +171,51 @@ class GroupsModel extends APP_Model
 		if($res = $this->db->query($sql, $bind))
 		{
 			return $res->result_array();
+		}
+
+		return  [];
+	}
+
+	// список групп преподавателя
+	public function getTeacherGroups($teacher, $active = true)
+	{
+		$now = new DateTime('now');
+		$now_ts = $now->getTimestamp();
+		$bind = [$teacher];
+		$sql_where = '';
+
+		// только автивные группы
+		if($active)
+		{
+			$bind[] = $now->format('Y-m-d H:i:s');
+			$bind[] = $now->format('Y-m-d H:i:s');
+			$sql_where .= ' AND (g.ts <= ? AND g.ts_end > ?) ';
+		}
+
+		$sql = 'SELECT 
+					g.*, c.name
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				WHERE 
+					g.deleted = 0 AND 
+					g.teacher = ? 
+					'.$sql_where.' 
+				ORDER BY 
+					g.ts_end ASC, g.ts ASC';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$res = $res->result_array();
+			foreach($res as &$val)
+			{
+				$val['timestamp_start'] = strtotime($val['ts']);
+				$val['timestamp_end'] = strtotime($val['ts_end']);
+				$val['status'] = ($val['timestamp_end'] > $now_ts)?(($val['timestamp_start'] > $now_ts)?1:0):-1;
+			}
+
+			return $res;
 		}
 
 		return  [];
@@ -324,6 +402,46 @@ class GroupsModel extends APP_Model
 		}
 
 		$result['body'] = $courses;
+
+		return $result;
+	}
+
+	// статус домашних заданий для группы
+	public function groupHomeworkStatus($id)
+	{
+		$bind = [$id];
+		$sql = 'SELECT 
+					MAX(lh.id) as id, lh.group_id, lh.lecture_id, lh.user, lr.id as review  
+				FROM 
+					'.self::TABLE_HOMEWORK.' as lh 
+				LEFT JOIN
+					(SELECT MAX(id) as id, group_id, lecture_id, user FROM '.self::TABLE_REVIEW.' GROUP BY group_id, lecture_id, user) as lr ON(lr.group_id = lh.group_id AND lr.lecture_id = lh.lecture_id AND lr.user = lh.user) 
+				WHERE 
+					lh.group_id = ? 
+				GROUP BY 
+					lh.group_id, lh.lecture_id, lh.user';
+
+		$result = [];			
+		if($res = $this->db->query($sql, $bind))
+		{
+			if($res = $res->result_array())
+			{
+				foreach($res as $val)
+				{
+					if(!array_key_exists($val['user'], $result))
+					{
+						$result[$val['user']] = [
+							'homeworks' => 0,
+							'reviews' => 0
+						];
+					}
+
+					$result[$val['user']]['homeworks']++;
+					if((int) $val['review'] > 0)
+						$result[$val['user']]['reviews']++;
+				}
+			}
+		}
 
 		return $result;
 	}

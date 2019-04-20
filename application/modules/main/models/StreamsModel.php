@@ -117,7 +117,7 @@ class StreamsModel extends APP_Model
 		$bind = [];
 
 		$sql = 'SELECT 
-					s.*, c.name as course_name, g.ts as course_ts  
+					s.*, c.name as course_name, g.ts as course_ts, g.ts_end as course_ts_end  
 				FROM 
 					'.self::TABLE.' as s 
 				LEFT JOIN 

@@ -1,54 +1,23 @@
-<h3 style="margin-bottom: 25px;"><?=$group['name']?></h3>
-
 <div class="row">
-	<div class="col-xs-6">
+	<div class="col-xs-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h4 class="panel-title">Загрузка заданий</h4>
-			</div>
-			<?=ShowError($error);?>
-			<div class="panel-body">
-				<p>Описание к требуемым форматам и размеру загружаемых файлов</p>
-				<form action="" method="post" enctype="multipart/form-data">
-					<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-					<div class="form-group">
-						<input type="file" name="file">
-					</div>
-					<div class="form-group">
-						<textarea class="form-control" name="text" placeholder="Комментарий к файлу"></textarea>
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-xs btn-primary">Загрузить</button>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="panel">
-			<div class="panel-heading">
-				<h4 class="panel-title">Загруженные задания</h4>
+				<h3 class="panel-title">Группы</h3>
 			</div>
 			<div class="panel-body">
-				<table class="table table-bordered">
-					<tr>
-						<td>Когда</td>
-						<td>Кто</td>
-						<td>Файл</td>
-						<td>Комментарий</td>
-					</tr>
-				</table>
+				<?if($items):?>
+					<ul>
+						<?foreach($items as $val):?>
+							<li>
+								<a href="/groups/<?=$val['code']?>/"><?=$val['name']?> <?=date('d.m.Y', $val['timestamp_start'])?> - <?=date('d.m.Y', $val['timestamp_end'])?></a> (<b><?=$val['subscr_cnt']?></b> подписано)
+							</li>
+						<?endforeach;?>
+					</ul>
+				<?endif;?>
 			</div>
 		</div>
 	</div>
 	<div class="col-xs-6">
-		<div class="panel">
-			<div class="panel-heading">
-				<h4 class="panel-title">Инфа</h4>
-			</div>
-			<div class="panel-body">
-				<p>Тут блоки с инфой о преподе и прочие блоки</p>
-			</div>
-		</div>
+		
 	</div>
 </div>
-
-

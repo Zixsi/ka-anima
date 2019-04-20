@@ -67,6 +67,8 @@ $(document).ready(function(){
 	item_del_files();
 
 	appListener();
+
+	wallComponent();
 });
 
 function toastrMsg(type, text)
@@ -107,28 +109,34 @@ function enableInput(t)
 function clearInput(t)
 {
 	t.find('input, textarea, select').each(function(){
-
-		if($(this).is('input[type="radio"]') || $(this).is('input[type="checkbox"]'))
+		if($(this).data('const') !== undefined && $(this).data('const') !== null)
 		{
-			$(this).prop('checked', false);
-		}
-		else if($(this).is('select'))
-		{
-			$(this).val($(this).find('option:first').val());
-			if($(this).hasClass('selectpicker'))
-			{
-				$(this).selectpicker("refresh");
-			}
+			// empty
 		}
 		else
 		{
-			var val = '';
-			if($(this).data('default') !== undefined && $(this).data('default') !== null)
+			if($(this).is('input[type="radio"]') || $(this).is('input[type="checkbox"]'))
 			{
-				val = $(this).data('default');
+				$(this).prop('checked', false);
 			}
+			else if($(this).is('select'))
+			{
+				$(this).val($(this).find('option:first').val());
+				if($(this).hasClass('selectpicker'))
+				{
+					$(this).selectpicker("refresh");
+				}
+			}
+			else
+			{
+				var val = '';
+				if($(this).data('default') !== undefined && $(this).data('default') !== null)
+				{
+					val = $(this).data('default');
+				}
 
-			$(this).val(val);
+				$(this).val(val);
+			}
 		}
 	});
 }
@@ -229,6 +237,9 @@ function appListener()
 	var g_item_advanced = modal_group_subscr.find('.item.item-advanced');
 	var g_item_vip = modal_group_subscr.find('.item.item-vip');
 
+	var add_review_modal = $('#add-review-modal');
+	var add_review_modal_form = add_review_modal.find('form');
+	
 	$('.btn-subscr-group').on('click', function(){
 		var target = $(this).data('target');
 		var data = JSON.parse($(target).text());
@@ -269,6 +280,175 @@ function appListener()
 
 		return false;
 	});
+
+	// добавление ревью
+	$('.btn-add-review').on('click', function(){
+		var params = {
+			group: $(this).data('group'),
+			lecture: $(this).data('lecture'),
+			user: $(this).data('user')
+		};
+		setFormInput(add_review_modal_form, params);
+		add_review_modal.modal('show');
+	});
+
+	$('.bnt-remove-review').on('click', function(){
+		ajaxApiQuery('review.delete', $(this).data('id'), function(res){
+			toastrMsg('success', res);
+			add_review_modal.modal('hide');
+			window.location.reload(true);
+		});
+
+		return false;
+	});
+
+	add_review_modal_form.on('submit', function(){
+		var params = $(this).serializeControls();
+		ajaxApiQuery('review.add', params, function(res){
+			toastrMsg('success', res);
+			add_review_modal.modal('hide');
+			window.location.reload(true);
+		});
+
+		return false;
+	});
+}
+
+function wallComponent()
+{
+	var wall_input = $('#wall-component .wall-from--text-input');
+	var wall_main_form = $('#wall-main-form');
+	var wall_child_from = $('#wall-component .wall-child-from');
+	var wall_btn_load_more = $('#wall-load-more');
+	var tpl_wall_item = $('#wall-item-tpl').html();
+	var tpl_wall_child = $('#wall-child-tpl').html();
+	var tpl_wall_item_role = $('#wall-item-role-tpl').html();
+
+	wall_input.on('input change focus', function(e){
+		$(this).height(20);
+		$(this).height(this.scrollHeight);
+	});
+
+	$('body').on('click', '#wall-component .wall-item-tools .btn-comments', function(){
+		var is_loaded_child = $(this).hasClass('loaded');
+		var parent_id = $(this).data('id');
+		$(this).parent().parent().find('.wall-wrap-childs').fadeToggle(0).find('.wall-from--text-input').focus();
+		// получить список дочерних комментариев
+		if(!is_loaded_child)
+		{
+			console.log(parent_id);
+			$(this).addClass('loaded');
+			$('body').trigger('wall:update-childs', {id: parent_id});
+		}
+	});
+
+	$('body').on('wall:update-childs', function(e, params){
+		var childs_container = $('#wall-childs-id' + params.id);
+		if(childs_container.length > 0)
+		{
+			ajaxApiQuery('wall.message.child', {id: params.id}, function(res){
+				wallFillChilds(childs_container, res);
+			});
+		}
+	});
+
+	wall_btn_load_more.on('click', function(){
+		var btn = $(this);
+		var target = btn.data('id');
+		var limit = btn.data('limit') * 1;
+		var offset = btn.data('offset') * 1;
+		var all = btn.data('all') * 1;
+
+		ajaxApiQuery('wall.message.list', {target: target, limit: limit, offset: offset}, function(res){
+			offset = offset + limit;
+			btn.data('offset',offset);
+			if(offset >= all)
+				btn.remove();
+
+			// console.log(res);
+			wallFill($('#wall-main-list'), res);
+		});
+	});
+	
+	// обработка главной формы
+	wall_main_form.on('submit', function(){
+		var form = $(this);
+		var params = $(this).serializeControls();
+		ajaxApiQuery('wall.message', params, function(res){
+			clearInput(form);
+			window.location.reload(true);
+		});
+		return false;
+	});
+
+	wall_child_from.on('submit', function(){
+		var form = $(this);
+		var params = $(this).serializeControls();
+		ajaxApiQuery('wall.message', params, function(res){
+			clearInput(form);
+			$('#wall-component').trigger('wall:update-childs', {id: params.target});
+		});
+		return false;
+	});
+
+	function wallFill(container, data)
+	{
+		data.forEach(function(e, i){
+			html = tpl_wall_item;
+			html = html.replace(/{USER_ID}/g, e.user);
+			html = html.replace(/{USER_NAME}/g, e.full_name);
+			html = html.replace(/{USER_IMG}/g, e.img);
+			html = html.replace(/{DATE}/g, e.ts);
+			html = html.replace(/{TEXT}/g, e.text);
+
+			if((e.role * 1) > 0)
+			{
+				html_role = tpl_wall_item_role;
+				html_role = html_role.replace(/{VALUE}/g, e.role_name);
+				html = html.replace(/{ROLE}/g, html_role);
+			}
+			else
+			{
+				html = html.replace(/{ROLE}/g, '');
+			}
+
+			html = html.replace(/{TARGET_ID}/g, e.group_id);
+			html = html.replace(/{ID}/g, e.id);
+			html = html.replace(/{CHILD_CNT}/g, (e.child_cnt * 1));
+			
+			container.append(html);
+		});
+	}
+
+	function wallFillChilds(container, data)
+	{
+		container.empty();
+		var cnt = 0;
+		data.forEach(function(e, i){
+			cnt++;
+			html = tpl_wall_child;
+			html = html.replace(/{USER_ID}/g, e.user);
+			html = html.replace(/{USER_NAME}/g, e.full_name);
+			html = html.replace(/{USER_IMG}/g, e.img);
+			html = html.replace(/{DATE}/g, e.ts);
+			html = html.replace(/{TEXT}/g, e.text);
+
+			if((e.role * 1) > 0)
+			{
+				html_role = tpl_wall_item_role;
+				html_role = html_role.replace(/{VALUE}/g, e.role_name);
+				html = html.replace(/{ROLE}/g, html_role);
+			}
+			else
+			{
+				html = html.replace(/{ROLE}/g, '');
+			}
+
+			container.append(html);
+		});
+
+		container.closest('.wall-panel').find('.wall-item-tools .info-child-cnt').text(cnt);
+	}
 }
 
 function moscow_date_time()
