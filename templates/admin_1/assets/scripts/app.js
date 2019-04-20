@@ -319,6 +319,8 @@ function wallComponent()
 	var wall_input = $('#wall-component .wall-from--text-input');
 	var wall_main_form = $('#wall-main-form');
 	var wall_child_from = $('#wall-component .wall-child-from');
+	var wall_btn_load_more = $('#wall-load-more');
+	var tpl_wall_item = $('#wall-item-tpl').html();
 	var tpl_wall_child = $('#wall-child-tpl').html();
 	var tpl_wall_item_role = $('#wall-item-role-tpl').html();
 
@@ -327,19 +329,20 @@ function wallComponent()
 		$(this).height(this.scrollHeight);
 	});
 
-	$('#wall-component .wall-item-tools').on('click', '.btn-comments', function(){
+	$('body').on('click', '#wall-component .wall-item-tools .btn-comments', function(){
 		var is_loaded_child = $(this).hasClass('loaded');
 		var parent_id = $(this).data('id');
 		$(this).parent().parent().find('.wall-wrap-childs').fadeToggle(0).find('.wall-from--text-input').focus();
 		// получить список дочерних комментариев
 		if(!is_loaded_child)
 		{
+			console.log(parent_id);
 			$(this).addClass('loaded');
-			$('#wall-component').trigger('wall:update-childs', {id: parent_id});
+			$('body').trigger('wall:update-childs', {id: parent_id});
 		}
 	});
 
-	$('#wall-component').on('wall:update-childs', function(e, params){
+	$('body').on('wall:update-childs', function(e, params){
 		var childs_container = $('#wall-childs-id' + params.id);
 		if(childs_container.length > 0)
 		{
@@ -347,6 +350,24 @@ function wallComponent()
 				wallFillChilds(childs_container, res);
 			});
 		}
+	});
+
+	wall_btn_load_more.on('click', function(){
+		var btn = $(this);
+		var target = btn.data('id');
+		var limit = btn.data('limit') * 1;
+		var offset = btn.data('offset') * 1;
+		var all = btn.data('all') * 1;
+
+		ajaxApiQuery('wall.message.list', {target: target, limit: limit, offset: offset}, function(res){
+			offset = offset + limit;
+			btn.data('offset',offset);
+			if(offset >= all)
+				btn.remove();
+
+			// console.log(res);
+			wallFill($('#wall-main-list'), res);
+		});
 	});
 	
 	// обработка главной формы
@@ -369,6 +390,35 @@ function wallComponent()
 		});
 		return false;
 	});
+
+	function wallFill(container, data)
+	{
+		data.forEach(function(e, i){
+			html = tpl_wall_item;
+			html = html.replace(/{USER_ID}/g, e.user);
+			html = html.replace(/{USER_NAME}/g, e.full_name);
+			html = html.replace(/{USER_IMG}/g, e.img);
+			html = html.replace(/{DATE}/g, e.ts);
+			html = html.replace(/{TEXT}/g, e.text);
+
+			if((e.role * 1) > 0)
+			{
+				html_role = tpl_wall_item_role;
+				html_role = html_role.replace(/{VALUE}/g, e.role_name);
+				html = html.replace(/{ROLE}/g, html_role);
+			}
+			else
+			{
+				html = html.replace(/{ROLE}/g, '');
+			}
+
+			html = html.replace(/{TARGET_ID}/g, e.group_id);
+			html = html.replace(/{ID}/g, e.id);
+			html = html.replace(/{CHILD_CNT}/g, (e.child_cnt * 1));
+			
+			container.append(html);
+		});
+	}
 
 	function wallFillChilds(container, data)
 	{

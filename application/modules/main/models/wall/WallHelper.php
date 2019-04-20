@@ -59,14 +59,14 @@ class WallHelper extends APP_Model
 	{
 		try
 		{
-			$data['group'] = (int) ($data['group'] ?? 0);
-			if($this->GroupsModel->getByID($data['group']) === false)
+			$data['target'] = ($data['target'] ?? 0);
+			if($this->GroupsModel->getByID($data['target']) === false)
 				throw new Exception('ошибка получения списка');
 
-			$limit = 20;
-			$offset = (int) ($data['page'] ?? 0) * $limit;
+			$limit = (int) ($data['limit'] ?? 20);
+			$offset = (int) ($data['offset'] ?? 0);
 
-			return $this->WallModel->list($data['group'], $limit, $offset);
+			return $this->WallModel->list($data['target'], $limit, $offset);
 		}
 		catch(Exception $e)
 		{

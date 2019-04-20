@@ -30,7 +30,7 @@ class WallModel extends APP_Model
 	}
 
 	// список сообщений для группы
-	public function list(int $id, int $limit = 20, $offset = 0)
+	public function list($id, int $limit = 20, $offset = 0)
 	{
 		$bind = [$id];
 
@@ -60,6 +60,20 @@ class WallModel extends APP_Model
 		}
 
 		return [];
+	}
+
+	public function allCnt($id)
+	{
+		$bind = [$id];
+
+		$sql = 'SELECT count(*) as cnt FROM '.self::TABLE.' WHERE group_id = ? AND target = 0 AND del = 0 ORDER BY id DESC';
+		if($res = $this->db->query($sql, $bind))
+		{
+			if($res = $res->row_array())
+				return (int) $res['cnt'];
+		}
+
+		return 0;
 	}
 
 	public function child(int $id)
