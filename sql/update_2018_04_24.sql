@@ -1,0 +1,1 @@
+ALTER TABLE `courses` ADD `code` VARCHAR(40) NOT NULL AFTER `id`;
