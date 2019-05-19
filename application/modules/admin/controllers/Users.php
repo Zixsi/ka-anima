@@ -28,6 +28,11 @@ class Users extends APP_Controller
 			header('Location: ../');
 		$data['roles'] = UserModel::ROLES_NAME;
 		$data['balance'] = $this->TransactionsModel->balanceUser($id);
+		$data['subscribes'] = $this->SubscriptionModel->byUser($id);
+		$data['transactions']['in'] = $this->TransactionsModel->listUserTxByType($id, 0);
+		$data['transactions']['out'] = $this->TransactionsModel->listUserTxByType($id, 1);
+		
+		// debug($data); die();
 
 		$this->load->lview('users/item', $data);
 	}

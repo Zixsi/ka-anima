@@ -153,4 +153,6 @@ $autoload['model'] = [
 	'main/homework/HomeworkHelper',
 	'main/wall/WallModel',
 	'main/wall/WallHelper',
+	'main/users/UserActionsModel',
+	'main/users/UserActionsHelper'
 ];

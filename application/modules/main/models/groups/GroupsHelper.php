@@ -57,7 +57,7 @@ class GroupsHelper extends APP_Model
 			$item_data = [
 				'type' => $data['type'],
 				'teacher' => $course['teacher'],
-				'code' => 'c'.$data['type'].$course['id'].'-'.$date_b->format('Ym'),
+				'code' => $this->makeCode($course['code'], $data['type'], $date_b->format('dmy')),
 				'course_id' => $course['id'],
 				'ts' => $date_b->format('Y-m-d 00:00:00'),
 				'ts_end' => $ts_end->format('Y-m-d 00:00:00')
@@ -153,7 +153,7 @@ class GroupsHelper extends APP_Model
 			$data = [
 				'type' => $type,
 				'teacher' => $course['teacher'],
-				'code' => 'c'.$course['id'].$type.'-'.$start->format('Ym'),
+				'code' => $this->makeCode($course['code'], $type, $start->format('dmy')),
 				'course_id' => $course['id'],
 				'ts' => $start->format('Y-m-d 00:00:00'),
 				'ts_end' => $ts_end->format('Y-m-d 00:00:00')
@@ -264,5 +264,11 @@ class GroupsHelper extends APP_Model
 			if(array_key_exists($val['id'], $subscr_stat))
 				$val['subscr_cnt'] = $subscr_stat[$val['id']]['cnt'];
 		}
+	}
+
+	// код группы
+	public function makeCode($course_code, $type, $date)
+	{
+		return $course_code.'-'.substr(trim($type), 0, 1).$date;
 	}
 }

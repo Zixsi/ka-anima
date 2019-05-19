@@ -7,7 +7,7 @@
 			<div class="week-panel owl-carousel">
 				<?$i = 1;?>
 				<?foreach($list as $stream_item):?>
-					<a href="/courses/<?=$group_id?>/stream/<?=$stream_item['id']?>/" data-index="<?=($i - 1)?>" class="week-item active <?=($item['id'] == $stream_item['id'])?'current':''?>">
+					<a href="/courses/<?=$group['code']?>/stream/<?=$stream_item['id']?>/" data-index="<?=($i - 1)?>" class="week-item active <?=($item['id'] == $stream_item['id'])?'current':''?>">
 						<span class="number"><?=$i?></span>
 						<span class="name"><?=$stream_item['name']?></span>
 					</a>

@@ -102,7 +102,7 @@ $user_id = $CI->Auth->userID();
 									<div id="sub-courses" class="collapse in">
 										<ul class="nav">
 											<?foreach($courses as $item):?>
-												<li><a href="/courses/<?=$item['course_group']?>/" class=""><?=$item['name']?> (<?=strftime("%B %Y", strtotime($item['ts']))?>)</a></li>
+												<li><a href="/courses/<?=$item['code']?>/" class=""><?=$item['name']?> (<?=strftime("%B %Y", strtotime($item['ts']))?>)</a></li>
 											<?endforeach;?>
 										</ul>
 									</div>

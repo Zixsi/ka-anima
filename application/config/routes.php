@@ -14,6 +14,9 @@ $route['admin'] = 'admin/main';
 $route['admin/courses/(:num)/lectures'] = 'admin/Lectures/index/$1';
 $route['admin/courses/(:num)/lectures/(.*)'] = 'admin/Lectures/$2/$1';
 $route['admin/courses/(.*)'] = 'admin/Courses/$1';
+
+$route['admin/groups/(:any)'] = 'admin/Groups/item/$1';
+
 $route['admin/(.*)'] = 'admin/$1';
 
 $route['profile'] = 'app/Profile/index';
@@ -41,11 +44,12 @@ $route['video/(.*)'] = 'app/video/index/$1';
 
 //$route['groups/(:num)'] = 'app/Groups/index/$1';
 $route['courses'] = 'app/courses/index';
-$route['courses/(:num)'] = 'app/courses/index/$1';
-$route['courses/(:num)/lecture/(:num)'] = 'app/courses/index/$1/$2';
-$route['courses/(:num)/group'] = 'app/courses/group/$1';
-$route['courses/(:num)/review'] = 'app/courses/review/$1';
-$route['courses/(:num)/review/(:num)'] = 'app/courses/review/$1/$2';
-$route['courses/(:num)/stream'] = 'app/courses/stream/$1';
-$route['courses/(:num)/stream/(:num)'] = 'app/courses/stream/$1/$2';
+$route['courses/enroll'] = 'app/courses/enroll';
+$route['courses/(:any)'] = 'app/courses/index/$1';
+$route['courses/(:any)/lecture/(:num)'] = 'app/courses/index/$1/$2';
+$route['courses/(:any)/group'] = 'app/courses/group/$1';
+$route['courses/(:any)/review'] = 'app/courses/review/$1';
+$route['courses/(:any)/review/(:num)'] = 'app/courses/review/$1/$2';
+$route['courses/(:any)/stream'] = 'app/courses/stream/$1';
+$route['courses/(:any)/stream/(:num)'] = 'app/courses/stream/$1/$2';
 $route['(.*)'] = 'app/$1';

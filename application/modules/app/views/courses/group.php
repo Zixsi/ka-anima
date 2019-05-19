@@ -53,7 +53,7 @@
 						<?foreach($lectures as $val):?>
 							<li>
 								<?if($val['active']):?>
-									<a href="/courses/<?=$group_id?>/lecture/<?=$val['id']?>"><?=$val['name']?></a>
+									<a href="/courses/<?=$group['code']?>/lecture/<?=$val['id']?>"><?=$val['name']?></a>
 								<?else:?>
 									<span><?=$val['name']?></span>
 								<?endif;?>

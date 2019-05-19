@@ -8,30 +8,30 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/SubscriptionModel', 'main/CoursesModel', 'main/CoursesGroupsModel', 'main/LecturesModel', 'main/FilesModel', 'main/LecturesGroupModel', 'main/LecturesHomeworkModel', 'main/ReviewModel', 'main/VideoModel', 'main/GroupsModel']);
-
 		$this->user_id = $this->Auth->userID();
 	}
 	
-	public function index($group = 0, $lecture = 0)
+	public function index($group = '', $lecture = 0)
 	{
 		$data = [];
 		$data['error'] = null;
 		$data['section'] = 'index';
-		$data['group_id'] = intval($group);
-		$data['lecture_id'] = intval($lecture);
-		$data['subscr'] = $this->subscrGroup($data['group_id']);
+
+		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
+		$group_id = (int) ($data['group']['id']);
+		$data['subscr'] = $this->subscrGroup($group_id);
+
+		$data['lecture_id'] = (int) $lecture;
 		$data['subscr_is_active'] = ($data['subscr'])?true:false;
 
-		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
+		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
 		$last_active_lecture = $this->prepareLectures($data['lectures']);
 		$data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
 
 		if($data['lectures_is_active'] && $data['subscr_is_active'])
 		{
 			if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
-				header('Location: /courses/'.$data['group_id'].'/lecture/'.$last_active_lecture);
+				header('Location: /courses/'.$group.'/lecture/'.$last_active_lecture);
 
 			$data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
 			$data['lecture']['ts'] = $data['lectures'][$data['lecture_id']]['ts'];
@@ -45,7 +45,6 @@ class Courses extends APP_Controller
 			// 	$data['lecture']['can_upload_files'] = false;
 			// unset($ts_now, $ts_lecture_start, $diff);
 
-
 			$data['lecture']['video_code'] = '';
 			if($res = $this->VideoModel->bySource($data['lecture']['id']))
 				$data['lecture']['video_code'] = $res['video_code'];
@@ -54,54 +53,53 @@ class Courses extends APP_Controller
 				$this->uploadHomeWork($data);
 			
 			$data['csrf'] = cr_get_key();
-			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($data['group_id'], $data['lecture_id']);
+			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($group_id, $data['lecture_id']);
 			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
 		}
 
-		$this->setHomeworkStatus($data['group_id'], $this->user_id, $data['lectures']);
+		$this->setHomeworkStatus($group_id, $this->user_id, $data['lectures']);
 
-		// debug($data['lectures']); die();
-
+		// debug($data['group']); die();
 		$this->load->lview('courses/index', $data);
 	}
 
-	public function group($group = 0)
+	public function group($group = '')
 	{
 		$data = [];
 		$data['error'] = null;
 		$data['section'] = 'group';
-		$data['group_id'] = (int) $group;
-		$data['subscr'] = $this->subscrGroup($data['group_id']);
-		
-		if($data['subscr'] === false)
-			header('Location: /courses/'.$data['group_id'].'/');
+		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
+		$group_id = (int) ($data['group']['id']);
+		$data['subscr'] = $this->subscrGroup($group_id);
 
-		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
-		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
+		if($data['subscr'] === false)
+			header('Location: /courses/'.$data['group']['code'].'/');
+
+		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
 		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
 		$data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
-		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
-		$data['images'] = $this->GroupsModel->getImageFiles($data['group_id']);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
+		$data['images'] = $this->GroupsModel->getImageFiles($group_id);
 
-		$data['wall'] = $this->WallModel->list($data['group_id']);
+		$data['wall'] = $this->WallModel->list($group_id);
 		// debug($data['wall']); die();
 
 		$this->load->lview('courses/group', $data);
 	}
 
-	public function review($group = 0, $review = 0)
+	public function review($group = '', $review = 0)
 	{
 		$data = [];
 		$data['section'] = 'review';
-		$data['group_id'] = (int) $group;
-		$data['subscr'] = $this->subscrGroup($data['group_id']);
+		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
+		$group_id = (int) ($data['group']['id']);
+		$data['subscr'] = $this->subscrGroup($group_id);
 
 		if($data['subscr'] == false)
-			header('Location: /courses/'.$data['group_id'].'/');
+			header('Location: /courses/'.$data['group']['code'].'/');
 
-		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
 		if(($data['subscr']['type'] ?? '') === 'standart')
-			header('Location: /courses/'.$data['group_id'].'/');
+			header('Location: /courses/'.$data['group']['code'].'/');
 
 		$data['review_item'] = false; 
 		if($review > 0)
@@ -119,53 +117,46 @@ class Courses extends APP_Controller
 
 		$filter = $this->input->get('filter', true);
 		$data['filter_url'] = http_build_query(['filter' => $filter]);
-		$data['items'] = $this->ReviewModel->getByGroup($data['group_id'], $filter);
-		$data['lectures'] = $this->LecturesGroupModel->listForGroup($data['group_id']);
-		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['group_id']);
-		$data['not_viewed'] = $this->ReviewModel->notViewedItems($this->user_id, $data['group_id']);
+		$data['items'] = $this->ReviewModel->getByGroup($group_id, $filter);
+		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
+		$data['not_viewed'] = $this->ReviewModel->notViewedItems($this->user_id, $group_id);
 
 		// debug($data); die();
 		$this->load->lview('courses/reviews', $data);
 	}
 
-	public function stream($group = 0, $item = 0)
+	public function stream($group = '', $item = 0)
 	{
 		$data = [];
 		$data['section'] = 'stream';
-		$data['group_id'] = intval($group);
-		$data['subscr'] = $this->subscrGroup($data['group_id']);
+		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
+		$group_id = (int) ($data['group']['id']);
+		$data['subscr'] = $this->subscrGroup($group_id);
 		
 		if($data['subscr'] == false)
-			header('Location: /courses/'.$data['group_id'].'/');
+			header('Location: /courses/'.$data['group']['code'].'/');
 
-		$data['group'] = $this->CoursesGroupsModel->getByID($data['group_id']);
+		$data['group'] = $this->CoursesGroupsModel->getByID($group_id);
 		if(($data['subscr']['type'] ?? '') === 'standart')
-			header('Location: /courses/'.$data['group_id'].'/');
+			header('Location: /courses/'.$data['group']['code'].'/');
 
-		$data['list'] = $this->StreamsModel->byGroupList($data['group_id']);
+		$data['list'] = $this->StreamsModel->byGroupList($group_id);
 		$data['item'] = false;
 		$streams_id = $this->getStreamsIds($data['list']);
 
 		if(count($streams_id))
 		{
 			if($item > 0)
-			{
 				$data['item'] = $this->StreamsModel->getByID($item);
-			}
 			else
-			{
-				$data['item'] = $this->StreamsModel->byGroup($data['group_id']);
-			}
+				$data['item'] = $this->StreamsModel->byGroup($group_id);
 
 			if(empty($data['item']))
-			{
 				$data['item'] = current($data['list']);
-			}
 			
 			if(!in_array($data['item']['id'], $streams_id))
-			{
-				header('Location: /courses/'.$data['group_id'].'/stream/');
-			}
+				header('Location: /courses/'.$data['group']['code'].'/stream/');
 
 			$this->load->library(['youtube']);
 			$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
@@ -191,7 +182,7 @@ class Courses extends APP_Controller
 				$val['subscription'] = in_array($val['id'], $subscr_courses);
 			}
 		}
-		//debug($data['items']); die();
+		// debug($data); die();
 		
 		$this->load->lview('courses/enroll', $data);
 	}
@@ -210,10 +201,12 @@ class Courses extends APP_Controller
 	private function currentGroupWeek($list)
 	{
 		$cnt = 0;
-
-		foreach($list as $val)
+		if($list && is_array($list))
 		{
-			$cnt += ($val['active'] == 1 && (int) $val['type'] === 0)?1:0;
+			foreach($list as $val)
+			{
+				$cnt += ($val['active'] == 1 && (int) $val['type'] === 0)?1:0;
+			}
 		}
 
 		return $cnt;
@@ -247,12 +240,15 @@ class Courses extends APP_Controller
 	{
 		if(($list = $this->LecturesHomeworkModel->listLecturesIdWithHomework($group_id, $user_id)) !== false)
 		{
-			foreach($data as &$val)
+			if($data && is_array($data))
 			{
-				$val['homework_fail'] = false;
-				if($val['active'] == 1 && $val['type'] == 0 && !in_array($val['id'], $list))
+				foreach($data as &$val)
 				{
-					$val['homework_fail'] = true;
+					$val['homework_fail'] = false;
+					if($val['active'] == 1 && $val['type'] == 0 && !in_array($val['id'], $list))
+					{
+						$val['homework_fail'] = true;
+					}
 				}
 			}
 		}
@@ -274,7 +270,7 @@ class Courses extends APP_Controller
 		{
 			if($file_id = $this->FilesModel->saveFileArray($this->upload->data()))
 			{
-				$this->LecturesHomeworkModel->add($data['group_id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
+				$this->LecturesHomeworkModel->add($data['group']['id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
 			}
 
 			$data['error'] = $this->FilesModel->LAST_ERROR;

@@ -66,31 +66,25 @@ class Subscription extends APP_Controller
 	private function prepareSubscription(&$items)
 	{
 		$user_id = $this->Auth->userID();
-		//debug($items); die();
 		//debug($user); die();
 
 		if($items)
 		{
 			foreach($items as &$item)
 			{
+				$item['data'] = json_decode($item['data'], true);
 				$item['renew'] = null;
 
 				switch($item['type'])
 				{
 					// Если подписка на курс
 					case 0:
-
 						// Если не все оплачено по месяцам
 						if($item['amount'] > 0)
-						{
 							$item['renew'] = 'month';
-						}
-						// Если оплатили все м кончилась подписка
+						// Если оплатили все и кончилась подписка
 						elseif(strtotime($item['ts_end']) < time())
-						{
 							$item['renew'] = 'year';
-						}
-
 					break;
 
 					default:
@@ -98,6 +92,8 @@ class Subscription extends APP_Controller
 					break;
 				}
 			}
+
+			// debug($items); die();
 		}
 	}
 }

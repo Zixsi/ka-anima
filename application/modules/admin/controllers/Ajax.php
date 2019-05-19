@@ -47,7 +47,6 @@ class Ajax extends APP_Controller
 			case 'lecture.remove':
 				$this->lectureRemove();
 			break;
-
 			case 'user.add':
 				$this->userAdd();
 			break;
@@ -62,6 +61,18 @@ class Ajax extends APP_Controller
 			break;
 			case 'user.unblock':
 				$this->userUnBlock();
+			break;
+			case 'wall.message':
+				$this->wallMessage();
+			break;
+			case 'wall.message.list':
+				$this->wallMessageList();
+			break;
+			case 'wall.message.child':
+				$this->wallMessageChild();
+			break;
+			default:
+				$this->jsonrpc->error(-32600);
 			break;
 		}
 	}
@@ -201,6 +212,67 @@ class Ajax extends APP_Controller
 				throw new Exception($this->UsersHelper->getLastError());
 
 			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// добавить сообщение на стену 
+	private function wallMessage()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
+			$params['user'] = $this->user['id'];
+
+			if($this->WallHelper->add($params) === false)
+				throw new Exception($this->WallHelper->getLastError());
+			
+			$this->jsonrpc->result(true);
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// список сообщений стены
+	private function wallMessageList()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
+
+			if(($res = $this->WallHelper->list($params)) === false)
+				throw new Exception($this->WallHelper->getLastError());
+			
+			$this->jsonrpc->result($res);
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	// список дочерних сообщений
+	private function wallMessageChild()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
+
+			if(($res = $this->WallHelper->child($params)) === false)
+				throw new Exception($this->WallHelper->getLastError());
+			
+			$this->jsonrpc->result($res);
 		}
 		catch(Exception $e)
 		{

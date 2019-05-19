@@ -16,7 +16,7 @@ class SystemHook
 	public function initOptions()
 	{
 		date_default_timezone_set('Europe/Moscow');
-		setlocale(LC_ALL, 'ru_RU.UTF-8');
+		// setlocale(LC_ALL, 'ru_RU.UTF-8');
 		$this->CI->form_validation->set_error_delimiters('<div>', '</div>');
 	}
 
@@ -37,11 +37,6 @@ class SystemHook
 
 		if($d == 'admin')
 		{
-			// var_dump($c);
-			// var_dump($a);
-			// var_dump($d);
-			// var_dump($check);
-			// var_dump($user); die();
 			if(!$check)
 			{
 				redirect('/auth/');
@@ -70,11 +65,5 @@ class SystemHook
 				redirect('/');
 			}
 		}
-
-		$this->CI->load->model([
-			'main/CoursesGroupsModel', 
-			'main/VideoModel', 
-			'main/StreamsModel'
-		]);
 	}
 }

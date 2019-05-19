@@ -6,9 +6,6 @@ class UsersHelper extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model([
-			'main/UserModel',
-		]);
 	}
 
 	public function add($data = [])

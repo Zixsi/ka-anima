@@ -6,7 +6,6 @@ class Courses extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesModel', 'main/GroupsModel', 'main/courses/CoursesHelper']);
 	}
 
 	public function index()
