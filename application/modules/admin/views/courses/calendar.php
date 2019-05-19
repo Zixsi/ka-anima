@@ -56,7 +56,7 @@
 												<div class="btn-group">
 													<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
 													<ul class="dropdown-menu" role="menu">
-														<li><a href="javascript: void(0);">Информация</a></li>
+														<li><a href="/admin/groups/<?=$v['code']?>/">Информация</a></li>
 														<?if($v['subscription_cnt'] === 0):?>
 															<li><a href="javascript: void(0);" class="btn-remove-group" data-id="<?=$v['id']?>">Удалить</a></li>
 														<?endif;?>

@@ -50,6 +50,11 @@ $config['course'] = [
 		'rules' => 'required'
 	],
 	[
+		'field' => 'code',
+		'label' => 'Символьный код',
+		'rules' => 'rtrim|required|min_length[3]|max_length[40]|alpha_dash|is_unique[courses.code]'
+	],
+	[
 		'field' => 'teacher',
 		'label' => 'Преподаватель',
 		'rules' => 'required|integer'

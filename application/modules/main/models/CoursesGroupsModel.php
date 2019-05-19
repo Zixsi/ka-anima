@@ -88,10 +88,25 @@ class CoursesGroupsModel extends APP_Model
 
 	public function getByCode($code)
 	{
-		$res = $this->db->query('SELECT g.*, c.price_month, c.price_full FROM '.self::TABLE.' as g LEFT JOIN '.self::TABLE_COURSES.' as c ON(c.id = g.course_id) WHERE g.code = ?', [$id]);
-		if($row = $res->row_array())
+		$sql = 'SELECT 
+					g.*, c.name, c.price, g.teacher, 
+					l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img_src  
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l_all ON(l_all.course_id = g.course_id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = g.course_id) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
+				WHERE g.code = ?';
+		if($res = $this->db->query($sql, [$code]))
 		{
-			return $row;
+			$item = $res->row_array();
+			$item['price'] = json_decode($item['price'], true);
+			return $item;
 		}
 
 		return false;

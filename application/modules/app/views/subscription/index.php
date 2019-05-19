@@ -11,7 +11,7 @@
 	</div>		
 </div>
 
-<?=ShowError($error);?>
+<?=alert_error($error);?>
 
 <div class="row">
 	<div class="col-xs-12">
@@ -52,12 +52,13 @@
 											<input type="hidden" name="id" value="<?=$item['id']?>">
 											<input type="hidden" name="request_type" value="renew">
 											<?if($item['renew'] == 'month'):?>
-												<?=number_format($item['price_month'], 2, '.', '')?>  руб.
+												<?=number_format($item['data']['price'], 2, '.', '')?>  руб.
 												<input type="hidden" name="type" value="month">
 												<button type="submit" class="btn btn-3xs btn-success">Продлить</button>
 											<?elseif($item['renew'] == 'year'):?>
 												<input type="hidden" name="type" value="year">
-												Продлить на год (<?=number_format($item['price_month'], 2, '.', '')?>  руб.) 
+												<!-- TODO: сумма продления на год -->
+												Продлить на год (0 руб.) 
 												<button type="submit" class="btn btn-3xs btn-success">Продлить</button>
 											<?else:?>
 												<span>- - -</span>

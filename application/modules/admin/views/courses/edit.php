@@ -41,6 +41,10 @@
 					<input type="text" name="name" id="fname" class="form-control" placeholder="Название" value="<?=set_value('name', $item['name'], true)?>">
 				</div>
 				<div class="form-group">
+					<label for="fcode">Символьный код</label>
+					<input type="text" name="code" id="fcode" class="form-control" placeholder="" value="<?=set_value('code', $item['code'], true)?>">
+				</div>
+				<div class="form-group">
 					<label for="fperiod">Описание</label>
 					<textarea name="description" id="fdescription" class="form-control" placeholder="Описание"><?=set_value('description', $item['description'], true)?></textarea>
 				</div>

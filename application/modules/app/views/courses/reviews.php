@@ -86,13 +86,13 @@
 											<?if(is_array($not_viewed) && in_array($item['id'], $not_viewed)):?>
 												<span class="badge bg-danger" style="position: absolute; top: -8px; right: 5px;">!</span>
 											<?endif;?>
-											<a href="/courses/<?=$item['group_id']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
+											<a href="/courses/<?=$group['code']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
 												<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="100%">
 											</a>
 											<div class="caption">
 												<span><?=date('d-m-Y', strtotime($item['ts']))?></span><br>
 												<h4>
-													<a href="/courses/<?=$item['group_id']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
+													<a href="/courses/<?=$group['code']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
 														<?=($item['user'])?$item['user_name']:'Общий обзор'?> - <?=$item['name']?>
 													</a>
 												</h4>

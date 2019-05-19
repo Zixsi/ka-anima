@@ -49,7 +49,7 @@
 .week-panel .week-item.active {cursor: pointer;}
 .week-panel .week-item.active .number {background-color: #00AAFF; position:  relative;}
 .week-panel .week-item.active.current .number:before {content: ""; display: block; position: absolute; top: -15%; left: -15%; width: 130%; height: 130%; border: 3px dotted #00AAFF; border-radius: 50%;}
-.week-panel .week-item .number {display: inline-block; width: 40px ;height: 40px; border-radius: 50%; background-color: #ccc; text-align: center; line-height: 38px; color: #fff; font-size: 25px; margin-bottom: 10px;}
+.week-panel .week-item .number {display: inline-block; width: 40px ;height: 40px; border-radius: 50%; background-color: #ccc; text-align: center; line-height: 38px; color: #fff; font-size: 25px; margin-bottom: 10px; position: relative;}
 .week-panel .week-item .badge {position: absolute; top: -5px; right: -5px;}
 .week-panel .week-item .name {display: block; font-size: 14px; color: #676a6d;}
 

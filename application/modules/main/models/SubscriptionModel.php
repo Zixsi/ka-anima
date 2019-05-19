@@ -96,7 +96,7 @@ class SubscriptionModel extends APP_Model
 
 		$bind = [(int) $user, date('Y-m-d H:i:s')];
 		$sql = 'SELECT 
-					c.id, c.name, cg.ts, cg.ts_end, cg.id as course_group  
+					c.id, c.name, cg.ts, cg.ts_end, cg.id as course_group, cg.code as code   
 				FROM 
 					'.self::TABLE.' as s 
 				LEFT JOIN 
@@ -141,14 +141,21 @@ class SubscriptionModel extends APP_Model
 	// Подписки пользователя
 	public function byUser($user)
 	{
-		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? ORDER BY id DESC';
+		$sql = 'SELECT 
+					s.*, cg.code  
+				FROM 
+					'.self::TABLE.' as s 
+				LEFT JOIN 
+					'.self::TABLE_COURSES_GROUPS.' as cg ON(cg.id = s.target AND s.target_type = \'course\') 
+				WHERE 
+					user = ? 
+				ORDER BY 
+					id DESC';
 		$res = $this->db->query($sql, [intval($user)]);
 		if($res = $res->result_array())
 		{
 			foreach($res as &$val)
-			{
 				$val['active'] = (strtotime($val['ts_end']) > time())?true:false;
-			}
 
 			return $res;
 		}
@@ -233,7 +240,7 @@ class SubscriptionModel extends APP_Model
 		return [];
 	}
 
-	/*
+	
 	// Продление подписки
 	public function renewItem($id)
 	{
@@ -243,22 +250,22 @@ class SubscriptionModel extends APP_Model
 			{
 				unset($item['id']);
 				$price = 0;
+				$item['data'] = json_decode($item['data'], true);
 				$item['amount'] = floatval($item['amount']);
-				$item['price_month'] = floatval($item['price_month']);
 				$ts_end_mark = strtotime($item['ts_end']);
 
-				switch($item['type'])
+				// debug($item); die();
+
+				switch($item['target_type'])
 				{
-					case '0':
+					case 'course':
 						// Продление на месяц
 						if($item['amount'] > 0)
 						{
-							if(($service = $this->CoursesGroupsModel->getByID($item['service'])) == false)
-							{
+							if(($service = $this->CoursesGroupsModel->getByID($item['target'])) == false)
 								throw new Exception('Group not found', 1);
-							}
 
-							$price = ($item['amount'] > $item['price_month'])?($item['amount'] - $item['price_month']):$item['price_month'];
+							$price = ($item['amount'] > $item['data']['price'])?$item['data']['price']:$item['amount'];
 
 							$ts_end = new DateTime($item['ts_end']);
 							$ts_end->modify('next month');
@@ -270,7 +277,8 @@ class SubscriptionModel extends APP_Model
 						// Продление на год
 						elseif($ts_end_mark < time())
 						{
-							$price = $item['price_month'];
+							// TODO: сумма продления на год 
+							$price = 0;
 							$ts_end = new DateTime();
 							$ts_end->modify('next year');
 							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
@@ -284,40 +292,31 @@ class SubscriptionModel extends APP_Model
 				$this->db->trans_begin();
 
 				if($this->Auth->balance() < $price)
-				{
 					throw new Exception('Insufficient funds', 1);
-				}
 
+				$item['data'] = json_encode($item['data']);
 				if($this->update($id, $item) == false)
-				{
 					throw new Exception('Update error', 1);
-				}
 
-				if($price > 0)
+				if($price >= 0)
 				{
 					$tx = [
 						'user' => $item['user'],
 						'type' => '1',
-						'amount' => $price,
+						'amount' => (float) $price,
 						'description' => $item['description'],
 						'service' => 'group',
-						'service_id' => $item['service']
+						'service_id' => $item['target']
 					];
 
 					if($this->TransactionsModel->add($tx))
-					{
 						$this->Auth->updateBalance();
-					}
 					else
-					{
 						throw new Exception('Pay error', 1);
-					}
 				}
 
 				if($this->db->trans_status() === FALSE)
-				{
 					throw new Exception('Renew error', 1);
-				}
 
 				$this->db->trans_commit();
 
@@ -332,7 +331,7 @@ class SubscriptionModel extends APP_Model
 
 		return false;
 	}
-	*/
+	
 
 	/*
 	public function List($filter = [], $order = [], $select = [])

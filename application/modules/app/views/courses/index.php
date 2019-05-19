@@ -6,31 +6,33 @@
 	<div class="col-xs-8 col-xs-push-2">
 		<div class="week-panel owl-carousel">
 			<?$i = 0;?>
-			<?foreach($lectures as $item):?>
-				<?if($item['active'] && $subscr_is_active):?>
-					<a href="/courses/<?=$group_id?>/lecture/<?=$item['id']?>" data-index="<?=$i?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
-						<span class="number">
-							<span><?=$i?></span>
-							<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
-								<span class="badge bg-danger">!</span>
-							<?endif;?>
+			<?if(is_array($lectures)):?>
+				<?foreach($lectures as $item):?>
+					<?if($item['active'] && $subscr_is_active):?>
+						<a href="/courses/<?=$group['code']?>/lecture/<?=$item['id']?>" data-index="<?=$i?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
+							<span class="number">
+								<span><?=$i?></span>
+								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+									<span class="badge bg-danger">!</span>
+								<?endif;?>
+							</span>
+							<span class="name"><?=$item['name']?></span>
+						</a>
+					<?else:?>
+						<span class="week-item">
+							<span class="number">
+								<span><?=$i?></span>
+								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+									<span class="badge bg-danger">!</span>
+								<?endif;?>
+							</span>
+							<span class="name"><?=$item['name']?></span>
 						</span>
-						<span class="name"><?=$item['name']?></span>
-					</a>
-				<?else:?>
-					<span class="week-item">
-						<span class="number">
-							<span><?=$i?></span>
-							<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
-								<span class="badge bg-danger">!</span>
-							<?endif;?>
-						</span>
-						<span class="name"><?=$item['name']?></span>
-					</span>
-				<?endif;?>
+					<?endif;?>
 
-				<?$i++;?>
-			<?endforeach;?>
+					<?$i++;?>
+				<?endforeach;?>
+			<?endif;?>
 		</div>
 	</div>
 

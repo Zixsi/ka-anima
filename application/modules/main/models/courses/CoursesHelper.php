@@ -30,6 +30,7 @@ class CoursesHelper extends APP_Model
 			$this->CoursesModel->preparePrice($price);
 			$item = [
 				'name' => ($data['name'] ?? ''),
+				'code' => ($data['code'] ?? ''),
 				'description' => ($data['description'] ?? ''),
 				'teacher' => intval($data['teacher'] ?? 0),
 				'price' => json_encode($price),
@@ -80,6 +81,7 @@ class CoursesHelper extends APP_Model
 			$item = [
 				'active' => ($data['active'] ?? $course_item['active']),
 				'name' => ($data['name'] ?? $course_item['name']),
+				'code' => ($data['code'] ?? $course_item['code']),
 				'description' => ($data['description'] ?? $course_item['description']),
 				'teacher' => intval($data['teacher'] ?? $course_item['teacher']),
 				'price' => json_encode($price),
