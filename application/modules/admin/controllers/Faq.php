@@ -6,7 +6,6 @@ class Faq extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/FaqModel']);
 	}
 
 	public function index()
@@ -45,9 +44,7 @@ class Faq extends APP_Controller
 					'answer' => $form_data['answer']
 				];
 				if($this->FaqModel->add($form_data) === false)
-				{
-					throw new Exception($this->FaqModel->LAST_ERROR);
-				}
+					throw new Exception($this->FaqModel->getLastError());
 
 				header('Location: ../');
 			}
@@ -87,7 +84,7 @@ class Faq extends APP_Controller
 
 				if($this->FaqModel->update($id, $form_data) === false)
 				{
-					throw new Exception($this->FaqModel->LAST_ERROR);
+					throw new Exception($this->FaqModel->getLastError());
 				}
 
 				header('Location: ../../');

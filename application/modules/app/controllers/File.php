@@ -6,7 +6,6 @@ class File extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/FilesModel']);
 	}
 
 	public function index()

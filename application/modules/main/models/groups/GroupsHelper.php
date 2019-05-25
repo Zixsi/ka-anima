@@ -6,13 +6,6 @@ class GroupsHelper extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->model([
-			'main/GroupsModel',
-			'main/CoursesModel',
-			'main/LecturesModel',
-			'main/SubscriptionModel',
-		]);
 	}
 
 	public function add($data)

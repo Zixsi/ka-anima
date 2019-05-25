@@ -8,7 +8,6 @@ class Profile extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/UserFriendsModel', 'main/UserMessagesModel']);
 
 		$this->user_id = intval($this->Auth->userID());
 	}
@@ -125,7 +124,7 @@ class Profile extends APP_Controller
 				
 				if($this->UserMessagesModel->add($message_data) === false)
 				{
-					throw new Exception($this->UserMessagesModel->LAST_ERROR, 1);
+					throw new Exception($this->UserMessagesModel->getLastError(), 1);
 				}
 
 				if($message_data['target'] !== $data['id'])

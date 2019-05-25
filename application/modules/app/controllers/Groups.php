@@ -43,7 +43,7 @@ class Groups extends APP_Controller
 			// с меткой о загруженных файлах
 			// с меткой о загруженных ревью
 			$data['homeworks'] = $this->LecturesGroupModel->listForUser($data['item']['id'], $data['user']['id']);
-			$this->listenUserActions($data['item'], $params);
+			$this->listenUserActions($data['item'], $params, $data);
 		}
 
 		$data['wall'] = $this->WallModel->list($data['item']['id']);
@@ -52,7 +52,7 @@ class Groups extends APP_Controller
 		$this->load->lview('groups/item', $data);
 	}
 	
-	private function listenUserActions($group, $params)
+	private function listenUserActions($group, $params, $data = [])
 	{
 		if(!isset($params['action']) || empty($params['action']))
 			return;
@@ -61,7 +61,17 @@ class Groups extends APP_Controller
 		{
 			case 'download':
 				if(isset($params['target']) && $params['target'] == 'homework')
+				{
+					$lecture = $this->LecturesModel->getByID($params['lecture']);
+					action(UserActionsModel::ACTION_HOMEWORK_FILE_DOWNLOAD, [
+						'group_code' => $group['code'], 
+						'lecture_name' => $lecture['name'], 
+						'user_id' => $data['user']['id'],
+						'user_name' => $data['user']['full_name']
+					]);
+					
 					$this->HomeworkHelper->download($group['id'], $params['lecture'], $params['user']);
+				}
 			break;
 			default:
 				// empty 

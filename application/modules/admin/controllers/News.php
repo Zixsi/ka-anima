@@ -6,7 +6,6 @@ class News extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/NewsModel']);
 	}
 
 	public function index()
@@ -45,9 +44,7 @@ class News extends APP_Controller
 					'text' => $form_data['text']
 				];
 				if($this->NewsModel->add($form_data) === false)
-				{
-					throw new Exception($this->NewsModel->LAST_ERROR);
-				}
+					throw new Exception($this->NewsModel->getLastError());
 
 				header('Location: ../');
 			}
@@ -86,9 +83,7 @@ class News extends APP_Controller
 				];
 
 				if($this->NewsModel->update($id, $form_data) === false)
-				{
-					throw new Exception($this->NewsModel->LAST_ERROR);
-				}
+					throw new Exception($this->NewsModel->getLastError());
 
 				header('Location: ../../');
 			}

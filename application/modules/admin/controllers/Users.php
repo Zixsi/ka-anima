@@ -6,7 +6,6 @@ class Users extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/UserModel']);
 	}
 
 	public function index()
@@ -31,6 +30,8 @@ class Users extends APP_Controller
 		$data['subscribes'] = $this->SubscriptionModel->byUser($id);
 		$data['transactions']['in'] = $this->TransactionsModel->listUserTxByType($id, 0);
 		$data['transactions']['out'] = $this->TransactionsModel->listUserTxByType($id, 1);
+		$data['streams'] = $this->StreamsModel->list($id, []);
+		$data['actions'] = $this->UserActionsModel->listByUser($id);
 		
 		// debug($data); die();
 

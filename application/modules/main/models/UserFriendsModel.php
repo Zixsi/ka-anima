@@ -25,7 +25,7 @@ class UserFriendsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;
@@ -76,7 +76,7 @@ class UserFriendsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;
@@ -96,7 +96,7 @@ class UserFriendsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return 0;

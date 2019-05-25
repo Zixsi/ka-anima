@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app');
+$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'main/action');
 
 /*
 | -------------------------------------------------------------------
@@ -133,10 +133,11 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = [
-	'app/AuthModel' => 'Auth', 
+	'main/users/AuthHelper' => 'Auth', 
 	'main/FilesModel',
 	'main/AccessModel', 
 	'main/UserModel', 
+	'main/UserFriendsModel', 
 	'main/CoursesModel', 
 	'main/GroupsModel', 
 	'main/groups/GroupsHelper', 
@@ -154,5 +155,8 @@ $autoload['model'] = [
 	'main/wall/WallModel',
 	'main/wall/WallHelper',
 	'main/users/UserActionsModel',
-	'main/users/UserActionsHelper'
+	'main/users/UserActionsHelper',
+	'main/subscription/SubscriptionHelper',
+	'main/FaqModel',
+	'main/NewsModel',
 ];

@@ -13,23 +13,15 @@ class FilesModel extends APP_Model
 
 	public function add($data = [])
 	{
-		try
-		{
-			$data['file_path'] = get_rel_path($data['file_path']);
-			$data['full_path'] = get_rel_path($data['full_path']);
-			$data['file_size'] = number_format($data['file_size'], 2, '.', '');
-			$data['image_width'] = intval($data['image_width']);
-			$data['image_height'] = intval($data['image_height']);
+		$data['file_path'] = get_rel_path($data['file_path']);
+		$data['full_path'] = get_rel_path($data['full_path']);
+		$data['file_size'] = number_format($data['file_size'], 2, '.', '');
+		$data['image_width'] = intval($data['image_width']);
+		$data['image_height'] = intval($data['image_height']);
 
-			if($this->db->insert(self::TABLE, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		if($this->db->insert(self::TABLE, $data))
+			return $this->db->insert_id();
+
 
 		return false;
 	}
@@ -39,10 +31,7 @@ class FilesModel extends APP_Model
 		if(!empty($data))
 		{
 			if(isset($data['image_size_str']))
-			{
 				unset($data['image_size_str']);
-			}
-
 			$data['ts'] = date('Y-m-d 00:00:00');
 
 			return $this->add($data); 
@@ -60,9 +49,7 @@ class FilesModel extends APP_Model
 	{
 		$sql = 'SELECT * FROM '.self::TABLE.' WHERE id = ?';
 		if($row = $this->db->query($sql, [$id])->row_array())
-		{
 			return $row;
-		}
 
 		return false;
 	}
@@ -74,37 +61,24 @@ class FilesModel extends APP_Model
 	
 		count($filter)?$this->db->where($filter):$this->db->where('id >', 0);
 		foreach($order as $key => $val)
-		{
 			$this->db->order_by($key, $val);
-		}
 
 		if($res = $this->db->get(self::TABLE))
-		{
 			return $res->result_array();
-		}
 
 		return false;
 	}
 
 	public function addLink(int $id, int $id_item, string $type)
 	{
-		try
-		{
-			$data = [
-				'file' => $id,
-				'item' => $id_item,
-				'item_type' => $type
-			];
+		$data = [
+			'file' => $id,
+			'item' => $id_item,
+			'item_type' => $type
+		];
 
-			if($this->db->insert(self::TABLE_LINK_FILES, $data))
-			{
-				return $this->db->insert_id();
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		if($this->db->insert(self::TABLE_LINK_FILES, $data))
+			return $this->db->insert_id();
 
 		return false;
 	}
@@ -142,9 +116,7 @@ class FilesModel extends APP_Model
 					f.is_image DESC, f.id ASC';
 
 		if($res = $this->db->query($sql, [$item, $type])->result_array())
-		{
 			return $res;
-		}
 
 		return false;
 	}
@@ -190,25 +162,17 @@ class FilesModel extends APP_Model
 						$file = $this->upload->data();
 						$upload_files[] = $file;
 						if(($file_id = $this->saveFileArray($file)) === false)
-						{
-							throw new Exception($this->LAST_ERROR, 1);
-						}
+							throw new Exception($this->getLastError(), 1);
 
 						if($this->addLink($file_id, $item_id, $type) === false)
-						{
-							throw new Exception($this->LAST_ERROR, 1);
-						}
+							throw new Exception($this->getLastError(), 1);
 					}
 				}
 
 				if($this->db->trans_status())
-				{
 					$this->db->trans_commit();
-				}
 				else
-				{
 					throw new Exception('Add files error', 1);
-				}
 			}
 			catch(Exception $e)
 			{
@@ -217,14 +181,11 @@ class FilesModel extends APP_Model
 					foreach($upload_files as $file)
 					{
 						if(is_file($file['full_path']))
-						{
 							unlink($file['full_path']);
-						}
 					}
 				}
-				 $this->db->trans_rollback();
-
-				$this->LAST_ERROR = $e->getMessage();
+				
+				$this->db->trans_rollback();
 				return false;
 			}
 		}

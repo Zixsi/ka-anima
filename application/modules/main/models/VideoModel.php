@@ -27,38 +27,20 @@ class VideoModel extends APP_Model
 	// список видео по ресурсу
 	public function bySource($id, $type = 'lecture')
 	{
-		try
-		{
-			$bind = [$id, $type];
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ?';
-			if($res = $this->db->query($sql, $bind)->row_array())
-			{
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$bind = [$id, $type];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ?';
+		if($res = $this->db->query($sql, $bind)->row_array())
+			return $res;
 
 		return false;
 	}
 
 	public function byVideoCode($code)
 	{
-		try
-		{
-			$bind = [$code];
-			$sql = 'SELECT * FROM '.self::TABLE.' WHERE video_code = ?';
-			if($res = $this->db->query($sql, $bind)->row_array())
-			{
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$bind = [$code];
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE video_code = ?';
+		if($res = $this->db->query($sql, $bind)->row_array())
+			return $res;
 
 		return false;
 	}
@@ -69,21 +51,17 @@ class VideoModel extends APP_Model
 		try
 		{
 			if(in_array(strtolower($type), self::VIDEO_TYPES) == false)
-			{
 				throw new Exception('Invalid video type', 1);
-			}
 
 			$this->load->library(['ydvideo']);
 			if($video = $this->ydvideo->getVideo($url))
-			{
 				$this->set($source_id, $url, $video['video'], $type, 'mp4');
-			}
 
 			return false;
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;
@@ -105,9 +83,7 @@ class VideoModel extends APP_Model
 				];
 
 				if($this->db->update(self::TABLE, $data))
-				{
 					return true;
-				}
 			}
 			else
 			{
@@ -122,15 +98,12 @@ class VideoModel extends APP_Model
 				];
 
 				if($this->db->insert(self::TABLE, $data))
-				{
 					return true;
-				}
 			}
 		}
 		catch(Exception $e)
 		{
-			debug($e->getMessage()); die();
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;
@@ -140,19 +113,10 @@ class VideoModel extends APP_Model
 	// список видео для обновления
 	public function forUpdate($time = 300)
 	{
-		try
-		{
-			$expire = date('Y-m-d H:i:s', time() - $time);
-			$sql = 'SELECT source_id, source_type, code, type FROM '.self::TABLE.' WHERE ts IS NULL OR ts < ?';
-			if($res = $this->db->query($sql, [$expire])->result_array())
-			{
-				return $res;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$expire = date('Y-m-d H:i:s', time() - $time);
+		$sql = 'SELECT source_id, source_type, code, type FROM '.self::TABLE.' WHERE ts IS NULL OR ts < ?';
+		if($res = $this->db->query($sql, [$expire])->result_array())
+			return $res;
 
 		return false;
 	}

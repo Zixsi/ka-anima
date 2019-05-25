@@ -6,12 +6,6 @@ class SubscriptionHelper extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model([
-			'main/CoursesModel',
-			'main/SubscriptionModel',
-			'main/GroupsModel',
-			'main/groups/GroupsHelper'
-		]);
 	}
 
 	public function group($data = [])
@@ -42,9 +36,7 @@ class SubscriptionHelper extends APP_Model
 			{
 				// проверяем есть ли подходящая группа
 				if($res = $this->GroupsModel->getNearVip($course_id))
-				{
 					$group_id = $res['id'];
-				}
 				else
 				{
 					// создаем отдельную группу
@@ -111,7 +103,7 @@ class SubscriptionHelper extends APP_Model
 				}
 			}
 
-			$data = [
+			$params = [
 				'user' => $data['user'],
 				'type' => $data['type'],
 				'target' => $item['group_id'],
@@ -124,19 +116,21 @@ class SubscriptionHelper extends APP_Model
 				'data' => json_encode(['price' => $price])
 			];
 
-			$this->SubscriptionModel->add($data);
+			$this->SubscriptionModel->add($params);
 
 			$fields = [
-				'user' => $data['user'],
+				'user' => $params['user'],
 				'type' => '1',
 				'amount' => $price,
-				'description' => $data['description'],
+				'description' => $params['description'],
 				'service' => 'group',
 				'service_id' => $item['group_id']
 			];
 
 			$this->TransactionsModel->add($fields);
 			$this->Auth->updateBalance();
+
+			action(UserActionsModel::ACTION_COURSE_SUBSCR, ['group_code' => $item['code'], 'period' => $data['period']]);
 			
 			if($this->db->trans_status() === FALSE)
 			{

@@ -209,44 +209,35 @@ class UserModel extends APP_Model
 
 	public function listAllForUser($id)
 	{
-		try
+		$id = intval($id);
+		$bind = [$id];
+
+		$sql = 'SELECT 
+					u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, uf.user as is_friend    
+				FROM 
+					'.self::TABLE.' as u 
+				LEFT JOIN 
+					'.self::TABLE_USER_FRIENDS.' as uf ON(uf.id = u.id AND uf.user = ?) 
+				WHERE 
+					u.role != 5 AND 
+					u.deleted = 0 AND 
+					u.blocked = 0
+				ORDER BY 
+					u.id ASC';
+
+		$result = [];
+		if($res = $this->db->query($sql, $bind)->result_array())
 		{
-			$id = intval($id);
-			$bind = [$id];
-
-			$sql = 'SELECT 
-						u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, uf.user as is_friend    
-					FROM 
-						'.self::TABLE.' as u 
-					LEFT JOIN 
-						'.self::TABLE_USER_FRIENDS.' as uf ON(uf.id = u.id AND uf.user = ?) 
-					WHERE 
-						u.role != 5 AND 
-						u.deleted = 0 AND 
-						u.blocked = 0
-					ORDER BY 
-						u.id ASC';
-
-			$result = [];
-			if($res = $this->db->query($sql, $bind)->result_array())
+			foreach($res as $val)
 			{
-				foreach($res as $val)
-				{
-					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
-					$val['full_name'] = (!empty($val['full_name']))?$val['full_name']:$val['email'];
-					$val['is_friend'] = ($val['is_friend'] || intval($val['id']) === $id)?true:false;
-					$result[] = $val;
-				}
+				$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+				$val['full_name'] = (!empty($val['full_name']))?$val['full_name']:$val['email'];
+				$val['is_friend'] = ($val['is_friend'] || intval($val['id']) === $id)?true:false;
+				$result[] = $val;
 			}
-
-			return $result;
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
 		}
 
-		return false;
+		return $result;
 	}
 
 	// кол-во юзеров по ролям

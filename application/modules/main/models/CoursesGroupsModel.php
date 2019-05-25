@@ -29,7 +29,7 @@ class CoursesGroupsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			//
 		}
 
 		return false;
@@ -49,7 +49,7 @@ class CoursesGroupsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			//
 		}
 
 		return false;

@@ -41,7 +41,7 @@ class Streams extends APP_Controller
 				header('Location: ../../');
 		}
 
-		$data['error'] = $this->StreamsModel->LAST_ERROR;
+		$data['error'] = $this->StreamsModel->getLastError();
 		// $data['groups'] = $this->GroupsModel->getTeacherGroups($data['item']['teacher']);
 		$data['csrf'] = cr_get_key();
 

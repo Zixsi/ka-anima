@@ -121,25 +121,65 @@
 						</thead>
 						<tbody>
 							<?if($subscribes):?>
-								<?foreach($subscribes as $item):?>
+								<?foreach($subscribes as $val):?>
 									<tr>
 										<td>
-											<a href="/admin/groups/<?=$item['code']?>/"><?=$item['description']?></a>
+											<a href="/admin/groups/<?=$val['code']?>/"><?=$val['description']?></a>
 										</td>
-										<td class="text-center"><?=date('Y-m-d', strtotime($item['ts_start']))?></td>
-										<td class="text-center"><?=date('Y-m-d', strtotime($item['ts_end']))?></td>
+										<td class="text-center"><?=date('Y-m-d', strtotime($val['ts_start']))?></td>
+										<td class="text-center"><?=date('Y-m-d', strtotime($val['ts_end']))?></td>
 										<td class="text-center">
-											<?if($item['active']):?>
+											<?if($val['active']):?>
 												<span class="label label-success">Активный</span>
 											<?else:?>
 												<span class="label label-danger">Истек</span>
 											<?endif;?>	
 										</td>
 										<td class="text-center">
-											<?if($item['amount'] > 0):?>
-												<?=number_format($item['amount'], 2, '.', '')?> руб.
+											<?if($val['amount'] > 0):?>
+												<?=number_format($val['amount'], 2, '.', '')?> руб.
 											<?else:?>
 												<span>- - -</span>
+											<?endif;?>
+										</td>
+									</tr>
+								<?endforeach;?>
+							<?endif;?>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		<?elseif((int) $item['role'] === 1):?>
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Онлайн встречи</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="text-center">Название</th>
+								<th class="text-center">Начинается</th>
+								<th class="text-center">Статус</th>
+							</tr>
+						</thead>
+						<tbody>
+							<?if($streams):?>
+								<?foreach($streams as $val):?>
+									<tr>
+										<td>
+											<a href="/admin/streams/item/<?=$val['id']?>/"><?=$val['name']?></a>
+										</td>
+										<td class="text-center"><?=date('Y-m-d H:i:00', strtotime($val['ts']))?></td>
+										<td class="text-center">
+											<?if($val['status'] == 0):?>
+												<span class="label label-success">В процессе</span>
+											<?elseif($val['status'] == -1):?>
+												<span class="label label-danger">Завершено</span>
+											<?elseif($val['status'] == 2):?>
+												<span class="label label-info">Сегодня</span>
+											<?else:?>
+												<span class="label label-warning">Скоро</span>
 											<?endif;?>
 										</td>
 									</tr>
@@ -153,63 +193,95 @@
 	</div>
 </div>
 
-<div class="row">
-	<div class="col-xs-6">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Пополнения счета</h3>
+<?if((int) $item['role'] === 0):?>
+	<div class="row">
+		<div class="col-xs-6">
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Пополнения счета</h3>
+				</div>
+				<div class="panel-body">
+					<?if($transactions['in']):?>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Сумма</th>
+									<th>Платежная система</th>
+									<th>Статус</th>
+									<th width="180">Дата</th>
+									<th width="100">Инвойс</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?foreach($transactions['in'] as $item):?>
+								<tr>
+									<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
+									<td><?=$item['description']?></td>
+									<td>Завершен</td>
+									<td><?=$item['ts']?></td>
+									<td>
+										<a href="javascript:void(0);">Скачать</a>
+									</td>
+								</tr>
+							<?endforeach;?>
+							</tbody>
+						</table>
+					<?endif;?>
+				</div>
 			</div>
-			<div class="panel-body">
-				<?if($transactions['in']):?>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Сумма</th>
-								<th>Платежная система</th>
-								<th>Статус</th>
-								<th width="180">Дата</th>
-								<th width="100">Инвойс</th>
-							</tr>
-						</thead>
-						<tbody>
-						<?foreach($transactions['in'] as $item):?>
-							<tr>
-								<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
-								<td><?=$item['description']?></td>
-								<td>Завершен</td>
-								<td><?=$item['ts']?></td>
-								<td>
-									<a href="javascript:void(0);">Скачать</a>
-								</td>
-							</tr>
-						<?endforeach;?>
-						</tbody>
-					</table>
-				<?endif;?>
+		</div>
+		<div class="col-xs-6">
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">Платежи</h3>
+				</div>
+				<div class="panel-body">
+					<?if($transactions['out']):?>
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Описание</th>
+									<th>Сумма</th>
+									<th width="180">Дата</th>	
+								</tr>
+							</thead>
+							<tbody>
+							<?foreach($transactions['out'] as $item):?>
+								<tr>
+									<td><?=$item['description']?></td>
+									<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
+									<td><?=$item['ts']?></td>
+								</tr>
+							<?endforeach;?>
+							</tbody>
+						</table>
+					<?endif;?>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="col-xs-6">
+<?endif;?>
+
+<div class="row">
+	<div class="col-xs-12">
 		<div class="panel">
 			<div class="panel-heading">
-				<h3 class="panel-title">Платежи</h3>
+				<h3 class="panel-title">Действия</h3>
 			</div>
 			<div class="panel-body">
-				<?if($transactions['out']):?>
+				<?if($actions):?>
 					<table class="table table-striped">
 						<thead>
 							<tr>
+								<th width="180">Дата</th>
 								<th>Описание</th>
-								<th>Сумма</th>
-								<th width="180">Дата</th>	
 							</tr>
 						</thead>
 						<tbody>
-						<?foreach($transactions['out'] as $item):?>
+						<?foreach($actions as $item):?>
 							<tr>
-								<td><?=$item['description']?></td>
-								<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
-								<td><?=$item['ts']?></td>
+								<td><?=date('d.m.Y H:i:s', strtotime($item['date']))?></td>
+								<td><?=action_print_description($item)?></td>
 							</tr>
 						<?endforeach;?>
 						</tbody>

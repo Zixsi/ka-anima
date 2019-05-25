@@ -6,8 +6,6 @@ class Video extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/VideoModel']);
-
 		$this->load->layout = 'empty';
 	}
 	

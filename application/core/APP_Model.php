@@ -2,7 +2,7 @@
 
 class APP_Model extends CI_Model
 {
-	public $LAST_ERROR = null;
+	public $last_error = null;
 	private $last_error_code = 0;
 	
 	public function __construct()
@@ -10,15 +10,21 @@ class APP_Model extends CI_Model
 		parent::__construct();
 	}
 
+	public function setLastException($e)
+	{
+		$this->last_error = (string) $e->getMessage();
+		$this->last_error_code = (int) $e->getCode();
+	}
+
 	public function setLastError($text, $code = 0)
 	{
-		$this->LAST_ERROR = strval($text);
-		$this->last_error_code = intval($code);
+		$this->last_error = (string) $text;
+		$this->last_error_code = (int) $code;
 	}
 
 	public function getLastError()
 	{
-		return $this->LAST_ERROR;
+		return $this->last_error;
 	}
 
 	public function getLastErrorCode()

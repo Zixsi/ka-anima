@@ -13,10 +13,14 @@ class Auth extends APP_Controller
 	{
 		$data = [];
 
-		if($this->Auth->login()) redirect('');
+		if($this->Auth->login())
+		{
+			action(UserActionsModel::ACTION_LOGIN);
+			redirect('');
+		}
 		
 		$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->LAST_ERROR;
+		$data['error'] = $this->Auth->getLastError();
 
 		$this->load->lview('auth/login', $data);
 	}
@@ -36,7 +40,7 @@ class Auth extends APP_Controller
 		$data['form']['email'] = $this->input->post('email', true);
 		$data['form']['name'] = $this->input->post('name', true);
 		$data['form']['lastname'] = $this->input->post('lastname', true);
-		$data['error'] = $this->Auth->LAST_ERROR;
+		$data['error'] = $this->Auth->getLastError();
 
 		$this->load->lview('auth/register', $data);
 	}
@@ -46,7 +50,7 @@ class Auth extends APP_Controller
 		$data = [];
 
 		//$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->LAST_ERROR;
+		$data['error'] = $this->Auth->getLastError();
 
 		$this->load->lview('auth/forgot', $data);
 	}
@@ -56,7 +60,7 @@ class Auth extends APP_Controller
 		$data = [];
 		
 		//$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->LAST_ERROR;
+		$data['error'] = $this->Auth->getLastError();
 
 		$this->load->lview('auth/confirmation', $data);
 	}

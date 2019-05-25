@@ -7,7 +7,6 @@ CREATE TABLE `user_actions` (
 	`user` INT UNSIGNED NOT NULL , 
 	`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
 	`action` VARCHAR(80) NOT NULL , 
-	`description` TEXT NOT NULL , 
 	`data` TEXT NULL 
 ) ENGINE = InnoDB;
 ALTER TABLE `user_actions` ADD `hash` VARCHAR(40) NOT NULL AFTER `data`, ADD UNIQUE `hash` (`hash`);

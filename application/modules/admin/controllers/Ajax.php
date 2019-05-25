@@ -16,12 +16,6 @@ class Ajax extends APP_Controller
 		{
 			$this->jsonrpc->error(-32000);
 		}
-
-		$this->load->model([
-			'main/groups/GroupsHelper',
-			'main/users/UsersHelper',
-			'main/lectures/LecturesHelper',
-		]);
 	}
 
 	public function index()

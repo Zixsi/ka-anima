@@ -40,7 +40,7 @@ class StreamsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;
@@ -79,7 +79,7 @@ class StreamsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return false;

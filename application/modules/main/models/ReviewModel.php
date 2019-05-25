@@ -151,22 +151,13 @@ class ReviewModel extends APP_Model
 
 	public function setViewedStatus(int $id, $status)
 	{
-		try
-		{
-			$params = [
-				'item_is_viewed	' => ($status)?1:0
-			];
-			
-			$this->db->where('id', $id);
-			if($this->db->update(self::TABLE, $params))
-			{
-				return true;
-			}
-		}
-		catch(Exception $e)
-		{
-			$this->LAST_ERROR = $e->getMessage();
-		}
+		$params = [
+			'item_is_viewed	' => ($status)?1:0
+		];
+		
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $params))
+			return true;
 
 		return false;
 	}

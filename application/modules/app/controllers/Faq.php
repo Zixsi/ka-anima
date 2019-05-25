@@ -5,7 +5,6 @@ class Faq extends APP_Controller
 {
 	public function index()
 	{
-		$this->load->model(['main/FaqModel']);
 		$data = [];
 		$data['items'] = $this->FaqModel->list();
 

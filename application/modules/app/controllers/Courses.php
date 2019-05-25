@@ -263,17 +263,23 @@ class Courses extends APP_Controller
 		$this->load->library('upload', $upload_config);
 
 		if($this->upload->do_upload('file') == false)
-		{
 			$data['error'] = $this->upload->display_errors();
-		}
 		else
 		{
-			if($file_id = $this->FilesModel->saveFileArray($this->upload->data()))
+			$file_data = $this->upload->data();
+			if($file_id = $this->FilesModel->saveFileArray($file_data))
 			{
-				$this->LecturesHomeworkModel->add($data['group']['id'], $data['lecture_id'], $this->user_id, $file_id, $comment);
+				if($this->LecturesHomeworkModel->add($data['group']['id'], $data['lecture_id'], $this->user_id, $file_id, $comment))
+				{
+					action(UserActionsModel::ACTION_HOMEWORK_FILE_ADD, [
+						'group_code' => $data['group']['code'], 
+						'lecture_name' => $data['lecture']['name'], 
+						'file_name' => $file_data['orig_name']
+					]);
+				}
 			}
 
-			$data['error'] = $this->FilesModel->LAST_ERROR;
+			$data['error'] = $this->FilesModel->getLastError();
 		}
 	}
 

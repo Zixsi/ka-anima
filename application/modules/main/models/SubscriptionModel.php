@@ -31,7 +31,6 @@ class SubscriptionModel extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesGroupsModel']);
 	}
 
 	public function add($data = [])
@@ -255,16 +254,18 @@ class SubscriptionModel extends APP_Model
 				$ts_end_mark = strtotime($item['ts_end']);
 
 				// debug($item); die();
+				$service = null;
+				$period = null;
 
 				switch($item['target_type'])
 				{
 					case 'course':
+						if(($service = $this->CoursesGroupsModel->getByID($item['target'])) == false)
+							throw new Exception('Group not found', 1);
+
 						// Продление на месяц
 						if($item['amount'] > 0)
 						{
-							if(($service = $this->CoursesGroupsModel->getByID($item['target'])) == false)
-								throw new Exception('Group not found', 1);
-
 							$price = ($item['amount'] > $item['data']['price'])?$item['data']['price']:$item['amount'];
 
 							$ts_end = new DateTime($item['ts_end']);
@@ -273,6 +274,7 @@ class SubscriptionModel extends APP_Model
 
 							$item['ts_end'] = (strtotime($ts_end_format) > strtotime($service['ts_end']))?$service['ts_end']:$ts_end_format;
 							$item['amount'] -= $price;
+							$period = 'month';
 						}
 						// Продление на год
 						elseif($ts_end_mark < time())
@@ -282,6 +284,7 @@ class SubscriptionModel extends APP_Model
 							$ts_end = new DateTime();
 							$ts_end->modify('next year');
 							$item['ts_end'] = $ts_end->format('Y-m-d 00:00:00');
+							$period = 'year';
 						}
 					break;
 					default:
@@ -315,6 +318,8 @@ class SubscriptionModel extends APP_Model
 						throw new Exception('Pay error', 1);
 				}
 
+				action(UserActionsModel::ACTION_COURSE_RENEW_SUBSCR, ['group_code' => $service['code'], 'period' => $period]);
+
 				if($this->db->trans_status() === FALSE)
 					throw new Exception('Renew error', 1);
 
@@ -326,142 +331,8 @@ class SubscriptionModel extends APP_Model
 		catch(Exception $e)
 		{
 			$this->db->trans_rollback();
-			$this->LAST_ERROR = $e->getMessage();
 		}
 
 		return false;
 	}
-	
-
-	/*
-	public function List($filter = [], $order = [], $select = [])
-	{
-		$select = count($select)?implode(', ', $select):'*';
-		$this->db->select($select);
-	
-		count($filter)?$this->db->where($filter):$this->db->where('id >', 0);
-		foreach($order as $key => $val)
-		{
-			$this->db->order_by($key, $val);
-		}
-
-		if($res = $this->db->get(self::TABLE))
-		{
-			return $res->result_array();
-		}
-
-		return false;
-	}
-
-	public function group($user, $group, $price_period = null)
-	{
-		try
-		{	
-			if(intval($user) == 0)
-			{
-				throw new Exception('User not found', 1);
-			}
-
-			if(($item = $this->CoursesGroupsModel->getByID($group)) == false)
-			{
-				throw new Exception('Group not found', 1);
-			}
-
-			if(in_array($price_period , ['month', 'full']) == false)
-			{
-				throw new Exception('Invalid price period', 1);
-			}
-			elseif($this->Auth->balance() < $item['price_'.$price_period])
-			{
-				throw new Exception('Insufficient funds', 1);
-			}
-
-			if($this->CheckSubscibe($user, $group))
-			{
-				throw new Exception('Already subscribed', 1);
-			}
-
-			$ts_end = $item['ts_end'];
-			$subscr_type = 0;
-			$amount = 0; // остаток для оплаты
-
-			// Оплата за месяц
-			if($price_period == 'month')
-			{
-				$ts_curr = new DateTime($item['ts']);
-				$ts_month = new DateTime($item['ts']);
-				$ts_month->modify('next month');
-				$diff = $ts_curr->diff($ts_month);
-				
-				// Если разница между датой окончания и месяцем оплаты меньше или равно 1 недели 
-				// то устанавливаем дату окончания курса
-				if(strtotime($ts_month->format('Y-m-d 00:00:00')) < strtotime($ts_end) && $diff->d > 7)
-				{
-					$subscr_type = 1;
-					$ts_end = $ts_month->format('Y-m-d 00:00:00');
-
-					// Рассчитываем остаток оплаты при покупке месяца
-					$diff = $ts_curr->diff(new DateTime($item['ts_end']));
-					if($diff->d > 7)
-					{
-						$diff->m++;
-					}
-
-					$amount = ($diff->m * $item['price_month']) - $item['price_month'];
-				}
-			}
-
-			$data = [
-				'user' => intval($user),
-				'type' => 0,
-				'service' => intval($group),
-				'description' => $item['name'].' ('.strftime("%B %Y", strtotime($item['ts'])).')',
-				'ts_start' => $item['ts'],
-				'ts_end' => $ts_end,
-				'subscr_type' => $subscr_type,
-				'price_month' => $item['price_month'],
-				'price_full' => $item['price_full'],
-				'amount' => $amount
-			];
-
-			$this->db->trans_begin();
-
-			if(($this->add($data)) == false)
-			{
-				throw new Exception($this->LAST_ERROR, 1);
-			}
-
-			$fields = [
-				'user' => $user,
-				'type' => '1',
-				'amount' => $item['price_'.$price_period],
-				'description' => $data['description'],
-				'service' => 'group',
-				'service_id' => $group
-			];
-
-			if($this->TransactionsModel->add($fields))
-			{
-				 $this->Auth->updateBalance();
-			}
-
-			if($this->db->trans_status() === FALSE)
-			{
-				throw new Exception('Subscibe error', 1);
-			}
-
-			$this->db->trans_commit();
-
-			return true;
-		}
-		catch(Exception $e)
-		{
-			$this->db->trans_rollback();
-			$this->LAST_ERROR = $e->getMessage();
-		}
-
-		return false;
-	}
-	*/
-
 }

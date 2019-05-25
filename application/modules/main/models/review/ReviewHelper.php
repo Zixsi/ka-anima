@@ -17,17 +17,18 @@ class ReviewHelper extends APP_Model
 			$this->db->trans_begin();
 
 			$data['group'] = (int) ($data['group'] ?? 0);
-			if($data['group'] === 0)
+
+			if(($group = $this->GroupsModel->getByID($data['group'])) === false)
 				throw new Exception('группа не найдена');
-			$data['group_id'] = $data['group'];
+			$data['group_id'] = $group['id'];
 
 			$data['lecture'] = (int) ($data['lecture'] ?? 0);
-			if($data['lecture'] === 0)
+			if(($lecture = $this->LecturesModel->getByID($data['lecture'])) === false)
 				throw new Exception('лекция не найдена');
-			$data['lecture_id'] = $data['lecture'];
+			$data['lecture_id'] = $lecture['id'];
 
 			$data['user'] = (int) ($data['user'] ?? 0);
-			if($data['user'] === 0)
+			if(($user = $this->UserModel->getByID($data['user'])) === false)
 				throw new Exception('пользователь не найден');
 
 			$data['video_url'] = ($data['video_url'] ?? '');
@@ -47,6 +48,13 @@ class ReviewHelper extends APP_Model
 
 			if($this->VideoModel->prepareAndSet($id, 'review', $data['video_url']))
 				throw new Exception('ошибка добавления');
+
+			action(UserActionsModel::ACTION_REVIEW_ADD, [
+				'group_code' => $group['code'], 
+				'lecture_name' => $lecture['name'], 
+				'user_id' => $user['id'],
+				'user_name' => $user['full_name']
+			]);
 
 			if($this->db->trans_status() === false)
 			{
@@ -73,11 +81,24 @@ class ReviewHelper extends APP_Model
 		{
 			$this->db->trans_begin();
 
+			if(($item = $this->ReviewModel->getByID($id)) === false)
+				throw new Exception('элемент не найден');
+
+			$user = $this->UserModel->getByID($item['user']);
+			$group = $this->GroupsModel->getByID($item['group_id']);
+
 			if($this->ReviewModel->delete($id) === false)
 				throw new Exception('ошибка удаления 1 ');
 
 			if($this->VideoModel->remove($id, 'review') === false)
 				throw new Exception('ошибка удаления 2');
+
+			action(UserActionsModel::ACTION_REVIEW_DEL, [
+				'group_code' => $group['code'], 
+				'lecture_name' => $item['lecture_name'], 
+				'user_id' => $user['id'],
+				'user_name' => $user['full_name']
+			]);
 
 			if($this->db->trans_status() === false)
 			{

@@ -6,7 +6,6 @@ class Lectures extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/CoursesModel', 'main/LecturesModel']);
 	}
 
 	public function index($course = 0)
@@ -37,7 +36,7 @@ class Lectures extends APP_Controller
 		}
 
 		$data['csrf'] = cr_get_key();
-		$data['error'] = $this->LecturesModel->LAST_ERROR;
+		$data['error'] = $this->LecturesModel->getLastError();
 
 		$this->load->lview('lectures/add', $data);
 	}
@@ -58,8 +57,7 @@ class Lectures extends APP_Controller
 		{
 			header('Location: ../');
 		}
-
-		$this->load->model(['main/VideoModel']);
+		
 		$data['error'] = null;
 
 		if(cr_valid_key())
@@ -74,14 +72,14 @@ class Lectures extends APP_Controller
 				$this->FilesModel->deleteLinkFile(($form_data['del_files'] ?? []), $id, 'lecture');
 				if($this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures'))
 				{
-					$data['error'] = $this->FilesModel->LAST_ERROR;
+					$data['error'] = $this->FilesModel->getLastError();
 				}
 
 				SetFlashMessage('success', 'Success');
 			}
 			else
 			{
-				$data['error'] = $this->LecturesModel->LAST_ERROR;
+				$data['error'] =$this->LecturesModel->getLastError();
 			}
 		}
 

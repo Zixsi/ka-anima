@@ -12,39 +12,66 @@ class UserActionsHelper extends APP_Model
 	{
 		try
 		{	
-			$this->db->trans_begin();
+			$data['action'] = ($data['action'] ?? '');
 
-			// $this->form_validation->reset_validation();
-			// $this->form_validation->set_data($data);
+			if(empty($data['action']) || !array_key_exists($data['action'], UserActionsModel::ACTIONS))
+				throw new Exception('Действие не определено', 1);
 
-			// // проверка полей
-			// if($this->form_validation->run('user_add') == FALSE)
-			// 	// $this->form_validation->error_string()
-			// 	throw new Exception(current($this->form_validation->error_array()), -32602);
+			$data['user'] = (int) ($data['user'] ?? 0);
+			if($data['user'] === 0)
+				throw new Exception('Неуказан пользователь', 1);
 
-			// $data['active'] = (int) ($data['active'] ?? 1);
-			// $data['password'] = $this->UserModel->pwdHash($data['password']);
-			// $data['hash'] = sha1(time());
-			// unset($data['re_password']);
+			$data['data'] = is_array($data['data'])?$data['data']:[];
 
-			// if(($id = $this->UserModel->add($data)) === false)
-			// 	throw new Exception('Ошибка создания', -32603);
+			$params = [
+				'user' => $data['user'],
+				'date_ts' => time(),
+				'action' => $data['action'],
+				'data' => json_encode($data['data']),
+				'hash' => $this->UserActionsModel->hash($data['user'], $data['action'])
+			];
 
-			// if($this->db->trans_status() === FALSE)
-			// 	throw new Exception('Ошибка создания', -32603);
-
-			// $this->UserActionsModel->add();
-
-			$this->db->trans_commit();
-
-			return true;
+			return $this->UserActionsModel->add($params);
 		}
 		catch(Exception $e)
 		{
-			$this->db->trans_rollback();
-			$this->setLastError($e->getMessage(), $e->getCode());
+			$this->setLastException($e);
 		}
 
 		return false;
+	}
+
+	public function prepareDescription($item)
+	{
+		$data = json_decode($item['data'], true);
+		$result = UserActionsModel::ACTIONS[$item['action']]['description'];
+		switch($item['action'])
+		{
+			case UserActionsModel::ACTION_COURSE_SUBSCR:
+			case UserActionsModel::ACTION_COURSE_RENEW_SUBSCR:
+				$result .= ' <a href="/admin/groups/'.$data['group_code'].'/" target="_blank">'.$data['group_code'].'</a>';
+			break;
+			case UserActionsModel::ACTION_PAY_ADD_FOUNDS:
+				$result .= ' на сумму '.number_format((float) $data['value'], 2, '.', ' ').' руб. с помощью '.$data['pay_system'];
+			break;
+			case UserActionsModel::ACTION_HOMEWORK_FILE_ADD:
+				$result .= ' <a href="/admin/groups/'.$data['group_code'].'/?user='.$item['user'].'" target="_blank">'.$data['group_code'].'</a> ('.$data['lecture_name'].') - '.$data['file_name'];
+			break;
+			case UserActionsModel::ACTION_HOMEWORK_FILE_DOWNLOAD:
+			case UserActionsModel::ACTION_REVIEW_ADD:
+			case UserActionsModel::ACTION_REVIEW_DEL:
+				$result .= ' <a href="/admin/groups/'.$data['group_code'].'/?user='.$data['user_id'].'" target="_blank">'.$data['group_code'].'</a> ('.$data['lecture_name'].') -  <a href="/admin/users/user/'.$data['user_id'].'/" target="_blank">'.$data['user_name'].'</a>';
+			break;
+			case UserActionsModel::ACTION_STREAM_ADD:
+			case UserActionsModel::ACTION_STREAM_EDIT:
+				$result .= ' <a href="/admin/streams/item/'.$data['item_id'].'/" target="_blank">'.$data['item_name'].'</a>';
+			break;
+			default:
+				// empty
+			break;
+		}
+
+		// debug($item);
+		return $result;
 	}
 }

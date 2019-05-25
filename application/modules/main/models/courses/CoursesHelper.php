@@ -13,11 +13,6 @@ class CoursesHelper extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->model([
-			'main/CoursesModel',
-			'main/LecturesModel',
-		]);
 	}
 
 	public function add($data)
@@ -123,7 +118,6 @@ class CoursesHelper extends APP_Model
 	{
 		if(isset($_FILES[$name]) && !empty($_FILES[$name]['name']))
 		{
-			$this->load->model(['main/FilesModel']);
 			$this->load->config('upload');
 			$this->upload_config = $this->config->item($config);
 			$this->load->library('upload', $this->upload_config);

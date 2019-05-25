@@ -58,7 +58,7 @@ class TransactionsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			//
 		}
 
 		return false;
@@ -80,7 +80,7 @@ class TransactionsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			//
 		}
 
 		return false;
@@ -104,7 +104,7 @@ class TransactionsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return 0;
@@ -123,7 +123,7 @@ class TransactionsModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
+			// 
 		}
 
 		return 0;

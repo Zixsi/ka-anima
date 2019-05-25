@@ -8,8 +8,6 @@ class Users extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model(['main/UserFriendsModel']);
-
 		$this->user_id = intval($this->Auth->userID());
 	}
 

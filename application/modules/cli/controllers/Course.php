@@ -5,7 +5,7 @@ class Course extends APP_Controller
 {
 	public function __construct()
 	{
-		$this->load->model(['main/CoursesModel', 'main/LecturesModel', 'main/CoursesGroupsModel']);
+
 	}
 
 	public function index()
@@ -96,7 +96,6 @@ class Course extends APP_Controller
 	public function updateVideoUrl()
 	{
 		echo 'Update Video Url => Start'.PHP_EOL;
-		$this->load->model(['main/VideoModel']);
 		$this->load->library(['ydvideo']);
 
 		if($items = $this->VideoModel->forUpdate(3600))
@@ -115,7 +114,6 @@ class Course extends APP_Controller
 	public function addLectureVideo()
 	{
 		/*var_dump('addLectureVideo');
-		$this->load->model(['main/VideoModel']);
 		$this->load->library(['youtube']);
 
 		if($items = $this->LecturesModel->list())
@@ -124,7 +122,7 @@ class Course extends APP_Controller
 			{
 				if($this->VideoModel->prepareAndSet($item['id'], 'lecture', $item['video']) == false)
 				{
-					debug($this->VideoModel->LAST_ERROR); die();
+					debug($this->VideoModel->getLastError()); die();
 				}
 			}
 		}*/

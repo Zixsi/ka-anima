@@ -6,12 +6,6 @@ class LecturesHelper extends APP_Model
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->model([
-			'main/LecturesModel',
-			'main/LecturesGroupModel',
-			'main/VideoModel'
-		]);
 	}
 
 	public function remove($id)

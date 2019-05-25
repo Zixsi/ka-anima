@@ -40,7 +40,7 @@ class Subscription extends APP_Controller
 			$data_post = $this->input->post(null, true);
 			if($this->SubscriptionModel->renewItem($data_post['id']) == false)
 			{
-				$data['error'] = $this->SubscriptionModel->LAST_ERROR;
+				$data['error'] = $this->SubscriptionModel->getLastError();
 			}
 		}
 	}
@@ -58,7 +58,8 @@ class Subscription extends APP_Controller
 
 			if($this->TransactionsModel->add($fields))
 			{
-				 $this->Auth->updateBalance();
+				action(UserActionsModel::ACTION_PAY_ADD_FOUNDS, ['value' => $fields['amount'], 'pay_system' => 'PaySystem']);
+				$this->Auth->updateBalance();
 			}
 		}
 	}

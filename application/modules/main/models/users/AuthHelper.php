@@ -1,12 +1,11 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class AuthModel extends APP_Model
+class AuthHelper extends APP_Model
 {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('main/TransactionsModel');
 	}
 
 	public function login()
@@ -18,19 +17,13 @@ class AuthModel extends APP_Model
 			$this->form_validation->set_data($data);
 
 			if($this->form_validation->run('signin') == FALSE)
-			{
 				throw new Exception($this->form_validation->error_string(), 1);
-			}
 
 			if(($res = $this->UserModel->getByEmail($data['email'])) == FALSE)
-			{
 				throw new Exception("User not found", 1);
-			}
 
 			if($this->UserModel->pwdHash($data['password']) !== $res['password'])
-			{
 				throw new Exception("Invalid email or password", 1);
-			}
 
 			unset($res['password']);
 			if(isset($data['remember']))
@@ -53,8 +46,7 @@ class AuthModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
-			//var_dump($e->getMessage());
+			$this->setLastException($e);
 		}
 
 		return false;
@@ -69,9 +61,7 @@ class AuthModel extends APP_Model
 			$this->form_validation->set_data($data);
 
 			if($this->form_validation->run('signup') == FALSE)
-			{
 				throw new Exception($this->form_validation->error_string(), 1);
-			}
 
 			$user_fields = [
 				'email' => $data['email'],
@@ -91,8 +81,7 @@ class AuthModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			$this->LAST_ERROR = $e->getMessage();
-			//var_dump($e->getMessage());
+			$this->setLastException($e);
 		}
 
 		return false;
@@ -124,7 +113,7 @@ class AuthModel extends APP_Model
 
 	public function userID()
 	{
-		return $this->user()['id'];
+		return ($this->user()['id'] ?? 0);
 	}
 
 	public function userRole()

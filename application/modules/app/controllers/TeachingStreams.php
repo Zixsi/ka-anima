@@ -28,10 +28,16 @@ class TeachingStreams extends APP_Controller
 		{
 			$form_data = $this->input->post(null, true);
 			if($id = $this->StreamsModel->add($form_data))
+			{
+				action(UserActionsModel::ACTION_STREAM_ADD, [
+					'item_id' => $id,  
+					'item_name' => $form_data['name'], 
+				]);
 				header('Location: ../');
+			}
 		}
 
-		$data['error'] = $this->StreamsModel->LAST_ERROR;
+		$data['error'] = $this->StreamsModel->getLastError();
 		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
 		$data['csrf'] = cr_get_key();
 
@@ -47,11 +53,20 @@ class TeachingStreams extends APP_Controller
 		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
-			if($id = $this->StreamsModel->update($id, $form_data))
+			if($this->StreamsModel->update($id, $form_data))
+			{
+				$data['item'] = $this->StreamsModel->getByID($id);
+
+				action(UserActionsModel::ACTION_STREAM_EDIT, [
+					'item_id' => $data['item']['id'],  
+					'item_name' => $data['item']['name'], 
+				]);
+
 				header('Location: ../../');
+			}
 		}
 
-		$data['error'] = $this->StreamsModel->LAST_ERROR;
+		$data['error'] = $this->StreamsModel->getLastError();
 		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
 		$data['csrf'] = cr_get_key();
 
