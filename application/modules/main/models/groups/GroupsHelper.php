@@ -264,4 +264,62 @@ class GroupsHelper extends APP_Model
 	{
 		return $course_code.'-'.substr(trim($type), 0, 1).$date;
 	}
+
+	public function userAdd($data)
+	{
+		try
+		{
+			$this->db->trans_begin();
+
+			$data['group'] = (int) ($data['group'] ?? 0);
+			if(($group = $this->GroupsModel->getByID($data['group_id'])) === false)
+				throw new Exception('группа не найдена');
+
+			if(($course = $this->CoursesModel->getByID($group['course_id'])) === false)
+				throw new Exception('неверные параметры', 1);
+
+			$data['user'] = (int) ($data['user'] ?? 0);
+			if(($user = $this->UserModel->getByID($data['user'])) === false)
+				throw new Exception('пользователь не найден');
+
+			$data['type'] = ($data['type'] ?? null);
+			if(empty($data['type']) || !array_key_exists($data['type'], SubscriptionModel::TYPES))
+				throw new Exception('неверный тип подписки');
+
+			if($this->SubscriptionModel->сheck($user['id'], $group['id']))
+				throw new Exception('уже подписан');
+
+			$params = [
+				'user' => $user['id'],
+				'type' => $data['type'],
+				'target' => $group['id'],
+				'target_type' => 'course',
+				'description' => $course['name'].' ('.strftime("%B %Y", strtotime($group['ts'])).')',
+				'ts_start' => $group['ts'],
+				'ts_end' => $group['ts_end'],
+				'subscr_type' => 0,
+				'amount' => 0,
+				'data' => json_encode(['price' => 0])
+			];
+
+			$this->SubscriptionModel->add($params);
+
+			if($this->db->trans_status() === false)
+			{
+				$this->db->trans_rollback();
+				throw new Exception('Ошибка добавления');
+			}
+
+			$this->db->trans_commit();
+
+			return $group_id;
+		}
+		catch(Exception $e)
+		{
+			$this->db->trans_rollback();
+			$this->setLastError($e->getMessage(), $e->getCode());
+		}
+
+		return false;
+	}
 }

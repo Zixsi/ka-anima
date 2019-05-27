@@ -5,7 +5,7 @@
 				<h3 class="panel-title">Группа <?=$item['name']?> (<?=$item['code']?>)</h3>
 			</div>
 			<div class="panel-body">
-				<button type="button" class="btn btn-primary btn-xxs">Добавить ученика</button>
+				<button type="button" class="btn btn-primary btn-xxs" id="group--add-user-btn">Добавить ученика</button>
 				<table class="table">
 					<thead>
 						<tr>
@@ -114,6 +114,42 @@
 						<?endif;?>
 					</tbody>
 				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="modal fade" id="group--add-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Добавить ученика</h4>
+			</div>
+			<div class="modal-body">
+				<form action="" method="post">
+					<input type="hidden" name="group_id" value="<?=$item['id']?>">
+					<?if($item['type'] === 'standart'):?>
+						<div class="form-group users-block">
+							<select name="type" class="form-control">
+								<option value="none">-- нет --</option>
+								<option value="standart">Стандартная</option>
+								<option value="advanced">Расширенная</option>
+							</select>
+						</div>
+					<?else:?>
+						<input type="hidden" name="type" value="<?=$item['type']?>">
+					<?endif;?>
+					<div class="form-group users-block">
+						<div>
+							<select name="user" class="form-control" id="select2-users" style="width: 100%;"></select>
+						</div>
+					</div>
+					<div class="form-group text-right">
+						<button type="submit" class="btn btn-primary">Добавить</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>

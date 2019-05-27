@@ -10,6 +10,7 @@ $(document).ready(function(){
 	appMain();
 	usersListener();
 	courseListener();
+	groupListener();
 });
 
 function appMain()
@@ -143,7 +144,6 @@ function enableInput(t)
 function clearInput(t)
 {
 	t.find('input, textarea, select').each(function(){
-
 		if($(this).is('input[type="radio"]') || $(this).is('input[type="checkbox"]'))
 		{
 			$(this).prop('checked', false);
@@ -448,3 +448,27 @@ function usersListener()
 	});
 
 }
+
+
+function groupListener()
+{
+	var group__add_user_modal = $('#group--add-user-modal');
+	var group__add_user_modal_form = group__add_user_modal.find('form');
+
+	$('#group--add-user-btn').on('click', function(){
+		group__add_user_modal.modal('show');
+	});
+
+	group__add_user_modal_form.on('submit', function(){
+		var params = $(this).serializeObject();
+		ajaxApiQuery('group.user.add', params, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+}
+//  

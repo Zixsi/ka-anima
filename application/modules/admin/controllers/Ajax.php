@@ -38,6 +38,9 @@ class Ajax extends APP_Controller
 			case 'group.remove':
 				$this->groupRemove();
 			break;
+			case 'group.user.add':
+				$this->groupUserAdd();
+			break;
 			case 'lecture.remove':
 				$this->lectureRemove();
 			break;
@@ -95,6 +98,23 @@ class Ajax extends APP_Controller
 		try
 		{
 			if($this->GroupsHelper->remove((int) ($this->request['params']['id'] ?? 0)) === false)
+				throw new Exception($this->GroupsHelper->getLastError());
+
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	private function groupUserAdd()
+	{
+		try
+		{
+			if($this->GroupsHelper->userAdd(($this->request['params'] ?? [])) === false)
 				throw new Exception($this->GroupsHelper->getLastError());
 
 			$this->jsonrpc->result('Успешно');

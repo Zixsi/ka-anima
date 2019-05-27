@@ -197,8 +197,8 @@ class UserModel extends APP_Model
 			{
 				$result[] = [
 					'id' => $val['id'],
-					'text' => $val['email']
-				];
+					'text' => $val['email'].' ('.$val['full_name'].')'
+				]; 
 			}
 
 			return $result;
