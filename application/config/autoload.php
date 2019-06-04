@@ -139,6 +139,7 @@ $autoload['model'] = [
 	'main/UserModel', 
 	'main/UserFriendsModel', 
 	'main/CoursesModel', 
+	'main/courses/CoursesHelper', 
 	'main/GroupsModel', 
 	'main/groups/GroupsHelper', 
 	'main/CoursesGroupsModel', 
@@ -159,4 +160,5 @@ $autoload['model'] = [
 	'main/subscription/SubscriptionHelper',
 	'main/FaqModel',
 	'main/NewsModel',
+	'main/UserMessagesModel',
 ];

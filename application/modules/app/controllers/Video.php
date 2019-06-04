@@ -9,7 +9,7 @@ class Video extends APP_Controller
 		$this->load->layout = 'empty';
 	}
 	
-	public function index($code)
+	public function index($code = null)
 	{
 		$data = [];
 		$data['user'] = $this->Auth->user();
@@ -22,9 +22,7 @@ class Video extends APP_Controller
 		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.png';
 
 		if($video = $this->VideoModel->byVideoCode($code))
-		{
 			$data['video'] = $video['video_url'];
-		}
 
 		$this->load->lview('video/index', $data);
 	}
