@@ -1,0 +1,46 @@
+/*#FD610F
+#000000
+#FFFFFE
+#B67F62
+#E7C2AE
+#FDECE3
+*/
+
+.form-check .form-check-label input[type="checkbox"] + .input-helper:before {border: solid #E7C2AE; background: #E7C2AE; border-radius: 0px;}
+.form-check .form-check-label input[type="checkbox"]:checked + .input-helper:before {background: #E7C2AE; border-radius: 0px;}
+.form-check .form-check-label input[type="checkbox"] + .input-helper:after {font-family: "Font Awesome 5 Free"; content: '\f00c'; font-size: 0.6375rem; text-align: center;}
+.form-check .form-check-label input[type="checkbox"]:checked + .input-helper:after {width: 16px;}
+
+.btn-primary, .wizard > .actions a {background-color: #E7C2AE; border-color: #E7C2AE;}
+.btn-primary:hover, .wizard > .actions a:hover {background-color: #B67F62; border-color: #B67F62;}
+.btn-primary:not(:disabled):not(.disabled):active, .wizard > .actions a:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .wizard > .actions a:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle, .wizard > .actions .show > a.dropdown-toggle {background-color: #B67F62; border-color: #B67F62;}
+
+
+.text-primary {color: #B67F62 !important;}
+a.text-primary:hover, a.text-primary:focus {color: #000000 !important;}
+
+.page-loader {position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; display: none;}
+.page-loader:after {content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-color: #fff; opacity: 0.8;}
+.page-loader.ld-loading {display: block;}
+
+.ld-loading .panel-body {position: relative;}
+.ld-loading .panel-body > * {transition: opacity 0.3s; opacity: 0.2;}
+.ld-loading .panel-body:before {display: block; content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 50;}
+.ld-loading .loader {display: block;}
+.loader {display: none; position: absolute; top: 45%; left: 0; right: 0; z-index: 100;}
+
+.jumping-dots-loader span {background-color: #FD610F;}
+
+.alert p {font-size: 0.913rem;}
+.alert-fill-light {background-color: #E7C2AE; border-color: #E7C2AE;}
+.alert-with-icon {padding-left: 50px; position: relative;}
+.alert-with-icon > i {position: absolute; top: 20px; left: 15px;}
+
+
+/*=====================================================================================================*/
+
+.content-wrapper {background-color: #ffffff;}
+
+.auth .brand-logo {text-align: center;}
+.auth .brand-logo img {width: 180px; height: 72px;}
+

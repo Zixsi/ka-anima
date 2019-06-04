@@ -66,7 +66,7 @@ class UserModel extends APP_Model
 		$res = $this->db->query($sql, [$id]);
 		if($row = $res->row_array())
 		{
-			$val['role_name'] = self::ROLES_NAME[$val['role']];
+			$row['role_name'] = self::ROLES_NAME[$row['role']];
 			if(empty($row['img']))
 				$row['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$row['id'])]);
 
@@ -86,6 +86,15 @@ class UserModel extends APP_Model
 			
 			return $row;
 		}
+
+		return false;
+	}
+
+	public function getByHash($code)
+	{
+		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE hash = ?', [$code]);
+		if($row = $res->row_array())
+			return $row;
 
 		return false;
 	}
@@ -262,6 +271,11 @@ class UserModel extends APP_Model
 		}
 
 		return $result;
+	}
+
+	public function setActive($id, $flag = true)
+	{
+		return $this->db->update(self::TABLE, ['active' => (($flag)?1:0)], ['id' => $id]);
 	}
 
 	public function pwdHash($password, $salt = false)

@@ -2,25 +2,20 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config = [];
-$config['signin'] = [
+$config['auth_login'] = [
 	[
 		'field' => 'email',
-		'label' => 'Email',
+		'label' => 'E-mail',
 		'rules' => 'required|valid_email'
 	],
 	[
 		'field' => 'password',
-		'label' => 'Password',
+		'label' => 'Пароль',
 		'rules' => 'trim|required'
 	]
 ];
 
-$config['signup'] = [
-	[
-		'field' => 'email',
-		'label' => 'Email',
-		'rules' => 'required|valid_email|is_unique[users.email]'
-	],
+$config['auth_register'] = [
 	[
 		'field' => 'name',
 		'label' => 'Имя',
@@ -32,13 +27,31 @@ $config['signup'] = [
 		'rules' => 'required|min_length[2]'
 	],
 	[
+		'field' => 'email',
+		'label' => 'E-mail',
+		'rules' => 'required|valid_email|is_unique[users.email]'
+	],
+	[
 		'field' => 'password',
-		'label' => 'Password',
+		'label' => 'Пароль',
 		'rules' => 'trim|required|min_length[6]|max_length[64]'
 	],
 	[
-		'field' => 'repassword',
-		'label' => 'Re-Password',
+		'field' => 're_password',
+		'label' => 'Повтор пароля',
+		'rules' => 'trim|matches[password]'
+	]
+];
+
+$config['auth_recovery'] = [
+	[
+		'field' => 'password',
+		'label' => 'Пароль',
+		'rules' => 'trim|required|min_length[6]|max_length[64]'
+	],
+	[
+		'field' => 're_password',
+		'label' => 'Повтор пароля',
 		'rules' => 'trim|matches[password]'
 	]
 ];

@@ -23,13 +23,17 @@ class SystemHook
 	public function checkAuth()
 	{
 		if(is_cli() == true)
-		{
 			return;
-		}
 
 		$c = $this->CI->router->fetch_class();		
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);
+
+		// запускаем сессию только если пользователь авторизован (ранее была запущена сессия)
+		$session_cookie_name = $this->CI->config->item('sess_cookie_name');
+		if(!empty($_COOKIE[$session_cookie_name]))
+			$this->CI->load->library('session');
+
 		$check = $this->CI->Auth->check();
 		$user = $this->CI->Auth->user();
 
@@ -38,32 +42,22 @@ class SystemHook
 		if($d == 'admin')
 		{
 			if(!$check)
-			{
 				redirect('/auth/');
-			}
 			elseif($check && $c === 'auth' && $a !== 'logout')
-			{
 				redirect('/admin/');
-			}
 			elseif($check && intval($user['role']) !== 5)
-			{
 				redirect('/');
-			}
 		}
 		else
 		{
-			if(!$check && $c !== 'auth')
-			{
+			$ignored = ['ajax'];
+
+			if(!$check && $c !== 'auth' && !in_array($c, $ignored))
 				redirect('/auth/');
-			}
 			elseif($check && intval($user['role']) === 5 && $a !== 'logout')
-			{
 				redirect('/admin/');
-			}
 			elseif($check && $c === 'auth' && $a !== 'logout')
-			{
 				redirect('/');
-			}
 		}
 	}
 }
