@@ -142,7 +142,7 @@ $config['subclass_prefix'] = 'APP_';
 | Note: This will NOT disable or override the CodeIgniter-specific
 |	autoloading (application/config/autoload.php)
 */
-$config['composer_autoload'] = true;
+$config['composer_autoload'] = false;
 
 /*
 |--------------------------------------------------------------------------

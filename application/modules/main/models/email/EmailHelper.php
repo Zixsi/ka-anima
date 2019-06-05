@@ -23,7 +23,7 @@ class EmailHelper extends APP_Model
 	private function init()
 	{
 		$this->email->from($this->conf['email_from'], $this->conf['email_from_name']);
-		// $this->email->bcc($from);
+		$this->email->bcc($this->conf['email_from']);
 	}
 
 	public function registration($data = [])

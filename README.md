@@ -5,4 +5,4 @@ http://wrapbootstrap.com/preview/WB0J69TPB
 https://pixinvent.com/bootstrap-admin-template/robust/html/ltr/vertical-menu-template/index.html
 
 
-http://www.urbanui.com/hiliteui/template/demo/vertical-default-light/pages/samples/login-2.html
+http://www.urbanui.com/hiliteui/template/demo/vertical-default-light/index.html

@@ -20,6 +20,14 @@ class SystemHook
 		$this->CI->form_validation->set_error_delimiters('<div>', '</div>');
 	}
 
+	public function sessionStart()
+	{
+		// запускаем сессию только если пользователь авторизован (ранее была запущена сессия)
+		$session_cookie_name = $this->CI->config->item('sess_cookie_name');
+		if(!empty($_COOKIE[$session_cookie_name]))
+			$this->CI->load->library('session');
+	}
+
 	public function checkAuth()
 	{
 		if(is_cli() == true)
@@ -29,15 +37,11 @@ class SystemHook
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);
 
-		// запускаем сессию только если пользователь авторизован (ранее была запущена сессия)
-		$session_cookie_name = $this->CI->config->item('sess_cookie_name');
-		if(!empty($_COOKIE[$session_cookie_name]))
-			$this->CI->load->library('session');
-
 		$check = $this->CI->Auth->check();
 		$user = $this->CI->Auth->user();
 
-		//var_dump($d); die();
+		// var_dump($check);
+		// var_dump($user); die();
 
 		if($d == 'admin')
 		{

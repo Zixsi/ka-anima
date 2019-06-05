@@ -9,7 +9,7 @@ class Profile extends APP_Controller
 	{
 		parent::__construct();
 
-		$this->user_id = intval($this->Auth->userID());
+		$this->user_id = $this->Auth->userID();
 	}
 
 	public function index($id = 0)

@@ -14,6 +14,9 @@ class Auth extends APP_Controller
 		$data = [];
 		$data['remembered'] = $this->Auth->getLoginRemember();
 
+		// $this->EmailHelper->registration(['email' => 'zixxsi@gmail.com', 'code' => '123456']);
+		// die();
+
 		$this->load->lview('auth/login', $data);
 	}
 

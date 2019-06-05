@@ -44,3 +44,11 @@ $hook['pre_controller_constructor'][] = array(
 	'filepath' => 'hooks',
 	'params'   => []
 );
+
+$hook['pre_controller'][] = array(
+	'class'    => 'SystemHook',
+	'function' => 'sessionStart',
+	'filename' => 'SystemHook.php',
+	'filepath' => 'hooks',
+	'params'   => []
+);
