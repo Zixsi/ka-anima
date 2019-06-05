@@ -14,7 +14,7 @@ class Groups extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
+		$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false);
 		$this->GroupsHelper->prepareListForTeacher($data['items']);
 		// debug($data); die();
 		$this->load->lview('groups/index', $data);
