@@ -137,11 +137,13 @@ $autoload['model'] = [
 	'main/users/AuthHelper' => 'Auth', 
 	'main/users/UserActionsModel',
 	'main/users/UserActionsHelper',
+	'main/users/UserMessagesModel',
 
 	'main/FilesModel',
 	'main/AccessModel', 
 	'main/UserFriendsModel', 
 	'main/CoursesModel', 
+	'main/courses/CoursesHelper', 
 	'main/GroupsModel', 
 	'main/groups/GroupsHelper', 
 	'main/CoursesGroupsModel', 
