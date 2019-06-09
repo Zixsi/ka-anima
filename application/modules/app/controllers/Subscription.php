@@ -22,7 +22,6 @@ class Subscription extends APP_Controller
 		}
 		$data['csrf'] = cr_get_key();
 
-		$data['balance'] = $this->Auth->balance();
 		$data['items'] = $this->SubscriptionModel->byUser($user_id);
 		$data['transactions']['in'] = $this->TransactionsModel->listUserTxByType($user_id, 0);
 		$data['transactions']['out'] = $this->TransactionsModel->listUserTxByType($user_id, 1);

@@ -3,14 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/assets/img/favicon.ico" />
+	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/img/favicon.ico" />
 	<title>Login</title>
-	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/bootstrap/css/bootstrap.min.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/assets/css/app.css?v=<?=VERSION?>">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/assets/css/custom.css?v=<?=VERSION?>">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.css">
+
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
 </head>
 <body>
 	<div class="page-loader">
@@ -33,9 +32,9 @@
 			</div>
 		</div>
 	</div>
-	<script src="<?=TEMPLATE_DIR?>/tools/jquery/jquery.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/tools/bootstrap/js/bootstrap.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/main_v1/assets/js/app.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/main.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
+
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
 </body>
 </html>

@@ -133,10 +133,13 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = [
+	'main/users/UserModel', 
 	'main/users/AuthHelper' => 'Auth', 
+	'main/users/UserActionsModel',
+	'main/users/UserActionsHelper',
+
 	'main/FilesModel',
 	'main/AccessModel', 
-	'main/UserModel', 
 	'main/UserFriendsModel', 
 	'main/CoursesModel', 
 	'main/GroupsModel', 
@@ -154,8 +157,6 @@ $autoload['model'] = [
 	'main/homework/HomeworkHelper',
 	'main/wall/WallModel',
 	'main/wall/WallHelper',
-	'main/users/UserActionsModel',
-	'main/users/UserActionsHelper',
 	'main/subscription/SubscriptionHelper',
 	'main/FaqModel',
 	'main/NewsModel',

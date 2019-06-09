@@ -17,7 +17,7 @@ class SystemHook
 	{
 		date_default_timezone_set('Europe/Moscow');
 		// setlocale(LC_ALL, 'ru_RU.UTF-8');
-		$this->CI->form_validation->set_error_delimiters('<div>', '</div>');
+		$this->CI->form_validation->set_error_delimiters('', '<br>');
 	}
 
 	public function sessionStart()

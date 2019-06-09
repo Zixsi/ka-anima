@@ -35,7 +35,6 @@ class AuthHelper extends APP_Model
 			delete_cookie('email');
 		}
 
-		$res['balance'] = $this->TransactionsModel->balanceUser($res['id']);
 		$res['last_update'] = time();
 
 		$this->setUser($res);
@@ -196,33 +195,14 @@ class AuthHelper extends APP_Model
 		 || $user['id'] < 1 || (int) $user['deleted'] === 1 || (int) $user['blocked'] === 1)?false:true;
 	}
 
-	// Проверка доступа
-	public function checkAccess($params = [])
+	public function getRoleName()
 	{
-		if($user = $this->user())
-		{
-			foreach($params as $val)
-			{
-				if($this->AccessModel->check($user['role'], $val[0], $val[1]) === true)
-				{
-					return true;
-				}
-			}
-		}
-
-		return false;
+		// $res = $this->user();
+		// debug();
 	}
 
-	public function balance()
+	public function getName()
 	{
-		$user = $this->user();
-		return isset($user['balance'])?$user['balance']:0;
-	}
-
-	public function updateBalance()
-	{
-		$user = $this->user();
-		$user['balance'] = $this->TransactionsModel->balanceUser($user['id']);
-		$this->session->set_userdata('USER', $user);
+		// $this->user()
 	}
 }

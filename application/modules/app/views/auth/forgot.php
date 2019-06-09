@@ -1,6 +1,6 @@
 <div class="auth-form-transparent text-left p-3">
 	<div class="brand-logo">
-		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/assets/img/logo_black.png" alt="logo"></a>
+		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_black.png" alt="logo"></a>
 	</div>
 	<h4>Восстановление пароля</h4>
 	<form action="" method="POST" class="pt-2" id="auth--forgot-form">

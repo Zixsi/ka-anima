@@ -3,11 +3,6 @@
 		<div class="col-xs-6">
 			<h3>Подписка</h3>
 		</div>	
-		<div class="col-xs-6 text-right balance-block-wrap">
-			<span class="balance-block">
-				Ваш баланс: <span href="" class="balance-value"><?=number_format($balance, 2, '.', ' ')?> руб.</span>
-			</span>
-		</div>
 	</div>		
 </div>
 
@@ -84,52 +79,6 @@
 </div>
 
 <div class="row">
-	<div class="col-xs-6">
-		<div class="panel panel-headline">
-			<div class="panel-heading">
-				<h3 class="panel-title">Ваши пополнения счета</h3>
-			</div>
-			<div class="panel-body">
-				<form action="./" method="post" class="form-inline" style="margin-bottom: 25px;">
-					<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-					<input type="hidden" name="request_type" value="pay">
-					<div class="form-group">
-						<input type="text" name="amount" class="form-control" value="100">
-					</div>
-					<div class="form-group">
-						<button type="submit" class="btn btn-md btn-primary">Пополнить</button>
-					</div>
-				</form>
-				<?if($transactions['in']):?>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Сумма</th>
-								<th>Платежная система</th>
-								<th>Статус</th>
-								<th width="180">Дата</th>
-								<th width="100">Инвойс</th>
-							</tr>
-						</thead>
-						<tbody>
-						<?foreach($transactions['in'] as $item):?>
-							<tr>
-								<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
-								<td><?=$item['description']?></td>
-								<td>Завершен</td>
-								<td><?=$item['ts']?></td>
-								<td>
-									<a href="javascript:void(0);">Скачать</a>
-								</td>
-							</tr>
-						<?endforeach;?>
-						</tbody>
-					</table>
-				<?endif;?>
-			</div>
-		</div>
-	</div>
-
 	<div class="col-xs-6">
 		<div class="panel panel-headline">
 			<div class="panel-heading">

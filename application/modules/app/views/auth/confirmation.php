@@ -1,18 +1,15 @@
 <div class="auth-form-transparent text-left p-3">
 	<div class="brand-logo">
-		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/assets/img/logo_black.png" alt="logo"></a>
+		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_black.png" alt="logo"></a>
 	</div>
 	<h4>Подтверждение регистрации</h4>
 	<?if($success):?>
-		<div class="alert alert-fill-success alert-with-icon">
-			<i class="fas fa-exclamation-circle"></i>
-			<p>Регистрация успешно подстверждена.</p>
-			<p>Пожалуйста, авторизуйтесь, перейдя по ссылке.</p>
+		<div class="alert alert-fill-success">
+			<i class="mdi mdi-alert-circle"></i>Регистрация успешно подстверждена. Пожалуйста, авторизуйтесь, перейдя по ссылке
 		</div>
 	<?else:?>
-		<div class="alert alert-fill-danger alert-with-icon">
-			<i class="fas fa-exclamation-circle"></i>
-			<p>Неверный код подтверждения.</p>
+		<div class="alert alert-fill-danger">
+			<i class="mdi mdi-alert-circle"></i>Неверный код подтверждения
 		</div>
 	<?endif;?>
 	<div class="text-center mt-4 font-weight-light">
