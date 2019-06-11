@@ -1,0 +1,9 @@
+CREATE TABLE `faq_sections` ( 
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , 
+	`name` VARCHAR(255) NOT NULL , 
+	PRIMARY KEY (`id`)
+) ENGINE = InnoDB;
+
+ALTER TABLE `faq` ADD `section` INT UNSIGNED NOT NULL DEFAULT '0' AFTER `id`;
+
+ALTER TABLE `news` ADD `description` TEXT NULL AFTER `title`, ADD `img` VARCHAR(255) NULL AFTER `text`;

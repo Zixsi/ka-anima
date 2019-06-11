@@ -22,7 +22,7 @@ $tpl_user = $CI->Auth->user();
 		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 			<div class="text-left navbar-brand-wrapper d-flex align-items-center justify-content-between">
 				<a class="navbar-brand brand-logo" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_white.png" alt="logo"/></a>
-				<a class="navbar-brand brand-logo-mini" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_white.png" alt="logo"/></a> 
+				<a class="navbar-brand brand-logo-mini" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_mini.png" alt="logo"/></a> 
 				<button class="navbar-toggler align-self-center" type="button" data-toggle="minimize">
 				<span class="mdi mdi-menu"></span>
 				</button>

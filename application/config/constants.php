@@ -90,4 +90,10 @@ defined('DATE_MONTHS') OR define('DATE_MONTHS', [
 ]);
 
 defined('TEMPLATE_DIR') OR define('TEMPLATE_DIR', '/templates');
+defined('COPYRIGHT') OR define('COPYRIGHT', 'Copyright &copy; 2019  All rights reserved.');
 defined('VERSION') OR define('VERSION', '0.0.3a'.time());
+
+defined('DATE_FORMAT_SHORT') OR define('DATE_FORMAT_SHORT', 'd.m.Y');
+defined('DATE_FORMAT_FULL') OR define('DATE_FORMAT_FULL', 'd.m.Y H:i:s');
+defined('IMG_DEFAULT_300_300') OR define('IMG_DEFAULT_300_300', TEMPLATE_DIR.'/assets/img_default_300x300.jpg');
+defined('IMG_DEFAULT_300_200') OR define('IMG_DEFAULT_300_200', TEMPLATE_DIR.'/assets/img_default_300x200.jpg');

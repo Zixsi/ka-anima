@@ -30,6 +30,8 @@ $route['teachingstreams/(:num)'] = 'app/TeachingStreams/item/$1';
 $route['teachingstreams/(.*)'] = 'app/TeachingStreams/$1';
 
 $route['video/(.*)'] = 'app/video/index/$1';
+$route['news/(.*)'] = 'app/news/index/$1';
+
 
 //$route['groups/(:num)'] = 'app/Groups/index/$1';
 $route['courses'] = 'app/courses/index';

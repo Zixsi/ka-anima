@@ -45,8 +45,27 @@ class NewsModel extends APP_Model
 	{
 		$sql = 'SELECT * FROM '.self::TABLE.' ORDER BY id '.$sort;
 		if($res = $this->db->query($sql)->result_array())
+		{
+			$this->prepareList($res);
 			return $res;
+		}
 
 		return false;
+	}
+
+	public function prepareList(&$data)
+	{
+		if(is_array($data) && count($data))
+		{
+			foreach($data as &$item)
+				$this->prepareItem($item);
+		}
+	}
+
+	public function prepareItem(&$data)
+	{
+		$data['ts_timestamp'] = strtotime($data['ts'] ?? 0);
+		$data['ts_formated'] = date(DATE_FORMAT_SHORT, $data['ts_timestamp']);
+		$data['img'] = IMG_DEFAULT_300_200;
 	}
 }

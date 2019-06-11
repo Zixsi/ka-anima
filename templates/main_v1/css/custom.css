@@ -49,4 +49,11 @@ a.text-primary:hover, a.text-primary:focus {color: #000000 !important;}
 .auth .brand-logo {text-align: center;}
 .auth .brand-logo img {width: 180px; height: 72px;}
 .navbar .navbar-brand-wrapper .navbar-brand img {width: calc(230px - 115px); height: auto;}
+.nav-pills.nav-pills-custom .nav-link.active {background-color: #25378b;}
+.nav-pills.nav-pills-custom .nav-link {border-radius: 0;}
 
+@media (max-width: 991px) {
+	.navbar .navbar-brand-wrapper {padding: 0.625rem;}
+}
+
+#main--news-block .news-item {padding-bottom: 15px;}

@@ -222,9 +222,6 @@ class GroupsModel extends APP_Model
 		$start_ts->modify('-2 weeks'); // за 2 недели после старата
 		$end_ts = clone $now;
 		$end_ts->modify('+3 months'); // за 3 месяца до старта
-		
-		// debug($start_ts->format('Y-m-d 00:00:00')); die();
-
 
 		$bind = [
 			$start_ts->format('Y-m-d 00:00:00'), 
@@ -233,8 +230,7 @@ class GroupsModel extends APP_Model
 		];
 
 		$sql = 'SELECT 
-					c.id, c.name, c.description, c.price, c.only_standart , g.id as group_id, 
-					g.code, g.ts, f.full_path as img_src   
+					c.id, c.code, c.name, c.description, c.price, c.only_standart, f.full_path as img   
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
@@ -247,43 +243,41 @@ class GroupsModel extends APP_Model
 					(g.ts > ? AND g.ts < ?) AND 
 					g.ts_end > ? AND 
 					g.type NOT IN(\'vip\', \'private\')
+				GROUP BY 
+					c.id 
 				ORDER BY 
-					g.course_id ASC, g.ts ASC';
-
+					c.id ASC';
 
 		if($res = $this->db->query($sql, $bind))
 		{
 			$rows = $res->result_array();
-			foreach($rows as $val)
-			{
-				if(!array_key_exists($val['id'], $result))
-				{
-					$result[$val['id']] = [
-						'id' => $val['id'],
-						'name' => $val['name'],
-						'img' => $val['img_src'],
-						'only_standart' => $val['only_standart'],
-						'description' => $val['description'],
-						'free' => false,
-						'price' => json_decode($val['price'], true),
-						'groups' => []
-					];
-				}
+			if(is_array($rows))
+				$result = $rows;
 
-				$result[$val['id']]['groups'][] = [
-					'id' => $val['group_id'],
-					'code' => $val['code'],
-					'ts' => $val['ts'] 
-				];
-
-				if((int) $result[$val['id']]['only_standart'] === 1 && (int) $result[$val['id']]['price']['month'] === 0)
-				{
-					$result[$val['id']]['free'] = true;
-				}
-			}
+			$this->prepareOffersList($result);
 		}
 
 		return $result;
+	}
+
+	// подготовить список предложений
+	public function prepareOffersList(&$data)
+	{
+		if(!is_array($data))
+			return;
+
+		foreach($data as &$val)
+		{
+			if(isset($val['price']))
+				$val['price'] = json_decode($val['price'], true);
+
+			$val['free'] = false;
+			if((int) $val['only_standart'] === 1 && isset($val['price']['month']) && (int) $val['price']['month'] === 0)
+				$val['free'] = true;
+
+			if(array_key_exists('img', $val))
+				$val['img'] = empty($val['img'])?IMG_DEFAULT_300_200:'/'.$val['img'];
+		}
 	}
 
 	// карта курсов (для админки)

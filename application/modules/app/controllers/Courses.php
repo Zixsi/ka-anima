@@ -10,8 +10,41 @@ class Courses extends APP_Controller
 		parent::__construct();
 		$this->user_id = $this->Auth->userID();
 	}
+
+	// список доступных курсов
+	public function index()
+	{
+		$data = [];
+
+		// список предложений
+
+		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
+		// debug($data['items']); die();
+
+		// $item = current($data['items']);
+		// $data['items'] = [];
+		// for($i = 0; $i < 10; $i++)
+		// {
+		// 	$tmp_item = $item;
+		// 	$tmp_item['description'] = str_repeat($tmp_item['description'], rand(1, 3));
+		// 	$tmp_item['name'] = str_repeat($tmp_item['name'], rand(1, 3));
+		// 	$data['items'][] = $tmp_item;
+		// }
+
+		// $data['items'] = $this->GroupsModel->listOffers($this->user_id);
+		// if(count($data['items']))
+		// {
+		// 	$subscr_courses = $this->SubscriptionModel->listCoursesId($this->user_id);
+		// 	foreach($data['items'] as &$val)
+		// 	{
+		// 		$val['subscription'] = in_array($val['id'], $subscr_courses);
+		// 	}
+		// }
+
+		$this->load->lview('courses/index', $data);
+	}
 	
-	public function index($group = '', $lecture = 0)
+	/*public function index($group = '', $lecture = 0)
 	{
 		$data = [];
 		$data['error'] = null;
@@ -61,7 +94,7 @@ class Courses extends APP_Controller
 
 		// debug($data['group']); die();
 		$this->load->lview('courses/index', $data);
-	}
+	}*/
 
 	public function group($group = '')
 	{
@@ -171,7 +204,6 @@ class Courses extends APP_Controller
 	public function enroll()
 	{
 		$data = [];
-		$data['balance'] = $this->Auth->balance();
 		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
 
 		if(count($data['items']))

@@ -41,11 +41,13 @@ $(document).ready(function(){
 
 function toastrMsg(type, text)
 {
-	// str.replace('тест','прошел');
 	if(text.indexOf('<br>'))
 	{
 		text = text.split('<br>');
-		text = text.slice(0, (text.length - 1));
+		if(text.length == 1)
+			text = text[0];
+		else
+			text = text.slice(0, (text.length - 1));
 	}
 
 	var options = {
