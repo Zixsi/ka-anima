@@ -14,7 +14,10 @@ class NewsModel extends APP_Model
 	{
 		$sql = 'SELECT * FROM '.self::TABLE.' WHERE id = ?';
 		if($row = $this->db->query($sql, [intval($id)])->row_array())
+		{
+			$this->prepareItem($row);
 			return $row;
+		}
 
 		return false;
 	}

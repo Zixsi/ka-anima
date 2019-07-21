@@ -260,6 +260,55 @@ class GroupsModel extends APP_Model
 		return $result;
 	}
 
+	// список предложений для курса
+	public function listOffersForCourse($course)
+	{
+		$result = [];
+		$now = new DateTime('now');
+		$now->setTime(0, 0, 0);
+		$start_ts = clone $now;
+		$start_ts->modify('-2 weeks'); // за 2 недели после старата
+		$end_ts = clone $now;
+		$end_ts->modify('+3 months'); // за 3 месяца до старта
+
+		$bind = [
+			$course, 
+			$start_ts->format('Y-m-d 00:00:00'), 
+			$end_ts->format('Y-m-d 00:00:00'), 
+			$now->format('Y-m-d 00:00:00')
+		];
+
+		$sql = 'SELECT 
+					* 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					course_id = ? AND 
+					deleted = 0 AND 
+					(ts > ? AND ts < ?) AND 
+					ts_end > ? AND 
+					type NOT IN(\'vip\', \'private\')
+				ORDER BY 
+					ts ASC';
+
+		if($res = $this->db->query($sql, $bind))
+		{
+			$rows = $res->result_array();
+			if(is_array($rows))
+				$result = $rows;
+
+			foreach($result as &$val)
+			{
+				$val['ts_timestamp'] = strtotime($val['ts']);
+				$val['ts_end_timestamp'] = strtotime($val['ts_end']);
+				$val['ts_formated'] = date(DATE_FORMAT_SHORT, $val['ts_timestamp']);
+				$val['ts_end_formated'] = date(DATE_FORMAT_SHORT, $val['ts_end_timestamp']);
+			}
+		}
+
+		return $result;
+	}
+
 	// подготовить список предложений
 	public function prepareOffersList(&$data)
 	{
@@ -268,15 +317,30 @@ class GroupsModel extends APP_Model
 
 		foreach($data as &$val)
 		{
+			$val['free'] = false;
+			$val['only_standart'] = (int) ($val['only_standart'] ?? 0);
+
 			if(isset($val['price']))
+			{
 				$val['price'] = json_decode($val['price'], true);
 
-			$val['free'] = false;
-			if((int) $val['only_standart'] === 1 && isset($val['price']['month']) && (int) $val['price']['month'] === 0)
-				$val['free'] = true;
+				if($val['only_standart'])
+					$val['free'] = ((int) $val['price']['standart']['month'] === 0);
+				else
+				{
+					foreach($val['price'] as $v)
+					{
+						if(((int) $v['month'] === 0))
+						{
+							$val['free'] = true;
+							break;
+						}
+					}
+				}
+			}
 
 			if(array_key_exists('img', $val))
-				$val['img'] = empty($val['img'])?IMG_DEFAULT_300_200:'/'.$val['img'];
+				$val['img'] = empty($val['img'])?IMG_DEFAULT_16_9:'/'.$val['img'];
 		}
 	}
 

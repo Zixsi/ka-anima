@@ -1,7 +1,7 @@
 <?php
 $CI = &get_instance();
 $tpl_user = $CI->Auth->user();
-// debug($tpl_user);
+// debug($tpl_user); die();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +11,15 @@ $tpl_user = $CI->Auth->user();
 	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/img/favicon.ico" />
 	<title>Dashboard</title>
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.css">
+
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
+	<!-- MAIN CSS -->
 
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
@@ -32,15 +40,15 @@ $tpl_user = $CI->Auth->user();
 					<li class="nav-item dropdown">
 						<a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
 							<i class="mdi mdi-bell-outline mx-0"></i>
-							<p class="notification-ripple notification-ripple-bg">
+							<!-- <p class="notification-ripple notification-ripple-bg">
 								<span class="ripple notification-ripple-bg"></span>
 								<span class="ripple notification-ripple-bg"></span>
 								<span class="ripple notification-ripple-bg"></span>
-							</p>
+							</p> -->
 						</a>
 						<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-							<p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-							<a class="dropdown-item preview-item">
+							<p class="mb-0 font-weight-normal float-left dropdown-header">Уведомления</p>
+							<!-- <a class="dropdown-item preview-item">
 								<div class="preview-thumbnail">
 									<div class="preview-icon bg-success">
 										<i class="mdi mdi-information mx-0"></i>
@@ -72,17 +80,17 @@ $tpl_user = $CI->Auth->user();
 									<h6 class="preview-subject font-weight-normal">New user registration</h6>
 									<p class="font-weight-light small-text mb-0 text-muted">2 days ago</p>
 								</div>
-							</a>
+							</a> -->
 						</div>
 					</li>
 					<li class="nav-item dropdown">
-						<a class="nav-link count-indicator d-flex justify-content-center align-items-center nav-message" href="#">
+						<a class="nav-link count-indicator d-flex justify-content-center align-items-center nav-message" href="/profile/messages/">
 							<i class="mdi mdi-email-outline mx-0"></i>
-							<p class="notification-ripple notification-ripple-bg">
+							<!--<p class="notification-ripple notification-ripple-bg">
 								<span class="ripple notification-ripple-bg"></span>
 								<span class="ripple notification-ripple-bg"></span>
 								<span class="ripple notification-ripple-bg"></span>
-							</p>
+							</p>-->
 						</a>
 					</li>
 					<li class="nav-item nav-user-icon">
@@ -182,32 +190,22 @@ $tpl_user = $CI->Auth->user();
 					</li>
 
 					<?if($CI->Auth->isUser()):?>
-						<?if($courses = $CI->SubscriptionModel->coursesList(($tpl_user['id'] ?? 0))):?>
-							<li class="nav-item <?=is_active_menu_item('courses')?'active':''?>">
-								<a class="nav-link" data-toggle="collapse" href="#courses-elements" aria-expanded="false" aria-controls="courses-elements">
-									<i class="mdi mdi-view-headline menu-icon"></i>
-									<span class="menu-title">Курсы <span class="badge badge-pill badge-info"><?=count($courses)?></span></span>
-									<i class="menu-arrow"></i>
-								</a>
-								<div class="collapse" id="courses-elements">
-									<ul class="nav flex-column sub-menu">
-										<?foreach($courses as $item):?>
-											<li class="nav-item"><a class="nav-link" href="/courses/<?=$item['code']?>/"><?=$item['name']?> (<?=strftime("%B %Y", strtotime($item['ts']))?>)</a></li>
-										<?endforeach;?>
-									</ul>
-								</div>
-							</li>
-						<?endif;?>
-						<li class="nav-item <?=is_active_menu_item('courses', 'enroll')?'active':''?>">
-							<a class="nav-link" href="/courses/enroll/">
-								<i class="mdi mdi-reply menu-icon"></i>
-								<span class="menu-title">Запись на курс</span>
+						<li class="nav-item <?=is_active_menu_item('courses')?'active':''?>">
+							<a class="nav-link" href="/courses/">
+								<i class="mdi mdi-view-headline menu-icon"></i>
+								<span class="menu-title">Курсы</span>
 							</a>
 						</li>
-						<li class="nav-item <?=is_active_menu_item('subscription')?'active':''?>">
-							<a class="nav-link" href="/subscription/">
+						<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
+							<a class="nav-link" href="/groups/">
 								<i class="mdi mdi-bell menu-icon"></i>
 								<span class="menu-title">Подписки</span>
+							</a>
+						</li>
+						<li class="nav-item <?=is_active_menu_item('transactions')?'active':''?>">
+							<a class="nav-link" href="/transactions/">
+								<i class="mdi mdi-wallet menu-icon"></i>
+								<span class="menu-title">Платежи</span>
 							</a>
 						</li>
 					<?endif;?>
@@ -233,12 +231,15 @@ $tpl_user = $CI->Auth->user();
 							<span class="menu-title">Пользователи</span>
 						</a>
 					</li>
-					<li class="nav-item <?=is_active_menu_item('faq')?'active':''?>">
-						<a class="nav-link" href="/faq/">
-							<i class="mdi mdi-comment-question-outline menu-icon"></i>
-							<span class="menu-title">FAQ</span>
-						</a>
-					</li>
+
+					<?if($CI->Auth->isUser()):?>
+						<li class="nav-item <?=is_active_menu_item('faq')?'active':''?>">
+							<a class="nav-link" href="/faq/">
+								<i class="mdi mdi-comment-question-outline menu-icon"></i>
+								<span class="menu-title">FAQ</span>
+							</a>
+						</li>
+					<?endif;?>
 				</ul>
 			</nav>
 			<div class="main-panel">
@@ -250,6 +251,14 @@ $tpl_user = $CI->Auth->user();
 	</div>
 	<script src="<?=TEMPLATE_DIR?>/main_v1/js/main.js?v=<?=VERSION?>"></script>
 	<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
+
+	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.ui.widget.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.iframe-transport.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.full.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
 
 	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
 </body>

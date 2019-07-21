@@ -53,7 +53,7 @@ class UserFriendsModel extends APP_Model
 		try
 		{
 			$sql = 'SELECT 
-						u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email  
+						u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, u.role   
 					FROM 
 						'.self::TABLE.' as uf 
 					LEFT JOIN 
@@ -66,7 +66,8 @@ class UserFriendsModel extends APP_Model
 			{
 				foreach($res as $val)
 				{
-					$val['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['id'])]);
+					$this->UserModel->prepareUser($val);
+
 					$val['full_name'] = (!empty($val['full_name']))?$val['full_name']:$val['email'];
 					$result[] = $val;
 				}

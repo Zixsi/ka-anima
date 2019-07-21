@@ -52,9 +52,30 @@ class CoursesModel extends APP_Model
 
 		if($row = $this->db->query($sql, [$id])->row_array())
 		{
-			$row['price'] = json_decode($row['price'], true);
-			$this->preparePrice($row['price']);
+			$this->prepareItem($row);
+			return $row;
+		}
 
+		return false;
+	}
+
+	public function getByCode($code)
+	{
+		$sql = 'SELECT 
+					c.*, l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img    
+				FROM 
+					'.self::TABLE.' as c  
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' GROUP BY course_id) as l_all ON(l_all.course_id = c.id) 
+				LEFT JOIN 
+					(SELECT course_id, count(id) as cnt FROM '.self::TABLE_LECTURES.' WHERE type = 0 GROUP BY course_id) as l_main ON(l_main.course_id = c.id) 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = c.img)  
+				WHERE c.code = ?';
+
+		if($row = $this->db->query($sql, [$code])->row_array())
+		{
+			$this->prepareItem($row);
 			return $row;
 		}
 
@@ -78,6 +99,38 @@ class CoursesModel extends APP_Model
 		}
 
 		return false;
+	}
+
+	public function prepareItem(&$data)
+	{
+		if(is_array($data))
+		{
+			$data['free'] = false;
+			$data['only_standart'] = (int) ($data['only_standart'] ?? 0);
+
+			if(array_key_exists('img', $data))
+				$data['img'] = empty($data['img'])?IMG_DEFAULT_16_9:'/'.$data['img'];
+
+			if(array_key_exists('price', $data))
+			{
+				$data['price'] = json_decode($data['price'], true);
+				$this->preparePrice($data['price']);
+
+				if($data['only_standart'])
+					$data['free'] = ((int) $data['price']['standart']['month'] === 0);
+				else
+				{
+					foreach($data['price'] as $v)
+					{
+						if(((int) $v['month'] === 0))
+						{
+							$data['free'] = true;
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public function preparePrice(&$data)

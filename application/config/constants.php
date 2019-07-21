@@ -95,5 +95,11 @@ defined('VERSION') OR define('VERSION', '0.0.3a'.time());
 
 defined('DATE_FORMAT_SHORT') OR define('DATE_FORMAT_SHORT', 'd.m.Y');
 defined('DATE_FORMAT_FULL') OR define('DATE_FORMAT_FULL', 'd.m.Y H:i:s');
+defined('DATE_FORMAT_DB_SHORT') OR define('DATE_FORMAT_DB_SHORT', 'Y-m-d');
+defined('DATE_FORMAT_DB_FULL') OR define('DATE_FORMAT_DB_FULL', 'Y-m-d H:i:s');
+
+defined('PRICE_CHAR') OR define('PRICE_CHAR', '<i class="fa fa-rub"></i>');
 defined('IMG_DEFAULT_300_300') OR define('IMG_DEFAULT_300_300', TEMPLATE_DIR.'/assets/img_default_300x300.jpg');
 defined('IMG_DEFAULT_300_200') OR define('IMG_DEFAULT_300_200', TEMPLATE_DIR.'/assets/img_default_300x200.jpg');
+defined('IMG_DEFAULT_16_9') OR define('IMG_DEFAULT_16_9', TEMPLATE_DIR.'/assets/img_default_16x9.jpg');
+defined('IMG_UNICORN') OR define('IMG_UNICORN', TEMPLATE_DIR.'/assets/unicorn.jpg');

@@ -21,6 +21,10 @@ class Ajax extends APP_Controller
 		$this->bind('auth.register', $this->Auth, 'register');
 		$this->bind('auth.forgot', $this->Auth, 'forgot');
 		$this->bind('auth.recovery', $this->Auth, 'recovery');
+		
+		$this->bind('wall.message', $this, 'wallMessage');
+		$this->bind('wall.message.list', $this, 'wallMessageList');
+		$this->bind('wall.message.child', $this, 'wallMessageChild');
 
 		$this->run();
 
@@ -35,15 +39,15 @@ class Ajax extends APP_Controller
 		// 	// case 'review.delete':
 		// 	// 	$this->reviewDelete();
 		// 	// break;
-		// 	// case 'wall.message':
-		// 	// 	$this->wallMessage();
-		// 	// break;
-		// 	// case 'wall.message.list':
-		// 	// 	$this->wallMessageList();
-		// 	// break;
-		// 	// case 'wall.message.child':
-		// 	// 	$this->wallMessageChild();
-		// 	// break;
+		// 	case 'wall.message':
+		// 		$this->wallMessage();
+		// 	break;
+		// 	case 'wall.message.list':
+		// 		$this->wallMessageList();
+		// 	break;
+		// 	case 'wall.message.child':
+		// 		$this->wallMessageChild();
+		// 	break;
 		// 	default:
 		// 		$this->jsonajax->error(Jsonajax::CODE_INTERNAL_ERROR, 'неверный запрос');
 		// 	break;
@@ -170,65 +174,65 @@ class Ajax extends APP_Controller
 	// 	$this->jsonrpc->result(false);
 	// }
 
-	// // добавить сообщение на стену 
-	// private function wallMessage()
-	// {
-	// 	try
-	// 	{
-	// 		$params = ($this->request['params'] ?? []);
-	// 		$params['user'] = $this->user['id'];
+	// добавить сообщение на стену 
+	private function wallMessage()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
+			$params['user'] = $this->user['id'];
 
-	// 		if($this->WallHelper->add($params) === false)
-	// 			throw new Exception($this->WallHelper->getLastError());
+			if($this->WallHelper->add($params) === false)
+				throw new Exception($this->WallHelper->getLastError());
 			
-	// 		$this->jsonrpc->result(true);
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
+			$this->jsonrpc->result(true);
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
 
-	// 	$this->jsonrpc->result(false);
-	// }
+		$this->jsonrpc->result(false);
+	}
 
-	// // список сообщений стены
-	// private function wallMessageList()
-	// {
-	// 	try
-	// 	{
-	// 		$params = ($this->request['params'] ?? []);
+	// список сообщений стены
+	private function wallMessageList()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
 
-	// 		if(($res = $this->WallHelper->list($params)) === false)
-	// 			throw new Exception($this->WallHelper->getLastError());
+			if(($res = $this->WallHelper->list($params)) === false)
+				throw new Exception($this->WallHelper->getLastError());
 			
-	// 		$this->jsonrpc->result($res);
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
+			$this->jsonrpc->result($res);
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
 
-	// 	$this->jsonrpc->result(false);
-	// }
+		$this->jsonrpc->result(false);
+	}
 
-	// // список дочерних сообщений
-	// private function wallMessageChild()
-	// {
-	// 	try
-	// 	{
-	// 		$params = ($this->request['params'] ?? []);
+	// список дочерних сообщений
+	private function wallMessageChild()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
 
-	// 		if(($res = $this->WallHelper->child($params)) === false)
-	// 			throw new Exception($this->WallHelper->getLastError());
+			if(($res = $this->WallHelper->child($params)) === false)
+				throw new Exception($this->WallHelper->getLastError());
 			
-	// 		$this->jsonrpc->result($res);
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
+			$this->jsonrpc->result($res);
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
 
-	// 	$this->jsonrpc->result(false);
-	// }
+		$this->jsonrpc->result(false);
+	}
 	
 }

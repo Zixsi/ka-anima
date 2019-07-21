@@ -25483,7 +25483,7 @@ dl li {
 .email-wrapper .mail-sidebar .menu-bar .profile-list-item a .pro-pic img {
   max-width: 100%;
   width: 100%;
-  border-radius: 100%;
+  /*border-radius: 100%;*/
 }
 
 .email-wrapper .mail-sidebar .menu-bar .profile-list-item a .user {

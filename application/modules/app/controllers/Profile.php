@@ -31,9 +31,7 @@ class Profile extends APP_Controller
 	{
 		$data = [];
 		if(($data['user'] = $this->UserModel->getByID($this->user_id)) === false)
-		{
 			show_404();
-		}
 
 		$data['error'] = false;
 		if(cr_valid_key())
@@ -47,14 +45,10 @@ class Profile extends APP_Controller
 				$this->form_validation->set_data($form_data);
 
 				if($this->form_validation->run('profile_edit') == FALSE)
-				{
 					throw new Exception($this->form_validation->error_string(), 1);
-				}
 
 				if($id = $this->UserModel->updateProfile($data['user']['id'], $form_data))
-				{
 					header('Location: ../');
-				}
 			}
 			catch(Exception $e)
 			{
@@ -70,10 +64,8 @@ class Profile extends APP_Controller
 	{
 		$data = [];
 		if(($data['user'] = $this->UserModel->getByID($this->user_id)) === false)
-		{
 			show_404();
-		}
-
+		
 		$data['message'] = null;
 
 		if(($id = intval($this->input->post('id', true))) > 0)

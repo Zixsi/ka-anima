@@ -82,9 +82,11 @@ class UserModel extends APP_Model
 		return false;
 	}
 
-	private function prepareUser(&$data)
+	public function prepareUser(&$data)
 	{
-		$data['role_name'] = self::ROLES_NAME[$data['role']];
+		if(isset($data['role']))
+			$data['role_name'] = self::ROLES_NAME[$data['role']];
+
 		if(empty($data['img']))
 			// $data['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$data['id'])]);
 			$data['img'] = TEMPLATE_DIR.'/assets/profile_icon_male2.png';
@@ -220,7 +222,7 @@ class UserModel extends APP_Model
 		$bind = [$id];
 
 		$sql = 'SELECT 
-					u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, uf.user as is_friend    
+					u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, u.role, uf.user as is_friend    
 				FROM 
 					'.self::TABLE.' as u 
 				LEFT JOIN 

@@ -56,12 +56,14 @@ class UserMessagesModel extends APP_Model
 
 				if(!array_key_exists($val['target'], $result))
 				{
+					$this->UserModel->prepareUser($val);
+
 					$result[$val['target']] = [
 						'id' => $val['target'],
 						'name'=> $val['name'],
 						'role'=> $val['role'],
 						'role_name'=> UserModel::ROLES_NAME[$val['role']],
-						'img' => $this->imggen->createIconSrc(['seed' => md5('user'.$val['target'])])
+						'img' => $val['img']
 					];
 				}
 			}
@@ -91,6 +93,8 @@ class UserMessagesModel extends APP_Model
 		{
 			foreach($res as $val)
 			{
+				$this->UserModel->prepareUser($val);
+				
 				$val['name'] = (!empty($val['user_full_name']))?$val['user_full_name']:$val['user_email'];
 				$val['role_name'] = UserModel::ROLES_NAME[$val['role']];
 				$result[] = $val;

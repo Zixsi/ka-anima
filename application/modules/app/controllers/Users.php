@@ -16,7 +16,7 @@ class Users extends APP_Controller
 		$data = [];
 		$data['message'] = null;
 
-		if(($id = intval($this->input->post('id', true))) > 0)
+		if(($id = (int) $this->input->post('id', true)) > 0)
 		{
 			if($this->UserFriendsModel->add($this->user_id, intval($id)) !== false)
 			{

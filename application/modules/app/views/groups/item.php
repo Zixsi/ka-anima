@@ -1,10 +1,8 @@
 <div class="row">
-	<div class="col-xs-6">
-		<div class="panel">
-			<div class="panel-heading">
-				<h3 class="panel-title">Группа <?=$item['name']?> (<?=$item['code']?>)</h3>
-			</div>
-			<div class="panel-body">
+	<div class="col-6">
+		<div class="card mb-4">
+			<div class="card-body">
+				<h3 class="card-title">Группа <?=$item['name']?> (<?=$item['code']?>)</h3>
 				<table class="table">
 					<thead>
 						<tr>
@@ -14,32 +12,32 @@
 						</tr>
 					</thead>
 					<tbody>
-						<?foreach($users as $val):?>
-							<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
-								<td><a href="./?user=<?=$val['id']?>"><?=$val['full_name']?></a></td>
-								<td class="text-center"><?=$val['reviews']?> / <?=$item['cnt']?></td>
-								<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
-							</tr>
-						<?endforeach;?>
+						<?if($users):?>
+							<?foreach($users as $val):?>
+								<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
+									<td><a href="./?user=<?=$val['id']?>"><?=$val['full_name']?></a></td>
+									<td class="text-center"><?=$val['reviews']?> / <?=$item['cnt']?></td>
+									<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
+								</tr>
+							<?endforeach;?>
+						<?endif;?>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		<div class="panel">
-			<?if($user):?>
-				<div class="panel-heading">
-					<h3 class="panel-title"><?=$user['full_name']?></h3>
-				</div>
-				<div class="panel-body">
+		<div class="card">
+			<div class="card-body">
+				<?if($user):?>
+					<h3 class="card-title"><?=$user['full_name']?></h3>
 					<div id="group-user-lectures">				
 						<?if($homeworks):?>
 							<?$i = 1;?>
 							<?foreach($homeworks as $val):?>
 								<div class="card">
-									<div class="head">
-										<div class="title"><?=$i?> урок</div>
+									<div class="card-header">
+										<div class="card-title"><?=$i?> урок</div>
 									</div>
-									<div class="body">
+									<div class="card-body">
 										<?if($val['homework'] == false):?>
 											<div class="title empty">ДЗ не загружено</div>
 										<?elseif($val['review'] == false):?>
@@ -49,7 +47,7 @@
 												<button type="button" class="btn btn-primary btn-block btn-add-review" data-toggle="modal" data-group="<?=$item['id']?>" data-lecture="<?=$val['lecture_id']?>" data-user="<?=$user['id']?>">Добавить отчет</button>
 											</div>
 										<?else:?>
-											<span class="fas fa-times bnt-remove-review" data-id="<?=$val['review']?>"></span>
+											<span class="fa fa-times bnt-remove-review" data-id="<?=$val['review']?>"></span>
 											<div class="title">Отчет загружен</div>
 											<p>Ученику будет доступен отчет в личном кабинете</p>
 										<?endif;?>
@@ -59,13 +57,13 @@
 							<?endforeach;?>
 						<?endif;?>
 					</div>
-				</div>
-			<?else:?>
-				<h3 class="text-center">Выберите ученика</h3>
-			<?endif;?>
+				<?else:?>
+					<h3 class="text-center">Выберите ученика</h3>
+				<?endif;?>
+			</div>
 		</div>
 	</div>
-	<div class="col-xs-6">
+	<div class="col-6">
 		<?=$this->wall->show($item['id'])?>
 	</div>
 </div>

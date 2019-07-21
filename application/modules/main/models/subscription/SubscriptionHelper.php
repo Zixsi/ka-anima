@@ -57,12 +57,6 @@ class SubscriptionHelper extends APP_Model
 				throw new Exception('Неверные параметры', 1);
 
 			$price = $item['price'][$data['type']][$data['period']];
-			
-			// if((int) $price === 0 && (int) $course_item['only_standart'] !== 1)
-			// 	throw new Exception('Ошибка подписки', 1);
-
-			if((int) $this->Auth->balance() < $price)
-				throw new Exception('Недостаточно средств на счету', 1);
 
 			// проверяем подписал юзер на эту группу или нет
 			if($this->SubscriptionModel->сheck($data['user'], $item['group_id']))
@@ -117,18 +111,6 @@ class SubscriptionHelper extends APP_Model
 			];
 
 			$this->SubscriptionModel->add($params);
-
-			$fields = [
-				'user' => $params['user'],
-				'type' => '1',
-				'amount' => $price,
-				'description' => $params['description'],
-				'service' => 'group',
-				'service_id' => $item['group_id']
-			];
-
-			$this->TransactionsModel->add($fields);
-			$this->Auth->updateBalance();
 
 			action(UserActionsModel::ACTION_COURSE_SUBSCR, ['group_code' => $item['code'], 'period' => $data['period']]);
 			

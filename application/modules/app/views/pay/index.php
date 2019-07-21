@@ -1,32 +1,48 @@
-<form action="./" method="post" class="form-inline">
-	<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-	<div class="form-group">
-		<input type="text" name="amount" class="form-control" value="100">
-	</div>
-	<div class="form-group">
-		<button type="submit" class="btn btn-md btn-primary">Пополнить</button>
-	</div>
-</form>
+<?//debug($item);?>
+<?alert_error($error);?>
 
-<?if($items):?>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th width="150">Дата</th>
-				<th width="100">Тип</th>
-				<th>Описание</th>
-				<th class="text-right">Сумма</th>
-			</tr>
-		</thead>
-		<tbody>
-		<?foreach($items as $item):?>
-			<tr>
-				<td><?=$item['ts']?></td>
-				<td><span class="label label-<?=($item['type'] == 0)?'success':'warning'?>"><?=($item['type'] == 0)?'IN':'OUT'?></span></td>
-				<td><?=$item['description']?></td>
-				<td class="text-right"><?=number_format($item['amount'], 2, '.', ' ')?> $</td>
-			</tr>
-		<?endforeach;?>
-		</tbody>
-	</table>
+<?if($item):?>
+	<div class="card px-2">
+		<div class="card-body">
+				<div class="container-fluid d-flex justify-content-between">
+					<div class="col-lg-3 pl-0">
+						<p class="mb-0 mt-5">Дата : <?=date(DATE_FORMAT_FULL);?></p>
+					</div>
+				</div>
+				<div class="container-fluid mt-5 d-flex justify-content-center w-100">
+					<div class="table-responsive w-100">
+							<table class="table">
+								<thead>
+									<tr class="bg-dark text-white">
+											<th>#</th>
+											<th>Описание</th>
+											<th class="text-right">Кол-во</th>
+											<th class="text-right">Сумма</th>
+										</tr>
+								</thead>
+								<tbody>
+									<tr class="text-right">
+										<td class="text-left">1</td>
+										<td class="text-left"><?=$item['name']?></td>
+										<td><?=$item['quantity']?></td>
+										<td><?=number_format($item['price'], 2, '.', '')?>&nbsp;<i class="fa fa-rub"></i></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+				</div>
+				<div class="container-fluid mt-5 w-100">
+					<h4 class="text-right mb-5">Всего : <?=number_format($item['price'], 2, '.', '')?>&nbsp;<i class="fa fa-rub"></i></h4>
+					<hr>
+				</div>
+				<div class="container-fluid w-100">
+					<form action="" method="post">
+						<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+						<button type="submit" class="btn btn-success float-right mt-4"><i class="mdi mdi-telegram mr-1"></i>Оплата</button> 
+					</form>
+				</div>
+		</div>
+	</div>
 <?endif;?>
+
+<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/sweetalert/sweetalert.min.js"></script>

@@ -15,33 +15,29 @@ class Courses extends APP_Controller
 	public function index()
 	{
 		$data = [];
-
-		// список предложений
-
-		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
-		// debug($data['items']); die();
-
-		// $item = current($data['items']);
-		// $data['items'] = [];
-		// for($i = 0; $i < 10; $i++)
-		// {
-		// 	$tmp_item = $item;
-		// 	$tmp_item['description'] = str_repeat($tmp_item['description'], rand(1, 3));
-		// 	$tmp_item['name'] = str_repeat($tmp_item['name'], rand(1, 3));
-		// 	$data['items'][] = $tmp_item;
-		// }
-
-		// $data['items'] = $this->GroupsModel->listOffers($this->user_id);
-		// if(count($data['items']))
-		// {
-		// 	$subscr_courses = $this->SubscriptionModel->listCoursesId($this->user_id);
-		// 	foreach($data['items'] as &$val)
-		// 	{
-		// 		$val['subscription'] = in_array($val['id'], $subscr_courses);
-		// 	}
-		// }
+		// список предложений курсов
+		$data['items'] = $this->GroupsModel->listOffers();
 
 		$this->load->lview('courses/index', $data);
+	}
+
+	// подробная информация по курсу
+	public function item($code = null)
+	{
+		$data = [];
+
+		// курс
+		if(($data['item'] = $this->CoursesModel->getByCode($code)) === false)
+			header('Location: ../');
+
+		// список лекций
+		$data['lectures'] = $this->LecturesModel->getByCourse($data['item']['id']);
+		// список групп доступных для подписки
+		$data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);
+		// преподаватель
+		$data['teacher'] = $this->UserModel->getById($data['item']['teacher']);
+
+		$this->load->lview('courses/item', $data);
 	}
 	
 	/*public function index($group = '', $lecture = 0)
@@ -96,6 +92,7 @@ class Courses extends APP_Controller
 		$this->load->lview('courses/index', $data);
 	}*/
 
+	/*
 	public function group($group = '')
 	{
 		$data = [];
@@ -328,4 +325,6 @@ class Courses extends APP_Controller
 
 		return $result;
 	}
+
+	*/
 }
