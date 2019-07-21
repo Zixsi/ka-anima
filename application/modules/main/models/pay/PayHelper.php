@@ -87,6 +87,7 @@ class PayHelper extends APP_Model
 		// debug($group_item); die();
 
 		$data['course'] = $group_item['course_id'];
+		$data['group'] = $group_item['id'];
 		$group = $this->SubscriptionHelper->prepareGroup($data);
 		$group['data'] = json_decode($group['data'], true);
 		// debug($group); die();

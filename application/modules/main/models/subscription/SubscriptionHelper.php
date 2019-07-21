@@ -47,13 +47,13 @@ class SubscriptionHelper extends APP_Model
 		if(($item = $this->GroupsModel->getByIdDetail($group_id)) === false)
 			throw new Exception('группа не найдена', 1);
 
-		if(($_GET['debug'] ?? false))
-		{
-			debug($item); 
-			debug(json_decode($item['price'], true)); 
-			debug($data);
-			die();
-		}
+		// if(($_GET['debug'] ?? false))
+		// {
+		// 	debug($item); 
+		// 	debug(json_decode($item['price'], true)); 
+		// 	debug($data);
+		// 	die();
+		// }
 
 		$item['price'] = json_decode($item['price'], true);
 
