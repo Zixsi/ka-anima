@@ -162,6 +162,7 @@ $autoload['model'] = [
 	'main/news/NewsModel',
 	'main/email/EmailHelper',
 	'main/pay/PayHelper',
+	// 'main/pay/PayData',
 
 	'main/LecturesModel', 
 	'main/LecturesGroupModel', 

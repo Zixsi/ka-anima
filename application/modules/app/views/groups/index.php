@@ -28,7 +28,7 @@
 							<?if($val['subscr_active']):?>
 								<a href="/groups/<?=$val['code']?>/" class="btn btn-primary btn-block">Просмотр</a>
 							<?else:?>
-								<a href="/pay/?hash=<?=$val['hash']?>" class="btn btn-success btn-block">Продлить</a>
+								<a href="/pay/?action=renewal&hash=<?=$val['hash']?>" class="btn btn-success btn-block">Продлить</a>
 							<?endif;?>
 						</div>
 					</div>

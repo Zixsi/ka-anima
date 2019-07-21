@@ -49,6 +49,7 @@
 	<div class="row pricing-table">
 		<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
 			<form action="/pay/" method="get" class="card border-primary border pricing-card-body">
+				<input type="hidden" name="action" value="new">
 				<input type="hidden" name="course" value="<?=$item['code']?>">
 				<input type="hidden" name="group" value="">
 				<input type="hidden" name="type" value="standart">
@@ -119,6 +120,7 @@
 		<?if(!$item['only_standart']):?>
 			<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
 				<form action="/pay/" method="get" class="card border border-success pricing-card-body">
+					<input type="hidden" name="action" value="new">
 					<input type="hidden" name="course" value="<?=$item['code']?>">
 					<input type="hidden" name="group" value="">
 					<input type="hidden" name="type" value="advanced">
@@ -166,6 +168,7 @@
 			</div>
 			<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
 				<form action="/pay/" method="get" class="card border border-primary pricing-card-body">
+					<input type="hidden" name="action" value="new">
 					<input type="hidden" name="course" value="<?=$item['code']?>">
 					<input type="hidden" name="group" value="">
 					<input type="hidden" name="type" value="vip">
