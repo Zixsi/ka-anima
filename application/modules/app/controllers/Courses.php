@@ -10,8 +10,37 @@ class Courses extends APP_Controller
 		parent::__construct();
 		$this->user_id = $this->Auth->userID();
 	}
+
+	// список доступных курсов
+	public function index()
+	{
+		$data = [];
+		// список предложений курсов
+		$data['items'] = $this->GroupsModel->listOffers();
+
+		$this->load->lview('courses/index', $data);
+	}
+
+	// подробная информация по курсу
+	public function item($code = null)
+	{
+		$data = [];
+
+		// курс
+		if(($data['item'] = $this->CoursesModel->getByCode($code)) === false)
+			header('Location: ../');
+
+		// список лекций
+		$data['lectures'] = $this->LecturesModel->getByCourse($data['item']['id']);
+		// список групп доступных для подписки
+		$data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);
+		// преподаватель
+		$data['teacher'] = $this->UserModel->getById($data['item']['teacher']);
+
+		$this->load->lview('courses/item', $data);
+	}
 	
-	public function index($group = '', $lecture = 0)
+	/*public function index($group = '', $lecture = 0)
 	{
 		$data = [];
 		$data['error'] = null;
@@ -61,8 +90,9 @@ class Courses extends APP_Controller
 
 		// debug($data['group']); die();
 		$this->load->lview('courses/index', $data);
-	}
+	}*/
 
+	/*
 	public function group($group = '')
 	{
 		$data = [];
@@ -171,7 +201,6 @@ class Courses extends APP_Controller
 	public function enroll()
 	{
 		$data = [];
-		$data['balance'] = $this->Auth->balance();
 		$data['items'] = $this->GroupsModel->listOffers($this->user_id);
 
 		if(count($data['items']))
@@ -296,4 +325,6 @@ class Courses extends APP_Controller
 
 		return $result;
 	}
+
+	*/
 }

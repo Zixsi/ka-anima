@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', 'session', 'uri', 'zip', 'imggen', 'main/jsonrpc', 'wall');
+$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'imggen', 'main/jsonrpc', 'main/jsonajax', 'wall');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'main/action');
+$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'main/extensions', 'main/action');
 
 /*
 | -------------------------------------------------------------------
@@ -133,32 +133,42 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = [
+	'main/users/UserModel', 
 	'main/users/AuthHelper' => 'Auth', 
+	'main/users/UserActionsModel',
+	'main/users/UserActionsHelper',
+	'main/users/UserMessagesModel',
+	'main/users/UserFriendsModel',
+
+	'main/courses/CoursesModel', 
+	'main/courses/CoursesHelper', 
+	'main/courses/CoursesGroupsModel', 
+
+	'main/groups/GroupsModel', 
+	'main/groups/GroupsHelper', 
+
 	'main/FilesModel',
 	'main/AccessModel', 
-	'main/UserModel', 
-	'main/UserFriendsModel', 
-	'main/CoursesModel', 
-	'main/courses/CoursesHelper', 
-	'main/GroupsModel', 
-	'main/groups/GroupsHelper', 
-	'main/CoursesGroupsModel', 
-	'main/SubscriptionModel', 
-	'main/LecturesModel', 
-	'main/LecturesGroupModel', 
-	'main/LecturesHomeworkModel', 
-	'main/ReviewModel',
-	'main/VideoModel',
-	'main/StreamsModel',
-	'main/TransactionsModel',
+	
+	'main/subscription/SubscriptionModel', 
+	'main/subscription/SubscriptionHelper',
+	'main/transactions/TransactionsModel',
+	'main/transactions/TransactionsHelper',
+	'main/review/ReviewModel',
 	'main/review/ReviewHelper',
 	'main/homework/HomeworkHelper',
 	'main/wall/WallModel',
 	'main/wall/WallHelper',
-	'main/users/UserActionsModel',
-	'main/users/UserActionsHelper',
-	'main/subscription/SubscriptionHelper',
+	'main/news/NewsModel',
+	'main/email/EmailHelper',
+	'main/pay/PayHelper',
+	// 'main/pay/PayData',
+
+	'main/LecturesModel', 
+	'main/LecturesGroupModel', 
+	'main/LecturesHomeworkModel', 
+	'main/VideoModel',
+	'main/StreamsModel',
 	'main/FaqModel',
-	'main/NewsModel',
-	'main/UserMessagesModel',
+	'main/OptionsModel',
 ];

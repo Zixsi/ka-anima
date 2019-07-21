@@ -1,36 +1,73 @@
-<div class="auth-box">
-	<div class="content">
-		<div class="header">
-			<div class="logo text-center"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png?v=<?=VERSION?>" alt="Klorofil Logo"></div>
-			<p class="lead">Rigister account</p>
-		</div>
-		<?=ShowError($error);?>
-		<form class="form-auth-small" action="" method="POST">
-			<div class="form-group">
-				<label for="signip-email" class="control-label sr-only">Email</label>
-				<input type="text" class="form-control" id="signip-email" name="email" value="<?=set_value('email', $form['email'], true)?>" placeholder="Email">
-			</div>
-			<div class="form-group">
-				<label for="signip-name" class="control-label sr-only">Имя</label>
-				<input type="text" class="form-control" id="signip-name" name="name" value="<?=set_value('name', $form['name'], true)?>" placeholder="Имя">
-			</div>
-			<div class="form-group">
-				<label for="signip-lastname" class="control-label sr-only">Фамилия</label>
-				<input type="text" class="form-control" id="signip-lastname" name="lastname" value="<?=set_value('lastname', $form['lastname'], true)?>" placeholder="Фамилия">
-			</div>
-			<div class="form-group">
-				<label for="signip-password" class="control-label sr-only">Password</label>
-				<input type="password" class="form-control" id="signip-password" name="password" value="" placeholder="Password">
-			</div>
-			<div class="form-group">
-				<label for="signip-re-password" class="control-label sr-only">Re-Password</label>
-				<input type="password" class="form-control" id="signip-re-password" name="repassword" value="" placeholder="Re-Password">
-			</div>
-			<button type="submit" class="btn btn-primary btn-lg btn-block">SIGN UP</button>
-			<div class="bottom">
-				<span class="helper-text">Already have account? <a href="/auth/">Sign In</a></span>
-			</div>
-		</form>
+<div class="auth-form-transparent text-left p-3">
+	<div class="brand-logo">
+		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_black.png" alt="logo"></a>
 	</div>
-	<div class="clearfix"></div>
+	<h4>Регистрация</h4>
+	<form action="" method="POST" class="pt-3" id="auth--register-form">
+		<input type="hidden" name="agree" value="0">
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend bg-transparent">
+					<span class="input-group-text bg-transparent border-right-0">
+						<i class="mdi mdi-account-outline text-primary"></i>
+					</span>
+				</div>
+				<input type="text" class="form-control form-control-lg border-left-0"  name="name" value="" placeholder="Имя">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend bg-transparent">
+					<span class="input-group-text bg-transparent border-right-0">
+						<i class="mdi mdi-account-outline text-primary"></i>
+					</span>
+				</div>
+				<input type="text" class="form-control form-control-lg border-left-0" name="lastname" value="" placeholder="Фамилия">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend bg-transparent">
+					<span class="input-group-text bg-transparent border-right-0">
+						<i class="mdi mdi-email-outline text-primary"></i>
+					</span>
+				</div>
+				<input type="email" class="form-control form-control-lg border-left-0" name="email" value="" placeholder="E-mail">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend bg-transparent">
+					<span class="input-group-text bg-transparent border-right-0">
+						<i class="mdi mdi-lock-outline text-primary"></i>
+					</span>
+				</div>
+				<input type="password" class="form-control form-control-lg border-left-0" name="password" value="" placeholder="Пароль">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<div class="input-group-prepend bg-transparent">
+					<span class="input-group-text bg-transparent border-right-0">
+						<i class="mdi mdi-lock-outline text-primary"></i>
+					</span>
+				</div>
+				<input type="password" class="form-control form-control-lg border-left-0" name="re_password" value="" placeholder="Повторить пароль">
+			</div>
+		</div>
+		<div class="mb-4">
+			<div class="form-check">
+				<label class="form-check-label text-muted">
+					<input type="checkbox" class="form-check-input" name="agree" value="1">
+					Я согласен со всеми условиями
+				</label>
+			</div>
+		</div>
+		<div class="mt-3">
+			<button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Регистрация</button>
+		</div>
+		<div class="text-center mt-4 font-weight-light">
+			Уже есть аккаунт? <a href="/auth/" class="text-primary">Авторизация</a>
+		</div>
+	</form>
 </div>

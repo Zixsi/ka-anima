@@ -12,15 +12,10 @@ class Auth extends APP_Controller
 	public function index()
 	{
 		$data = [];
+		$data['remembered'] = $this->Auth->getLoginRemember();
 
-		if($this->Auth->login())
-		{
-			action(UserActionsModel::ACTION_LOGIN);
-			redirect('');
-		}
-		
-		$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->getLastError();
+		// $this->EmailHelper->registration(['email' => 'zixxsi@gmail.com', 'code' => '123456']);
+		// die();
 
 		$this->load->lview('auth/login', $data);
 	}
@@ -28,40 +23,36 @@ class Auth extends APP_Controller
 	public function logout()
 	{
 		$this->Auth->logout();
-		redirect('');
+		redirect('/');
 	}
 
 	public function register()
 	{
-		$data = [];
-
-		if($this->Auth->register()) redirect('');
-
-		$data['form']['email'] = $this->input->post('email', true);
-		$data['form']['name'] = $this->input->post('name', true);
-		$data['form']['lastname'] = $this->input->post('lastname', true);
-		$data['error'] = $this->Auth->getLastError();
-
-		$this->load->lview('auth/register', $data);
+		$this->load->lview('auth/register', []);
 	}
 
 	public function forgot()
 	{
 		$data = [];
 
-		//$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->getLastError();
-
 		$this->load->lview('auth/forgot', $data);
+	}
+
+	public function recovery()
+	{
+		$data = [];
+		$data['code'] = ($_GET['code'] ?? '');
+
+		$this->load->lview('auth/recovery', $data);
 	}
 	
 	public function confirmation()
-	{
-		$data = [];
+	{	
+		$data = ['success' => false];
+		$data['success'] = $this->Auth->confirm(($_GET['code'] ?? ''));
 		
-		//$data['form'] = $this->Auth->getLoginRemember();
-		$data['error'] = $this->Auth->getLastError();
-
 		$this->load->lview('auth/confirmation', $data);
 	}
+
+	
 }

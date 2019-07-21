@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Admin</title>
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+	<link rel="stylesheet" href="../tools/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/app.css">
+	<link rel="stylesheet" href="assets/css/custom.css">
+</head>
+<body>
+	<div class="container-scroller">
+			<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+				<div class="text-left navbar-brand-wrapper d-flex align-items-center justify-content-between">
+					<a class="navbar-brand brand-logo" href="/"><img src="assets/img/logo_white.png" alt="logo"/></a>
+					<a class="navbar-brand brand-logo-mini" href="/"><img src="assets/img/logo_white.png" alt="logo"/></a> 
+					<button class="navbar-toggler align-self-center" type="button" data-toggle="minimize">
+					<span class="mdi mdi-menu"></span>
+					</button>
+				</div>
+				<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+					<ul class="navbar-nav navbar-nav-right">
+						<li class="nav-item dropdown">
+							<a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
+								<i class="far fa-bell mx-0"></i>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+								<p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+								<a class="dropdown-item preview-item">
+									<div class="preview-thumbnail">
+										<div class="preview-icon bg-success">
+											<i class="far fa-envelope mx-0"></i>
+										</div>
+									</div>
+									<div class="preview-item-content">
+										<h6 class="preview-subject font-weight-normal">Application Error</h6>
+										<p class="font-weight-light small-text mb-0 text-muted">
+											Just now
+										</p>
+									</div>
+								</a>
+								<a class="dropdown-item preview-item">
+									<div class="preview-thumbnail">
+										<div class="preview-icon bg-warning">
+											<i class="fas fa-cog mx-0"></i>
+										</div>
+									</div>
+									<div class="preview-item-content">
+										<h6 class="preview-subject font-weight-normal">Settings</h6>
+										<p class="font-weight-light small-text mb-0 text-muted">
+											Private message
+										</p>
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
+								<i class="far fa-envelope mx-0"></i>
+								<p class="notification-ripple notification-ripple-bg">
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+								</p>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
+								<p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+								<a class="dropdown-item preview-item">
+									<div class="preview-thumbnail">
+										<img src="assets/img/face28.png" alt="image" class="profile-pic">
+									</div>
+									<div class="preview-item-content flex-grow">
+										<h6 class="preview-subject ellipsis font-weight-normal">David Grey
+										</h6>
+										<p class="font-weight-light small-text text-muted mb-0">
+											The meeting is cancelled
+										</p>
+									</div>
+								</a>
+								<a class="dropdown-item preview-item">
+									<div class="preview-thumbnail">
+										<img src="assets/img/face28.png" alt="image" class="profile-pic">
+									</div>
+									<div class="preview-item-content flex-grow">
+										<h6 class="preview-subject ellipsis font-weight-normal">Tim Cook
+										</h6>
+										<p class="font-weight-light small-text text-muted mb-0">
+											New product launch
+										</p>
+									</div>
+								</a>
+								<a class="dropdown-item preview-item">
+									<div class="preview-thumbnail">
+										<img src="assets/img/face28.png" alt="image" class="profile-pic">
+									</div>
+									<div class="preview-item-content flex-grow">
+										<h6 class="preview-subject ellipsis font-weight-normal"> Johnson
+										</h6>
+										<p class="font-weight-light small-text text-muted mb-0">
+											Upcoming board meeting
+										</p>
+									</div>
+								</a>
+							</div>
+						</li>
+						<li class="nav-item nav-user-icon">
+							<a class="nav-link" href="#">
+							<img src="assets/img/face28.png" alt="profile"/>
+							</a>
+						</li>
+						<li class="nav-item nav-settings d-none d-lg-flex">
+							<a class="nav-link" href="#">
+								<i class="fas fa-ellipsis-h"></i>
+							</a>
+						</li>
+					</ul>
+					<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+						<i class="fas fa-bars"></i>
+					</button>
+				</div>
+			</nav>
+		<div class="container-fluid page-body-wrapper">
+			<nav class="sidebar sidebar-offcanvas" id="sidebar">
+				<ul class="nav">
+					<li class="nav-item nav-profile">
+						<div class="nav-link d-flex">
+							<div class="profile-image">
+								<img src="assets/img/face28.png" alt="image">
+							</div>
+							<div class="profile-name">
+								<p class="name">Edwin Harring</p>
+								<p class="designation">Manager</p>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+						<i class="fas fa-home menu-icon"></i>
+						<span class="menu-title">Dashboard</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">
+						<i class="fas fa-home menu-icon"></i>
+						<span class="menu-title">Widgets<span class="badge badge-danger">New</span></span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+						<i class="fas fa-home menu-icon"></i>
+						<span class="menu-title">Forms <span class="badge badge-pill badge-info">2</span></span>
+						<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse" id="form-elements">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"><a class="nav-link" href="#">Basic Elements</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Advanced Elements</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Validation</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Wizard</a></li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</nav>
+			<div class="main-panel">
+				<div class="content-wrapper">
+					Контент
+				</div>
+				<!-- <div class="footer-wrapper">
+						<footer class="footer">
+						<div class="d-sm-flex justify-content-center justify-content-sm-between">
+							<span class="text-center text-sm-left d-block d-sm-inline-block">Copyright &copy; 2019. All rights reserved. </span>
+							<span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Designed by: <a href="https://www.urbanui.com/" target="_blank">UrbanUI</a>. </span>
+						</div>
+					</footer>
+				</div> -->
+			</div>
+		</div>
+	</div>
+	<script src="../tools/jquery/jquery.min.js"></script>
+	<script src="../tools/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/js/app.js"></script>
+</body>
+</html>

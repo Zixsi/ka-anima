@@ -1,160 +1,257 @@
 <?php
 $CI = &get_instance();
-$user_id = $CI->Auth->userID();
+$tpl_user = $CI->Auth->user();
+// debug($tpl_user); die();
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Dashboard</title>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<!-- VENDOR CSS -->
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/css/bootstrap.min.css">
-	<!--
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/font-awesome/css/font-awesome.min.css">-->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/linearicons/style.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/img/favicon.ico" />
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.css">
+
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
 	<!-- MAIN CSS -->
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css?v=<?=VERSION?>">
-	<!-- GOOGLE FONTS -->
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
-	<!-- ICONS -->
-	<link rel="apple-touch-icon" sizes="56x64" href="<?=TEMPLATE_DIR?>/admin_1/assets/img/favicon.ico?v=<?=VERSION?>">
-	<link rel="icon" type="image/x-icon" sizes="56x64" href="<?=TEMPLATE_DIR?>/admin_1/assets/img/favicon.ico?v=<?=VERSION?>">
 
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery/jquery.min.js"></script>
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
 </head>
 
 <body>
-	<!-- WRAPPER -->
-	<div id="wrapper">
-		<!-- NAVBAR -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand">
-				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png?v=<?=VERSION?>" alt="Logo" class="img-responsive logo" style="height: 70px;"></a>
+	<div class="container-scroller">
+		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+			<div class="text-left navbar-brand-wrapper d-flex align-items-center justify-content-between">
+				<a class="navbar-brand brand-logo" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_white.png" alt="logo"/></a>
+				<a class="navbar-brand brand-logo-mini" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_mini.png" alt="logo"/></a> 
+				<button class="navbar-toggler align-self-center" type="button" data-toggle="minimize">
+				<span class="mdi mdi-menu"></span>
+				</button>
 			</div>
-			<div class="container-fluid">
-				<!--<div class="navbar-btn navbar-left"></div>-->
-				<div class="navbar-left">
-					<?if($CI->Auth->isTeacher()):?>
-						<?if($next_stream = $CI->StreamsModel->getNextForAuthor($user_id)):?>
-							<span id="homework-time-left" data-time="<?=$next_stream['ts']?>">
-								<div class="float-left icon">
-									<span class="lnr lnr-warning"></span>
+			<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+				<ul class="navbar-nav navbar-nav-right">
+					<li class="nav-item dropdown">
+						<a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
+							<i class="mdi mdi-bell-outline mx-0"></i>
+							<!-- <p class="notification-ripple notification-ripple-bg">
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+							</p> -->
+						</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+							<p class="mb-0 font-weight-normal float-left dropdown-header">Уведомления</p>
+							<!-- <a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-success">
+										<i class="mdi mdi-information mx-0"></i>
+									</div>
 								</div>
-								<div class="float-left">
-									<span class="title">Ближайшая онлайн встреча</span>
-									<span class="value">- - -</span>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">Application Error</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">Just now</p>
 								</div>
-							</span>
-						<?endif;?>
-					<?elseif($CI->Auth->isUser()):?>
-						<span id="homework-time-left" data-time="<?=date('Y-m-d 00:00:00', next_monday_ts())?>">
-							<div class="float-left icon">
-								<span class="lnr lnr-warning"></span>
-							</div>
-							<div class="float-left">
-								<span class="title">До конца сдачи ДЗ осталось </span>
-								<span class="value">- - -</span>
-							</div>
-						</span>
-					<?endif;?>
-				</div>
-				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-right">
-						<li>
-							<span id="panel-date-time-msk" style="display: inline-block;">- - -</span>
-						</li>
-						<li>
-							<span class="label label-success" style="display: inline-block; font-size: 15px; margin-top: 27px; margin-left: 15px;"><?=($CI->Auth->isTeacher())?'Преподаватель':'Ученик'?></span>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-							<ul class="dropdown-menu">
-								<li><a href="/profile/"><i class="lnr lnr-user"></i> <span>Профиль</span></a></li>
-								<li><a href="/profile/messages/"><i class="lnr lnr-envelope"></i> <span>Сообщения</span></a></li>
-								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+							</a>
+							<a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-warning">
+										<i class="mdi mdi-settings mx-0"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">Settings</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">Private message</p>
+								</div>
+							</a>
+							<a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-info">
+										<i class="mdi mdi-account-box mx-0"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">New user registration</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">2 days ago</p>
+								</div>
+							</a> -->
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link count-indicator d-flex justify-content-center align-items-center nav-message" href="/profile/messages/">
+							<i class="mdi mdi-email-outline mx-0"></i>
+							<!--<p class="notification-ripple notification-ripple-bg">
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+							</p>-->
+						</a>
+					</li>
+					<li class="nav-item nav-user-icon">
+						<a class="nav-link" href="/profile/">
+							<img src="<?=$CI->Auth->user()['img']?>" alt="profile"/>
+						</a>
+					</li>
+					<li class="nav-item nav-settings d-none d-lg-flex dropdown">
+						<a class="nav-link" href="#" data-toggle="dropdown" id="appDropdown">
+							<i class="mdi mdi-dots-horizontal"></i>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="appDropdown">
+							<a class="dropdown-item" href="/profile/"><i class="mdi mdi-settings text-primary"></i>Профиль</a>
+							<a class="dropdown-item" href="/auth/logout/"><i class="mdi mdi-logout text-primary"></i>Выход</a>
+						</div>
+					</li>
+				</ul>
+				<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+					<span class="mdi mdi-menu"></span>
+				</button>
 			</div>
 		</nav>
-		<!-- END NAVBAR -->
-		<!-- LEFT SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
-			<div class="sidebar-scroll">
-				<nav>
-					<ul class="nav">
-						<li><a href="/" <?=is_active_menu_item('main')?'class="active"':''?>  ><span>Главная</span></a></li>
-						<?if($CI->Auth->checkAccess([['user_menu', 'view']])):?>
-							<?if($courses = $CI->SubscriptionModel->coursesList($user_id)):?>
-								<li>
-									<a href="#sub-courses" data-toggle="collapse" class="collapsed <?=is_active_menu_item('courses')?'active':''?>"><span>Курсы</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
-									<div id="sub-courses" class="collapse in">
-										<ul class="nav">
-											<?foreach($courses as $item):?>
-												<li><a href="/courses/<?=$item['code']?>/" class=""><?=$item['name']?> (<?=strftime("%B %Y", strtotime($item['ts']))?>)</a></li>
-											<?endforeach;?>
-										</ul>
-									</div>
-								</li>
-							<?endif;?>
-							<li><a href="/courses/enroll/" <?=is_active_menu_item('courses', 'enroll')?'class="active"':''?> >Запись на курс</a></li>
-							<li><a href="/subscription/" <?=is_active_menu_item('subscription')?'class="active"':''?> >Подписка</a></li>
-						<?endif;?>
-							
-						<?if($CI->Auth->checkAccess([['teach_menu', 'view']])):?>
-							<li><a href="/groups/" <?=is_active_menu_item('groups')?'class="active"':''?> >Группы</a></li>
-							<li><a href="/teachingstreams/" <?=is_active_menu_item('teachingstreams')?'class="active"':''?> >Онлайн встречи</a></li>
-						<?endif;?>
+		<div class="container-fluid page-body-wrapper">
+			<!-- <div id="right-sidebar" class="settings-panel">
+				<ul class="chat-list">
+					<li class="list activee">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+						<div class="info">
+							<p>Thomas Douglas</p>
+							<p>Available</p>
+						</div>
+						<small class="text-muted my-auto">19 min</small>
+					</li>
+					<li class="list">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+						<div class="info">
+							<div class="wrapper d-flex">
+								<p>Catherine</p>
+							</div>
+							<p>Away</p>
+						</div>
+						<div class="badge badge-success badge-pill my-auto mx-2">4</div>
+						<small class="text-muted my-auto">23 min</small>
+					</li>
+					<li class="list">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face3.jpg" alt="image"><span class="online"></span></div>
+						<div class="info">
+							<p>Daniel Russell</p>
+							<p>Available</p>
+						</div>
+						<small class="text-muted my-auto">14 min</small>
+					</li>
+					<li class="list">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face4.jpg" alt="image"><span class="offline"></span></div>
+						<div class="info">
+							<p>James Richardson</p>
+							<p>Away</p>
+						</div>
+						<small class="text-muted my-auto">2 min</small>
+					</li>
+					<li class="list">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face5.jpg" alt="image"><span class="online"></span></div>
+						<div class="info">
+							<p>Madeline Kennedy</p>
+							<p>Available</p>
+						</div>
+						<small class="text-muted my-auto">5 min</small>
+					</li>
+					<li class="list">
+						<div class="profile"><img src="<?=TEMPLATE_DIR?>/main_v1/images/faces/face6.jpg" alt="image"><span class="online"></span></div>
+						<div class="info">
+							<p>Sarah Graves</p>
+							<p>Available</p>
+						</div>
+						<small class="text-muted my-auto">47 min</small>
+					</li>
+				</ul>
+			</div> -->
+			<nav class="sidebar sidebar-offcanvas" id="sidebar">
+				<ul class="nav">
+					<li class="nav-item nav-profile">
+						<div class="nav-link d-flex">
+							<div class="profile-image">
+								<a href="/profile/"><img src="<?=$CI->Auth->user()['img']?>" alt="image"></a>
+							</div>
+							<div class="profile-name">
+								<p class="name text-capitalize"><?=($tpl_user['full_name'] ?? $tpl_user['email'])?></p>
+								<p class="designation text-capitalize"><?=($tpl_user['role_name'] ?? '- - -')?></p>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('main')?'active':''?>">
+						<a class="nav-link" href="/">
+							<i class="mdi mdi-shield-check menu-icon"></i>
+							<span class="menu-title">Главная</span>
+						</a>
+					</li>
 
-						<li><a href="/profile/" <?=is_active_menu_item('profile')?'class="active"':''?> >Профиль</a></li>
-						<li><a href="/users/" <?=is_active_menu_item('users')?'class="active"':''?> >Пользователи</a></li>
-						<li><a href="/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
+					<?if($CI->Auth->isUser()):?>
+						<li class="nav-item <?=is_active_menu_item('courses')?'active':''?>">
+							<a class="nav-link" href="/courses/">
+								<i class="mdi mdi-view-headline menu-icon"></i>
+								<span class="menu-title">Курсы</span>
+							</a>
+						</li>
+						<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
+							<a class="nav-link" href="/groups/">
+								<i class="mdi mdi-bell menu-icon"></i>
+								<span class="menu-title">Подписки</span>
+							</a>
+						</li>
+						<li class="nav-item <?=is_active_menu_item('transactions')?'active':''?>">
+							<a class="nav-link" href="/transactions/">
+								<i class="mdi mdi-wallet menu-icon"></i>
+								<span class="menu-title">Платежи</span>
+							</a>
+						</li>
+					<?endif;?>
+						
+					<?if($CI->Auth->isTeacher()):?>			
+						<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
+							<a class="nav-link" href="/groups/">
+								<i class="mdi mdi-account-multiple menu-icon"></i>
+								<span class="menu-title">Группы</span>
+							</a>
+						</li>
+						<li class="nav-item <?=is_active_menu_item('teachingstreams')?'active':''?>">
+							<a class="nav-link" href="/teachingstreams/">
+								<i class="mdi mdi-message-video menu-icon"></i>
+								<span class="menu-title">Онлайн встречи</span>
+							</a>
+						</li>
+					<?endif;?>
 
-					</ul>
-				</nav>
-			</div>
-		</div>
-		<!-- END LEFT SIDEBAR -->
-		<!-- MAIN -->
-		<div class="main">
-			<!-- MAIN CONTENT -->
-			<div class="main-content">
-				<div class="container-fluid">
+					<li class="nav-item <?=is_active_menu_item('users')?'active':''?>">
+						<a class="nav-link" href="/users/">
+							<i class="mdi mdi-account-circle menu-icon"></i>
+							<span class="menu-title">Пользователи</span>
+						</a>
+					</li>
+
+					<?if($CI->Auth->isUser()):?>
+						<li class="nav-item <?=is_active_menu_item('faq')?'active':''?>">
+							<a class="nav-link" href="/faq/">
+								<i class="mdi mdi-comment-question-outline menu-icon"></i>
+								<span class="menu-title">FAQ</span>
+							</a>
+						</li>
+					<?endif;?>
+				</ul>
+			</nav>
+			<div class="main-panel">
+				<div class="content-wrapper">
 					<?$this->content()?>
 				</div>
 			</div>
-			<!-- END MAIN CONTENT -->
 		</div>
-		<!-- END MAIN -->
-		<div class="clearfix"></div>
-		<footer>
-			<div class="container-fluid">
-				<p class="copyright">&copy; 2018 Company. All Rights Reserved.</p>
-			</div>
-		</footer>
 	</div>
-	<!-- END WRAPPER -->
-	<!-- Javascript -->
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/holder.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/main.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
 
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-timezone.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/countdown.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-countdown.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.ui.widget.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.iframe-transport.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
@@ -163,6 +260,6 @@ $user_id = $CI->Auth->userID();
 	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
 
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
 </body>
 </html>

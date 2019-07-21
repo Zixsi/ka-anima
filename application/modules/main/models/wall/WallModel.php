@@ -110,10 +110,17 @@ class WallModel extends APP_Model
 			foreach($data as &$val)
 			{
 				if(!isset($user_img[$val['user']]))
-					$user_img[$val['user']] = $this->imggen->createIconSrc(['seed' => md5('user'.$val['user'])]);
+				{
+					$user = $val;
+					$user['id'] = $val['user'];
+					$this->UserModel->prepareUser($user);
+
+					$user_img[$val['user']] = $user['img'];
+				}
 
 				$val['text'] = htmlspecialchars($val['text']);
 				$val['timestamp'] = strtotime($val['ts']);
+				$val['ts'] = date(DATE_FORMAT_FULL, $val['timestamp']);
 				$val['img'] = $user_img[$val['user']];
 				$val['role_name'] = UserModel::ROLES_NAME[$val['role']];
 			}

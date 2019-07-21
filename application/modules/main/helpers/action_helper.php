@@ -17,3 +17,8 @@ function action_print_description($item)
 	$c = &get_instance();
 	return $c->UserActionsHelper->prepareDescription($item);
 }
+
+function test()
+{
+	return '#test#';
+}

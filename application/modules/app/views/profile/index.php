@@ -1,74 +1,54 @@
-<?//debug($user);?>
-<div class="panel panel-profile">
-	<div class="row">
-		<div class="col-xs-6">
-			<div class="profile-header">
-				<div class="overlay"></div>
-				<div class="profile-main">
-					<img src="<?=$user['img']?>" class="img-circle" alt="Avatar" width="80">
-					<h3 class="name"><?=($user['full_name'] ?? 'User')?></h3>
-					<span class="online-status status-available">Онлайн</span>
-				</div>
-				<div class="profile-stat">
-					<div class="row">
-						<div class="col-md-4 stat-item">
-							0 <span>курсов пройдено</span>
-						</div>
-						<?if($owner):?>
-							<a href="/profile/friends/" class="col-md-4 stat-item">
-								<?=$friends_cnt?> <span>друзей</span>
-							</a>
-						<?else:?>
-							<div class="col-md-4 stat-item">
-								<?=$friends_cnt?> <span>друзей</span>
+<div class="row">
+	<div class="col-6 offset-3">
+		<div class="card">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-12">
+						<div class="border-bottom text-center pb-4">
+							<img src="<?=$user['img']?>" alt="profile" class="img-lg rounded-circle mb-3"/>
+							<div class="mb-3">
+								<h3><?=($user['full_name'] ?? 'User')?></h3>
 							</div>
-						<?endif;?>
-						<div class="col-md-4 stat-item">
-							0 <span>достижений</span>
+							<p class="w-75 mx-auto mb-3">Bureau Oberhaeuser is a design bureau focused on Information- and Interface Design. </p>
+							<div class="d-flex justify-content-center">
+								<?if(!$owner):?>
+									<?if(!$is_friends):?>
+										<form action="/users/" method="post">
+											<input type="hidden" name="id" value="<?=$user['id']?>">
+											<button type="submit" class="btn btn-primary mr-1">Добавить в друзья</button>
+										</form>
+									<?endif;?>
+									<a href="/profile/messages/<?=$user['id']?>/" class="btn btn-primary">Написать сообщение</a>
+								<?else:?>
+									<a href="/profile/friends/" class="btn btn-primary mr-1">Друзья (<?=$friends_cnt?>)</a>
+									<a href="/profile/edit/" class="btn btn-primary">Редактировать</a>
+								<?endif;?>
+							</div>
+						</div>
+						<div class="py-4">
+							<p class="clearfix">
+								<span class="float-left">Дата рождения</span>
+								<span class="float-right text-muted"><?=date(DATE_FORMAT_SHORT, strtotime($user['birthday']))?></span>
+							</p>
+							<p class="clearfix">
+								<span class="float-left">Телефон</span>
+								<span class="float-right text-muted"><?=$user['phone']?></span>
+							</p>
+							<p class="clearfix">
+								<span class="float-left">E-mail</span>
+								<span class="float-right text-muted"><?=$user['email']?></span>
+							</p>
 						</div>
 					</div>
-				</div>
-			</div>
-			<div class="profile-detail">
-				<?if(!$owner):?>
-					<div class="row" style="margin-top: 1px;">
-						<div class="col-xs-12">
-							<?if(!$is_friends):?>
-								<a href="#" class="btn btn-lg btn-block btn-primary">Добавить в друзья</a>
-							<?else:?>
-								<button class="btn btn-lg btn-light btn-block disabled">В друзьях</button>
-							<?endif;?>
-							<a href="/profile/messages/<?=$user['id']?>/" class="btn btn-lg btn-block btn-primary">Написать сообщение</a>
+					<?/*
+					<div class="col-lg-8">
+						<div class="text-center">
+							<h3>Тут поселился радужный пони</h3>
+							<img src="<?=IMG_UNICORN?>">
 						</div>
-					</div>
-				<?endif;?>
-				<div class="profile-info">
-					<h4 class="heading">Базовая информация</h4>
-					<ul class="list-unstyled list-justify">
-						<li>Дата рождения <span><?=date('d-m-Y', strtotime($user['birthday']))?></span></li>
-						<li>Телефон <span><?=$user['phone']?></span></li>
-						<li>Email <span><?=$user['email']?></span></li>
-					</ul>
+					</div>*/?>
 				</div>
-				<?/*
-				<div class="profile-info">
-					<h4 class="heading">Социальные сети</h4>
-					<ul class="list-inline social-icons">
-						<li><a href="#" class="in-bg"><i class="fa fa-in"></i></a></li>
-						<li><a href="#" class="vk-bg"><i class="fa fa-vk"></i></a></li>
-						<li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-						<li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-						<li><a href="#" class="google-plus-bg"><i class="fa fa-google-plus"></i></a></li>
-						<li><a href="#" class="github-bg"><i class="fa fa-github"></i></a></li>
-					</ul>
-				</div>*/?>
-				<?if($owner):?>
-					<div class="text-center"><a href="/profile/edit/" class="btn btn-primary">Редактировать</a></div>
-				<?endif;?>
 			</div>
-		</div>
-		<div class="col-xs-6">
-			<h4 class="panel-heading">Тут какая то еще информация</h4>
 		</div>
 	</div>
 </div>

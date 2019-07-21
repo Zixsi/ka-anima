@@ -1,39 +1,45 @@
-<div class="panel">
-	<div class="panel-heading">
-		<div class="col-xs-6">
-			<h3 class="panel-title">Сообщения</h3>
-		</div>
-	</div>
-	<div class="panel-body" style="padding-top: 30px;">
-		<div class="row">
-			<?if($chats):?>
-				<div class="col-xs-3" style="border-right: 1px solid #ccc;">
-					<ul class="media-list">
+<div class="email-wrapper wrapper">
+	<div class="row align-items-stretch">
+		<?if($chats):?>
+			<div class="mail-sidebar col-2 pt-3 bg-white">
+				<div class="menu-bar">
+					<div class="wrapper">
+						<div class="online-status d-flex justify-content-between align-items-center">
+						<p class="chat">Чаты</p></div>
+					</div>
+					<ul class="profile-list" style="border-right: 1px solid #f6f2f2;">
 						<?foreach($chats as $val):?>
-							<li class="media" style="position: relative;">
-								<div class="pull-left">
-									<img class="media-object" src="<?=$val['img']?>" alt="">
-								</div>
-								<div class="media-body">
-									<?if($val['role'] > 0):?>
-										<span class="label label-success message-badge"><?=$val['role_name']?></span>
-									<?endif;?>
-									<h4 class="media-heading"><?=$val['name']?></h4>
-								</div>
-								<a href="/profile/messages/<?=$val['id']?>/" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5;"></a>
+							<li class="profile-list-item">
+								<a href="/profile/messages/<?=$val['id']?>/">
+									<span class="pro-pic">
+										<img src="<?=$val['img']?>" alt="" width="40" height="40">
+									</span>
+									<div class="user">
+										<p class="u-name"><?=$val['name']?></p>
+										<p class="u-designation"><?=$val['role_name']?></p>
+									</div>
+								</a>
 							</li>
 						<?endforeach;?>
 					</ul>
 				</div>
-			<?endif;?>
-			<div class="col-xs-<?=($chats)?'8':'12'?> text-center">
-				<p>Пожалуйста, выберите диалог или создайте
-					<?if($friends):?>
-						<a href="javascript:void(0);" data-toggle="modal" data-target="#chat-new">новый</a>
-					<?else:?>
-						<a href="/users/">новый</a>
-					<?endif;?>
-				</p>
+			</div>
+		<?endif;?>
+		<?if($chats):?>
+			<div class="mail-view col-10 bg-white">
+		<?else:?>
+			<div class="mail-view col-12 bg-white">
+		<?endif;?>
+			<div class="message-body">
+				<div class="message-content text-center">
+					<p>Пожалуйста, выберите диалог или создайте
+						<?if($friends):?>
+							<a href="javascript:void(0);" data-toggle="modal" data-target="#chat-new">новый</a>
+						<?else:?>
+							<a href="/users/">новый</a>
+						<?endif;?>
+					</p>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -43,8 +49,8 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Новое сообщение</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
 				<form action="" method="post" class="form">
