@@ -297,6 +297,9 @@ function appListener()
 	});
 
 	// добавление ревью
+	var add_review_modal = $('#add-review-modal');
+	var add_review_modal_form = add_review_modal.find('form');
+	
 	$('.btn-add-review').on('click', function(){
 		var params = {
 			group: $(this).data('group'),
