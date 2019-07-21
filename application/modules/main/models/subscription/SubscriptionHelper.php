@@ -49,10 +49,10 @@ class SubscriptionHelper extends APP_Model
 
 		$item['price'] = json_decode($item['price'], true);
 
-		if(!isset($item['price'][$data['type']][$data['period']]))
+		if(!array_key_exists($data['type'], $item['price']) && !array_key_exists($data['period'], $item['price'][$data['type']]))
 			throw new Exception('неверные параметры', 1);
 
-		$price = $item['price'][$data['type']][$data['period']];
+		$price = (float) $item['price'][$data['type']][$data['period']];
 
 		// проверяем подписал юзер на эту группу или нет
 		if($this->SubscriptionModel->сheck($data['user'], $item['group_id']))
