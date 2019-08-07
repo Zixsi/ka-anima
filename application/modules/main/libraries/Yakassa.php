@@ -93,7 +93,6 @@ class Yakassa
 		// debug(var_dump($this->paymentParams)); die();
 		$payment = $this->client->createPayment($this->paymentParams);
 
-		debug($payment);
 		$this->orderId = $payment->getId();
 		$this->payUrl = $payment->getConfirmation()->getConfirmationUrl();
 	}
