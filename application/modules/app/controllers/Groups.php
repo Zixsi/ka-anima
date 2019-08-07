@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Groups extends APP_Controller
 {
-	private $user;
+	public $user;
 
 	public function __construct()
 	{

@@ -14,88 +14,63 @@ class GroupsHelper extends APP_Model
 		{
 			$this->db->trans_begin();
 
-			$data['course'] = intval($data['course'] ?? 0);
+			$data['course'] = (int) ($data['course'] ?? 0);
 			if(($course = $this->CoursesModel->getByID($data['course'])) === false)
-				throw new Exception('Курс не найден');
+				throw new Exception('курс не найден');
 
 			$data['date'] = ($data['date'] ?? null);
 			if(empty($data['date']))
-				throw new Exception('Не указана дата начала');
+				throw new Exception('не указана дата начала');
 
 			$date_a = new DateTime(date('Y-m-d 00:00:00'));
 			$date_b = new DateTime(date('Y-m-d 00:00:00', strtotime($data['date'])));
 			if($date_a > $date_b)
-				throw new Exception('Неверная дата начала');
+				throw new Exception('неверная дата начала');
 
 			$data['type'] = ($data['type'] ?? null);
 			if(empty($data['type']) || !array_key_exists($data['type'], GroupsModel::TYPE))
-				throw new Exception('Неверный тип группы');
+				throw new Exception('неверный тип группы');
+
 
 			$data['users'] = ($data['users'] ?? []);
-			if($data['type'] === 'private' && empty($data['users']))
+			if($data['type'] === GroupsModel::TYPE_PRIVATE && empty($data['users']))
 				throw new Exception('не выбраны ученики');
 
-
-			// дата начала лекций
-			$ts_start = clone $date_b;
-			// если текущая дата не понедельник, получаем следующий понедельник
-			if(intval($ts_start->format('N')) !== 1)
-				$ts_start->modify('next monday');
-
-			// Дата окончания курса
-			$days = (intval($course['cnt_main']) + 1) * 7;
-			$ts_end = clone $ts_start;
-			$ts_end->add(new DateInterval('P'.$days.'D'));
-
-			$item_data = [
-				'type' => $data['type'],
-				'teacher' => $course['teacher'],
-				'code' => $this->makeCode($course['code'], $data['type'], $date_b->format('dmy')),
-				'course_id' => $course['id'],
-				'ts' => $date_b->format('Y-m-d 00:00:00'),
-				'ts_end' => $ts_end->format('Y-m-d 00:00:00')
-			];
-
-			if(($group_id = $this->GroupsModel->add($item_data)) === false)
-				throw new Exception('Ошибка создания группы');
-
-			// добавляем лекции в группу
-			if($lectures = $this->LecturesModel->listForCourse($course['id']))
+			if($data['type'] === GroupsModel::TYPE_PRIVATE)
 			{
-				$ts_item = clone $ts_start;				
-				foreach($lectures as $item)
+				if($group_id = $this->makeGroup($course, $data['type'], $date_b->getTimestamp()))
 				{
-					$ts = $date_a->format('Y-m-d 00:00:00');
-					if((int) $item['type'] === 0)
-					{
-						$ts = $ts_item->format('Y-m-d 00:00:00');
-						$ts_item->add(new DateInterval('P1W')); // +1 неделя
-					}
+					$group_item = $this->GroupsModel->getByID($group_id);
 
-					$this->LecturesModel->addLectureToGroupTs($group_id, $item['id'], $ts);
+					// добавляем выбранных учеников в группу
+					foreach($data['users'] as $val)
+					{
+						$user_data = [
+							'user' => $val,
+							'type' => $data['type'],
+							'target' => $group_item['id'],
+							'target_type' => 'course',
+							'description' => $course['name'].' '.date(DATE_FORMAT_SHORT, strtotime($group_item['ts'])).' - '.date(DATE_FORMAT_SHORT, strtotime($group_item['ts_end'])),
+							'ts_start' => $group_item['ts'],
+							'ts_end' => $group_item['ts_end'],
+							'subscr_type' => 0,
+							'amount' => 0,
+							'data' => json_encode(['price' => 0])
+						];
+
+						$this->SubscriptionModel->add($user_data);
+					}
 				}
 			}
-
-			// если закрытая группа
-			if($data['type'] === 'private')
+			else
 			{
-				// добавляем выбранных учеников в группу
-				foreach($data['users'] as $val)
+				// для каждого типа создаем группу
+				foreach(GroupsModel::TYPE as $type => $val)
 				{
-					$data = [
-						'user' => $val,
-						'type' => $data['type'],
-						'target' => $group_id,
-						'target_type' => 'course',
-						'description' => $course['name'].' ('.strftime("%B %Y", strtotime($item_data['ts'])).')',
-						'ts_start' => $item_data['ts'],
-						'ts_end' => $item_data['ts_end'],
-						'subscr_type' => 0,
-						'amount' => 0,
-						'data' => json_encode(['price' => 0])
-					];
+					if($type === GroupsModel::TYPE_PRIVATE || $type === GroupsModel::TYPE_VIP)
+						continue;
 
-					$this->SubscriptionModel->add($data);
+					$this->makeGroup($course, $type, $date_b->getTimestamp(), 1);
 				}
 			}
 
@@ -106,16 +81,14 @@ class GroupsHelper extends APP_Model
 			}
 
 			$this->db->trans_commit();
-
-			return true;
 		}
 		catch(Exception $e)
 		{
 			$this->db->trans_rollback();
-			$this->setLastError($e->getMessage(), $e->getCode());
+			throw new Exception($e->getMessage(), $e->getCode());
 		}
 
-		return false;
+		return true;
 	}
 
 	public function addSimple($course, $type, $start)
@@ -201,6 +174,7 @@ class GroupsHelper extends APP_Model
 				throw new Exception('Группа не найдена');
 
 			$this->GroupsModel->remove($item['id']);
+			$this->LecturesGroupModel->removeByGroup($item['id']);
 
 			if($this->db->trans_status() === false)
 			{
@@ -209,16 +183,14 @@ class GroupsHelper extends APP_Model
 			}
 
 			$this->db->trans_commit();
-
-			return true;
 		}
 		catch(Exception $e)
 		{
 			$this->db->trans_rollback();
-			$this->setLastError($e->getMessage(), $e->getCode());
+			throw new Exception($e->getMessage(), $e->getCode());
 		}
 
-		return false;
+		return true;
 	}
 
 	// проставляем пользователям статус домашних заданий
@@ -267,59 +239,143 @@ class GroupsHelper extends APP_Model
 
 	public function userAdd($data)
 	{
-		try
+		$data['group'] = (int) ($data['group'] ?? 0);
+		if(($group = $this->GroupsModel->getByID($data['group_id'])) === false)
+			throw new Exception('группа не найдена');
+
+		if(($course = $this->CoursesModel->getByID($group['course_id'])) === false)
+			throw new Exception('неверные параметры', 1);
+
+		$data['user'] = (int) ($data['user'] ?? 0);
+		if(($user = $this->UserModel->getByID($data['user'])) === false)
+			throw new Exception('пользователь не найден');
+
+		$data['type'] = ($data['type'] ?? null);
+		if(empty($data['type']) || !array_key_exists($data['type'], SubscriptionModel::TYPES))
+			throw new Exception('неверный тип подписки');
+
+		if($this->SubscriptionModel->сheck($user['id'], $group['id']))
+			throw new Exception('уже подписан');
+
+		$params = [
+			'user' => $user['id'],
+			'type' => $data['type'],
+			'target' => $group['id'],
+			'target_type' => 'course',
+			'description' => $course['name'].' ('.strftime("%B %Y", strtotime($group['ts'])).')',
+			'ts_start' => $group['ts'],
+			'ts_end' => $group['ts_end'],
+			'subscr_type' => 0,
+			'amount' => 0,
+			'data' => json_encode(['price' => 0])
+		];
+
+		$this->SubscriptionModel->add($params);
+
+		return true;
+	}
+
+	// создание группы с заданным типом
+	public function makeGroup($course, $type, $ts, $cnt = 1)
+	{
+		$result = null;
+		if($cnt > 1)
+			$result = [];
+
+		// переданная дата начала
+		$ts_start = new DateTime();
+		$ts_start->setTimestamp((int) $ts);
+		$ts_start_orign = clone $ts_start;
+
+		// если дата не понедельник, получаем следующий за этой датой понедельник
+		if((int) $ts_start->format('N') !== 1)
+			$ts_start->modify('next monday');
+
+		// вип всегда начинаются в понедельник
+		if($type == GroupsModel::TYPE_VIP)
+			$ts_start_orign = clone $ts_start;
+
+		// продолжительность курса
+		$days = ((int) $course['cnt_main'] + 1) * 7;
+		$group_interval = new DateInterval('P'.$days.'D');
+		// интервал лекций
+		$interval = new DateInterval('P1W');
+		
+		// лекции
+		$lectures = null;
+
+		for($i = 0; $i < $cnt; $i++)
 		{
-			$this->db->trans_begin();
+			// дата начала обучения
+			$ts_start_group = clone $ts_start;
+			// дата окончания обучения
+			$ts_end_group = clone $ts_start_group;
+			$ts_end_group->add($group_interval);
 
-			$data['group'] = (int) ($data['group'] ?? 0);
-			if(($group = $this->GroupsModel->getByID($data['group_id'])) === false)
-				throw new Exception('группа не найдена');
-
-			if(($course = $this->CoursesModel->getByID($group['course_id'])) === false)
-				throw new Exception('неверные параметры', 1);
-
-			$data['user'] = (int) ($data['user'] ?? 0);
-			if(($user = $this->UserModel->getByID($data['user'])) === false)
-				throw new Exception('пользователь не найден');
-
-			$data['type'] = ($data['type'] ?? null);
-			if(empty($data['type']) || !array_key_exists($data['type'], SubscriptionModel::TYPES))
-				throw new Exception('неверный тип подписки');
-
-			if($this->SubscriptionModel->сheck($user['id'], $group['id']))
-				throw new Exception('уже подписан');
-
-			$params = [
-				'user' => $user['id'],
-				'type' => $data['type'],
-				'target' => $group['id'],
-				'target_type' => 'course',
-				'description' => $course['name'].' ('.strftime("%B %Y", strtotime($group['ts'])).')',
-				'ts_start' => $group['ts'],
-				'ts_end' => $group['ts_end'],
-				'subscr_type' => 0,
-				'amount' => 0,
-				'data' => json_encode(['price' => 0])
+			$group_item_params = [
+				'type' => $type,
+				'teacher' => $course['teacher'],
+				'code' => $this->makeCode($course['code'], $type, $ts_start_orign->format('dmy')),
+				'course_id' => $course['id'],
+				'ts' => $ts_start_orign->format('Y-m-d 00:00:00'),
+				'ts_end' => $ts_end_group->format('Y-m-d 00:00:00')
 			];
 
-			$this->SubscriptionModel->add($params);
-
-			if($this->db->trans_status() === false)
+			if($group_item = $this->GroupsModel->getByCode($group_item_params['code']))
 			{
-				$this->db->trans_rollback();
-				throw new Exception('Ошибка добавления');
+				$group_item_id = $group_item['id'];
+			}
+			else
+			{
+				if(($group_item_id = $this->GroupsModel->add($group_item_params)) === false)
+					throw new Exception('ошибка создания группы');
+
+				if($lectures === null)
+					$lectures = $this->LecturesModel->listForCourse($course['id']);
+
+				// добавляем лекции в группу
+				if($lectures)
+				{
+					$ts_item = clone $ts_start_group;				
+					foreach($lectures as $item)
+					{
+						$ts = $ts_start_orign->format('Y-m-d 00:00:00');
+						if((int) $item['type'] === 0)
+						{
+							$ts = $ts_item->format('Y-m-d 00:00:00');
+							$ts_item->add($interval);
+						}
+
+						$this->LecturesModel->addLectureToGroupTs($group_item_id, $item['id'], $ts);
+					}
+				}
 			}
 
-			$this->db->trans_commit();
+			if($cnt === 1)
+				$result = $group_item_id;
+			else
+				$result[] = $group_item_id;
 
-			return $group_id;
+			// делаем смещение на 1 неделю
+			$ts_start->modify('next monday');
+			$ts_start_orign->add($interval);
 		}
-		catch(Exception $e)
+
+		return $result;
+	}
+
+	// индекс курса по дате
+	public function selectOfferByDate($date, $offers = [])
+	{
+		if(empty($date) || empty($offers) || !is_array($offers))
+			return null;
+
+		foreach($offers as $key => $val)
 		{
-			$this->db->trans_rollback();
-			$this->setLastError($e->getMessage(), $e->getCode());
+			if(trim($date) === $val['ts_formated'])
+				return $key;
 		}
 
-		return false;
+		return null;
 	}
 }

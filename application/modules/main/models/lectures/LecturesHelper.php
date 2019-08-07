@@ -31,15 +31,13 @@ class LecturesHelper extends APP_Model
 			}
 
 			$this->db->trans_commit();
-
-			return true;
 		}
 		catch(Exception $e)
 		{
 			$this->db->trans_rollback();
-			$this->setLastError($e->getMessage(), $e->getCode());
+			throw new Exception($e->getMessage(), $e->getCode());
 		}
 
-		return false;
+		return true;
 	}
 }

@@ -103,3 +103,5 @@ defined('IMG_DEFAULT_300_300') OR define('IMG_DEFAULT_300_300', TEMPLATE_DIR.'/a
 defined('IMG_DEFAULT_300_200') OR define('IMG_DEFAULT_300_200', TEMPLATE_DIR.'/assets/img_default_300x200.jpg');
 defined('IMG_DEFAULT_16_9') OR define('IMG_DEFAULT_16_9', TEMPLATE_DIR.'/assets/img_default_16x9.jpg');
 defined('IMG_UNICORN') OR define('IMG_UNICORN', TEMPLATE_DIR.'/assets/unicorn.jpg');
+
+defined('PAY_RETURN_URL') OR define('PAY_RETURN_URL', 'transactions/');

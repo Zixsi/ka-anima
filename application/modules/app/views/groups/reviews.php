@@ -1,6 +1,6 @@
 <div class="row">
 
-	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?></h3>
+	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?> [<?=$group['type']?>]</h3>
 	<?$this->load->view('groups/menu');?>
 
 	<div class="col-12">

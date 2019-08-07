@@ -4,10 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class CoursesHelper extends APP_Model
 {
 	const PRICE_STRUCTURE = [
-		'standart' => ['month' => 0, 'full' => 0, 'gg' => 999], // стандартный
+		'standart' => ['month' => 0, 'full' => 0], // стандартный
 		'advanced' => ['month' => 0, 'full' => 0], // расширенный
 		'vip' => ['month' => 0, 'full' => 0], // VIP
-		//'private' => ['month' => 0, 'full' => 0] // закрытый
 	];
 
 	public function __construct()
@@ -133,5 +132,54 @@ class CoursesHelper extends APP_Model
 		}
 
 		return false;
+	}
+
+	// подготовить курс
+	public function prepareItem(&$data)
+	{
+		if(!is_array($data))
+			return;
+
+
+	}
+
+	// подготовить предложения
+	public function prepareOffers(&$data)
+	{
+		if(!is_array($data))
+			return;
+
+		foreach($data as &$val)
+		{
+			$val['only_standart'] = (int) ($val['only_standart'] ?? 0);
+			$val['min_price'] = 0;
+
+			if(isset($val['price']))
+			{
+				$val['price'] = json_decode($val['price'], true);
+
+				$prices = [];
+				foreach($val['price'] as $v)
+				{
+					$prices[] = (float) $v['full'];
+				}
+
+				if(count($prices))
+					$val['min_price'] = min($prices);
+			}
+
+			$val['min_price_f'] = number_format($val['min_price'], 2, '.', ' ');
+
+			if(array_key_exists('img', $val))
+			{
+				if((int) $val['img'] > 0 && ($img_item = $this->FilesModel->getByID($val['img'])))
+					$val['img'] = '/'.$img_item['full_path'];
+				else
+					$val['img'] = IMG_DEFAULT_16_9;
+			}
+
+			$val['description'] = character_limiter($val['description'], 200);
+			unset($val['price']);
+		}
 	}
 }

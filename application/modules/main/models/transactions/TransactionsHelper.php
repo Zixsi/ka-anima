@@ -19,8 +19,6 @@ class TransactionsHelper extends APP_Model
 
 		$data['amount'] = (float) $data['amount'];
 		$data['status'] = TransactionsModel::STATUS_PENDING;
-		if($data['amount'] === 0.0)
-			$data['status'] = TransactionsModel::STATUS_SUCCESS;
 		$data['data'] = ($data['data'] ?? '');
 
 		$data['hash'] = md5($data['user'].$data['type'].$data['data'].time());
@@ -48,5 +46,30 @@ class TransactionsHelper extends APP_Model
 			$sign = ($val['type'] === $this->TransactionsModel::TYPE_OUT && $val['amount'] > 0)?'-':'';
 			$val['amount_f'] = $sign.$val['amount_f'];
 		}
+	}
+
+	// обработка данных транзакции
+	public function processingData($data)
+	{
+		if(!is_array($data))
+			$data = json_decode($data, true);
+
+		if(empty($data) || !is_array($data))
+			return false;
+
+		switch(($data['object']['type'] ?? ''))
+		{
+			case PayData::OBJ_TYPE_COURSE:
+				return  $this->SubscriptionHelper->processingCourse($data);
+			break;
+			case  PayData::OBJ_TYPE_SUBSCR:
+				return  $this->SubscriptionHelper->processingSubscription($data);
+			break;
+			default:
+				// empty 
+			break;
+		}
+
+		return false;
 	}
 }

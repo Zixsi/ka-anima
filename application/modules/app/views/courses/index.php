@@ -14,11 +14,7 @@
 		<?foreach($items as $val):?>
 			<div class="col-12 col-sm-6 col-lg-4 col-xl-3 item">
 				<div class="card">
-					<?if($val['free']):?>
-						<span class="badge badge-danger badge-free">FREE</span>
-					<?elseif((float) ($val['price']['standart']['full'] ?? 0) > 0):?>
-						<span class="badge badge-danger badge-free">от <?=number_format($val['price']['standart']['full'], 2, '.', ' ')?> <i class="fa fa-rub"></i></span>
-					<?endif;?>
+					<span class="badge badge-danger badge-free"><?=($val['min_price'] == 0)?'FREE':'от '.$val['min_price_f'].' '.PRICE_CHAR?></span>
 					<a href="/courses/<?=$val['code']?>/"><img class="card-img-top" src="<?=$val['img']?>" alt="<?=$val['name']?>"></a>
 					<div class="card-body">
 						<h4 class="card-title mt-1">

@@ -94,11 +94,15 @@ class CoursesModel extends APP_Model
 		}
 
 		if($res = $this->db->get(self::TABLE))
-		{
 			return $res->result_array();
-		}
 
-		return false;
+		return [];
+	}
+
+	// список автивных курсов
+	public function listActive()
+	{
+		return $this->list(['active' => 1], ['id' => 'DESC']);
 	}
 
 	public function prepareItem(&$data)

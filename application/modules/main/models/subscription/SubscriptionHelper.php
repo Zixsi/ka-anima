@@ -8,6 +8,7 @@ class SubscriptionHelper extends APP_Model
 		parent::__construct();
 	}
 
+	// TODO поправить цену
 	// подготовка подписки на группу
 	public function prepareGroup($data)
 	{
@@ -91,7 +92,7 @@ class SubscriptionHelper extends APP_Model
 			$diff_total = $ts_end_obj->diff($ts_curr);
 
 			// рассчитываем остаток оплаты 
-			$amount = ceil($diff_total->days / 28) * $price;
+			$amount = (ceil($diff_total->days / 28) - 1) * $price;
 			
 			// Если разница между датой окончания и месяцем оплаты меньше или равно 1 недели 
 			// то устанавливаем дату окончания курса
@@ -124,6 +125,7 @@ class SubscriptionHelper extends APP_Model
 			'ts_start' => $item['ts_start'],
 			'ts_end' => null,
 			'items' => [],
+			'amount' => 0,
 			'params' => []
 		];
 
@@ -168,6 +170,8 @@ class SubscriptionHelper extends APP_Model
 				'description' => $item['description'].' '.date(DATE_FORMAT_SHORT, $item['ts_end_timestamp']).' - '.$date->format(DATE_FORMAT_SHORT).' - возобновление подписки',
 				'price' => $price_item
 			];
+
+			$result['amount'] = ($item['amount'] - $price_item);
 
 			// если дата окончания меньше текущей даты то требуется еще продление на год
 			if($date->getTimestamp() < time())
@@ -327,4 +331,36 @@ class SubscriptionHelper extends APP_Model
 
 	// 	return false;
 	// }
+
+
+	// обработка данных транзакции для курса
+	public function processingCourse($data)
+	{
+		// если новый добавляем
+		$params = [
+			'user' => $data['user'],
+			'type' => $data['type'],
+			'target' => $data['object']['id'],
+			'target_type' => 'course',
+			'description' => $data['name'],
+			'ts_start' => $data['ts_start'],
+			'ts_end' => $data['ts_end'],
+			'subscr_type' => $data['params']['subscr_type'],
+			'amount' => $data['params']['amount'],
+			'data' => json_encode(['price' => $data['params']['price']])
+		];
+
+		return ($this->SubscriptionModel->add($params))?true:false;
+	}
+
+	// 
+	public function processingSubscription($data)
+	{
+		$params = [
+			'ts_end' => $data['ts_end'],
+			'amount' => $data['params']['amount'],
+		];
+
+		return ($this->SubscriptionModel->update($data['object']['id'], $params))?true:false;
+	}
 }

@@ -12,11 +12,16 @@ class GroupsModel extends APP_Model
 	const TABLE_FILES = 'files';
 	const TABLE_REVIEW = 'review';
 
+	const TYPE_STANDART = 'standart'; 	// без проверки дз и онлайн встреч
+	const TYPE_ADVANCED = 'advanced'; 	// расширенный (с дз и онлайн встречами)
+	const TYPE_VIP = 'vip'; 			// advanced + старт в ближайший понедельник
+	const TYPE_PRIVATE = 'private'; 	// закрытая группа
+
 	const TYPE = [
-		'standart' => ['title' => 'Стандартная'], // без проверки дз и онлайн встреч
-		'advanced' => ['title' => 'Расширенная'], // расширенный (с дз и онлайн встречами)
-		'vip' => ['title' => 'VIP'], // advanced + старт в ближайший понедельник
-		'private' => ['title' => 'Закрытая'] // закрытая группа
+		self::TYPE_STANDART => ['title' => 'Стандартная'], 
+		self::TYPE_ADVANCED => ['title' => 'Расширенная'], 
+		self::TYPE_VIP => ['title' => 'VIP'], 
+		self::TYPE_PRIVATE => ['title' => 'Закрытая']
 	]; 
 	
 	public function __construct()
@@ -40,7 +45,10 @@ class GroupsModel extends APP_Model
 		$sql = 'SELECT * FROM '.self::TABLE.' WHERE id = ?';
 		if($res = $this->db->query($sql, $bind))
 		{
-			return $res->row_array();
+			$item = $res->row_array();
+			$this->prepareItem($item);
+
+			return $item;
 		}
 
 		return false;
@@ -120,10 +128,7 @@ class GroupsModel extends APP_Model
 	public function remove($id)
 	{
 		$this->db->where('id', $id);
-		if($this->db->update(self::TABLE, ['deleted' => 1]))
-			return true;
-			
-		return false;
+		return $this->db->delete(self::TABLE);
 	}
 	
 	public function getImageFiles($id)
@@ -213,7 +218,7 @@ class GroupsModel extends APP_Model
 	}
 
 	// список предложений 
-	public function listOffers()
+	/*public function listOffers()
 	{
 		$result = [];
 		$now = new DateTime('now');
@@ -258,7 +263,7 @@ class GroupsModel extends APP_Model
 		}
 
 		return $result;
-	}
+	}*/
 
 	// список предложений для курса
 	public function listOffersForCourse($course)
@@ -266,16 +271,21 @@ class GroupsModel extends APP_Model
 		$result = [];
 		$now = new DateTime('now');
 		$now->setTime(0, 0, 0);
+
+		$before_start_mod = '+'.OptionsModel::getNumberWeeksBeforeStartCourse().' weeks';
+		$after_start_mod = '-'.OptionsModel::getNumberWeeksAfterStartCourse().' weeks';
+
 		$start_ts = clone $now;
-		$start_ts->modify('-2 weeks'); // за 2 недели после старата
+		$start_ts->modify($after_start_mod); // за n недель после старта
 		$end_ts = clone $now;
-		$end_ts->modify('+3 months'); // за 3 месяца до старта
+		$end_ts->modify($before_start_mod); // за n недель до старта
 
 		$bind = [
 			$course, 
 			$start_ts->format('Y-m-d 00:00:00'), 
 			$end_ts->format('Y-m-d 00:00:00'), 
-			$now->format('Y-m-d 00:00:00')
+			$now->format('Y-m-d 00:00:00'),
+			self::TYPE_STANDART
 		];
 
 		$sql = 'SELECT 
@@ -287,7 +297,7 @@ class GroupsModel extends APP_Model
 					deleted = 0 AND 
 					(ts > ? AND ts < ?) AND 
 					ts_end > ? AND 
-					type NOT IN(\'vip\', \'private\')
+					type = ? 
 				ORDER BY 
 					ts ASC';
 
@@ -299,10 +309,7 @@ class GroupsModel extends APP_Model
 
 			foreach($result as &$val)
 			{
-				$val['ts_timestamp'] = strtotime($val['ts']);
-				$val['ts_end_timestamp'] = strtotime($val['ts_end']);
-				$val['ts_formated'] = date(DATE_FORMAT_SHORT, $val['ts_timestamp']);
-				$val['ts_end_formated'] = date(DATE_FORMAT_SHORT, $val['ts_end_timestamp']);
+				$this->prepareItem($val);
 			}
 		}
 
@@ -342,6 +349,17 @@ class GroupsModel extends APP_Model
 			if(array_key_exists('img', $val))
 				$val['img'] = empty($val['img'])?IMG_DEFAULT_16_9:'/'.$val['img'];
 		}
+	}
+
+	public function prepareItem(&$item)
+	{
+		if(!is_array($item))
+			return;
+
+		$item['ts_timestamp'] = strtotime($item['ts']);
+		$item['ts_end_timestamp'] = strtotime($item['ts_end']);
+		$item['ts_formated'] = date(DATE_FORMAT_SHORT, $item['ts_timestamp']);
+		$item['ts_end_formated'] = date(DATE_FORMAT_SHORT, $item['ts_end_timestamp']);
 	}
 
 	// карта курсов (для админки)

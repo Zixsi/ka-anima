@@ -29,29 +29,58 @@ class PayHelper extends APP_Model
 		return $result;
 	}
 
-	// производим оплату
+	// создаем транзакцию оплаты
 	public function pay($data)
 	{
-		// создаем транзакцию оплаты
-		// $tx = [
-		// 	'user' => $data['user'],
-		// 	'type' => TransactionsModel::TYPE_IN,
-		// 	'amount' => $data['price'],
-		// 	'description' => 'PaySystem',
-		// 	'data' => json_encode($data)
-		// ];
+		$tx = [
+			'user' => $data['user'],
+			'type' => TransactionsModel::TYPE_IN,
+			'amount' => $data['price'],
+			'description' => $this->makePayDescription($data),
+			'data' => json_encode($data)
+		];
 
-		// if(($id = $this->TransactionsHelper->add($tx)) === false)
-		// 	throw new Exception('ошибка создания транзакции', 1);
+		if(($id = $this->TransactionsHelper->add($tx)) === false)
+			throw new Exception('ошибка создания транзакции', 1);
+
+		$base_url = $this->config->item('base_url');
+		$tx_item = $this->TransactionsModel->getByID($id);
 		
-		// $tx_item = $this->TransactionsModel->getByID($id);
-		// // если транзакция уже прошла проводим 
-		// if($tx_item['status'] === TransactionsModel::STATUS_SUCCESS)
-		// 	return $this->subscr($data);
+		// если цена 0.00, запускаем обработку данных транзакции
+		if((int) $tx['amount'] === 0)
+		{
+			if($this->TransactionsHelper->processingData($tx_item['data']))
+				$this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_SUCCESS]);
 
-		// return $tx_item['hash'];
+			header('Location: '.$base_url.PAY_RETURN_URL);
+		}
+		else
+		{
+			try
+			{
+				// обработка транзакций системой оплаты
+				if(($system = $this->PaySystem->select(PaySystem::YANDEX_KASSA)) === null)
+					throw new Exception('система оплаты неопледелена', 1);
 
-		throw new Exception('ошибка создания транзакции', 1);
+				$system->setReturnUrl($base_url.PAY_RETURN_URL);
+				$system->setBase($data['price'], 'Оплата услуг '.$this->config->item('project_name'));
+				$system->setItems($data['list']);
+
+				$user = $this->Auth->user();
+				$system->setCustomer($user['full_name'], $user['email']);
+				$system->setMeta(['hash' => $tx_item['hash']]);
+
+				$system->run();
+				$this->TransactionsModel->update($id, ['pay_system_hash' => $system->getOrderId()]);
+
+				header('Location: '.$system->getPayUrl());
+			}
+			catch(Exception $e)
+			{
+				$this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_ERROR]);
+				throw new Exception($e->getMessage(), $e->getCode());
+			}
+		}
 	}
 
 	// разобрать параметры обновления
@@ -67,6 +96,9 @@ class PayHelper extends APP_Model
 			$payData->addRow($val['description'], $val['price']);
 		}
 		$payData->setPeriod($res['ts_start'], $res['ts_end']);
+		$payData->setParams([
+			'amount' => $res['amount']
+		]);
 		$payData->calcPrice();
 
 		return $payData->toArray();
@@ -75,14 +107,20 @@ class PayHelper extends APP_Model
 	// разобрать параметры новой подписки
 	private function parseNew($data)
 	{
-		if(($group_item = $this->GroupsModel->getByCode($data['group'])) === false)
-			throw new Exception('неверный код группы', 1);
+		if(($course_item = $this->CoursesModel->getByCode(($data['course'] ?? null))) === false)
+			throw new Exception('неверный код курса', 1);
 
-		if(!array_key_exists($data['type'], $this->SubscriptionModel::TYPES))
+		if(!array_key_exists(($data['type'] ?? null), $this->SubscriptionModel::TYPES))
 			throw new Exception('неверный тип подписки', 1);
 
-		if(!in_array($data['period'], $this->SubscriptionModel::PERIOD_SUBSCR))
+		if(!in_array(($data['period'] ?? null), $this->SubscriptionModel::PERIOD_SUBSCR))
 			throw new Exception('неверный период подписки', 1);
+
+		// TODO проверить есть ли у пользователя уже активная подписка VIP
+
+		$data['group'] = $this->GroupsHelper->makeCode($course_item['code'], $data['type'], date('dmy', strtotime($data['group'] ?? 0)));
+		if(($group_item = $this->GroupsModel->getByCode($data['group'])) === false)
+			throw new Exception('неверный код группы', 1);
 
 		// debug($group_item); die();
 
@@ -90,7 +128,6 @@ class PayHelper extends APP_Model
 		$data['group'] = $group_item['id'];
 		$group = $this->SubscriptionHelper->prepareGroup($data);
 		$group['data'] = json_decode($group['data'], true);
-		// debug($group); die();
 
 		$payData = new PayData(PayData::OBJ_TYPE_COURSE, $group_item['id'], $data['type']);
 		$payData->setName($group['description']);
@@ -98,12 +135,30 @@ class PayHelper extends APP_Model
 		$payData->setPeriod($group['ts_start'], $group['ts_end']);
 		$payData->setParams([
 			'amount' => $group['amount'],
-			'price' => $group['price'],
+			'price' => ($group['data']['price'] ?? null),
 			'subscr_type' => $group['subscr_type']
 		]);
 		$payData->setNew(true);
 		$payData->calcPrice();
 
 		return $payData->toArray();
+	}
+
+	// описание оплаты из списка
+	private function makePayDescription($data)
+	{
+		$result = [];
+		if(isset($data['list']) && is_array($data['list']) && count($data['list']))
+		{
+			foreach($data['list'] as $val)
+			{
+				$result[] = $val['description'];
+			}
+		}
+
+		if(empty($result))
+			$result[] = $data['name'].' '.date(DATE_FORMAT_SHORT, strtotime($data['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($data['ts_end']));
+
+		return implode(' + ', $result);
 	}
 }

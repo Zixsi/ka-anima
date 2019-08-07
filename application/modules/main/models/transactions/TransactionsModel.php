@@ -59,9 +59,7 @@ class TransactionsModel extends APP_Model
 		}
 
 		if($res = $this->db->get(self::TABLE))
-		{
 			return $res->result_array();
-		}
 
 		return [];
 	}

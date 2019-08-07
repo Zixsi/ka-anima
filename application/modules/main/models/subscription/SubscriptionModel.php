@@ -41,6 +41,7 @@ class SubscriptionModel extends APP_Model
 
 	public function add($data = [])
 	{
+		$data['hash'] = $this->makeHash();
 		if($this->db->insert(self::TABLE, $data))
 			return $this->db->insert_id();
 
@@ -302,23 +303,8 @@ class SubscriptionModel extends APP_Model
 		return [];
 	}
 
-	
-	// продление подписки
-	public function renew($id, $data = [])
+	public function makeHash()
 	{
-		if($item = $this->getByID($id))
-		{
-			$data['amount'] = ($data['amount'] ?? 0);
-			$params = [
-				'ts_end' => $data['ts_end'],
-				'amount' => (float) $item['amount'] - $data['amount']
-			];
-
-			//action(UserActionsModel::ACTION_COURSE_RENEW_SUBSCR, ['group_code' => $service['code'], 'period' => $period]);
-
-			return $this->update($id, $params);
-		}
-
-		return false;
+		return md5(microtime(true));
 	}
 }

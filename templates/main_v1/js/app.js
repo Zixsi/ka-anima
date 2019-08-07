@@ -279,10 +279,10 @@ function appListener()
 {	
 	datepiker();
 
-	$('.course-card--groups .btn-date-change input[type="radio"]').on('change', function(){
-		$('.pricing-table input[name="group"]').val($(this).val());
-		$('.pricing-table-wrapper').show();
-	});
+	// $('.course-card--groups .btn-date-change input[type="radio"]').on('change', function(){
+	// 	$('.pricing-table input[name="group"]').val($(this).val());
+	// 	$('.pricing-table-wrapper').show();
+	// });
 
 	$('.pricing-table .period-checker input[type="radio"]').on('change', function(){
 		$(this).closest('form').find('.price-value').removeClass('active').end().find('.price-value.price-value--' + $(this).val()).addClass('active');

@@ -12,9 +12,4 @@ class Index extends APP_Controller
 	{
 		var_dump('INDEX CLI');
 	}
-
-	public function test()
-	{
-		var_dump('TEST CLI');
-	}
 }

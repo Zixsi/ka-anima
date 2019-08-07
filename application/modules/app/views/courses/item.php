@@ -6,12 +6,14 @@
 				<img src="<?=$item['img']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
 				<p><?=$item['description']?></p>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
-				<ul>
-					<?foreach($lectures as $val):?>
-						<li><?=$val['name']?></li>
-					<?endforeach;?>
-				</ul>
-				<?//debug($item);?>
+				<?if(($lectures ?? null)):?>
+					<ul>
+						<?foreach($lectures as $val):?>
+							<li><?=$val['name']?></li>
+						<?endforeach;?>
+					</ul>
+				<?endif;?>
+				<?//debug($offers);?>
 				<?//$item['free']?>
 				<div class="clearfix"></div>
 			</div>
@@ -33,25 +35,24 @@
 		<div class="card course-card--groups">
 			<div class="card-body pb-3">
 				<h3 class="card-title">Группы</h3>
-				<?foreach($offers as $val):?>
-					<span class="btn-date-change">
+				<?foreach($offers as $key => $val):?>
+					<a href="./?date=<?=$val['ts_formated']?>" class="btn-date-change">
 						<div class="title"><?=$val['ts_formated']?> - <?=$val['ts_end_formated']?></div>
-						<input type="radio" name="group" value="<?=$val['code']?>" id="group_<?=$val['code']?>">
-						<label for="group_<?=$val['code']?>" class="btn btn-secondary">Выбрать</label>
-					</span>
+						<span for="group_<?=$val['code']?>" class="btn btn-<?=($selected_offer_index === $key)?'primary':'secondary'?>">Выбрать</span>
+					</a>
 				<?endforeach;?>
 			</div>
 		</div>
 	</div>
 </div>
 
-<div class="containerr text-center pricing-table-wrapper pt-5">
+<div class="container text-center pricing-table-wrapper pt-5">
 	<div class="row pricing-table">
-		<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
+		<div class="col-md-6 col-xl-4 <?=($item['only_standart'])?'offset-md-3 offset-xl-4':''?> grid-margin stretch-card pricing-card">
 			<form action="/pay/" method="get" class="card border-primary border pricing-card-body">
 				<input type="hidden" name="action" value="new">
 				<input type="hidden" name="course" value="<?=$item['code']?>">
-				<input type="hidden" name="group" value="">
+				<input type="hidden" name="group" value="<?=($offers[$selected_offer_index]['ts_formated'] ?? '')?>">
 				<input type="hidden" name="type" value="standart">
 				<div class="text-center pricing-card-head">
 					<h3>Стандарт</h3>
@@ -66,16 +67,20 @@
 							<div class="col-12">
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="full" checked="">
-										Полная
-										<i class="input-helper"></i>
+										<div class="radio-input-wrap">
+											<input type="radio" class="form-check-input" name="period" value="full" checked="">
+											<i class="input-helper"></i>
+										</div>
+										<span>Полная</span>
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="month">
-										Помесячная
-										<i class="input-helper"></i>
+										<div class="radio-input-wrap">
+											<input type="radio" class="form-check-input" name="period" value="month">
+											<i class="input-helper"></i>
+										</div>
+										<span>Помесячная</span>
 									</label>
 								</div>
 							</div>
@@ -86,16 +91,20 @@
 							<div class="col-12">
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="full" checked="">
-										Полная
-										<i class="input-helper"></i>
+										<div class="radio-input-wrap">
+											<input type="radio" class="form-check-input" name="period" value="full" checked="true">
+											<i class="input-helper"></i>
+										</div>
+										<span>Полная</span>
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period"  disabled="" value="month">
-										Помесячная
-										<i class="input-helper"></i>
+										<div class="radio-input-wrap">
+											<input type="radio" class="form-check-input" name="period" value="month" disabled="true">
+											<i class="input-helper"></i>
+										</div>
+										<span>Помесячная</span>
 									</label>
 								</div>
 							</div>
@@ -113,43 +122,77 @@
 					<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 				</ul>
 				<div class="wrapper">
-					<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+					<?if($selected_offer_index !== null):?>
+						<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+					<?else:?>
+						<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
+					<?endif;?>
 				</div>
 			</form>
 		</div>
 		<?if(!$item['only_standart']):?>
 			<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
-				<form action="/pay/" method="get" class="card border border-success pricing-card-body">
+				<form action="/pay/" method="get" class="card border border-primary pricing-card-body">
 					<input type="hidden" name="action" value="new">
 					<input type="hidden" name="course" value="<?=$item['code']?>">
-					<input type="hidden" name="group" value="">
+					<input type="hidden" name="group" value="<?=($offers[$selected_offer_index]['ts_formated'] ?? '')?>">
 					<input type="hidden" name="type" value="advanced">
 					<div class="text-center pricing-card-head">
-						<h3 class="text-success">Расширенный</h3>
+						<h3>Расширенный</h3>
 						<p>Хочу в группу!</p>
-						<h1 class="font-weight-normal mb-4">
-							<span class="price-value price-value--full active"><?=number_format($item['price']['advanced']['full'], 2, '.', ' ')?></span>
-							<span class="price-value price-value--month"><?=number_format($item['price']['advanced']['month'], 2, '.', ' ')?></span>
-							&nbsp;<i class="fa fa-rub"></i>
-						</h1>
-						<div class="row mb-4 period-checker">
-						<div class="col-12">
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="full" checked="">
-										Полная
-										<i class="input-helper"></i>
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="month">
-										Помесячная
-										<i class="input-helper"></i>
-									</label>
+						<?if((float) ($item['price']['advanced']['full'] ?? 0) > 0 && (float) ($item['price']['advanced']['month'] ?? 0) > 0):?>
+							<h1 class="font-weight-normal mb-4">
+								<span class="price-value price-value--full active"><?=number_format($item['price']['advanced']['full'], 2, '.', ' ')?></span>
+								<span class="price-value price-value--month"><?=number_format($item['price']['advanced']['month'], 2, '.', ' ')?></span>
+								&nbsp;<i class="fa fa-rub"></i>
+							</h1>
+							<div class="row mb-4 period-checker">
+								<div class="col-12">
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="full" checked="">
+												<i class="input-helper"></i>
+											</div>
+											<span>Полная</span>
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="month">
+												<i class="input-helper"></i>
+											</div>
+											<span>Помесячная</span>
+										</label>
+									</div>
 								</div>
 							</div>
-						</div>
+						<?else:?>
+							<h1 class="font-weight-normal mb-4">FREE</h1>
+							<div class="row mb-4 period-checker">
+								<div class="col-12">
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="full" checked="true">
+												<i class="input-helper"></i>
+											</div>
+											<span>Полная</span>
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="month" disabled="true">
+												<i class="input-helper"></i>
+											</div>
+											<span>Помесячная</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						<?endif;?>
 					</div>
 					<ul class="list-unstyled plan-features">
 						<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
@@ -162,58 +205,74 @@
 						<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 					</ul>
 					<div class="wrapper">
-						<button type="submit" class="btn btn-success btn-block">Подписаться</button>
+						<?if($selected_offer_index !== null):?>
+							<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+						<?else:?>
+							<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
+						<?endif;?>
 					</div>
 				</form>
 			</div>
-			<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
-				<form action="/pay/" method="get" class="card border border-primary pricing-card-body">
-					<input type="hidden" name="action" value="new">
-					<input type="hidden" name="course" value="<?=$item['code']?>">
-					<input type="hidden" name="group" value="">
-					<input type="hidden" name="type" value="vip">
-					<div class="text-center pricing-card-head">
-						<h3>VIP</h3>
-						<p>Нужен наставник!</p>
-						<h1 class="font-weight-normal mb-4">
-							<span class="price-value price-value--full active"><?=number_format($item['price']['vip']['full'], 2, '.', ' ')?></span>
-							<span class="price-value price-value--month"><?=number_format($item['price']['vip']['month'], 2, '.', ' ')?></span>
-							&nbsp;<i class="fa fa-rub"></i>
-						</h1>
-						<div class="row mb-4 period-checker">
-							<div class="col-12">
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="full" checked="">
-										Полная
-										<i class="input-helper"></i>
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="period" value="month">
-										Помесячная
-										<i class="input-helper"></i>
-									</label>
+
+			<?if((float) ($item['price']['vip']['full'] ?? 0) > 0 && (float) ($item['price']['vip']['month'] ?? 0) > 0):?>
+				<div class="col-md-6 col-xl-4 grid-margin stretch-card pricing-card">
+					<form action="/pay/" method="get" class="card border border-primary pricing-card-body">
+						<input type="hidden" name="action" value="new">
+						<input type="hidden" name="course" value="<?=$item['code']?>">
+						<input type="hidden" name="group" value="<?=($vip_offer['ts_formated'] ?? '')?>">
+						<input type="hidden" name="type" value="vip">
+						<div class="text-center pricing-card-head">
+							<div class="badge badge-danger info--date-start"><?=($vip_offer['ts_formated'] ?? '')?></div>
+							<h3>VIP</h3>
+							<p>Нужен наставник!</p>
+							<h1 class="font-weight-normal mb-4">
+								<span class="price-value price-value--full active"><?=number_format($item['price']['vip']['full'], 2, '.', ' ')?></span>
+								<span class="price-value price-value--month"><?=number_format($item['price']['vip']['month'], 2, '.', ' ')?></span>
+								&nbsp;<i class="fa fa-rub"></i>
+							</h1>
+							<div class="row mb-4 period-checker">
+								<div class="col-12">
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="full" checked="">
+												<i class="input-helper"></i>
+											</div>
+											<span>Полная</span>
+										</label>
+									</div>
+									<div class="form-check">
+										<label class="form-check-label">
+											<div class="radio-input-wrap">
+												<input type="radio" class="form-check-input" name="period" value="month">
+												<i class="input-helper"></i>
+											</div>
+											<span>Помесячная</span>
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<ul class="list-unstyled plan-features">
-						<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
-						<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
-						<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
-						<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
-						<li class="checked"><i class="fa fa-times"></i>Личные онлайн встречи</li>
-						<li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
-						<li><i class="fa fa-times"></i>Начало в назначенную дату</li>
-						<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
-					</ul>
-					<div class="wrapper">
-						<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
-					</div>
-				</form>
-			</div>
+						<ul class="list-unstyled plan-features">
+							<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
+							<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
+							<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
+							<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
+							<li class="checked"><i class="fa fa-times"></i>Личные онлайн встречи</li>
+							<li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
+							<li><i class="fa fa-times"></i>Начало в назначенную дату</li>
+							<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
+						</ul>
+						<div class="wrapper">
+							<?if($vip_offer !== null):?>
+								<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+							<?else:?>
+								<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
+							<?endif;?>
+						</div>
+					</form>
+				</div>
+			<?endif;?>
 		<?endif;?>
 	</div>
 </div>

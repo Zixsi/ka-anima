@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'imggen', 'main/jsonrpc', 'main/jsonajax', 'wall');
+$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'imggen', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'main/extensions', 'main/action');
+$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'text', 'main/extensions', 'main/action');
 
 /*
 | -------------------------------------------------------------------
@@ -144,6 +144,11 @@ $autoload['model'] = [
 	'main/courses/CoursesHelper', 
 	'main/courses/CoursesGroupsModel', 
 
+	'main/lectures/LecturesHelper', 
+	'main/lectures/LecturesModel', 
+	'main/lectures/LecturesGroupModel', 
+	'main/lectures/LecturesHomeworkModel', 
+
 	'main/groups/GroupsModel', 
 	'main/groups/GroupsHelper', 
 
@@ -162,11 +167,8 @@ $autoload['model'] = [
 	'main/news/NewsModel',
 	'main/email/EmailHelper',
 	'main/pay/PayHelper',
-	// 'main/pay/PayData',
+	'main/pay/PaySystem',
 
-	'main/LecturesModel', 
-	'main/LecturesGroupModel', 
-	'main/LecturesHomeworkModel', 
 	'main/VideoModel',
 	'main/StreamsModel',
 	'main/FaqModel',

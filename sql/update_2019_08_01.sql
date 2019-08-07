@@ -1,0 +1,1 @@
+ALTER TABLE `transactions` ADD `pay_system_hash` VARCHAR(80) NULL AFTER `hash`;

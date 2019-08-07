@@ -13,11 +13,14 @@ class Course extends APP_Controller
 		// 
 	}
 
-	// Добавляем курс в список доступных для подписки
+	// добавление курса
 	// php index.php cli course createGroups
 	public function createGroups()
 	{
-		// empty
+		echo 'create groups => Start'.PHP_EOL;
+		
+
+		echo 'create groups => End'.PHP_EOL;
 	}
 
 	// Обновление ссылок на видео

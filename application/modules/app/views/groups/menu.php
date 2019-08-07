@@ -1,10 +1,7 @@
 <?php
 if(!isset($not_viewed))
 {
-	// var_dump($this->user_id);
-	// var_dump($group['id']); die();
-
-	$not_viewed = $this->ReviewModel->notViewedItems((int) $this->user_id, (int) $group['id']);
+	$not_viewed = $this->ReviewModel->notViewedItems((int) $this->user['id'], (int) $group['id']);
 }
 ?>
 <div class="w-100"></div>

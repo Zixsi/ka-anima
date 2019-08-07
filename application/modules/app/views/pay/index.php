@@ -1,7 +1,7 @@
 <?//debug($item); die();?>
 <?alert_error($error);?>
 
-<?if($item):?>
+<?if(($item ?? null)):?>
 	<div class="card px-2">
 		<div class="card-body">
 			<div class="container-fluid d-flex justify-content-between">
