@@ -43,24 +43,34 @@ class SystemHook
 		// var_dump($check);
 		// var_dump($user); die();
 
-		if($d == 'admin')
-		{
-			if(!$check)
-				redirect('/auth/');
-			elseif($check && $c === 'auth' && $a !== 'logout')
-				redirect('/admin/');
-			elseif($check && intval($user['role']) !== 5)
-				redirect('/');
-		}
-		else
-		{
-			$ignored = ['ajax'];
+		$ignored = ['auth', 'ajax'];
 
-			if(!$check && $c !== 'auth' && !in_array($c, $ignored))
-				redirect('/auth/');
-			elseif($check && intval($user['role']) === 5 && $a !== 'logout')
+		// если не авторизован и
+		// контроллер не в списке игнора или
+		// контроллер авторизации и метод выхода
+		// то делаем редирект на авторизацию
+		if(!$check && (!in_array($c, $ignored) || ($c === 'auth' && $a === 'logout')))
+			redirect('/auth/');
+
+		// если авторизован
+		if($check)
+		{
+			$is_admin = $this->CI->Auth->isAdmin();
+
+			// если контроллер авторизации, но не страница выхода
+			if($c === 'auth' && $a !== 'logout')
+			{
+				if($is_admin)
+					redirect('/admin/');
+				else
+					redirect('/');
+			}
+
+			// если админ но не раздел админки и не страница игнора
+			if($is_admin && $d !== 'admin' && !in_array($c, $ignored))
 				redirect('/admin/');
-			elseif($check && $c === 'auth' && $a !== 'logout')
+			// если не админ но раздел админки
+			elseif(!$is_admin && $d === 'admin')
 				redirect('/');
 		}
 	}

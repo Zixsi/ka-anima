@@ -22,6 +22,9 @@ data/lectures/*
 !data/homework
 data/homework/*
 !data/homework/dummy
+data/users/*
+!data/users/dummy
+
 
 # IDE Files
 #-------------------------

@@ -25,28 +25,23 @@
 								<?endif;?>
 							</div>
 						</div>
-						<div class="py-4">
-							<p class="clearfix">
-								<span class="float-left">Дата рождения</span>
-								<span class="float-right text-muted"><?=date(DATE_FORMAT_SHORT, strtotime($user['birthday']))?></span>
-							</p>
-							<p class="clearfix">
-								<span class="float-left">Телефон</span>
-								<span class="float-right text-muted"><?=$user['phone']?></span>
-							</p>
-							<p class="clearfix">
-								<span class="float-left">E-mail</span>
-								<span class="float-right text-muted"><?=$user['email']?></span>
-							</p>
-						</div>
+						<?if($owner || !$this->Auth->isUser()):?>
+							<div class="pt-4">
+								<p class="clearfix">
+									<span class="float-left">Дата рождения</span>
+									<span class="float-right text-muted"><?=date(DATE_FORMAT_SHORT, strtotime($user['birthday']))?></span>
+								</p>
+								<p class="clearfix">
+									<span class="float-left">Телефон</span>
+									<span class="float-right text-muted"><?=$user['phone']?></span>
+								</p>
+								<p class="clearfix">
+									<span class="float-left">E-mail</span>
+									<span class="float-right text-muted"><?=$user['email']?></span>
+								</p>
+							</div>
+						<?endif;?>
 					</div>
-					<?/*
-					<div class="col-lg-8">
-						<div class="text-center">
-							<h3>Тут поселился радужный пони</h3>
-							<img src="<?=IMG_UNICORN?>">
-						</div>
-					</div>*/?>
 				</div>
 			</div>
 		</div>

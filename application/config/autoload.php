@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'imggen', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa');
+$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa');
 
 /*
 | -------------------------------------------------------------------
@@ -134,6 +134,7 @@ $autoload['language'] = array();
 */
 $autoload['model'] = [
 	'main/users/UserModel', 
+	'main/users/UsersHelper', 
 	'main/users/AuthHelper' => 'Auth', 
 	'main/users/UserActionsModel',
 	'main/users/UserActionsHelper',

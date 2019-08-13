@@ -13,20 +13,32 @@ class Groups extends APP_Controller
 
 	public function index()
 	{
-		$data = [];
-
-		// для преродавателя
 		if($this->Auth->isTeacher())
-		{
-			$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false);
-			$this->GroupsHelper->prepareListForTeacher($data['items']);
-			$this->load->lview('groups/index_teacher', $data);
-		}
-		else // для ученика
-		{
-			$data['items'] = $this->SubscriptionModel->groupsList($this->user['id']);
-			$this->load->lview('groups/index', $data);
-		}
+			$this->indexTeacher();
+		else
+			$this->indexUser();
+	}
+
+	// список групп для преподователя
+	private function indexTeacher()
+	{
+		$data = [];
+		$filter = [
+			'with_subscribed' => true, // с подписанными пользователями
+		];
+		$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false, $filter);
+		$this->GroupsHelper->prepareListForTeacher($data['items'], $filter);
+
+		$this->load->lview('groups/index_teacher', $data);
+	}
+
+	// список групп пользователя
+	private function indexUser()
+	{
+		$data = [];
+		$data['items'] = $this->SubscriptionModel->groupsList($this->user['id']);
+		
+		$this->load->lview('groups/index_user', $data);
 	}
 
 	public function item($code, $lecture = 0)
@@ -47,8 +59,7 @@ class Groups extends APP_Controller
 		$params = $this->input->get(null, true);
 
 		// ученики группы
-		$type = ($data['item']['type'] === 'standart')?'advanced':$data['item']['type'];
-		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
+		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $data['item']['type']);
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
 		// дз ученика
@@ -67,7 +78,7 @@ class Groups extends APP_Controller
 		$data['wall'] = $this->WallModel->list($data['item']['id']);
 
 		// debug($data); die();
-		$this->load->lview('groups/item', $data);
+		$this->load->lview('groups/item_teacher', $data);
 	}
 
 	// главная страница группы для ученика
@@ -215,7 +226,8 @@ class Groups extends APP_Controller
 			$this->load->library(['youtube']);
 			$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
 			$data['item']['started'] = boolval(time() >= strtotime($data['item']['ts']));
-			//debug($data['item']);
+
+			$data['item']['chat'] = $this->youtube->getLiveChatUrl($data['item']['video_code']);
 		}
 
 		$this->load->lview('groups/stream', $data);
@@ -282,15 +294,12 @@ class Groups extends APP_Controller
 				{
 					$val['homework_fail'] = false;
 					if($val['active'] == 1 && $val['type'] == 0 && !in_array($val['id'], $list))
-					{
 						$val['homework_fail'] = true;
-					}
 				}
 			}
 		}
 	}
 	
-
 	private function uploadHomeWork(&$data)
 	{
 		$comment = $this->input->post('text', true);
@@ -325,9 +334,7 @@ class Groups extends APP_Controller
 		if(is_array($data))
 		{
 			foreach($data as $val)
-			{
 				$result[] = $val['id'];
-			}
 		}
 
 		return $result;

@@ -47,8 +47,14 @@ class Profile extends APP_Controller
 				if($this->form_validation->run('profile_edit') == FALSE)
 					throw new Exception($this->form_validation->error_string(), 1);
 
+				$this->UsersHelper->prepareProfileImg('img');
+
 				if($id = $this->UserModel->updateProfile($data['user']['id'], $form_data))
+				{
+					$user = $this->UserModel->getByID($data['user']['id']);
+					$this->Auth->setUser($user);
 					header('Location: ../');
+				}
 			}
 			catch(Exception $e)
 			{

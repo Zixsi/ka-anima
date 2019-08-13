@@ -33,3 +33,15 @@ $config['upload_lectures'] = [
 	'encrypt_name' => true,
 	'remove_spaces' => true
 ];
+
+
+// изображение 
+$config['upload_user_profile'] = [
+	'upload_path' => './data/users/',
+	'allowed_types' => 'jpeg|jpg|png',
+	'max_size' => 1024, // 1 мб
+	'max_width' => 1024,
+	'max_height' => 1024,
+	'encrypt_name' => true,
+	'remove_spaces' => true
+];

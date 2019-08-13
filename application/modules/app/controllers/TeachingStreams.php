@@ -38,7 +38,11 @@ class TeachingStreams extends APP_Controller
 		}
 
 		$data['error'] = $this->StreamsModel->getLastError();
-		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
+		$filter = [
+			'with_subscribed' => true, // с подписанными пользователями
+		];
+		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id'], true, $filter);
+
 		$data['csrf'] = cr_get_key();
 
 		$this->load->lview('teaching_streams/add', $data);
@@ -67,7 +71,10 @@ class TeachingStreams extends APP_Controller
 		}
 
 		$data['error'] = $this->StreamsModel->getLastError();
-		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id']);
+		$filter = [
+			'with_subscribed' => true, // с подписанными пользователями
+		];
+		$data['groups'] = $this->GroupsModel->getTeacherGroups($this->user['id'], true, $filter);
 		$data['csrf'] = cr_get_key();
 
 		$this->load->lview('teaching_streams/edit', $data);
@@ -82,6 +89,7 @@ class TeachingStreams extends APP_Controller
 		$this->load->library(['youtube']);
 
 		$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
+		$data['item']['chat'] = $this->youtube->getLiveChatUrl($data['item']['video_code']);
 		//debug($data['item']);
 
 		$this->load->lview('teaching_streams/item', $data);

@@ -210,25 +210,53 @@ class GroupsHelper extends APP_Model
 	// подготовить список групп для преподавателя
 	public function prepareListForTeacher(&$data = [])
 	{
-		// получаем идентификаторы групп
-		$ids = [];
-		foreach($data as $val)
-		{
-			$ids[] = $val['id'];
-		}
-
-		// получаем информацию по кол-ву подписок 
-		$subscr_stat = [];
-		if(count($ids))
-			$subscr_stat = $this->SubscriptionModel->statForIds($ids);
+		$result = [];
 
 		// проставляем информацию для каждой группы
-		foreach($data as &$val)
+		foreach($data as $val)
 		{
-			$val['subscr_cnt'] = 0;
-			if(array_key_exists($val['id'], $subscr_stat))
-				$val['subscr_cnt'] = $subscr_stat[$val['id']]['cnt'];
+			if(!isset($result[$val['status']]))
+			{
+				$info = $this->statusInfo($val['status']);
+				$info['status'] = $val['status'];
+				$info['items'] = [];
+				$result[$val['status']] = $info;
+			}
+
+			$result[$val['status']]['items'][] = $val;
 		}
+
+		ksort($result);
+		$result = array_values($result);
+		$data = $result;
+	}
+
+	public function statusInfo($value)
+	{
+		$result = null;
+
+		switch($value)
+		{
+			case -1:
+				$result = [
+					'text' => 'Завершен',
+					'class' => 'secondary'
+				];
+				break;
+			case 1:
+				$result = [
+					'text' => 'Скоро',
+					'class' => 'warning'
+				];
+				break;
+			default:
+				$result = [
+					'text' => 'В процессе',
+					'class' => 'success'
+				];
+		}
+
+		return $result;
 	}
 
 	// код группы

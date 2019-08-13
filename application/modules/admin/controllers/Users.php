@@ -26,10 +26,8 @@ class Users extends APP_Controller
 		if(($data['item'] = $this->UserModel->getByID($id)) === false)
 			header('Location: ../');
 		$data['roles'] = UserModel::ROLES_NAME;
-		$data['balance'] = $this->TransactionsModel->balanceUser($id);
 		$data['subscribes'] = $this->SubscriptionModel->byUser($id);
-		$data['transactions']['in'] = $this->TransactionsModel->listUserTxByType($id, 0);
-		$data['transactions']['out'] = $this->TransactionsModel->listUserTxByType($id, 1);
+		$data['transactions'] = $this->TransactionsHelper->listByUser($id);
 		$data['streams'] = $this->StreamsModel->list($id, []);
 		$data['actions'] = $this->UserActionsModel->listByUser($id);
 		

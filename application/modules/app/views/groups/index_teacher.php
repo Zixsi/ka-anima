@@ -2,50 +2,48 @@
 <?//debug($items);?>
 <div class="row">
 	<div class="col-12">
-		<div class="card">
-			<div class="card-body">
-				<?if($items):?>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<th>Группа</th>
-								<th class="text-right" width="100">Участники</th>							
-								<th class="text-right" width="100">Тип</th>							
-								<th class="text-right" width="100">Статус</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?foreach($items as $item):?>
+
+		<?if($items):?>
+			<ul class="nav nav-tabs" role="tablist">
+				<?foreach($items as $key => $item):?>
+					<li class="nav-item">
+						<a class="nav-link <?=($key === 0)?'active':''?>" id="menu-tab-<?=$key?>" data-toggle="tab" href="#tab-content-<?=$key?>" role="tab"><?=$item['text']?></a>
+					</li>
+				<?endforeach;?>
+			</ul>
+
+			<div class="tab-content" style="background-color: #fff;">
+				<?foreach($items as $key => $item):?>
+					<div class="tab-pane fade <?=($key === 0)?'active show':''?>" id="tab-content-<?=$key?>" role="tabpanel">
+						<table class="table table-striped">
+							<thead>
 								<tr>
-									<td>
-										<a href="/groups/<?=$item['code']?>/"><?=$item['name']?> <?=date(DATE_FORMAT_SHORT, $item['timestamp_start'])?> - <?=date(DATE_FORMAT_SHORT, $item['timestamp_end'])?></a>
-									</td>
-									<td class="text-right"><?=$item['subscr_cnt']?></td>
-									<td class="text-right">
-										<span class="badge badge-primary d-block"><?=$item['type']?></span>
-									</td>
-									<td class="text-right">
-										<?
-										switch($item['status'])
-										{
-											case -1:
-												echo '<span class="badge badge-secondary d-block">Завершен</span>';
-											break;
-											case 1:
-												echo '<span class="badge badge-warning d-block">Скоро</span>';
-											break;
-											default:
-												echo '<span class="badge badge-success d-block">В процессе</span>';
-											break;
-										}
-										?>
-									</td>
+									<th>Группа</th>
+									<th class="text-right" width="100">Участники</th>							
+									<th class="text-right" width="100">Тип</th>							
+									<th class="text-right" width="100">Статус</th>
 								</tr>
-							<?endforeach;?>
-						</tbody>
-					</table>
-				<?endif;?>
+							</thead>
+							<tbody>
+								<?foreach($item['items'] as $row):?>
+									<tr>
+										<td>
+											<a href="/groups/<?=$row['code']?>/"><?=$row['name']?> <?=date(DATE_FORMAT_SHORT, $row['timestamp_start'])?> - <?=date(DATE_FORMAT_SHORT, $row['timestamp_end'])?></a>
+										</td>
+										<td class="text-right"><?=$row['subscr_cnt']?></td>
+										<td class="text-right">
+											<span class="badge badge-primary d-block"><?=$row['type']?></span>
+										</td>
+										<td class="text-right">
+											<span class="badge badge-<?=$item['class']?> d-block"><?=$item['text']?></span>
+										</td>
+									</tr>
+								<?endforeach;?>
+							</tbody>
+						</table>
+					</div>
+				<?endforeach;?>
 			</div>
-		</div>
+		<?endif;?> 		
 	</div>
 </div>

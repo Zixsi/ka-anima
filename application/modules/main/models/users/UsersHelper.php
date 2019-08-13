@@ -108,4 +108,42 @@ class UsersHelper extends APP_Model
 
 		return true;
 	}
+
+	// подготовка изображения профиля перед установкой
+	public function prepareProfileImg($name)
+	{
+		if(empty(($_FILES[$name] ?? null)))
+			return false;
+
+		$this->load->config('upload');
+		$this->upload_config = $this->config->item('upload_user_profile');
+		$this->load->library('upload', $this->upload_config);
+
+		if($this->upload->do_upload($name) == false)
+			throw new Exception($this->upload->display_errors(), 1);
+
+
+		$img = $this->upload->data();
+		var_dump($img);
+
+		// get_rel_path($data['full_path'])
+
+		// $img['image_width']
+		// $img['image_height']
+		// $img['file_name']
+
+		// $config = [
+		// 	'image_library' => 'imagemagick',
+		// 	'source_image' => $img['full_path'],
+		// 	'x_axis' => 0,
+		// 	'y_axis' => 0
+		// ];
+
+		// $this->image_lib->initialize($config);
+		// if(!$this->image_lib->crop())
+		// 	throw new Exception($this->image_lib->display_errors(), 1);
+
+		
+		die();
+	}
 }

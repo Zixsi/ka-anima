@@ -16,7 +16,7 @@ if(!isset($not_viewed))
 		<?if($subscr['type'] !== 'standart'):?>
 			<li class="nav-item">
 				<a href="/groups/<?=$group['code']?>/review/" class="nav-link <?=($section == 'review')?'active':''?>" style="position: relative;">
-					<span>Лекции</span>
+					<span>Ревью</span>
 					<?if(count($not_viewed)):?>
 						<span class="badge bg-danger" style="color: #fff; background-color: #F9354C; position: absolute; top: -8px; right: 5px;">!</span>
 					<?endif;?>

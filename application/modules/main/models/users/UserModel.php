@@ -88,7 +88,6 @@ class UserModel extends APP_Model
 			$data['role_name'] = self::ROLES_NAME[$data['role']];
 
 		if(empty($data['img']))
-			// $data['img'] = $this->imggen->createIconSrc(['seed' => md5('user'.$data['id'])]);
 			$data['img'] = TEMPLATE_DIR.'/assets/profile_icon_male2.png';
 	}
 

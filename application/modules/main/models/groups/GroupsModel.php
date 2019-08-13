@@ -173,11 +173,11 @@ class GroupsModel extends APP_Model
 	}
 
 	// список групп преподавателя
-	public function getTeacherGroups($teacher, $active = true)
+	public function getTeacherGroups($teacher, $active = true, $filter = [])
 	{
 		$now = new DateTime('now');
 		$now_ts = $now->getTimestamp();
-		$bind = [$teacher];
+		$bind = [$teacher, self::TYPE_STANDART];
 		$sql_where = '';
 
 		// только автивные группы
@@ -188,15 +188,30 @@ class GroupsModel extends APP_Model
 			$sql_where .= ' AND (g.ts <= ? AND g.ts_end > ?) ';
 		}
 
+		if(($filter['with_subscribed'] ?? false))
+		{
+			$sql_where .= ' AND s.subscr_cnt > 0 ';
+		}
+
 		$sql = 'SELECT 
-					g.*, c.name
+					g.*, c.name, s.subscr_cnt 
 				FROM 
 					'.self::TABLE.' as g 
 				LEFT JOIN 
 					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					(SELECT 
+						target, count(*) as subscr_cnt  
+					FROM 
+						'.self::TABLE_SUBSCRIPTION.' 
+					WHERE 
+						target_type = \'course\' 
+					GROUP BY 
+						target) as s ON(s.target = g.id) 
 				WHERE 
 					g.deleted = 0 AND 
-					g.teacher = ? 
+					g.teacher = ? AND 
+					g.type != ?  
 					'.$sql_where.' 
 				ORDER BY 
 					g.ts_end ASC, g.ts ASC';
@@ -206,6 +221,7 @@ class GroupsModel extends APP_Model
 			$res = $res->result_array();
 			foreach($res as &$val)
 			{
+				$val['subscr_cnt'] = (int) $val['subscr_cnt'];
 				$val['timestamp_start'] = strtotime($val['ts']);
 				$val['timestamp_end'] = strtotime($val['ts_end']);
 				$val['status'] = ($val['timestamp_end'] > $now_ts)?(($val['timestamp_start'] > $now_ts)?1:0):-1;

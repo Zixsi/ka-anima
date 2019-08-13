@@ -235,6 +235,22 @@ function datepiker()
 	});
 }
 
+function datetimepicker()
+{
+	if($('.datetimepicker').length < 1)
+		return;
+
+	$.datetimepicker.setLocale('ru');
+
+	$('.datetimepicker').datetimepicker({
+		format: 'd.m.Y H:i:s',
+		formatDate: 'd.m.Y',
+		lang:'ru',
+		timepicker: true,
+		dayOfWeekStart: 1
+	});
+}
+
 
 //====================================================================//
 
@@ -278,6 +294,7 @@ function authListener()
 function appListener()
 {	
 	datepiker();
+	datetimepicker();
 
 	// $('.course-card--groups .btn-date-change input[type="radio"]').on('change', function(){
 	// 	$('.pricing-table input[name="group"]').val($(this).val());

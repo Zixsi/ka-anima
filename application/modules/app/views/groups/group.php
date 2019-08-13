@@ -32,10 +32,10 @@
 			<div class="card-body">
 				<h3 class="card-title">Лекции</h3>
 				<?if($lectures):?>
-					<?$lectures = array_chunk($lectures, ceil(count($lectures) / 2));?>
+					<?$lectures = array_chunk($lectures, ceil(count($lectures) / 3));?>
 					<div class="row">
 						<?foreach($lectures as $col):?>
-							<div class="col-6">
+							<div class="col-4">
 								<ul>
 									<?foreach($col as $val):?>
 										<li>

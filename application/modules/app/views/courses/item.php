@@ -6,12 +6,20 @@
 				<img src="<?=$item['img']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
 				<p><?=$item['description']?></p>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
-				<?if(($lectures ?? null)):?>
-					<ul>
-						<?foreach($lectures as $val):?>
-							<li><?=$val['name']?></li>
+
+				<?if($lectures):?>
+					<?$lectures = array_chunk($lectures, ceil(count($lectures) / 3));?>
+					<div class="row">
+						<?foreach($lectures as $col):?>
+							<div class="col-4">
+								<ul>
+									<?foreach($col as $val):?>
+										<li><?=$val['name']?></li>
+									<?endforeach;?>
+								</ul>
+							</div>
 						<?endforeach;?>
-					</ul>
+					</div>
 				<?endif;?>
 				<?//debug($offers);?>
 				<?//$item['free']?>

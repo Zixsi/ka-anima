@@ -100,7 +100,6 @@
 				</p>
 				<p>Дата регистрации: <?=date('d.m.Y H:i:s', strtotime($item['ts_created']))?></p>
 				<p>Дата последней активности: 00.00.000 00:00:00</p>
-				<p>Баланс: <?=number_format($balance, 2, '.', ' ')?></p>
 			</div>
 		</div>
 		<?if((int) $item['role'] == 0):?>
@@ -137,7 +136,7 @@
 										</td>
 										<td class="text-center">
 											<?if($val['amount'] > 0):?>
-												<?=number_format($val['amount'], 2, '.', '')?> руб.
+												<?=number_format($val['amount'], 2, '.', '')?> <?=PRICE_CHAR?>
 											<?else:?>
 												<span>- - -</span>
 											<?endif;?>
@@ -198,45 +197,10 @@
 		<div class="col-xs-6">
 			<div class="panel">
 				<div class="panel-heading">
-					<h3 class="panel-title">Пополнения счета</h3>
-				</div>
-				<div class="panel-body">
-					<?if($transactions['in']):?>
-						<table class="table table-striped">
-							<thead>
-								<tr>
-									<th>Сумма</th>
-									<th>Платежная система</th>
-									<th>Статус</th>
-									<th width="180">Дата</th>
-									<th width="100">Инвойс</th>
-								</tr>
-							</thead>
-							<tbody>
-							<?foreach($transactions['in'] as $item):?>
-								<tr>
-									<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
-									<td><?=$item['description']?></td>
-									<td>Завершен</td>
-									<td><?=$item['ts']?></td>
-									<td>
-										<a href="javascript:void(0);">Скачать</a>
-									</td>
-								</tr>
-							<?endforeach;?>
-							</tbody>
-						</table>
-					<?endif;?>
-				</div>
-			</div>
-		</div>
-		<div class="col-xs-6">
-			<div class="panel">
-				<div class="panel-heading">
 					<h3 class="panel-title">Платежи</h3>
 				</div>
 				<div class="panel-body">
-					<?if($transactions['out']):?>
+					<?if($transactions):?>
 						<table class="table table-striped">
 							<thead>
 								<tr>
@@ -246,11 +210,11 @@
 								</tr>
 							</thead>
 							<tbody>
-							<?foreach($transactions['out'] as $item):?>
+							<?foreach($transactions as $item):?>
 								<tr>
 									<td><?=$item['description']?></td>
-									<td><?=number_format($item['amount'], 2, '.', ' ')?>  руб.</td>
-									<td><?=$item['ts']?></td>
+									<td><?=(($item['type'] === TransactionsModel::TYPE_OUT)?'-':'+')?><?=$item['amount_f']?>  <?=PRICE_CHAR?></td>
+									<td><?=$item['ts_f']?></td>
 								</tr>
 							<?endforeach;?>
 							</tbody>

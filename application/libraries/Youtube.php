@@ -125,6 +125,17 @@ class Youtube
 		return false;
 	}
 
+
+	// Ссылка на чат трансляции
+	public function getLiveChatUrl($code)
+	{
+		$result = 'https://www.youtube.com/live_chat?v='.$code.'&embed_domain=';
+		// $host = 'https://school.cgaim.ru'.$_SERVER['REQUEST_URI'];
+		$host = 'http'.(is_https()?'s':'').'://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+
+		return $result.$host;
+	}
+
 	private function getUrlMap($data)
 	{
 		$result = [];
