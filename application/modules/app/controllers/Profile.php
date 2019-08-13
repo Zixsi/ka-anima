@@ -17,9 +17,7 @@ class Profile extends APP_Controller
 		$data = [];
 		$data['id'] = intval((intval($id) > 0)?$id:$this->user_id);
 		if(($data['user'] = $this->UserModel->getByID($data['id'])) === false)
-		{
 			show_404();
-		}
 		$data['owner'] = ($this->user_id === intval($data['user']['id']));
 		$data['is_friends'] = $this->UserFriendsModel->isFriends($this->user_id, $data['id']);
 		$data['friends_cnt'] = $this->UserFriendsModel->cnt($data['id']);
@@ -47,7 +45,8 @@ class Profile extends APP_Controller
 				if($this->form_validation->run('profile_edit') == FALSE)
 					throw new Exception($this->form_validation->error_string(), 1);
 
-				$this->UsersHelper->prepareProfileImg('img');
+				if($img = $this->UsersHelper->prepareProfileImg('img'))
+					$form_data['img'] = '/'.$img;
 
 				if($id = $this->UserModel->updateProfile($data['user']['id'], $form_data))
 				{

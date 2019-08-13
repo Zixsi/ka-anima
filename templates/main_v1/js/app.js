@@ -35,6 +35,8 @@ $(document).ready(function(){
 	}
 
 	$(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
+	$('[data-toggle="popover"]').popover();
+	$('[data-toggle="tooltip"]').tooltip();
 
 	authListener();
 	appListener();

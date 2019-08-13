@@ -48,7 +48,10 @@ class UserModel extends APP_Model
 			'name' => $data['name'] ?? '',
 			'lastname' => $data['lastname'] ?? '',
 			'birthday' => date('Y-m-d', strtotime($data['birthday'] ?? '')),
-			'phone' => $data['phone'] ?? ''
+			'phone' => $data['phone'] ?? '',
+			'img' => ($data['img'] ?? ''),
+			'soc' => ($data['soc'] ?? ''),
+			'title' => ($data['title'] ?? ''),
 		];
 
 		return $this->update($id, $data);
@@ -221,7 +224,7 @@ class UserModel extends APP_Model
 		$bind = [$id];
 
 		$sql = 'SELECT 
-					u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, u.role, uf.user as is_friend    
+					u.id, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email, u.role, u.img, uf.user as is_friend    
 				FROM 
 					'.self::TABLE.' as u 
 				LEFT JOIN 

@@ -233,3 +233,26 @@ function roadmap_check_intersect($item, $list)
 
 	return $i;
 }
+
+function calc_crop_rect($width, $height)
+{
+	$result = ['x' => 0, 'y' => 0, 'width' => 0, 'height' => 0];
+	$result['width'] = (int) $width;
+	$result['height'] = (int) $height;
+
+	if($result['height'] === 0)
+		return $result;
+
+	if($result['height'] > $result['width'])
+	{
+		$result['y'] = ceil(($result['height'] - $result['width']) / 2);
+		$result['height'] = $result['width'];
+	}
+	elseif($result['width'] > $result['height'])
+	{
+		$result['x'] = ceil(($result['width'] - $result['height']) / 2);
+		$result['width'] = $result['height'];
+	}
+
+	return $result;
+}

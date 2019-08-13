@@ -42,6 +42,8 @@ $config['upload_user_profile'] = [
 	'max_size' => 1024, // 1 мб
 	'max_width' => 1024,
 	'max_height' => 1024,
+	'min_width' => 128,
+	'min_height' => 128,
 	'encrypt_name' => true,
 	'remove_spaces' => true
 ];

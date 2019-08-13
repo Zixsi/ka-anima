@@ -207,7 +207,18 @@ $config['profile_edit'] = [
 		'field' => 'lastname',
 		'label' => 'Фамилия',
 		'rules' => 'required|min_length[2]'
-	]
+	],
+	[
+		'field' => 'title',
+		'label' => 'Цель',
+		'rules' => 'max_length[255]'
+	],
+	[
+		'field' => 'soc',
+		'label' => 'Ссылка на профиль соцсети',
+		'rules' => 'max_length[255]|valid_url|prep_url'
+	],
+	
 ];
 
 $config['faq_add'] = [

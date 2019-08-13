@@ -112,7 +112,7 @@ class UsersHelper extends APP_Model
 	// подготовка изображения профиля перед установкой
 	public function prepareProfileImg($name)
 	{
-		if(empty(($_FILES[$name] ?? null)))
+		if(empty(($_FILES[$name] ?? null)) || (int) $_FILES[$name]['size'] === 0)
 			return false;
 
 		$this->load->config('upload');
@@ -124,26 +124,27 @@ class UsersHelper extends APP_Model
 
 
 		$img = $this->upload->data();
-		var_dump($img);
+		$pos = calc_crop_rect($img['image_width'], $img['image_height']);
 
-		// get_rel_path($data['full_path'])
+		chmod($img['full_path'], FILE_WRITE_MODE);
 
-		// $img['image_width']
-		// $img['image_height']
-		// $img['file_name']
+		$config_crop = [
+			'source_image' => $img['full_path'],
+			'maintain_ratio' => false,
+			'width' => $pos['width'],
+			'height' => $pos['height'],
+			'x_axis' => $pos['x'],
+			'y_axis' => $pos['y']
+		];
 
-		// $config = [
-		// 	'image_library' => 'imagemagick',
-		// 	'source_image' => $img['full_path'],
-		// 	'x_axis' => 0,
-		// 	'y_axis' => 0
-		// ];
+		$this->image_lib->clear();
+		$this->image_lib->initialize($config_crop);
+		if(!$this->image_lib->crop())
+		{
+			unlink($img['full_path']);
+			throw new Exception($this->image_lib->display_errors(), 1);
+		}
 
-		// $this->image_lib->initialize($config);
-		// if(!$this->image_lib->crop())
-		// 	throw new Exception($this->image_lib->display_errors(), 1);
-
-		
-		die();
+		return get_rel_path($img['full_path']);
 	}
 }

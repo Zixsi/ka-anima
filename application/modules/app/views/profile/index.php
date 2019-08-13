@@ -9,7 +9,7 @@
 							<div class="mb-3">
 								<h3><?=($user['full_name'] ?? 'User')?></h3>
 							</div>
-							<p class="w-75 mx-auto mb-3">Bureau Oberhaeuser is a design bureau focused on Information- and Interface Design. </p>
+							<p class="w-75 mx-auto mb-3"><?=($user['title'] ?? '')?></p>
 							<div class="d-flex justify-content-center">
 								<?if(!$owner):?>
 									<?if(!$is_friends):?>
@@ -39,6 +39,14 @@
 									<span class="float-left">E-mail</span>
 									<span class="float-right text-muted"><?=$user['email']?></span>
 								</p>
+								<?if(!empty($user['soc'])):?>
+									<p class="clearfix">
+										<span class="float-left">Профиль соцсети</span>
+										<span class="float-right text-muted">
+											<a href="<?=prep_url($user['soc'])?>" target="_blank"><?=prep_url($user['soc'])?></a>
+										</span>
+									</p>
+								<?endif;?>
 							</div>
 						<?endif;?>
 					</div>
