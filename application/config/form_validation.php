@@ -258,12 +258,12 @@ $config['news_add'] = [
 		'field' => 'description',
 		'label' => 'Описание',
 		'rules' => 'required|min_length[10]'
-	]
+	],
 	[
 		'field' => 'text',
 		'label' => 'Детальное описание',
 		'rules' => 'required|min_length[10]'
-	]
+	],
 ];
 $config['news_edit'] = $config['news_add'];
 
