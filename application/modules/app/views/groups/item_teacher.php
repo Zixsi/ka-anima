@@ -7,8 +7,8 @@
 					<thead>
 						<tr>
 							<th>Ученик</th>
-							<th class="text-center">Выполеннные задания</th>
-							<th class="text-center">Непроверенные работы</th>
+							<th class="text-center" width="120">Задания</th>
+							<th class="text-center" width="120">Непроверено</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -29,32 +29,83 @@
 			<div class="card-body">
 				<?if($user):?>
 					<h3 class="card-title"><?=$user['full_name']?></h3>
-					<div id="group-user-lectures">				
+					<div>
 						<?if($homeworks):?>
-							<?$i = 1;?>
-							<?foreach($homeworks as $val):?>
-								<div class="card">
-									<div class="card-header">
-										<div class="card-title"><?=$i?> урок</div>
-									</div>
-									<div class="card-body">
-										<?if($val['homework'] == false):?>
-											<div class="title empty">ДЗ не загружено</div>
-										<?elseif($val['review'] == false):?>
-											<div class="title">Ученик выполнил задание</div>
-											<div class="actions">
-												<a href="./?user=<?=$user['id']?>&lecture=<?=$val['lecture_id']?>&action=download&target=homework" class="btn btn-primary btn-block" target="_blank">Скачать ДЗ</a>
-												<button type="button" class="btn btn-primary btn-block btn-add-review" data-toggle="modal" data-group="<?=$item['id']?>" data-lecture="<?=$val['lecture_id']?>" data-user="<?=$user['id']?>">Добавить отчет</button>
-											</div>
-										<?else:?>
-											<span class="fa fa-times bnt-remove-review" data-id="<?=$val['review']?>"></span>
-											<div class="title">Отчет загружен</div>
-											<p>Ученику будет доступен отчет в личном кабинете</p>
-										<?endif;?>
-									</div>
+							<div id="teacher--user-homeworks">
+								<?//debug($homeworks);?>
+								<ul class="nav nav-tabs" role="tablist">
+									<?$n = 1;?>
+									<?foreach($homeworks as $val):?>
+										<li class="nav-item">
+											<a class="nav-link <?=($n === 1)?'active':''?>" id="tab-<?=$n?>" data-toggle="tab" href="#tab-content-<?=$n?>" role="tab" aria-controls="tab-content-<?=$n?>" aria-selected="true"><?=$n?></a>
+											<span class="badge bg-<?=$val['status']?>"><?=count($val['homeworks'])?></span>
+										</li>
+										<?$n++;?>
+									<?endforeach;?>
+								</ul>
+								<div class="tab-content">
+									<?$n = 1;?>
+									<?foreach($homeworks as $val):?>
+										<div class="tab-pane fade <?=($n === 1)?'active show':''?>" id="tab-content-<?=$n?>" role="tabpanel">
+											<?if(count($val['homeworks'])):?>
+												<div class="pb-2">
+													<?if(empty($val['review'])):?>
+														<button type="button" class="btn btn-primary btn-add-review" data-toggle="modal" data-group="<?=$item['id']?>" data-lecture="<?=$val['id']?>" data-user="<?=$user['id']?>">Добавить ревью</button>
+														<hr>
+													<?else:?>
+														<div class="row">
+															<div class="col-6">
+																<a href="<?=$val['review']['video_url']?>" target="_blank" class="btn btn-primary btn-block">Видео</a>
+															</div>
+															<div class="col-6">
+																<a href="<?=$val['review']['file_url']?>" target="_blank" class="btn btn-primary btn-block">Файл</a>
+															</div>
+														</div>
+														<?if(!empty($val['review']['text'])):?>
+															<div class="row">
+																<div class="col-12 pt-2">
+																	<p><?=$val['review']['text']?></p>
+																</div>
+															</div>
+														<?endif;?>
+														<?/*
+														<div class="row">
+															<div class="col-12 text-right">
+																<button type="button" class="btn btn-secondary btn-xs bnt-remove-review" data-id="<?=$val['review']['id']?>">Удалить ревью</button>
+															</div>
+														</div>*/?>
+														<hr>
+													<?endif;?>
+												</div>
+												<table class="table table-striped table-bordered">
+													<thead class="thead-dark">
+														<tr>
+															<th style="width: 150px;">Дата</th>
+															<th>Комментарий</th>
+															<th style="width: 90px;">#</th>
+														</tr>
+													</thead>
+													<tbody>
+														<?foreach($val['homeworks'] as $hw):?>
+															<tr <?=($hw['is_new'])?'class="table-danger"':''?>>
+																<td><?=date(DATE_FORMAT_FULL, $hw['ts_timestamp'])?></td>
+																<td><?=$hw['comment']?></td>
+																<td class="text-right">
+																	<a href="./?user=<?=$user['id']?>&lecture=<?=$val['id']?>&action=download&target=homework" class="d-inline-block btn btn-primary btn-xs" target="_blank">Скачать</a>
+																</td>
+															</tr>
+														<?endforeach;?>
+													</tbody>
+												</table>
+											<?else:?>
+												<div class="text-center">Нет загруженных файлов</div>
+											<?endif;?>
+										</div>
+
+										<?$n++;?>
+									<?endforeach;?>
 								</div>
-								<?$i++;?>
-							<?endforeach;?>
+							</div>
 						<?endif;?>
 					</div>
 				<?else:?>
@@ -72,8 +123,8 @@
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				<h4 class="modal-title">Ревью</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
 				<form action="" method="post">
@@ -87,6 +138,10 @@
 					<div class="form-group">
 						<label>Ссылка на файл</label>
 						<input type="text" name="file_url" value="" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Рекомендация</label>
+						<textarea name="text" class="form-control" style="height: 120px;"></textarea>
 					</div>
 					<div class="form-group text-right">
 						<button type="submit" class="btn btn-primary">Сохранить</button>

@@ -406,4 +406,48 @@ class GroupsHelper extends APP_Model
 
 		return null;
 	}
+
+	// 
+	public function buildHomeworkInfo($lectures, $homeworks = [], $reviews = [])
+	{
+		$result = [];
+
+		// подготавливаем лекции
+		foreach($lectures as $val)
+		{
+			if((int) $val['type'] === LecturesModel::TYPE_INTRO)
+				continue;
+
+			$val['status'] = 'info';
+			$val['homeworks'] = [];
+			$val['review'] = null;
+			$result[$val['id']] = $val;
+		}
+
+		// присваиваем ревью к лекции
+		foreach($reviews as $val)
+		{
+			$val['ts_timestamp'] = strtotime($val['ts']);
+			$result[$val['lecture_id']]['review'] = $val;
+		}
+
+		// присваиваем домашние задания к лекции
+		foreach($homeworks as $val)
+		{
+			$val['is_new'] = false;
+			$val['ts_timestamp'] = strtotime($val['ts']);
+
+			if(empty($result[$val['lecture_id']]['review']))
+				$result[$val['lecture_id']]['status'] = 'danger';
+			elseif($result[$val['lecture_id']]['review']['ts_timestamp'] < $val['ts_timestamp'])
+			{
+				$val['is_new'] = true;
+				$result[$val['lecture_id']]['status'] = 'warning';
+			}
+
+			$result[$val['lecture_id']]['homeworks'][] = $val;
+		}
+
+		return array_values($result);
+	}
 }

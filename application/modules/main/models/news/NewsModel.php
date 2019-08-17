@@ -69,6 +69,7 @@ class NewsModel extends APP_Model
 	{
 		$data['ts_timestamp'] = strtotime($data['ts'] ?? 0);
 		$data['ts_formated'] = date(DATE_FORMAT_SHORT, $data['ts_timestamp']);
-		$data['img'] = IMG_DEFAULT_300_200;
+		if(empty($data['img']))
+			$data['img'] = IMG_DEFAULT_300_200;
 	}
 }

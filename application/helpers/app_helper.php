@@ -256,3 +256,12 @@ function calc_crop_rect($width, $height)
 
 	return $result;
 }
+
+function thumb($src)
+{
+	$thumb_src = str_replace('.', '_thumb.', $src);
+	if(file_exists(/*$_SERVER['DOCUMENT_ROOT'].*/$thumb_src))
+		$src = $thumb_src;
+
+	return $src;
+}

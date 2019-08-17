@@ -166,6 +166,7 @@ $autoload['model'] = [
 	'main/wall/WallModel',
 	'main/wall/WallHelper',
 	'main/news/NewsModel',
+	'main/news/NewsHelper',
 	'main/email/EmailHelper',
 	'main/pay/PayHelper',
 	'main/pay/PaySystem',

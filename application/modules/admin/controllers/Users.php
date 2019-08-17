@@ -25,6 +25,7 @@ class Users extends APP_Controller
 		$data = [];
 		if(($data['item'] = $this->UserModel->getByID($id)) === false)
 			header('Location: ../');
+		
 		$data['roles'] = UserModel::ROLES_NAME;
 		$data['subscribes'] = $this->SubscriptionModel->byUser($id);
 		$data['transactions'] = $this->TransactionsHelper->listByUser($id);

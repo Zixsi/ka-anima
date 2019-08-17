@@ -1,127 +1,191 @@
 <?php
 $CI = &get_instance();
-$user_id = $CI->Auth->userID();
+$tpl_user = $CI->Auth->user();
+// debug($tpl_user); die();
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>ADMIN</title>
 	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-	<!-- VENDOR CSS -->
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/css/bootstrap.min.css">
-	<!--<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/font-awesome/css/font-awesome.min.css">-->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/linearicons/style.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/toastr/toastr.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/img/favicon.ico" />
+	<title>Dashboard</title>
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/font-awesome/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.css">
+
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/toastr/toastr.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.css">
 	<!-- MAIN CSS -->
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/main.css">
-	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/admin_1/assets/css/app.css?v=<?=VERSION?>">
-	<!-- GOOGLE FONTS -->
-	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
-	<!-- ICONS -->
-	<link rel="apple-touch-icon" sizes="56x64" href="<?=TEMPLATE_DIR?>/admin_1/assets/img/favicon.ico?v=<?=VERSION?>">
-	<link rel="icon" type="image/x-icon" sizes="56x64" href="<?=TEMPLATE_DIR?>/admin_1/assets/img/favicon.ico?v=<?=VERSION?>">
+
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
 </head>
 
 <body>
-	<!-- WRAPPER -->
-	<div id="wrapper">
-		<!-- NAVBAR -->
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div class="brand">
-				<a href="/"><img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/logo_black.png?v=<?=VERSION?>" alt="Logo" class="img-responsive logo" style="height: 70px;"></a>
+	<div class="container-scroller">
+		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+			<div class="text-left navbar-brand-wrapper d-flex align-items-center justify-content-between">
+				<a class="navbar-brand brand-logo" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_white.png" alt="logo"/></a>
+				<a class="navbar-brand brand-logo-mini" href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_mini.png" alt="logo"/></a> 
+				<button class="navbar-toggler align-self-center" type="button" data-toggle="minimize">
+				<span class="mdi mdi-menu"></span>
+				</button>
 			</div>
-			<div class="container-fluid">
-				<div id="navbar-menu">
-					<ul class="nav navbar-nav navbar-right">
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
-								<i class="lnr lnr-alarm"></i>
-								<span class="badge bg-danger">5</span>
+			<div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+				<ul class="navbar-nav navbar-nav-right">
+					<li class="nav-item dropdown">
+						<a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
+							<i class="mdi mdi-bell-outline mx-0"></i>
+							<!-- <p class="notification-ripple notification-ripple-bg">
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+							</p> -->
+						</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
+							<p class="mb-0 font-weight-normal float-left dropdown-header">Уведомления</p>
+							<!-- <a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-success">
+										<i class="mdi mdi-information mx-0"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">Application Error</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">Just now</p>
+								</div>
 							</a>
-							<ul class="dropdown-menu notifications">
-								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>System space is almost full</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-danger"></span>You have 9 unfinished tasks</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Monthly report is available</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-warning"></span>Weekly meeting in 1 hour</a></li>
-								<li><a href="#" class="notification-item"><span class="dot bg-success"></span>Your request has been approved</a></li>
-								<li><a href="#" class="more">See all notifications</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="<?=$CI->Auth->user()['img']?>" class="img-circle" alt="Avatar"> <span><?=$CI->Auth->user()['email']?></span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
-							<ul class="dropdown-menu">
-								<li><a href="/auth/logout/"><i class="lnr lnr-exit"></i> <span>Выход</span></a></li>
-							</ul>
-						</li>
-					</ul>
-				</div>
+							<a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-warning">
+										<i class="mdi mdi-settings mx-0"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">Settings</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">Private message</p>
+								</div>
+							</a>
+							<a class="dropdown-item preview-item">
+								<div class="preview-thumbnail">
+									<div class="preview-icon bg-info">
+										<i class="mdi mdi-account-box mx-0"></i>
+									</div>
+								</div>
+								<div class="preview-item-content">
+									<h6 class="preview-subject font-weight-normal">New user registration</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">2 days ago</p>
+								</div>
+							</a> -->
+						</div>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link count-indicator d-flex justify-content-center align-items-center nav-message" href="/profile/messages/">
+							<i class="mdi mdi-email-outline mx-0"></i>
+							<!--<p class="notification-ripple notification-ripple-bg">
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+								<span class="ripple notification-ripple-bg"></span>
+							</p>-->
+						</a>
+					</li>
+					<li class="nav-item nav-user-icon">
+						<a class="nav-link" href="/admin/users/user/<?=$tpl_user['id']?>/">
+							<img src="<?=$tpl_user['img']?>" alt="profile"/>
+						</a>
+					</li>
+					<li class="nav-item nav-settings d-none d-lg-flex dropdown">
+						<a class="nav-link" href="#" data-toggle="dropdown" id="appDropdown">
+							<i class="mdi mdi-dots-horizontal"></i>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="appDropdown">
+							<a class="dropdown-item" href="/profile/"><i class="mdi mdi-settings text-primary"></i>Профиль</a>
+							<a class="dropdown-item" href="/auth/logout/"><i class="mdi mdi-logout text-primary"></i>Выход</a>
+						</div>
+					</li>
+				</ul>
+				<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+					<span class="mdi mdi-menu"></span>
+				</button>
 			</div>
 		</nav>
-		<!-- END NAVBAR -->
-		<!-- LEFT SIDEBAR -->
-		<div id="sidebar-nav" class="sidebar">
-			<div class="sidebar-scroll">
-				<nav>
-					<ul class="nav">
-						<li><a href="/admin/" <?=is_active_menu_item('main')?'class="active"':''?> ><span>Главная</span></a></li>
-						<li><a href="/admin/news/" <?=is_active_menu_item('news')?'class="active"':''?> >Новости</a></li>
-						<li><a href="/admin/faq/" <?=is_active_menu_item('faq')?'class="active"':''?> >FAQ</a></li>
-						<li><a href="/admin/courses/" <?=is_active_menu_item('courses')?'class="active"':''?> >Курсы</a></li>
-						<li><a href="/admin/streams/" <?=is_active_menu_item('streams')?'class="active"':''?> >Онлайн встречи</a></li>
-						<li><a href="/admin/users/" <?=is_active_menu_item('users')?'class="active"':''?> >Пользователи</a></li>
-					</ul>
-				</nav>
-			</div>
-		</div>
-		<!-- END LEFT SIDEBAR -->
-		<!-- MAIN -->
-		<div class="main">
-			<!-- MAIN CONTENT -->
-			<div class="main-content">
-				<div class="container-fluid">
+		<div class="container-fluid page-body-wrapper">
+			<nav class="sidebar sidebar-offcanvas" id="sidebar">
+				<ul class="nav">
+					<li class="nav-item nav-profile">
+						<div class="nav-link d-flex">
+							<div class="profile-image">
+								<a href="/admin/users/user/<?=$tpl_user['id']?>/"><img src="<?=$tpl_user['img']?>" alt="image"></a>
+							</div>
+							<div class="profile-name">
+								<p class="name text-capitalize"><?=($tpl_user['full_name'] ?? $tpl_user['email'])?></p>
+								<p class="designation text-capitalize"><?=($tpl_user['role_name'] ?? '- - -')?></p>
+							</div>
+						</div>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('main')?'active':''?>">
+						<a class="nav-link" href="/">
+							<i class="mdi mdi-home menu-icon"></i>
+							<span class="menu-title">Главная</span>
+						</a>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('news')?'active':''?>">
+						<a class="nav-link" href="/admin/news/">
+							<i class="mdi mdi-newspaper menu-icon"></i>
+							<span class="menu-title">Новости</span>
+						</a>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('faq')?'active':''?>">
+						<a class="nav-link" href="/admin/faq/">
+							<i class="mdi mdi-comment-question-outline menu-icon"></i>
+							<span class="menu-title">FAQ</span>
+						</a>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('courses')?'active':''?>">
+						<a class="nav-link" href="/admin/courses/">
+							<i class="mdi mdi-view-headline menu-icon"></i>
+							<span class="menu-title">Курсы</span>
+						</a>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('streams')?'active':''?>">
+						<a class="nav-link" href="/admin/streams/">
+							<i class="mdi mdi-message-video menu-icon"></i>
+							<span class="menu-title">Онлайн встречи</span>
+						</a>
+					</li>
+					<li class="nav-item <?=is_active_menu_item('users')?'active':''?>">
+						<a class="nav-link" href="/admin/users/">
+							<i class="mdi mdi-account-circle menu-icon"></i>
+							<span class="menu-title">Пользователи</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+			<div class="main-panel">
+				<div class="content-wrapper">
 					<?$this->content()?>
 				</div>
 			</div>
-			<!-- END MAIN CONTENT -->
 		</div>
-		<!-- END MAIN -->
-		<div class="clearfix"></div>
-		<footer>
-			<div class="container-fluid">
-				<p class="copyright">&copy; 2018 Company. All Rights Reserved.</p>
-			</div>
-		</footer>
 	</div>
-	<!-- END WRAPPER -->
-	<!-- Javascript -->
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery/jquery.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/bootstrap/js/holder.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/main.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.js"></script>
 
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-timezone.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/countdown.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/vendor/moment/moment-countdown.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/klorofil-common.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.ui.widget.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.iframe-transport.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/upload/jquery.fileupload.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/datetimepicker/jquery.datetimepicker.full.min.js"></script>	
-	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>	
-	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>
-	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>		
+	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.min.js"></script>	
 
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/app.js?v=<?=VERSION?>"></script>
-	<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/admin.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
+	<script src="<?=TEMPLATE_DIR?>/main_v1/js/admin.js?v=<?=VERSION?>"></script>
 </body>
 </html>

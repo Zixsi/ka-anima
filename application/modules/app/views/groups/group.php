@@ -66,7 +66,20 @@
 					<h4><?=$teacher['full_name']?></h4>
 					<p class="text-muted mb-0"><?=$teacher['role_name']?></p>
 				</div>
-				<p class="mt-2 card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Lorem</p>
+				<?if(!empty($teacher['title'])):?>
+					<p class="mt-2 card-text"><?=$teacher['title']?></p>
+				<?endif;?>
+			</div>
+		</div>
+
+		<div class="card mb-4">
+			<div class="card-body">
+				<h3 class="card-title">Студенты группы</h3>
+				<?if($users):?>
+					<?foreach($users as $val):?>
+						<a href="/profile/<?=$val['id']?>/"><img src="<?=$val['img']?>" width="50" height="50" class="img-circle" title="<?=$val['full_name']?>"></a>
+					<?endforeach;?>
+				<?endif;?>
 			</div>
 		</div>
 
@@ -74,12 +87,14 @@
 			<div class="card mb-4">
 				<div class="card-body">
 					<h3 class="card-title">Изображения</h3>
-					<div class="row group-image-gallery">
+					<div class="gallery-block group-image-gallery">
 						<?foreach($images as $img):?>
-							<div class="col-6 col-md-3">
-								<a href="/<?=$img['src']?>" class="" target="_blank">
-									<img src="/<?=$img['src']?>" alt="" class="img-thumbnail img-fluid">
-								</a>
+							<div class="item">
+								<div class="item-wrapper">
+									<a href="/<?=$img['src']?>" class="item-content" data-toggle="lightbox" data-gallery="group-image">
+										<img src="/<?=$img['src_thumb']?>" alt="">
+									</a>
+								</div>
 							</div>
 						<?endforeach;?>
 					</div>
@@ -87,18 +102,24 @@
 			</div>
 		<?endif;?>
 
-		<div class="card panel-headline">
-			<div class="card-body">
-				<h3 class="card-title">Студенты группы</h3>
-				<?if($users):?>
-					<?foreach($users as $val):?>
-						<a href="/profile/<?=$val['id']?>/">
-							<img src="<?=$val['img']?>" width="50" height="50" class="img-circle" title="<?=$val['full_name']?>">
-						</a>
-					<?endforeach;?>
-				<?endif;?>
+		<?if($videos):?>
+			<div class="card mb-4">
+				<div class="card-body">
+					<h3 class="card-title">Видео</h3>
+					<div class="gallery-block group-video-gallery">
+						<?foreach($videos as $video):?>
+							<div class="item">
+								<div class="item-wrapper">
+									<a href="/<?=$video['src']?>" class="item-content" data-toggle="lightbox" data-gallery="group-video" data-type="video">
+										<img src="<?=IMG_DEFAULT_300_300?>" alt="">
+									</a>
+								</div>
+							</div>
+						<?endforeach;?>
+					</div>
+				</div>
 			</div>
-		</div>
+		<?endif;?>
 
 	</div>
 </div>

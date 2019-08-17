@@ -62,16 +62,24 @@ class Groups extends APP_Controller
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $data['item']['type']);
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
+		// лекции группы
+		$lectures = $this->LecturesGroupModel->listForGroup($data['item']['id']);
+
 		// дз ученика
 		$data['user'] = null;
 		$data['homeworks'] = [];
 		if(isset($params['user']) && array_key_exists($params['user'], $data['users']))
 		{
 			$data['user'] = $data['users'][$params['user']];
-			// получить лекции группы
-			// с меткой о загруженных файлах
-			// с меткой о загруженных ревью
-			$data['homeworks'] = $this->LecturesGroupModel->listForUser($data['item']['id'], $data['user']['id']);
+
+			// список файлов пользователя
+			$user_homeworks = $this->LecturesHomeworkModel->userFilesForGroup($data['user']['id'], $data['item']['id']);
+			// список ревью для пользователя
+			$user_reviews = $this->ReviewModel->getByGroup($data['item']['id'], ['user' => $data['user']['id']]);
+
+			$data['homeworks'] = $this->GroupsHelper->buildHomeworkInfo($lectures, $user_homeworks, $user_reviews);
+			unset($lectures, $user_homeworks, $user_reviews);
+
 			$this->listenUserActions($data['item'], $params, $data);
 		}
 
@@ -85,6 +93,7 @@ class Groups extends APP_Controller
 	private function itemUser($item, $lecture = 0)
 	{
 		$data = [];
+		$data['error'] = null;
 		$data['section'] = 'index';
 		$data['group'] = $item;
 		$group_id = $data['group']['id'];
@@ -118,15 +127,15 @@ class Groups extends APP_Controller
 			if($res = $this->VideoModel->bySource($data['lecture']['id']))
 				$data['lecture']['video_code'] = $res['video_code'];
 
-			// if(cr_valid_key())
-			// 	$this->uploadHomeWork($data);
+			if(cr_valid_key())
+				$this->uploadHomeWork($data);
 			
 			$data['csrf'] = cr_get_key();
 			$data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($group_id, $data['lecture_id']);
 			$data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
 		}
 
-		// $this->setHomeworkStatus($group_id, $this->user_id, $data['lectures']);
+		$this->setHomeworkStatus($group_id, $this->user['id'], $data['lectures']);
 
 		$this->load->lview('groups/item_user', $data);
 	}
@@ -147,6 +156,7 @@ class Groups extends APP_Controller
 		$data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
 		$data['images'] = $this->GroupsModel->getImageFiles($group_id);
+		$data['videos'] = $this->GroupsModel->getVideoFiles($group_id);
 
 		$data['wall'] = $this->WallModel->list($group_id);
 		// debug($data['wall']); die();
@@ -314,8 +324,10 @@ class Groups extends APP_Controller
 			$file_data = $this->upload->data();
 			if($file_id = $this->FilesModel->saveFileArray($file_data))
 			{
-				if($this->LecturesHomeworkModel->add($data['group']['id'], $data['lecture_id'], $this->user_id, $file_id, $comment))
+				if($this->LecturesHomeworkModel->add($data['group']['id'], $data['lecture_id'], $this->user['id'], $file_id, $comment))
 				{
+					$this->FilesModel->createThumb($file_data);
+
 					action(UserActionsModel::ACTION_HOMEWORK_FILE_ADD, [
 						'group_code' => $data['group']['code'], 
 						'lecture_name' => $data['lecture']['name'], 

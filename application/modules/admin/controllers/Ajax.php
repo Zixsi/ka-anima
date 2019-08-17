@@ -7,15 +7,11 @@ class Ajax extends APP_Controller
 	{
 		// Проверка Ajax запроса
 		if(!$this->input->is_ajax_request())
-		{
-			$this->jsonrpc->error(-32600);
-		}
+			$this->jsonajax->error(Jsonajax::CODE_ACCESS_DENIED);
 
 		// Проверка авторизации
-		if(intval($this->Auth->userID() ?? 0) === 0)
-		{
-			$this->jsonrpc->error(-32000);
-		}
+		if((int) ($this->Auth->userID() ?? 0) === 0)
+			$this->jsonajax->error(Jsonajax::CODE_NOT_AUTHORIZED);
 	}
 
 	public function index()
@@ -25,7 +21,7 @@ class Ajax extends APP_Controller
 		if(empty($data) && !empty($_POST['query']))
 			$data = $_POST['query'];
 
-		$this->request = $this->jsonrpc->parse($data);
+		$this->request = json_decode($data, true);
 		$this->user = $this->Auth->user();
 
 		try
@@ -50,9 +46,9 @@ class Ajax extends APP_Controller
 				case 'user.edit':
 					$this->userEdit();
 				break;
-				case 'user.remove':
-					$this->userRemove();
-				break;
+				// case 'user.remove':
+				// 	$this->userRemove();
+				// break;
 				case 'user.block':
 					$this->userBlock();
 				break;
@@ -69,78 +65,82 @@ class Ajax extends APP_Controller
 					$this->wallMessageChild();
 				break;
 				default:
-					$this->jsonrpc->error(-32600);
+					throw new Exception('method not found', 1);
 				break;
 			}
 		}
 		catch(Exception $e)
 		{
-			$this->jsonrpc->error(-32099, $e->getMessage());
+			$this->jsonajax->error(Jsonajax::CODE_INTERNAL_ERROR, $e->getMessage());
 		}
 
-		$this->jsonrpc->result(false);
+		$this->jsonajax->result(false);
 	}
 
 	// создание группы
 	private function groupCreate()
 	{
 		$this->GroupsHelper->add(($this->request['params'] ?? []));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// удаление группы
 	private function groupRemove()
 	{
 		$this->GroupsHelper->remove((int) ($this->request['params']['id'] ?? 0));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	private function groupUserAdd()
 	{
 		$this->GroupsHelper->userAdd(($this->request['params'] ?? []));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// удаление лекции
 	private function lectureRemove()
 	{
 		$this->LecturesHelper->remove((int) ($this->request['params'] ?? 0));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// создание пользователя
 	private function userAdd()
 	{
 		$this->UsersHelper->add(($this->request['params'] ?? []));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// редактирование пользователя
 	private function userEdit()
 	{
-		$this->UsersHelper->edit(($this->request['params']['id'] ?? 0), ($this->request['params'] ?? []));
-		$this->jsonrpc->result('Успешно');
+		$params = $this->request['params'] ?? [];
+		if($img = $this->UsersHelper->prepareProfileImg('img'))
+			$params['img'] = '/'.$img;
+
+		$this->UsersHelper->edit(($this->request['params']['id'] ?? 0), $params);
+		$this->jsonajax->result('Успешно');
 	}
 
 	// удаление пользователя
 	private function userRemove()
 	{
 		$this->UsersHelper->remove(($this->request['params'] ?? 0));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// заблокировать пользователя
 	private function userBlock()
 	{
 		$this->UsersHelper->block(($this->request['params'] ?? 0));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// разблокировать пользователя
 	private function userUnBlock()
 	{
 		$this->UsersHelper->unblock(($this->request['params'] ?? 0));
-		$this->jsonrpc->result('Успешно');
+		$this->jsonajax->result('Успешно');
 	}
 
 	// добавить сообщение на стену 
@@ -150,9 +150,9 @@ class Ajax extends APP_Controller
 		$params['user'] = $this->user['id'];
 
 		if($this->WallHelper->add($params) === false)
-			throw new Exception($this->WallHelper->getLastError(), -32099);
+			throw new Exception($this->WallHelper->getLastError(), 1);
 		
-		$this->jsonrpc->result(true);
+		$this->jsonajax->result(true);
 	}
 
 	// список сообщений стены
@@ -160,9 +160,9 @@ class Ajax extends APP_Controller
 	{
 		$params = ($this->request['params'] ?? []);
 		if(($res = $this->WallHelper->list($params)) === false)
-			throw new Exception($this->WallHelper->getLastError(), -32099);
+			throw new Exception($this->WallHelper->getLastError(), 1);
 		
-		$this->jsonrpc->result($res);
+		$this->jsonajax->result($res);
 	}
 
 	// список дочерних сообщений
@@ -170,8 +170,8 @@ class Ajax extends APP_Controller
 	{
 		$params = ($this->request['params'] ?? []);
 		if(($res = $this->WallHelper->child($params)) === false)
-			throw new Exception($this->WallHelper->getLastError(), -32099);
+			throw new Exception($this->WallHelper->getLastError(), 1);
 		
-		$this->jsonrpc->result($res);
+		$this->jsonajax->result($res);
 	}
 }

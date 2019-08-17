@@ -84,7 +84,7 @@ class ReviewModel extends APP_Model
 	{
 		$bind = [$group_id];
 		$sql = 'SELECT 
-					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, rv.video_code as video_code, CONCAT_WS(\' \', u.name, u.lastname) as user_name, l.name    
+					r.id, r.group_id, r.lecture_id, r.user, r.text, r.score, r.ts, r.video_url, r.file_url, rv.video_code as video_code, CONCAT_WS(\' \', u.name, u.lastname) as user_name, l.name    
 				FROM 
 					'.self::TABLE.' as r  
 				LEFT JOIN 
@@ -101,13 +101,13 @@ class ReviewModel extends APP_Model
 			if(($filter['lecture'] ?? 0) > 0)
 			{
 				$sql .= ' AND r.lecture_id = ? ';
-				$bind[] = intval($filter['lecture']);
+				$bind[] = (int) $filter['lecture'];
 			}
 
 			if(($filter['user'] ?? 0) > 0)
 			{
 				$sql .= ' AND r.user = ? ';
-				$bind[] = intval($filter['user']);
+				$bind[] = (int) $filter['user'];
 			}
 		}
 
@@ -123,7 +123,7 @@ class ReviewModel extends APP_Model
 			return $res;
 		}
 
-		return false;
+		return [];
 	}
 
 	public function notViewedItems(int $user, int $group)

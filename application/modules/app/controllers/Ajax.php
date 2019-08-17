@@ -26,32 +26,10 @@ class Ajax extends APP_Controller
 		$this->bind('wall.message.list', $this, 'wallMessageList');
 		$this->bind('wall.message.child', $this, 'wallMessageChild');
 
-		$this->run();
+		$this->bind('review.add', $this, 'reviewAdd');
+		$this->bind('review.delete', $this, 'reviewDelete');
 
-		// switch(($this->request['method'] ?? ''))
-		// {
-		// 	// case 'subscr.group':
-		// 	// 	$this->subscrGroup();
-		// 	// break;
-		// 	// case 'review.add':
-		// 	// 	$this->reviewAdd();
-		// 	// break;
-		// 	// case 'review.delete':
-		// 	// 	$this->reviewDelete();
-		// 	// break;
-		// 	case 'wall.message':
-		// 		$this->wallMessage();
-		// 	break;
-		// 	case 'wall.message.list':
-		// 		$this->wallMessageList();
-		// 	break;
-		// 	case 'wall.message.child':
-		// 		$this->wallMessageChild();
-		// 	break;
-		// 	default:
-		// 		$this->jsonajax->error(Jsonajax::CODE_INTERNAL_ERROR, 'неверный запрос');
-		// 	break;
-		// }
+		$this->run();
 	}
 
 	// проверка авторизации
@@ -116,63 +94,42 @@ class Ajax extends APP_Controller
 
 	//===============================================================================================================//
 
-	// // подписка на группу
-	// private function subscrGroup()
-	// {
-	// 	try
-	// 	{
-	// 		$params = ($this->request['params'] ?? []);
-	// 		$params['user'] = $this->user['id'];
-
-	// 		if($this->SubscriptionHelper->group($params) === false)
-	// 			throw new Exception($this->SubscriptionHelper->getLastError());
-
-	// 		$this->jsonrpc->result('Успешно');
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
-
-	// 	$this->jsonrpc->result(false);
-	// }
-
-	// // добавление ревью
-	// private function reviewAdd()
-	// {
-	// 	try
-	// 	{
-	// 		$params = ($this->request['params'] ?? []);
-	// 		if($this->ReviewHelper->add($params) === false)
-	// 			throw new Exception($this->ReviewHelper->getLastError());
+	// добавление ревью
+	private function reviewAdd()
+	{
+		try
+		{
+			$params = ($this->request['params'] ?? []);
+			if($this->ReviewHelper->add($params) === false)
+				throw new Exception($this->ReviewHelper->getLastError());
 			
-	// 		$this->jsonrpc->result('Успешно');
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
 
-	// 	$this->jsonrpc->result(false);
-	// }
+		$this->jsonrpc->result(false);
+	}
 
-	// // добавление ревью
-	// private function reviewDelete()
-	// {
-	// 	try
-	// 	{
-	// 		if($this->ReviewHelper->delete(($this->request['params'] ?? 0)) === false)
-	// 			throw new Exception($this->ReviewHelper->getLastError());
+	// добавление ревью
+	private function reviewDelete()
+	{
+		try
+		{
+			if($this->ReviewHelper->delete(($this->request['params'] ?? 0)) === false)
+				throw new Exception($this->ReviewHelper->getLastError());
 			
-	// 		$this->jsonrpc->result('Успешно');
-	// 	}
-	// 	catch(Exception $e)
-	// 	{
-	// 		$this->jsonrpc->error(-32099, $e->getMessage());
-	// 	}
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
 
-	// 	$this->jsonrpc->result(false);
-	// }
+		$this->jsonrpc->result(false);
+	}
 
 	// добавить сообщение на стену 
 	private function wallMessage()

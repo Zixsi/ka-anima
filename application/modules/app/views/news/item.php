@@ -1,6 +1,6 @@
 <div class="row mb-4">
 	<div class="col-10">
-		<h3><?=$item['title']?></h3>
+		<h3><?=htmlspecialchars($item['title'])?></h3>
 	</div>
 	<div class="col-2 text-right">
 		<a href="/" class="btn btn-outline-primary">Назад</a>
@@ -12,7 +12,7 @@
 		<div class="card">
 			<div class="card-body">
 				<h5><?=$item['ts_formated']?></h5>
-				<img src="<?=$item['img']?>">
+				<img src="<?=$item['img']?>" class="pb-4">
 				<div><?=$item['description']?></div>
 				<div><?=$item['text']?></div>
 			</div>

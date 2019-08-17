@@ -37,7 +37,9 @@
 					<h4><?=$teacher['full_name']?></h4>
 					<p class="text-muted mb-0"><?=$teacher['role_name']?></p>
 				</div>
-				<p class="mt-2 card-text">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Lorem</p>
+				<?if(!empty($teacher['title'])):?>
+					<p class="mt-2 card-text"><?=$teacher['title']?></p>
+				<?endif;?>
 			</div>
 		</div>
 		<div class="card course-card--groups">

@@ -11,7 +11,7 @@ class Streams extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->StreamsModel->list();
+		$data['items'] = $this->StreamsModel->list(0, ($_GET['filter'] ?? []));
 
 		$this->load->lview('streams/index', $data);
 	}
@@ -24,6 +24,7 @@ class Streams extends APP_Controller
 
 		$this->load->library(['youtube']);
 		$data['item']['video_code'] = $this->youtube->extractVideoId($data['item']['url']);
+		$data['item']['chat'] = $this->youtube->getLiveChatUrl($data['item']['video_code']);
 
 		$this->load->lview('streams/item', $data);
 	}

@@ -1,12 +1,19 @@
-<h3 style="margin-bottom: 30px;">Пользователи</h3>
+<div class="row mb-4">
+	<div class="col-6">
+		<h3>Пользователи</h3>
+	</div>
+	<div class="col-6 text-right">
+		
+	</div>
+</div>
+
 <div class="row">
-	<div class="col-md-3">
-		<div class="panel">
-			<div class="panel-heading"></div>
-			<div class="panel-body">
+	<div class="col-3">
+		<div class="card">
+			<div class="card-body">
 				<form action="" method="get" id="filter-user-form">
-					<p class="lead">Роли</p>
-					<ul class="list-group list-group-filter">
+					<p class="lead mb-4">Роли</p>
+					<ul class="list-group mb-4 list-group-filter">
 						<li class="list-group-item">
 							<input type="radio" name="role" id="from-filter-role1" <?=(!isset($filter['role']) || ($filter['role'] ?? '') === 'all')?'checked':''?> value="all">
 							<label for="from-filter-role1">
@@ -36,8 +43,8 @@
 							</label>
 						</li>
 					</ul>
-					<p class="lead">Группы</p>
-					<ul class="list-group list-group-filter">
+					<p class="lead mb-4">Группы</p>
+					<ul class="list-group mb-4 list-group-filter">
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group1" <?=(!isset($filter['group']) || ($filter['group'] ?? '') === 'all')?'checked':''?> checked value="all">
 							<label for="from-filter-group1">
@@ -59,6 +66,7 @@
 								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
+						<?/*
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group4" <?=(($filter['group'] ?? '') === 'deleted')?'checked':''?> value="deleted">
 							<label for="from-filter-group4">
@@ -66,16 +74,16 @@
 								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
+						*/?>
 					</ul>
 				</form>
 				<button type="button" class="btn btn-md btn-block btn-primary" data-toggle="modal" data-target="#add-user-modal">Добавить пользователя</button>
 			</div>
 		</div>
 	</div>
-	<div class="col-md-9">
-		<div class="panel">
-			<div class="panel-heading"></div>
-			<div class="panel-body">
+	<div class="col-9">
+		<div class="card">
+			<div class="card-body">
 				<div class="col-md-12">
 					<table class="table">
 						<thead>
@@ -84,7 +92,7 @@
 								<th width="70"></th>
 								<th>Имя</th>
 								<th>E-mail</th>
-								<th>Роль</th>
+								<th width="120">Роль</th>
 								<th>Дата регистрации</th>
 								<th width="70" class="text-right">Действия</th>
 							</tr>
@@ -95,10 +103,10 @@
 									<tr>
 										<td>
 											<?if($item['deleted'] == 1):?>
-												<i class="fas fa-trash-alt"></i>
+												<i class="mdi mdi-delete"></i>
 											<?endif;?>
 											<?if($item['blocked'] == 1):?>
-												<i class="fas fa-lock"></i>
+												<i class="mdi mdi-lock"></i>
 											<?endif;?>
 										</td>
 										<td>
@@ -111,26 +119,34 @@
 											<a href="./user/<?=$item['id']?>/"><?=$item['email']?></a>
 										</td>
 										<td>
-											<span class="label label-primary"><?=$item['role_name']?></span>
+											<span class="badge badge-primary d-block"><?=$item['role_name']?></span>
 										</td>
 										<td><?=$item['ts_created']?></td>
 										<td class="text-right">
 											<div class="btn-group">
-												<button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
-													<i class="fas fa-ellipsis-v"></i>
+												<button type="button" class="btn btn-sm btn-light" data-toggle="dropdown">
+													<i class="mdi mdi-dots-horizontal"></i>
 												</button>
-												<ul class="dropdown-menu" role="menu" style="right: 0; left: auto;">
-													<li><a href="./user/<?=$item['id']?>/">Просмотр</a></li>
+												<ul class="dropdown-menu dropdown-menu-right navbar-dropdown">
+													<li class="dropdown-item">
+														<a href="./user/<?=$item['id']?>/">Просмотр</a>
+													</li>
 													<?if($item['role'] != '5'):?>
-														<li class="divider"></li>
+														<li class="dropdown-divider"></li>
 														<?if($item['blocked'] == 0):?>
-															<li><a href="javascript:void(0);" class="btn-user-block" data-id="<?=$item['id']?>">Блокировать</a></li>
+															<li class="dropdown-item">
+																<a href="javascript:void(0);" class="btn-user-block" data-id="<?=$item['id']?>">Блокировать</a>
+															</li>
 														<?else:?>
-															<li><a href="javascript:void(0);" class="btn-user-unblock" data-id="<?=$item['id']?>">Разблокировать</a></li>
+															<li class="dropdown-item">
+																<a href="javascript:void(0);" class="btn-user-unblock" data-id="<?=$item['id']?>">Разблокировать</a>
+															</li>
 														<?endif;?>
-														<?if($item['deleted'] == 0):?>
-															<li><a href="javascript:void(0);" class="btn-user-remove" data-id="<?=$item['id']?>">Удалить</a></li>
-														<?endif;?>
+														<?/*if($item['deleted'] == 0):?>
+															<li class="dropdown-item">
+																<a href="javascript:void(0);" class="btn-user-remove" data-id="<?=$item['id']?>">Удалить</a>
+															</li>
+														<?endif;*/?>
 													<?endif;?>
 												</ul>
 											</div>
@@ -150,8 +166,8 @@
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
+				<h4 class="modal-title">Новый пользователь</h4>
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">Новая пользователь</h4>
 			</div>
 			<div class="modal-body">
 				<form action="" method="post">
@@ -191,7 +207,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="remove-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal modal-compact fade" id="remove-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -211,7 +227,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="block-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal modal-compact fade" id="block-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">

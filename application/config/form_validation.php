@@ -74,6 +74,19 @@ $config['course'] = [
 	]
 ];
 
+$config['course_edit'] = [
+	[
+		'field' => 'name',
+		'label' => 'Название',
+		'rules' => 'required'
+	],
+	[
+		'field' => 'teacher',
+		'label' => 'Преподаватель',
+		'rules' => 'required|integer'
+	]
+];
+
 $config['lectures'] = [
 	[
 		'field' => 'name',
@@ -242,8 +255,13 @@ $config['news_add'] = [
 		'rules' => 'required|min_length[3]'
 	],
 	[
-		'field' => 'text',
+		'field' => 'description',
 		'label' => 'Описание',
+		'rules' => 'required|min_length[10]'
+	]
+	[
+		'field' => 'text',
+		'label' => 'Детальное описание',
 		'rules' => 'required|min_length[10]'
 	]
 ];

@@ -19,6 +19,7 @@ $tpl_user = $CI->Auth->user();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
+	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.css">
 	<!-- MAIN CSS -->
 
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
@@ -95,7 +96,7 @@ $tpl_user = $CI->Auth->user();
 					</li>
 					<li class="nav-item nav-user-icon">
 						<a class="nav-link" href="/profile/">
-							<img src="<?=$CI->Auth->user()['img']?>" alt="profile"/>
+							<img src="<?=$tpl_user['img']?>" alt="profile"/>
 						</a>
 					</li>
 					<li class="nav-item nav-settings d-none d-lg-flex dropdown">
@@ -174,7 +175,7 @@ $tpl_user = $CI->Auth->user();
 					<li class="nav-item nav-profile">
 						<div class="nav-link d-flex">
 							<div class="profile-image">
-								<a href="/profile/"><img src="<?=$CI->Auth->user()['img']?>" alt="image"></a>
+								<a href="/profile/"><img src="<?=$tpl_user['img']?>" alt="image"></a>
 							</div>
 							<div class="profile-name">
 								<p class="name text-capitalize"><?=($tpl_user['full_name'] ?? $tpl_user['email'])?></p>
@@ -184,7 +185,7 @@ $tpl_user = $CI->Auth->user();
 					</li>
 					<li class="nav-item <?=is_active_menu_item('main')?'active':''?>">
 						<a class="nav-link" href="/">
-							<i class="mdi mdi-shield-check menu-icon"></i>
+							<i class="mdi mdi-home menu-icon"></i>
 							<span class="menu-title">Главная</span>
 						</a>
 					</li>
@@ -259,6 +260,7 @@ $tpl_user = $CI->Auth->user();
 	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.min.js"></script>	
 
 	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
 </body>

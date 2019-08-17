@@ -1,87 +1,93 @@
-<div class="roadmap-component">
-	<div class="roadmap-container">
-		<div class="roadmap-header">
-			<div class="roadmap-roulete">
-				<?if($roadmap['head']):?>
-					<?$i = 0;?>
-					<?foreach($roadmap['head'] as $k_year => $v_year):?>
-						<?foreach($v_year as $v_month):?>
-							<div class="r-month">
-								<div class="r-month-title"><?=$v_month?></div>
-								<span class="r-week <?=(($i === 0)?'first':'')?>"></span>
-								<span class="r-week"></span>
-								<span class="r-week"></span>
-								<span class="r-week last"></span>
-							</div>
-							<?$i++;?>
-						<?endforeach;?>
-					<?endforeach;?>
-				<?endif;?>
-			</div>
-		</div>
-		<div class="roadmap-body">
-			<div class="current-week-mark" style="left: <?=$roadmap['week']['left']?>px"></div>
-			<?if($items):?>
-				<?$i = 0;?>
-				<?foreach($items as $item):?>
-					<div class="roadmap-item item-color<?=(++$i)?>">
-						<div class="item-head colored">
-							<span class="title"><?=$item['name']?></span>
-							<span class="btn-menu btn-collapse" data-toggle="collapse" data-target="#items-row-wrap<?=$item['id']?>"><i class="fa fa-angle-up"></i></span>
-							<div class="btn-group">
-								<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
-								<ul class="dropdown-menu" role="menu">
-									<li><a href="./edit/<?=$item['id']?>/">Редактировать</a></li>
-									<li><a href="./<?=$item['id']?>/lectures/">Лекции</a></li>
-									<li><a href="javascript: void(0);" data-value="<?=$item['id']?>" class="btn-add-group">Добавить группу</a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="items-row-wrap collapse in" id="items-row-wrap<?=$item['id']?>">
-							<?if(!empty($roadmap['body'][$item['id']])):?>
-								<?foreach($roadmap['body'][$item['id']] as $val):?>
-									<div class="item-row">
-										<?foreach($val as $v):?>
-											<span class="roadmap-mark colored"  style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;">
-												<span class="icon colored"><i class="<?=$v['style']?>"></i></span>
-												<span><?=$v['title']?></span>
-												<div class="info">
-													<ul>
-														<li>Тип: <?=$v['type']?></li>
-														<li>Дата: <?=$v['title']?></li>
-														<li>Подписано: <?=$v['subscription_cnt']?></li>
-														<li>Дней до начала: <?=$v['days']?></li>
-													</ul>
-												</div>
-												<div class="btn-group">
-													<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
-													<ul class="dropdown-menu" role="menu">
-														<li><a href="/admin/groups/<?=$v['code']?>/">Информация</a></li>
-														<?if($v['subscription_cnt'] === 0):?>
-															<li><a href="javascript: void(0);" class="btn-remove-group" data-id="<?=$v['id']?>">Удалить</a></li>
-														<?endif;?>
-													</ul>
-												</div>
-											</span>
-										<?endforeach;?>
+<div class="card">
+	<div class="card-body">
+		
+		<div class="roadmap-component">
+			<div class="roadmap-container">
+				<div class="roadmap-header">
+					<div class="roadmap-roulete">
+						<?if($roadmap['head']):?>
+							<?$i = 0;?>
+							<?foreach($roadmap['head'] as $k_year => $v_year):?>
+								<?foreach($v_year as $v_month):?>
+									<div class="r-month">
+										<div class="r-month-title"><?=$v_month?></div>
+										<span class="r-week <?=(($i === 0)?'first':'')?>"></span>
+										<span class="r-week"></span>
+										<span class="r-week"></span>
+										<span class="r-week last"></span>
 									</div>
+									<?$i++;?>
 								<?endforeach;?>
-							<?else:?>
-								<div class="item-row"></div>
-							<?endif;?>
-						</div>
-						<div class="item-row row-collapse"></div>
+							<?endforeach;?>
+						<?endif;?>
 					</div>
-				<?endforeach;?>
-			<?endif;?>
-			<div class="roadmap-item item-color-default">
-				<div class="item-head colored">
-					<span><i class="fa fa-plus"></i></span>
-					<a href="./add/"></a>
 				</div>
-				<div class="item-row"></div>
+				<div class="roadmap-body">
+					<div class="current-week-mark" style="left: <?=$roadmap['week']['left']?>px"></div>
+					<?if($items):?>
+						<?$i = 0;?>
+						<?foreach($items as $item):?>
+							<div class="roadmap-item item-color<?=(++$i)?>">
+								<div class="item-head colored">
+									<span class="title"><?=$item['name']?></span>
+									<span class="btn-menu btn-collapse" data-toggle="collapse" data-target="#items-row-wrap<?=$item['id']?>"><i class="fa fa-angle-down"></i></span>
+									<div class="btn-group">
+										<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
+										<ul class="dropdown-menu" role="menu">
+											<li class="dropdown-item"><a href="./edit/<?=$item['id']?>/">Редактировать</a></li>
+											<li class="dropdown-item"><a href="./<?=$item['id']?>/lectures/">Лекции</a></li>
+											<li class="dropdown-item"><a href="javascript: void(0);" data-value="<?=$item['id']?>" class="btn-add-group">Добавить группу</a></li>
+										</ul>
+									</div>
+								</div>
+								<div class="items-row-wrap collapse in" id="items-row-wrap<?=$item['id']?>">
+									<?if(!empty($roadmap['body'][$item['id']])):?>
+										<?foreach($roadmap['body'][$item['id']] as $val):?>
+											<div class="item-row">
+												<?foreach($val as $v):?>
+													<span class="roadmap-mark colored"  style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;">
+														<span class="icon colored"><i class="<?=$v['style']?>"></i></span>
+														<span><?=$v['title']?></span>
+														<div class="info">
+															<ul>
+																<li>Тип: <?=$v['type']?></li>
+																<li>Дата: <?=$v['title']?></li>
+																<li>Подписано: <?=$v['subscription_cnt']?></li>
+																<li>Дней до начала: <?=$v['days']?></li>
+															</ul>
+														</div>
+														<div class="btn-group">
+															<span class="btn-menu" data-toggle="dropdown"><i class="fa fa-ellipsis-v"></i></span>
+															<ul class="dropdown-menu" role="menu">
+																<li class="dropdown-item"><a href="/admin/groups/<?=$v['code']?>/">Информация</a></li>
+																<?if($v['subscription_cnt'] === 0):?>
+																	<li class="dropdown-item"><a href="javascript: void(0);" class="btn-remove-group" data-id="<?=$v['id']?>">Удалить</a></li>
+																<?endif;?>
+															</ul>
+														</div>
+													</span>
+												<?endforeach;?>
+											</div>
+										<?endforeach;?>
+									<?else:?>
+										<div class="item-row"></div>
+									<?endif;?>
+								</div>
+								<div class="item-row row-collapse"></div>
+							</div>
+						<?endforeach;?>
+					<?endif;?>
+					<div class="roadmap-item item-color-default">
+						<div class="item-head colored">
+							<span><i class="fa fa-plus"></i></span>
+							<a href="./add/"></a>
+						</div>
+						<div class="item-row"></div>
+					</div>
+				</div>
 			</div>
 		</div>
+
 	</div>
 </div>
 

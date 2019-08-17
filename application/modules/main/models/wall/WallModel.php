@@ -36,7 +36,7 @@ class WallModel extends APP_Model
 
 		$sql = 'SELECT 
 					w.*, w2.cnt as child_cnt, CONCAT_WS(\' \', u.name, u.lastname) as full_name, 
-					u.email as email, u.role as role 
+					u.email as email, u.role as role, u.img  
 				FROM 
 					'.self::TABLE.' as w 
 				LEFT JOIN 
@@ -81,7 +81,7 @@ class WallModel extends APP_Model
 		$bind = [$id];
 
 		$sql = 'SELECT 
-					w.*, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email as email, u.role as role  
+					w.*, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.email as email, u.role as role, u.img   
 				FROM 
 					'.self::TABLE.' as w 
 				LEFT JOIN 

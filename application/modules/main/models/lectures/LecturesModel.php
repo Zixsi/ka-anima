@@ -16,9 +16,12 @@ class LecturesModel extends APP_Model
 		'review', // ревью 
 	];
 
+	const TYPE_COMMON = 0; // обычная
+	const TYPE_INTRO = 1; // вводная
+
 	const TYPES = [
-		'0' => ['title' => 'Обычная', 'value' => 0],
-		'1' => ['title' => 'Вводная', 'value' => 1]
+		self::TYPE_COMMON => ['title' => 'Обычная', 'value' => 0],
+		self::TYPE_INTRO => ['title' => 'Вводная', 'value' => 1]
 	];
 
 	public function __construct()

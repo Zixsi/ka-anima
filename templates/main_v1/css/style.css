@@ -10024,16 +10024,16 @@ pre code {
 .table td, .jsgrid .jsgrid-table td {
   padding: 1.25rem 0.9375rem;
   vertical-align: top;
-  border-top: 1px solid #f6f2f2;
+  border-top: 1px solid #d3d9de;
 }
 
 .table thead th, .jsgrid .jsgrid-table thead th {
   vertical-align: bottom;
-  border-bottom: 2px solid #f6f2f2;
+  border-bottom: 2px solid #d3d9de;
 }
 
 .table tbody + tbody, .jsgrid .jsgrid-table tbody + tbody {
-  border-top: 2px solid #f6f2f2;
+  border-top: 2px solid #d3d9de;
 }
 
 .table-sm th,
@@ -10042,12 +10042,12 @@ pre code {
 }
 
 .table-bordered {
-  border: 1px solid #f6f2f2;
+  border: 1px solid #d3d9de;
 }
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #f6f2f2;
+  border: 1px solid #d3d9de;
 }
 
 .table-bordered thead th,
@@ -22397,7 +22397,7 @@ code {
 
 .input-group-append .input-group-text,
 .input-group-prepend .input-group-text {
-  border-color: #f6f2f2;
+  border-color: #d3d9de;
   padding: 0.875rem 0.75rem;
   color: #979797;
 }
@@ -22406,7 +22406,7 @@ code {
 .jsgrid .jsgrid-table .jsgrid-filter-row select, .jsgrid .jsgrid-table .jsgrid-filter-row input[type=number], .select2-container--default .select2-selection--single, .select2-container--default .select2-selection--single .select2-search__field, .typeahead,
 .tt-query,
 .tt-hint {
-  border: 1px solid #f6f2f2;
+  border: 1px solid #d3d9de;
   font-weight: 400;
   font-size: 0.875rem;
   height: auto;
@@ -22427,7 +22427,7 @@ select.form-control:focus, select.asColorPicker-input:focus, .dataTables_wrapper
 .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .select2-container--default select.select2-selection--single:focus, .select2-container--default .select2-selection--single select.select2-search__field:focus, select.typeahead:focus,
 select.tt-query:focus,
 select.tt-hint:focus {
-  outline: 1px solid #f6f2f2;
+  outline: 1px solid #d3d9de;
 }
 
 select.form-control.border-primary, select.border-primary.asColorPicker-input, .dataTables_wrapper select.border-primary,
@@ -24489,7 +24489,7 @@ dl li {
   font-weight: 600;
   font-size: 0.8125rem;
   padding: 1rem 0.9375rem;
-  border-bottom: 1px solid #edeef2;
+  border-bottom: 1px solid #d3d9de;
 }
 
 .table thead th i, .jsgrid .jsgrid-table thead th i {
@@ -24506,7 +24506,7 @@ dl li {
   font-size: 0.813rem;
   padding: 0.625rem;
   color: #707889;
-  border-bottom: 1px solid #f6f2f2;
+  border-bottom: 1px solid #d3d9de;
   font-weight: 500;
 }
 
@@ -24544,7 +24544,7 @@ dl li {
 }
 
 .table.table-bordered, .jsgrid .table-bordered.jsgrid-table {
-  border-top: 1px solid #f6f2f2;
+  border-top: 1px solid #d3d9de;
 }
 
 .table tr:last-child td, .jsgrid .jsgrid-table tr:last-child td {

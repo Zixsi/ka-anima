@@ -62,7 +62,7 @@ class CoursesModel extends APP_Model
 	public function getByCode($code)
 	{
 		$sql = 'SELECT 
-					c.*, l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img    
+					c.*, l_all.cnt as cnt_all, l_main.cnt as cnt_main, (l_all.cnt - l_main.cnt) as cnt_other, f.full_path as img_src    
 				FROM 
 					'.self::TABLE.' as c  
 				LEFT JOIN 
@@ -112,8 +112,8 @@ class CoursesModel extends APP_Model
 			$data['free'] = false;
 			$data['only_standart'] = (int) ($data['only_standart'] ?? 0);
 
-			if(array_key_exists('img', $data))
-				$data['img'] = empty($data['img'])?IMG_DEFAULT_16_9:'/'.$data['img'];
+			if(array_key_exists('img_src', $data))
+				$data['img_src'] = empty($data['img_src'])?IMG_DEFAULT_16_9:'/'.$data['img_src'];
 
 			if(array_key_exists('price', $data))
 			{

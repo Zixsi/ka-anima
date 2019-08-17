@@ -75,7 +75,7 @@ class CoursesHelper extends APP_Model
 			$item = [
 				'active' => ($data['active'] ?? $course_item['active']),
 				'name' => ($data['name'] ?? $course_item['name']),
-				'code' => ($data['code'] ?? $course_item['code']),
+				// 'code' => ($data['code'] ?? $course_item['code']),
 				'description' => ($data['description'] ?? $course_item['description']),
 				'teacher' => intval($data['teacher'] ?? $course_item['teacher']),
 				'price' => json_encode($price),
@@ -85,7 +85,7 @@ class CoursesHelper extends APP_Model
 
 			$this->form_validation->reset_validation();
 			$this->form_validation->set_data($data);
-			if($this->form_validation->run('course') == false)
+			if($this->form_validation->run('course_edit') == false)
 				throw new Exception($this->form_validation->error_string(), 1);
 
 			if($img_id = $this->uploadImg('img', 'upload_course'))

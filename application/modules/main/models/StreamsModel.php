@@ -104,8 +104,12 @@ class StreamsModel extends APP_Model
 					s.id = ?
 				ORDER BY 
 					s.ts ASC';
+
 		if($res = $this->db->query($sql, [$id])->row_array())
 		{
+			$res['ts_timestamp'] = strtotime($res['ts']);
+			$res['started'] = ($res['ts_timestamp'] <=  time())?true:false;
+
 			return $res;
 		}
 
@@ -148,19 +152,22 @@ class StreamsModel extends APP_Model
 			$ts = time();
 			foreach($res as &$val)
 			{
+				$val['started'] = false;
 				$val['status'] = 1;
-				$ts_start = strtotime($val['ts']);
-				$ts_end = $ts_start + (3600 * 4);
+				$val['ts_timestamp'] = strtotime($val['ts']);
+				$ts_end = $val['ts_timestamp'] + (3600 * 4);
 
 				if($ts > $ts_end)
 				{
+					$val['started'] = true;
 					$val['status'] = -1;
 				}
-				elseif($ts >= $ts_start && $ts < $ts_end)
+				elseif($ts >= $val['ts_timestamp'] && $ts < $ts_end)
 				{
+					$val['started'] = true;
 					$val['status'] = 0;
 				}
-				elseif(date('Y-m-d') === date('Y-m-d', $ts_start))
+				elseif(date('Y-m-d') === date('Y-m-d', $val['ts_timestamp']))
 				{
 					$val['status'] = 2;
 				}

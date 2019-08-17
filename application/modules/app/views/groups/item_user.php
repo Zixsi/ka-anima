@@ -13,7 +13,10 @@
 							<span class="number">
 								<span><?=$i?></span>
 								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
-									<span class="badge bg-danger">!</span>
+									<span class="badge bg-danger" 
+										data-toggle="tooltip" 
+										data-placement="bottom" 
+										data-original-title="не загружено домашнее задание">!</span>
 								<?endif;?>
 							</span>
 							<span class="name"><?=$item['name']?></span>
@@ -23,7 +26,10 @@
 							<span class="number">
 								<span><?=$i?></span>
 								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
-									<span class="badge bg-danger">!</span>
+									<span class="badge bg-danger" 
+										data-toggle="tooltip" 
+										data-placement="bottom" 
+										data-original-title="не загружено домашнее задание">!</span>
 								<?endif;?>
 							</span>
 							<span class="name"><?=$item['name']?></span>
@@ -74,6 +80,9 @@
 				<div class="card mb-4">
 					<div class="card-body">
 						<h3 class="card-title">Загрузка заданий</h3>
+						<?if($error):?>
+							<div class="alert alert-danger"><?=$error?></div>
+						<?endif;?>
 						<div class="row">
 							<div class="col-6" style="font-size: 14px;">
 								<p><b>Видео файлы (mp4) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
@@ -142,13 +151,13 @@
 <?if($subscr_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/subscription/">Продлите чтобы получить доступ.</a></div>
 	<div class="text-center" style="padding: 50px 0px;">
-		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
+		<img src="<?=IMG_UNICORN?>" width="300" height="300">
 	</div>
 <?elseif($lectures_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">
 		<span>Нет активных лекций</span><br>
 	</div>
 	<div class="text-center" style="padding: 50px 0px;">
-		<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
+		<img src="<?=IMG_UNICORN?>" width="300" height="300">
 	</div>
 <?endif;?>

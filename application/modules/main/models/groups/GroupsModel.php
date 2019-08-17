@@ -144,9 +144,42 @@ class GroupsModel extends APP_Model
 					f.is_image = 1';
 
 		if($res = $this->db->query($sql, [$id])->result_array())
-			return $res;
+		{
+			foreach($res as &$val)
+			{
+				$val['src_thumb'] = thumb($val['src']);
+			}
 
-		return false;
+			return $res;
+		}
+
+		return [];
+	}
+
+	public function getVideoFiles($id)
+	{
+		$sql = 'SELECT 
+					f.id, f.full_path as src 
+				FROM 
+					'.self::TABLE_HOMEWORK.' as hw 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = hw.file) 
+				WHERE 
+					hw.group_id = ? AND 
+					f.file_ext = \'.mp4\'';
+
+		if($res = $this->db->query($sql, [$id]))
+		{
+			$res = $res->result_array();
+			foreach($res as &$val)
+			{
+				$val['src_thumb'] = IMG_DEFAULT_300_300;
+			}
+
+			return $res;
+		}
+
+		return [];
 	}
 
 	// список активных групп

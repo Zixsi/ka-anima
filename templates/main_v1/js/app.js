@@ -221,6 +221,81 @@ function ajaxQuery(method, params, callback)
 	}, GLOBAL_TIME_DELAY);
 }
 
+function ajaxFilesQuery(method, params, files, callback)
+{
+	showPageLoader();
+	var query = {'method': method, 'params': params};
+
+	var formData = new FormData();
+	formData.append('query', JSON.stringify(query));
+
+	if(files.length > 0)
+	{
+		files.forEach(function(e, i){
+			formData.append(e.name, e.value);
+		});
+	}
+
+	setTimeout(function(){
+		$.ajax({
+			url: AJAX_API_URL,
+			type: 'POST',
+			dataType: false,
+			contentType: false,
+			processData: false,
+			data: formData,
+			success: function(res){
+
+				try
+				{
+					res = JSON.parse(res);
+				}
+				catch(err)
+				{
+					toastrMsg('error', 'error parse json');
+					return false;
+				}
+
+				if(res.result !== undefined && res.result !== null)
+				{
+					if(callback && typeof(callback) === "function")
+						callback(res.result);
+				}
+				else if(res.error)
+				{
+					if(res.error.code === 'NOT_AUTHORIZED')
+					{
+						setTimeout(function(){
+							window.location.href = '/';
+						}, 2000);
+					}
+					
+					toastrMsg('error', res.error.message);
+				}
+
+				hidePageLoader();
+			},
+			error: function(e, code){
+				hidePageLoader();
+				toastrMsg('error', 'AJAX ERROR');
+				// console.log(e.responseText);
+			}
+		});
+	}, GLOBAL_TIME_DELAY);
+}
+
+
+function formFiles(form)
+{
+	var files = [];
+	$(form).find('input[type="file"]').each(function(i, e){
+		if($(e)[0].files.length > 0)
+			files.push({name: $(e).attr('name'), value: $(e)[0].files[0]});
+	});
+
+	return files;
+}
+
 function datepiker()
 {
 	if($('.datepiker').length < 1)
@@ -229,8 +304,8 @@ function datepiker()
 	$.datetimepicker.setLocale('ru');
 
 	$('.datepiker').datetimepicker({
-		format: 'd-m-Y',
-		formatDate: 'd-m-Y',
+		format: 'd.m.Y',
+		formatDate: 'd.m.Y',
 		lang:'ru',
 		timepicker: false,
 		dayOfWeekStart: 1
@@ -298,6 +373,11 @@ function appListener()
 	datepiker();
 	datetimepicker();
 
+	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
+		event.preventDefault();
+		$(this).ekkoLightbox({ wrapping: false });
+	});
+
 	// $('.course-card--groups .btn-date-change input[type="radio"]').on('change', function(){
 	// 	$('.pricing-table input[name="group"]').val($(this).val());
 	// 	$('.pricing-table-wrapper').show();
@@ -330,7 +410,7 @@ function appListener()
 	});
 
 	$('.bnt-remove-review').on('click', function(){
-		ajaxApiQuery('review.delete', $(this).data('id'), function(res){
+		ajaxQuery('review.delete', $(this).data('id'), function(res){
 			toastrMsg('success', res);
 			add_review_modal.modal('hide');
 			window.location.reload(true);
@@ -341,7 +421,7 @@ function appListener()
 
 	add_review_modal_form.on('submit', function(){
 		var params = $(this).serializeControls();
-		ajaxApiQuery('review.add', params, function(res){
+		ajaxQuery('review.add', params, function(res){
 			toastrMsg('success', res);
 			add_review_modal.modal('hide');
 			window.location.reload(true);

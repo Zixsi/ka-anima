@@ -28,21 +28,29 @@ class Groups extends APP_Controller
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
+		// лекции группы
+		$lectures = $this->LecturesGroupModel->listForGroup($data['item']['id']);
+
 		// дз ученика
 		$data['user'] = null;
 		$data['homeworks'] = [];
 		if(isset($params['user']) && array_key_exists($params['user'], $data['users']))
 		{
 			$data['user'] = $data['users'][$params['user']];
-			// получить лекции группы
-			// с меткой о загруженных файлах
-			// с меткой о загруженных ревью
-			$data['homeworks'] = $this->LecturesGroupModel->listForUser($data['item']['id'], $data['user']['id']);
+			
+			// список файлов пользователя
+			$user_homeworks = $this->LecturesHomeworkModel->userFilesForGroup($data['user']['id'], $data['item']['id']);
+			// список ревью для пользователя
+			$user_reviews = $this->ReviewModel->getByGroup($data['item']['id'], ['user' => $data['user']['id']]);
+
+			$data['homeworks'] = $this->GroupsHelper->buildHomeworkInfo($lectures, $user_homeworks, $user_reviews);
+			unset($lectures, $user_homeworks, $user_reviews);
+
 			$this->listenUserActions($data['item'], $params);
 		}
 
 		$data['streams'] = $this->StreamsModel->byGroupList($data['item']['id']);
-		// debug($data['streams']); die();
+		// debug($data); die();
 
 		$this->load->lview('groups/item', $data);
 	}

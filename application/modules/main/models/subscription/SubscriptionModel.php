@@ -242,7 +242,7 @@ class SubscriptionModel extends APP_Model
 			}
 
 			$sql = 'SELECT 
-						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name
+						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.img 
 					FROM 
 						'.self::TABLE.' as s 
 					LEFT JOIN 

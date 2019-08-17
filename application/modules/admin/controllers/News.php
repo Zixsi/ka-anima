@@ -12,9 +12,7 @@ class News extends APP_Controller
 	{
 		$data = [];
 		if(($id = $this->input->post('id', true)) && $this->input->post('type') === 'delete')
-		{
 			$this->NewsModel->delete($id);
-		}
 		$data['items'] = $this->NewsModel->list('desc');
 
 		$this->load->lview('news/index', $data);
@@ -35,13 +33,16 @@ class News extends APP_Controller
 				$this->form_validation->set_data($form_data);
 
 				if($this->form_validation->run('news_add') === false)
-				{
 					throw new Exception($this->form_validation->error_string());
-				}
+
+				if($img = $this->NewsHelper->prepareImg('img'))
+					$form_data['img'] = $img;
 
 				$form_data = [
-					'title' => $form_data['title'],
-					'text' => $form_data['text']
+					'title' => htmlspecialchars_decode($form_data['title']),
+					'text' => htmlspecialchars_decode($form_data['text']),
+					'description' => htmlspecialchars_decode($form_data['description'] ?? ''),
+					'img' => ($form_data['img'] ?? '')
 				];
 				if($this->NewsModel->add($form_data) === false)
 					throw new Exception($this->NewsModel->getLastError());
@@ -73,13 +74,16 @@ class News extends APP_Controller
 				$this->form_validation->set_data($form_data);
 
 				if($this->form_validation->run('news_edit') === false)
-				{
 					throw new Exception($this->form_validation->error_string());
-				}
+
+				if($img = $this->NewsHelper->prepareImg('img'))
+					$form_data['img'] = '/'.$img;
 
 				$form_data = [
-					'title' => $form_data['title'],
-					'text' => $form_data['text']
+					'title' => htmlspecialchars_decode($form_data['title']),
+					'text' => htmlspecialchars_decode($form_data['text']),
+					'description' => htmlspecialchars_decode($form_data['description'] ?? ''),
+					'img' => ($form_data['img'] ?? '')
 				];
 
 				if($this->NewsModel->update($id, $form_data) === false)

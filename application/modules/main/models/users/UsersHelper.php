@@ -15,7 +15,7 @@ class UsersHelper extends APP_Model
 
 		// проверка полей
 		if($this->form_validation->run('user_add') == FALSE)
-			throw new Exception(current($this->form_validation->error_array()), -32602);
+			throw new Exception(current($this->form_validation->error_array()), 1);
 
 		$data['active'] = (int) ($data['active'] ?? 1);
 		$data['password'] = $this->UserModel->pwdHash($data['password']);
@@ -23,7 +23,7 @@ class UsersHelper extends APP_Model
 		unset($data['re_password']);
 
 		if(($id = $this->UserModel->add($data)) === false)
-			throw new Exception('Ошибка создания', -32603);
+			throw new Exception('Ошибка создания', 1);
 
 		return true;
 	}
@@ -31,7 +31,7 @@ class UsersHelper extends APP_Model
 	public function edit($id, $data = [])
 	{
 		if(($item = $this->UserModel->getByID($id)) === false)
-			throw new Exception('Пользователь не найден', -32602);
+			throw new Exception('Пользователь не найден', 1);
 
 		$this->form_validation->reset_validation();
 
@@ -49,8 +49,10 @@ class UsersHelper extends APP_Model
 
 		$this->form_validation->set_data($data);
 		if($this->form_validation->run() == FALSE)
-			throw new Exception(current($this->form_validation->error_array()), -32602);
+			throw new Exception(current($this->form_validation->error_array()), 1);
 
+		if(isset($data['birthday']))
+			$data['birthday'] = date(DATE_FORMAT_DB_SHORT, strtotime($data['birthday']));
 
 		if(isset($data['password']) && empty($data['password']))
 			unset($data['password']);
@@ -61,7 +63,7 @@ class UsersHelper extends APP_Model
 			$this->form_validation->set_rules('re_password', 'Повтор пароля', 'trim|matches[password]');
 			$this->form_validation->set_data($data);
 			if($this->form_validation->run() == FALSE)
-				throw new Exception(current($this->form_validation->error_array()), -32602);
+				throw new Exception(current($this->form_validation->error_array()), 1);
 
 			$data['password'] = $this->UserModel->pwdHash($data['password']);
 		}
@@ -76,10 +78,10 @@ class UsersHelper extends APP_Model
 	public function remove($id)
 	{
 		if(($item = $this->UserModel->getByID($id)) === false)
-			throw new Exception('Пользователь не найден', -32602);
+			throw new Exception('Пользователь не найден', 1);
 
 		if($item['role'] == '5')
-			throw new Exception('Действие запрещено', -32603);
+			throw new Exception('Действие запрещено', 1);
 
 		$this->UserModel->update($id, ['deleted' => 1]);
 
@@ -89,10 +91,10 @@ class UsersHelper extends APP_Model
 	public function block($id)
 	{
 		if(($item = $this->UserModel->getByID($id)) === false)
-			throw new Exception('Пользователь не найден', -32602);
+			throw new Exception('Пользователь не найден', 1);
 
 		if($item['role'] == '5')
-			throw new Exception('Действие запрещено', -32603);
+			throw new Exception('Действие запрещено', 1);
 
 		$this->UserModel->update($id, ['blocked' => 1]);
 
@@ -102,7 +104,7 @@ class UsersHelper extends APP_Model
 	public function unblock($id)
 	{
 		if(($item = $this->UserModel->getByID($id)) === false)
-			throw new Exception('Пользователь не найден', -32602);
+			throw new Exception('Пользователь не найден', 1);
 
 		$this->UserModel->update($id, ['blocked' => 0]);
 

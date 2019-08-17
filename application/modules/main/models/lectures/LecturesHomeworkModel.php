@@ -107,6 +107,7 @@ class LecturesHomeworkModel extends APP_Model
 
 	public function listLecturesIdWithHomework($group_id, $user)
 	{
+		$result = [];
 		$sql = 'SELECT lecture_id FROM '.self::TABLE_LECTURES_HOMEWORK.' WHERE group_id = ? AND user = ? AND type = 0 GROUP BY lecture_id';
 		if($res = $this->db->query($sql, [$group_id, $user])->result_array())
 		{
@@ -114,7 +115,7 @@ class LecturesHomeworkModel extends APP_Model
 				$result[] = $val['lecture_id'];
 		}
 
-		return [];
+		return $result;
 	}
 
 	// Список загруженных юзерами файлов в лекции для преподователя
@@ -162,5 +163,28 @@ class LecturesHomeworkModel extends APP_Model
 			return $this->db->insert_id();
 
 		return false;
+	}
+
+	// список файлов пользователя в группе
+	public function userFilesForGroup($user_id, $group_id)
+	{
+		$result = [];
+		$sql = 'SELECT 
+					hw.*, f.orig_name as name 
+				FROM 
+					'.self::TABLE_LECTURES_HOMEWORK.' as hw 
+				LEFT JOIN 
+					'.self::TABLE_FILES.' as f ON(f.id = hw.file) 
+				WHERE 
+					hw.user = ? AND hw.group_id = ? 
+				ORDER BY 
+					hw.id ASC';
+
+		if($res = $this->db->query($sql, [$user_id, $group_id]))
+		{
+			$result = $res->result_array();
+		}
+
+		return $result;
 	}
 }

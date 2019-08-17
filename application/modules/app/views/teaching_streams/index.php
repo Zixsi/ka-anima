@@ -48,13 +48,13 @@
 									<td><?=date(DATE_FORMAT_FULL, strtotime($item['ts']))?></td>
 									<td class="text-right">
 										<?if($item['status'] == 0):?>
-											<span class="label label-success">В процессе</span>
+											<span class="badge badge-success">В процессе</span>
 										<?elseif($item['status'] == -1):?>
-											<span class="label label-danger">Завершено</span>
+											<span class="badge badge-danger">Завершено</span>
 										<?elseif($item['status'] == 2):?>
-											<span class="label label-info">Сегодня</span>
+											<span class="badge badge-info">Сегодня</span>
 										<?else:?>
-											<span class="label label-warning">Скоро</span>
+											<span class="badge badge-warning">Скоро</span>
 										<?endif;?>
 									</td>
 									<td class="text-right">

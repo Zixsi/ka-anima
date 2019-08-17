@@ -166,6 +166,8 @@ class FilesModel extends APP_Model
 
 						if($this->addLink($file_id, $item_id, $type) === false)
 							throw new Exception($this->getLastError(), 1);
+
+						// $this->createThumb($file['full_path']);
 					}
 				}
 
@@ -192,4 +194,45 @@ class FilesModel extends APP_Model
 
 		return true;
 	}
+
+	public function createThumb($file, $width = 150, $height = 150)
+	{
+		if(!isset($file['is_image']) || (int) $file['is_image'] !== 1)
+			return;
+
+		$config_resize = [
+			'source_image' => $file['full_path'],
+			'new_image' => $file['file_path'].$file['raw_name'].'_tmp'.$file['file_ext'],
+			'maintain_ratio' => true,
+			'width' => (int) $width,
+			'height' => (int) $height,
+			'master_dim' => (((int) $file['image_width'] > (int) $file['image_height'])?'height':'width')
+		];
+
+		$config_crop = [
+			'source_image' => $config_resize['new_image'],
+			'new_image' => $file['full_path'],
+			'maintain_ratio' => false,
+			'create_thumb' => true,
+			'thumb_marker' => '_thumb',
+			'width' => (int) $width,
+			'height' => (int) $height,
+		];
+		
+		$this->image_lib->initialize($config_resize);
+		if(!$this->image_lib->resize())
+			throw new Exception($this->image_lib->display_errors(), 1);
+		$this->image_lib->clear();
+
+		$this->image_lib->initialize($config_crop);
+		if(!$this->image_lib->crop())
+		{
+			unlink($config_resize['new_image']);
+			throw new Exception($this->image_lib->display_errors(), 1);
+		}
+
+		unlink($config_resize['new_image']);
+		$this->image_lib->clear();
+	}
+
 }
