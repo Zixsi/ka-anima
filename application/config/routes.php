@@ -15,6 +15,10 @@ $route['admin/courses/(:num)/lectures'] = 'admin/Lectures/index/$1';
 $route['admin/courses/(:num)/lectures/(.*)'] = 'admin/Lectures/$2/$1';
 $route['admin/courses/(.*)'] = 'admin/Courses/$1';
 $route['admin/groups/(:any)'] = 'admin/Groups/item/$1';
+$route['admin/faq/sections/add'] = 'admin/faq/addSections';
+$route['admin/faq/sections/(:num)'] = 'admin/faq/editSections/$1';
+
+
 $route['admin/(.*)'] = 'admin/$1';
 
 $route['profile'] = 'app/Profile/index';

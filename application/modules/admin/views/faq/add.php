@@ -8,11 +8,20 @@
 </div>
 
 <div class="card">
-	<div class="card-body" style="padding-top: 30px;">
-		<div class="col-xs-12">
+	<div class="card-body">
+		<div class="col-12">
 			<?=alert_error($error);?>
 			<form action="" method="POST">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
+				<div class="form-group">
+					<label>Категория</label>
+					<select name="section" class="form-control">
+						<option value="0" <?=set_select2('section', 0, true)?>>-- нет --</option>
+						<?foreach($sections as $val):?>
+							<option value="<?=$val['id']?>" <?=set_select2('section', $val['id'])?>><?=$val['name']?></option>
+						<?endforeach;?>
+					</select>
+				</div>
 				<div class="form-group">
 					<label for="fquestion">Вопрос</label>
 					<input type="text" name="question" id="fquestion" class="form-control" value="<?=set_value('question', '', true)?>">

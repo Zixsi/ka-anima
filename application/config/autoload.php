@@ -170,9 +170,10 @@ $autoload['model'] = [
 	'main/email/EmailHelper',
 	'main/pay/PayHelper',
 	'main/pay/PaySystem',
+	'main/faq/FaqModel',
+	'main/faq/FaqHelper',
 
 	'main/VideoModel',
 	'main/StreamsModel',
-	'main/FaqModel',
 	'main/OptionsModel',
 ];

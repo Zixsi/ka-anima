@@ -248,6 +248,15 @@ $config['faq_add'] = [
 ];
 $config['faq_edit'] = $config['faq_add'];
 
+$config['faq_section_add'] = [
+	[
+		'field' => 'name',
+		'label' => 'Название',
+		'rules' => 'required|min_length[3]|max_length[255]'
+	],
+];
+$config['faq_section_edit'] = $config['faq_section_add'];
+
 $config['news_add'] = [
 	[
 		'field' => 'title',

@@ -1,10 +1,9 @@
 <div class="row mb-4">
 	<div class="col-6">
-		<h3>FAQ</h3>
+		<h3>FAQ разделы</h3>
 	</div>
 	<div class="col-6 text-right">
 		<a href="./add/" class="btn btn-primary">Добавить</a>
-		<a href="./sections/" class="btn btn-primary">Разделы</a>
 	</div>
 </div>
 
@@ -13,7 +12,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th width="200">Раздел</th>
+					<th width="100">Id</th>
 					<th>Название</th>
 					<th class="text-right" width="200">Действие</th>
 				</tr>
@@ -22,10 +21,10 @@
 				<?if(is_array($items)):?>
 					<?foreach($items as $item):?>
 						<tr>
-							<td><?=($item['section_name'] ?? '- - -')?></td>
-							<td><?=$item['question']?></td>
+							<td><?=$item['id']?></td>
+							<td><?=$item['name']?></td>
 							<td class="text-right">
-								<a href="./edit/<?=$item['id']?>/" class="btn btn-xs btn-primary d-inline-block" title="Редактировать">
+								<a href="./<?=$item['id']?>/" class="btn btn-xs btn-primary d-inline-block" title="Редактировать">
 									<i class="mdi mdi-pencil"></i>
 								</a>
 								<form action="" method="post" class="delete-item-form d-inline-block">
