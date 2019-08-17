@@ -10,7 +10,7 @@
 <?//debug($item);?>
 <?if($item):?>
 	<div class="row">
-		?if($item['started'] == false):?>
+		<?if($item['started'] == false):?>
 			<div class="col-12">
 				<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=date(DATE_FORMAT_FULL, $item['ts_timestamp'])?></div>
 			</div>

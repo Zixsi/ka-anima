@@ -32,4 +32,26 @@ class FaqHelper extends APP_Model
 
 		return $this->FaqModel->updateSection($id, $params);	
 	}
+
+	public function splitBySections(&$data, $sections = [])
+	{
+		$result = [];
+
+		foreach($data as $val)
+		{
+			if(!array_key_exists($val['section'], $result))
+			{
+				$result[$val['section']] = [
+					'id' => $val['section'],
+					'name' => ($sections[$val['section']]['name'] ?? '- - -'),
+					'items' => []
+				];
+			}
+
+			$result[$val['section']]['items'][] = $val;
+		}
+
+
+		$data = $result;
+	}
 }

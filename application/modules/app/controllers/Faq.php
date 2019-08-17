@@ -6,7 +6,11 @@ class Faq extends APP_Controller
 	public function index()
 	{
 		$data = [];
-		$data['items'] = $this->FaqModel->list();
+		$items = $this->FaqModel->list();
+		$sections = $this->FaqModel->listSections();
+		$this->FaqHelper->splitBySections($items, $sections);
+
+		$data['chunks'] = array_chunk($items, 2);
 
 		$this->load->lview('faq/index', $data);
 	}
