@@ -29,10 +29,16 @@ class Courses extends APP_Controller
 
 		$this->CoursesHelper->prepareItem($data['item']);
 
-		// список лекций
-		$data['lectures'] = $this->LecturesModel->getByCourse($data['item']['id']);
 		// список предложений
 		$data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);
+		if(count($data['offers']) && empty($this->input->get('date')))
+		{
+			$offer = current($data['offers']);
+			header('Location: ./?date='.$offer['ts_formated']);
+		}
+
+		// список лекций
+		$data['lectures'] = $this->LecturesModel->getByCourse($data['item']['id']);
 		// преподаватель
 		$data['teacher'] = $this->UserModel->getById($data['item']['teacher']);
 

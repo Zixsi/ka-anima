@@ -1,6 +1,7 @@
 <div class="email-wrapper wrapper">
 	<div class="row align-items-stretch">
 		<?if($chats):?>
+			<?//debug($chats);?>
 			<div class="mail-sidebar col-2 pt-3 bg-white">
 				<div class="menu-bar">
 					<div class="wrapper">
@@ -18,6 +19,13 @@
 										<p class="u-name"><?=$val['name']?></p>
 										<p class="u-designation"><?=$val['role_name']?></p>
 									</div>
+									<?if($val['unread'] > 0):?>
+										<p class="notification-ripple notification-ripple-bg">
+											<span class="ripple notification-ripple-bg"></span>
+											<span class="ripple notification-ripple-bg"></span>
+											<span class="ripple notification-ripple-bg"></span>
+										</p>
+									<?endif;?>
 								</a>
 							</li>
 						<?endforeach;?>

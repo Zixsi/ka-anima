@@ -8,6 +8,9 @@ class Groups extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		if(!$this->Auth->isActive())
+			header('Location: /');
+		
 		$this->user = $this->Auth->user();
 	}
 

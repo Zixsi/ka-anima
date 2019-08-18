@@ -6,6 +6,8 @@ class Pay extends APP_Controller
 	public function __construct()
 	{
 		parent::__construct();
+		if(!$this->Auth->isActive())
+			header('Location: /');
 	}
 
 	public function index()

@@ -59,7 +59,8 @@ function toastrMsg(type, text)
 		text: text,
 		showHideTransition: 'slide',
 		icon: 'error',
-		position: 'top-right'
+		position: 'top-right',
+		hideAfter: 5000,
 	};
 
 	switch(type)

@@ -19,6 +19,13 @@
 										<p class="u-designation"><?=$val['role_name']?></p>
 									</div>
 								</a>
+								<?if($val['unread'] > 0):?>
+									<p class="notification-ripple notification-ripple-bg">
+										<span class="ripple notification-ripple-bg"></span>
+										<span class="ripple notification-ripple-bg"></span>
+										<span class="ripple notification-ripple-bg"></span>
+									</p>
+								<?endif;?>
 							</li>
 						<?endforeach;?>
 					</ul>

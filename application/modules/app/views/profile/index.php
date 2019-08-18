@@ -1,5 +1,11 @@
 <div class="row">
 	<div class="col-6 offset-3">
+		<?if(!$this->Auth->isActive()):?>
+			<div class="alert alert-fill-warning" role="alert">
+				<i class="mdi mdi-alert-circle"></i>
+				<span>Пользователь неактивирован. Часть функционала будет недоступно. Для активации следуйте инструкциям направленным на почту.</span>
+			</div>
+		<?endif;?>
 		<div class="card">
 			<div class="card-body">
 				<div class="row">

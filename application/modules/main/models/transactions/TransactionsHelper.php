@@ -45,6 +45,7 @@ class TransactionsHelper extends APP_Model
 			$val['amount_f'] = number_format($val['amount'], 2, '.', ' ');
 			$sign = ($val['type'] === $this->TransactionsModel::TYPE_OUT && $val['amount'] > 0)?'-':'';
 			$val['amount_f'] = $sign.$val['amount_f'];
+			$val['status_info'] = $this->statusInfo($val['status']);
 		}
 	}
 
@@ -71,5 +72,16 @@ class TransactionsHelper extends APP_Model
 		}
 
 		return false;
+	}
+
+	public function statusInfo($status)
+	{
+		$info = [
+			TransactionsModel::STATUS_SUCCESS => ['name' => 'Успешно', 'class' => 'success'],
+			TransactionsModel::STATUS_PENDING => ['name' => 'В процессе', 'class' => 'warning'],
+			TransactionsModel::STATUS_ERROR => ['name' => 'Ошибка', 'class' => 'danger'],
+		];
+
+		return $info[$status] ?? null;
 	}
 }

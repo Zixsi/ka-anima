@@ -3,9 +3,12 @@
 	<li class="nav-item">
 		<a class="nav-link active" href="/courses/">Предложения</a>
 	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="/groups/">Подписки</a>
-	</li>
+
+	<?if($this->Auth->isActive()):?>
+		<li class="nav-item">
+			<a class="nav-link" href="/groups/">Подписки</a>
+		</li>
+	<?endif;?>
 </ul>
 
 <div class="row" id="courses--list">

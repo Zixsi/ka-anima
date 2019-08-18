@@ -92,11 +92,9 @@ class Profile extends APP_Controller
 		$data = [];
 
 		if(($data['user'] = $this->UserModel->getByID($this->user_id)) === false)
-		{
 			show_404();
-		}
 
-		$data['id'] = intval($id);
+		$data['id'] = (int) $id;
 		$data['messages'] = [];
 		$data['error'] = false;
 
@@ -141,14 +139,15 @@ class Profile extends APP_Controller
 
 		if($data['id'] > 0)
 		{
+			$this->UserMessagesModel->chatSetReadAll($data['id'], $data['user']['id']);
+			$data['chats'][$data['id']]['unread'] = 0;
+
 			$data['messages'] = $this->UserMessagesModel->listForChat($this->user_id, $data['id']);
 			if(empty($data['messages']))
 			{
 				if(($target = $this->UserModel->getByID($data['id'])) === false)
-				{
 					header('Location: /profile/messages/');
-				}
-
+				
 				$data['chats'][] = [
 					'id' => $target['id'],
 					'name' => $target['full_name'],

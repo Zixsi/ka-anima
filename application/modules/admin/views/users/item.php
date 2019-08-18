@@ -14,17 +14,17 @@
 									<i class="mdi mdi-dots-horizontal"></i>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right navbar-dropdown">
-									<li class="dropdown-item">
-										<a href="javascript:void(0);" class="btn-send-email-confirm" data-id="<?=$item['id']?>">Отправить подтверждение E-mail</a>
+									<li class="dropdown-item btn-send-email-confirm" data-id="<?=$item['id']?>">
+										<span>Отправить подтверждение E-mail</span>
 									</li>
 									<li class="dropdown-divider"></li>
 									<?if($item['blocked'] == 0):?>
-										<li class="dropdown-item">
-											<a href="javascript:void(0);" class="btn-user-block" data-id="<?=$item['id']?>">Блокировать</a>
+										<li class="dropdown-item btn-user-block" data-id="<?=$item['id']?>">
+											<span>Блокировать</span>
 										</li>
 									<?else:?>
-										<li class="dropdown-item">
-											<a href="javascript:void(0);" class="btn-user-unblock" data-id="<?=$item['id']?>">Разблокировать</a>
+										<li class="dropdown-item btn-user-unblock" data-id="<?=$item['id']?>">
+											<span>Разблокировать</span>
 										</li>
 									<?endif;?>
 									<?/*if($item['deleted'] == 0):?>

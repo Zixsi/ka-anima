@@ -57,8 +57,8 @@ class SystemHook
 		{
 			$is_admin = $this->CI->Auth->isAdmin();
 
-			// если контроллер авторизации, но не страница выхода
-			if($c === 'auth' && $a !== 'logout')
+			// если контроллер авторизации, но не страница из списка
+			if($c === 'auth' && !in_array($a, ['logout', 'confirmation']))
 			{
 				if($is_admin)
 					redirect('/admin/');
@@ -72,6 +72,9 @@ class SystemHook
 			// если не админ но раздел админки
 			elseif(!$is_admin && $d === 'admin')
 				redirect('/');
+
+
+			$this->CI->load->library('main/notifications');
 		}
 	}
 }

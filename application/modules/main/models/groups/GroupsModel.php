@@ -500,16 +500,16 @@ class GroupsModel extends APP_Model
 			switch($val['type'])
 			{
 				case 'advanced':
-					$val['style'] = 'fas fa-chess-bishop';
+					$val['style'] = 'mdi mdi-brightness-5';
 				break;
 				case 'vip':
-					$val['style'] = 'fas fa-chess-king';
+					$val['style'] = 'mdi mdi-brightness-6';
 				break;
 				case 'private':
-					$val['style'] = 'fas fa-chess';
+					$val['style'] = 'mdi mdi-brightness-7';
 				break;
 				default:
-					$val['style'] = 'fas fa-chess-pawn';
+					$val['style'] = 'mdi mdi-brightness-1';
 				break;
 			}
 

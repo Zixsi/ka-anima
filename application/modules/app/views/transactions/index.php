@@ -16,9 +16,14 @@
 						</thead>
 						<tbody>
 							<?foreach($items as $item):?>
-								<tr>
+								<tr class="">
 									<td><?=$item['ts_f']?></td>
-									<td><?=$item['status']?></td>
+									<td>
+										<?if($item['status'] !== TransactionsModel::STATUS_SUCCESS):?>
+											<i class="mdi mdi-alert-circle mx-0 text-<?=$item['status_info']['class']?>" style="font-size: 16px;"></i>
+										<?endif;?>
+										<span><?=$item['status_info']['name']?></span>
+									</td>
 									<td><?=$item['description']?></td>
 									<td class="text-right"><?=$item['amount_f']?>  <?=PRICE_CHAR?></td>
 								</tr>

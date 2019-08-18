@@ -22,6 +22,12 @@ class AuthHelper extends APP_Model
 		if($this->UserModel->pwdHash($data['password']) !== $res['password'])
 			throw new AppBadLogicExtension('Неверный логин или пароль');
 
+		if((int) $res['blocked'] === 1)
+		{
+			$email_support = $this->config->item('email_support');
+			throw new AppBadLogicExtension('Пользователь заблокирован. Обратитесь в службу технической поддержки '.$email_support);
+		}
+
 		unset($res['password']);
 		if(isset($data['remember']))
 		{
@@ -204,5 +210,10 @@ class AuthHelper extends APP_Model
 	public function getName()
 	{
 		// $this->user()
+	}
+
+	public function isActive()
+	{
+		return (($user = $this->user()) && (int) $user['active'] === 1)?true:false;
 	}
 }

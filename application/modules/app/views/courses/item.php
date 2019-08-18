@@ -132,7 +132,7 @@
 					<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 				</ul>
 				<div class="wrapper">
-					<?if($selected_offer_index !== null):?>
+					<?if($selected_offer_index !== null && $this->Auth->isActive()):?>
 						<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 					<?else:?>
 						<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
@@ -215,7 +215,7 @@
 						<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 					</ul>
 					<div class="wrapper">
-						<?if($selected_offer_index !== null):?>
+						<?if($selected_offer_index !== null  && $this->Auth->isActive()):?>
 							<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 						<?else:?>
 							<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
@@ -274,7 +274,7 @@
 							<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 						</ul>
 						<div class="wrapper">
-							<?if($vip_offer !== null):?>
+							<?if($vip_offer !== null && $this->Auth->isActive()):?>
 								<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 							<?else:?>
 								<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>

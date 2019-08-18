@@ -7,6 +7,9 @@ class Video extends APP_Controller
 	{
 		parent::__construct();
 		$this->load->layout = 'empty';
+
+		if(!$this->Auth->isActive())
+			die();
 	}
 	
 	public function index($code = null)

@@ -1,7 +1,8 @@
 <?php
-$CI = &get_instance();
-$tpl_user = $CI->Auth->user();
-// debug($tpl_user); die();
+$tpl_user = $this->Auth->user();
+$this->notifications->load();
+$notifications = $this->notifications->list();
+$unread_messages = $this->UserMessagesModel->cntUnreadAll($tpl_user['id']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,57 +42,45 @@ $tpl_user = $CI->Auth->user();
 					<li class="nav-item dropdown">
 						<a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
 							<i class="mdi mdi-bell-outline mx-0"></i>
-							<!-- <p class="notification-ripple notification-ripple-bg">
-								<span class="ripple notification-ripple-bg"></span>
-								<span class="ripple notification-ripple-bg"></span>
-								<span class="ripple notification-ripple-bg"></span>
-							</p> -->
+							<?if(count($notifications)):?>
+								<p class="notification-ripple notification-ripple-bg">
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+								</p>
+							<?endif;?>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
-							<p class="mb-0 font-weight-normal float-left dropdown-header">Уведомления</p>
-							<!-- <a class="dropdown-item preview-item">
-								<div class="preview-thumbnail">
-									<div class="preview-icon bg-success">
-										<i class="mdi mdi-information mx-0"></i>
-									</div>
-								</div>
-								<div class="preview-item-content">
-									<h6 class="preview-subject font-weight-normal">Application Error</h6>
-									<p class="font-weight-light small-text mb-0 text-muted">Just now</p>
-								</div>
-							</a>
-							<a class="dropdown-item preview-item">
-								<div class="preview-thumbnail">
-									<div class="preview-icon bg-warning">
-										<i class="mdi mdi-settings mx-0"></i>
-									</div>
-								</div>
-								<div class="preview-item-content">
-									<h6 class="preview-subject font-weight-normal">Settings</h6>
-									<p class="font-weight-light small-text mb-0 text-muted">Private message</p>
-								</div>
-							</a>
-							<a class="dropdown-item preview-item">
-								<div class="preview-thumbnail">
-									<div class="preview-icon bg-info">
-										<i class="mdi mdi-account-box mx-0"></i>
-									</div>
-								</div>
-								<div class="preview-item-content">
-									<h6 class="preview-subject font-weight-normal">New user registration</h6>
-									<p class="font-weight-light small-text mb-0 text-muted">2 days ago</p>
-								</div>
-							</a> -->
+							<?if(count($notifications)):?>
+								<!-- <p class="mb-0 font-weight-normal float-left dropdown-header">Уведомления</p> -->
+								<?foreach($notifications as $notif):?>
+									<a <?=($notif['href'])?'href="'.$notif['href'].'"':''?> class="dropdown-item preview-item">
+										<div class="preview-thumbnail">
+											<div class="preview-icon bg-<?=$notif['type']?>">
+												<i class="<?=$notif['icon']?> mx-0"></i>
+											</div>
+										</div>
+										<div class="preview-item-content">
+											<h6 class="preview-subject font-weight-normal"><?=$notif['text']?></h6>
+											<!-- <p class="font-weight-light small-text mb-0 text-muted">Just now</p> -->
+										</div>
+									</a>
+								<?endforeach;?>
+							<?else:?>
+								<p class="mb-0 font-weight-normal text-center dropdown-header">Нет новых уведомлений</p>
+							<?endif;?>
 						</div>
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link count-indicator d-flex justify-content-center align-items-center nav-message" href="/profile/messages/">
 							<i class="mdi mdi-email-outline mx-0"></i>
-							<!--<p class="notification-ripple notification-ripple-bg">
-								<span class="ripple notification-ripple-bg"></span>
-								<span class="ripple notification-ripple-bg"></span>
-								<span class="ripple notification-ripple-bg"></span>
-							</p>-->
+							<?if($unread_messages > 0):?>
+								<p class="notification-ripple notification-ripple-bg">
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+									<span class="ripple notification-ripple-bg"></span>
+								</p>
+							<?endif;?>
 						</a>
 					</li>
 					<li class="nav-item nav-user-icon">
@@ -190,28 +179,31 @@ $tpl_user = $CI->Auth->user();
 						</a>
 					</li>
 
-					<?if($CI->Auth->isUser()):?>
+					<?if($this->Auth->isUser()):?>
 						<li class="nav-item <?=is_active_menu_item('courses')?'active':''?>">
 							<a class="nav-link" href="/courses/">
 								<i class="mdi mdi-view-headline menu-icon"></i>
 								<span class="menu-title">Курсы</span>
 							</a>
 						</li>
-						<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
-							<a class="nav-link" href="/groups/">
-								<i class="mdi mdi-bell menu-icon"></i>
-								<span class="menu-title">Подписки</span>
-							</a>
-						</li>
-						<li class="nav-item <?=is_active_menu_item('transactions')?'active':''?>">
-							<a class="nav-link" href="/transactions/">
-								<i class="mdi mdi-wallet menu-icon"></i>
-								<span class="menu-title">Платежи</span>
-							</a>
-						</li>
+
+						<?if($this->Auth->isActive()):?>
+							<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
+								<a class="nav-link" href="/groups/">
+									<i class="mdi mdi-bell menu-icon"></i>
+									<span class="menu-title">Подписки</span>
+								</a>
+							</li>
+							<li class="nav-item <?=is_active_menu_item('transactions')?'active':''?>">
+								<a class="nav-link" href="/transactions/">
+									<i class="mdi mdi-wallet menu-icon"></i>
+									<span class="menu-title">Платежи</span>
+								</a>
+							</li>
+						<?endif;?>
 					<?endif;?>
 						
-					<?if($CI->Auth->isTeacher()):?>			
+					<?if($this->Auth->isTeacher()):?>			
 						<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
 							<a class="nav-link" href="/groups/">
 								<i class="mdi mdi-account-multiple menu-icon"></i>
@@ -226,14 +218,16 @@ $tpl_user = $CI->Auth->user();
 						</li>
 					<?endif;?>
 
-					<li class="nav-item <?=is_active_menu_item('users')?'active':''?>">
-						<a class="nav-link" href="/users/">
-							<i class="mdi mdi-account-circle menu-icon"></i>
-							<span class="menu-title">Пользователи</span>
-						</a>
-					</li>
+					<?if($this->Auth->isActive()):?>
+						<li class="nav-item <?=is_active_menu_item('users')?'active':''?>">
+							<a class="nav-link" href="/users/">
+								<i class="mdi mdi-account-circle menu-icon"></i>
+								<span class="menu-title">Пользователи</span>
+							</a>
+						</li>
+					<?endif;?>
 
-					<?if($CI->Auth->isUser()):?>
+					<?if($this->Auth->isUser()):?>
 						<li class="nav-item <?=is_active_menu_item('faq')?'active':''?>">
 							<a class="nav-link" href="/faq/">
 								<i class="mdi mdi-comment-question-outline menu-icon"></i>
