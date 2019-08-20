@@ -19,12 +19,12 @@ $config['auth_register'] = [
 	[
 		'field' => 'name',
 		'label' => 'Имя',
-		'rules' => 'required|min_length[2]'
+		'rules' => 'required|min_length[2]|alpha_numeric_spaces_ru'
 	],
 	[
 		'field' => 'lastname',
 		'label' => 'Фамилия',
-		'rules' => 'required|min_length[2]'
+		'rules' => 'required|min_length[2]|alpha_numeric_spaces_ru'
 	],
 	[
 		'field' => 'email',
@@ -42,6 +42,8 @@ $config['auth_register'] = [
 		'rules' => 'trim|matches[password]'
 	]
 ];
+
+// alpha_numeric_spaces
 
 $config['auth_recovery'] = [
 	[
@@ -214,12 +216,12 @@ $config['profile_edit'] = [
 	[
 		'field' => 'name',
 		'label' => 'Имя',
-		'rules' => 'required|min_length[2]'
+		'rules' => 'required|min_length[2]|alpha_numeric_spaces_ru'
 	],
 	[
 		'field' => 'lastname',
 		'label' => 'Фамилия',
-		'rules' => 'required|min_length[2]'
+		'rules' => 'required|min_length[2]|alpha_numeric_spaces_ru'
 	],
 	[
 		'field' => 'title',

@@ -48,8 +48,23 @@ class Auth extends APP_Controller
 	
 	public function confirmation()
 	{	
-		$data = ['success' => false];
-		$data['success'] = $this->Auth->confirm(($_GET['code'] ?? ''));
+		$data['message'] = [
+			'status' => false, 
+			'text' => null
+		];
+
+		try
+		{
+			$this->Auth->confirm(($_GET['code'] ?? ''));
+			$data['message'] = [
+				'status' => true, 
+				'text' => 'Регистрация успешно подтверждена. Пожалуйста, авторизуйтесь, перейдя по ссылке'
+			];
+		}
+		catch(Exception $e)
+		{
+			$data['message']['text'] = $e->getMessage();
+		}
 		
 		$this->load->lview('auth/confirmation', $data);
 	}

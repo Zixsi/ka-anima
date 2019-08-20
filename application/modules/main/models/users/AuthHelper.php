@@ -90,22 +90,21 @@ class AuthHelper extends APP_Model
 
 	public function confirm($code)
 	{
-		try
+		if(($user = $this->UserModel->getByHash($code)) === false)
+			throw new AppBadLogicExtension('Неверный код подтверждения');
+
+		if((int) $user['active'] === 1)
+			return true;
+
+		$this->UserModel->setActive($user['id'], true);
+		// если авторизован, сбрасываем значения в сессии
+		if(($user = $this->user()))
 		{
-			if(($user = $this->UserModel->getByHash($code)) === false)
-				throw new AppBadLogicExtension('Неверный код подтверждения');
-
-			if((int) $user['active'] === 1)
-				return true;
-
-			return $this->UserModel->setActive($user['id'], true);
-		}
-		catch(Exception $e)
-		{
-			// 
+			$user['active'] = 1;
+			$this->setUser($user);
 		}
 
-		return false;
+		return true;
 	}
 
 	public function forgot($email)

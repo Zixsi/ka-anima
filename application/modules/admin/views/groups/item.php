@@ -37,7 +37,7 @@
 				<?if($user):?>
 					<div class="card-header">
 						<h3 class="card-title pt-2">
-							<a href="/admin/users/user/<?=$user['id']?>/" target="_blank" style="text-decoration: underline;"><?=$user['full_name']?></a>
+							<a href="/admin/users/user/<?=$user['id']?>/" class="text-primary" target="_blank"><?=$user['full_name']?></a>
 						</h3>
 					</div>
 				<?endif;?>

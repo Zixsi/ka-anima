@@ -57,6 +57,14 @@
 </div>
 
 <div class="container text-center pricing-table-wrapper pt-5">
+	<div>
+		<?if(!$this->Auth->isActive()):?>
+			<div class="alert alert-fill-danger" role="alert">
+				<i class="mdi mdi-alert-circle"></i>
+				<span>Пользователь неактивирован. Подписка недоступна.</span>
+			</div>
+		<?endif;?>
+	</div>
 	<div class="row pricing-table">
 		<div class="col-md-6 col-xl-4 <?=($item['only_standart'])?'offset-md-3 offset-xl-4':''?> grid-margin stretch-card pricing-card">
 			<form action="/pay/" method="get" class="card border-primary border pricing-card-body">

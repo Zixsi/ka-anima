@@ -107,9 +107,7 @@ class Profile extends APP_Controller
 				$this->form_validation->set_data($form_data);
 
 				if($this->form_validation->run('message') == FALSE)
-				{
 					throw new Exception($this->form_validation->error_string(), 1);
-				}
 
 				$message_data = [
 					'user' => $this->user_id,
@@ -118,14 +116,10 @@ class Profile extends APP_Controller
 				];
 				
 				if($this->UserMessagesModel->add($message_data) === false)
-				{
 					throw new Exception($this->UserMessagesModel->getLastError(), 1);
-				}
 
 				if($message_data['target'] !== $data['id'])
-				{
 					header('Location: /profile/messages/'.$message_data['target'].'/');
-				}
 			}
 			catch(Exception $e)
 			{
@@ -134,13 +128,15 @@ class Profile extends APP_Controller
 		}
 		$data['csrf'] = cr_get_key();
 
-		$data['chats'] = $this->UserMessagesModel->listChats($this->user_id);
+		$data['chats'] = $this->UserMessagesHelper->listChats($this->user_id);
 		$data['friends'] = $this->UserFriendsModel->list($this->user_id);
+
+		// debug($data['chats']); die();
 
 		if($data['id'] > 0)
 		{
 			$this->UserMessagesModel->chatSetReadAll($data['id'], $data['user']['id']);
-			$data['chats'][$data['id']]['unread'] = 0;
+			$this->UserMessagesHelper->chatArraySetRead($data['chats'], $data['id']);
 
 			$data['messages'] = $this->UserMessagesModel->listForChat($this->user_id, $data['id']);
 			if(empty($data['messages']))
@@ -150,10 +146,17 @@ class Profile extends APP_Controller
 				
 				$data['chats'][] = [
 					'id' => $target['id'],
-					'name' => $target['full_name'],
-					'img' => $target['img']
+					'unread' => 0,
+					'user' => [
+						'name' => $target['full_name'],
+						'img' => $target['img'],
+						'role' => $target['role'],
+						'role_name' => $target['role_name']
+					]
 				];
 			}
+
+			// debug($data); die();
 
 			$this->load->lview('profile/messages', $data);
 		}

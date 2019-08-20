@@ -12,6 +12,7 @@ $lang['form_validation_exact_length']		= 'Поле {field} должно быть
 $lang['form_validation_alpha']			= 'Поле {field} может содержать только буквы алфавита';
 $lang['form_validation_alpha_numeric']		= 'Поле {field} может содержать только буквенно-цифровые символы';
 $lang['form_validation_alpha_numeric_spaces']	= 'Поле {field} может содержать только буквенно-цифровые символы и пробелы';
+$lang['form_validation_alpha_numeric_spaces_ru']	= 'Поле {field} может содержать только буквенно-цифровые символы и пробелы';
 $lang['form_validation_alpha_dash']		= 'Поле {field} может содержать только буквенно-цифровые символы, подчеркивания и тире';
 $lang['form_validation_numeric']		= 'Поле {field} должно содержать только цифры';
 $lang['form_validation_is_numeric']		= 'Поле {field} должно содержать только числовые символы';

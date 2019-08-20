@@ -3,13 +3,9 @@
 		<a href="/"><img src="<?=TEMPLATE_DIR?>/main_v1/img/logo_black.png" alt="logo"></a>
 	</div>
 	<h4>Подтверждение регистрации</h4>
-	<?if($success):?>
-		<div class="alert alert-fill-success">
-			<i class="mdi mdi-alert-circle"></i>Регистрация успешно подстверждена. Пожалуйста, авторизуйтесь, перейдя по ссылке
-		</div>
-	<?else:?>
-		<div class="alert alert-fill-danger">
-			<i class="mdi mdi-alert-circle"></i>Неверный код подтверждения
+	<?if($message['text']):?>
+		<div class="alert alert-fill-<?=($message['status']?'success':'danger')?>">
+			<i class="mdi mdi-alert-circle"></i><?=$message['text']?>
 		</div>
 	<?endif;?>
 	<div class="text-center mt-4 font-weight-light">

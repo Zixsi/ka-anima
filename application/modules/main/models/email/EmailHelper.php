@@ -47,7 +47,7 @@ class EmailHelper extends APP_Model
 		return $res;
 	}
 
-	public function forgot()
+	public function forgot($data = [])
 	{
 
 		$this->init();

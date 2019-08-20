@@ -12,11 +12,11 @@
 							<li class="profile-list-item">
 								<a href="/profile/messages/<?=$val['id']?>/">
 									<span class="pro-pic">
-										<img src="<?=$val['img']?>" alt="" width="40" height="40">
+										<img src="<?=$val['user']['img']?>" alt="" width="40" height="40">
 									</span>
 									<div class="user">
-										<p class="u-name"><?=$val['name']?></p>
-										<p class="u-designation"><?=$val['role_name']?></p>
+										<p class="u-name"><?=$val['user']['name']?></p>
+										<p class="u-designation"><?=$val['user']['role_name']?></p>
 									</div>
 								</a>
 								<?if($val['unread'] > 0):?>

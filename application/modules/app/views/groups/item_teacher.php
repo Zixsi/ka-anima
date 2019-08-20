@@ -15,7 +15,9 @@
 						<?if($users):?>
 							<?foreach($users as $val):?>
 								<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
-									<td><a href="./?user=<?=$val['id']?>"><?=$val['full_name']?></a></td>
+									<td>
+										<a href="./?user=<?=$val['id']?>" class="text-primary"><?=$val['full_name']?></a>
+									</td>
 									<td class="text-center"><?=$val['reviews']?> / <?=$item['cnt']?></td>
 									<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
 								</tr>
@@ -28,7 +30,9 @@
 		<div class="card">
 			<div class="card-body">
 				<?if($user):?>
-					<h3 class="card-title"><?=$user['full_name']?></h3>
+					<h3 class="card-title">
+						<a href="/profile/<?=$user['id']?>/" class="text-primary" target="_blank"><?=$user['full_name']?></a>
+					</h3>
 					<div>
 						<?if($homeworks):?>
 							<div id="teacher--user-homeworks">

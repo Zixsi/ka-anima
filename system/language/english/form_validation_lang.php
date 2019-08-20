@@ -49,6 +49,7 @@ $lang['form_validation_exact_length']		= 'The {field} field must be exactly {par
 $lang['form_validation_alpha']			= 'The {field} field may only contain alphabetical characters.';
 $lang['form_validation_alpha_numeric']		= 'The {field} field may only contain alpha-numeric characters.';
 $lang['form_validation_alpha_numeric_spaces']	= 'The {field} field may only contain alpha-numeric characters and spaces.';
+$lang['form_validation_alpha_numeric_spaces_ru']	= 'The {field} field may only contain alpha-numeric characters and spaces.';
 $lang['form_validation_alpha_dash']		= 'The {field} field may only contain alpha-numeric characters, underscores, and dashes.';
 $lang['form_validation_numeric']		= 'The {field} field must contain only numbers.';
 $lang['form_validation_is_numeric']		= 'The {field} field must contain only numeric characters.';

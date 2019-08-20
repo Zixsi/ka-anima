@@ -139,6 +139,7 @@ $autoload['model'] = [
 	'main/users/UserActionsModel',
 	'main/users/UserActionsHelper',
 	'main/users/UserMessagesModel',
+	'main/users/UserMessagesHelper',
 	'main/users/UserFriendsModel',
 
 	'main/courses/CoursesModel', 
