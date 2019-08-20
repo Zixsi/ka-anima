@@ -22,7 +22,7 @@ class Video extends APP_Controller
 		// Если что то пошло не так отображать заглушку
 		
 		$data['video'] = false;
-		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.png';
+		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.jpg';
 
 		if($video = $this->VideoModel->byVideoCode($code))
 			$data['video'] = $video['video_url'];
