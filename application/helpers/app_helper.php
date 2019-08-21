@@ -215,23 +215,31 @@ function roadmap_check_intersect($item, $list)
 	$date_a1 = new DateTime($item['ts']);
 	$date_a2 = new DateTime($item['ts_end']);
 
-	$i = 0;
+	$index = 0;
 	foreach($list as $key => $val)
 	{
+		$index = $key;
+
+		if(empty($val))
+			break;
+
+		$collision = 0;
 		foreach($val as $v)
 		{
 			$date_b1 = new DateTime($v['ts']);
 			$date_b2 = new DateTime($v['ts_end']);
 
 			if(($date_a1 <= $date_b2) && ($date_a2 >= $date_b1))
-			{
-				$i++;
-				break;
-			}
+				$collision++;
 		}
+
+		if($collision === 0)
+			break;
+		else
+			$index++;
 	}
 
-	return $i;
+	return $index;
 }
 
 function calc_crop_rect($width, $height)

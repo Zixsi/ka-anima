@@ -35,6 +35,12 @@ class LecturesGroupModel extends APP_Model
 		$res = $this->db->query($sql, [date('Y-m-d H:i:s'), $id]);
 		if($res = $res->result_array())
 		{
+			foreach($res as &$val)
+			{
+				if((int) $val['type'] === 1)
+					$val['active'] = 1;
+			}
+
 			return $res;
 		}
 

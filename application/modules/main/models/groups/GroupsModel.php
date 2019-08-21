@@ -444,7 +444,7 @@ class GroupsModel extends APP_Model
 		foreach($data as $val)
 		{
 			$date_b = new DateTime($val['ts']);
-			$date_b1 = $date_b;
+			$date_b1 = clone $date_b;
 			$date_c = new DateTime($val['ts_end']);
 			//debug($val);
 
@@ -465,7 +465,7 @@ class GroupsModel extends APP_Model
 			}
 			else
 			{
-				$date_b1 = $date_a;
+				$date_b1 = clone $date_a;
 				$diff_width_months = date_diff_months($date_a, $date_c);
 			}
 

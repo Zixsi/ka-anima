@@ -61,7 +61,7 @@
 		<?if(!$this->Auth->isActive()):?>
 			<div class="alert alert-fill-danger" role="alert">
 				<i class="mdi mdi-alert-circle"></i>
-				<span>Пользователь неактивирован. Подписка недоступна.</span>
+				<span>Пользователь неактивирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту.</span>
 			</div>
 		<?endif;?>
 	</div>

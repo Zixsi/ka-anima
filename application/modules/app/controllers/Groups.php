@@ -272,9 +272,7 @@ class Groups extends APP_Controller
 			{
 				$data[$val['id']] = $val;
 				if($val['active'] == 1)
-				{
 					$last_active_id = $val['id'];
-				}
 			}
 		
 			unset($tmp_data);

@@ -16,6 +16,7 @@ class Courses extends APP_Controller
 
 		$groups = $this->GroupsModel->getActiveGroups();
 		$data['roadmap'] = $this->GroupsModel->makeRoadmap($groups);
+		// die();
 		unset($groups);
 
 		$this->load->lview('courses/calendar', $data);
