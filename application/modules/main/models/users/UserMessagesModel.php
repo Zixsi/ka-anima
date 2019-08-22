@@ -27,7 +27,7 @@ class UserMessagesModel extends APP_Model
 				FROM 
 					'.self::TABLE.' as m 
 				LEFT JOIN 
-					(SELECT count(*) as cnt, user, target FROM '.self::TABLE.' WHERE is_read = 0 AND target = ? GROUP BY user, target) as mur ON(mur.user = m.target AND mur.target = m.user) 
+					(SELECT count(*) as cnt, user, target FROM '.self::TABLE.' WHERE is_read = 0 AND target = ? GROUP BY user, target) as mur ON(mur.user = m.user AND mur.target = m.target) 
 				WHERE 
 					m.user = ? OR m.target = ? 
 				GROUP BY 
@@ -36,6 +36,7 @@ class UserMessagesModel extends APP_Model
 		$result = [];
 		if($res = $this->db->query($sql, $bind)->result_array())
 		{
+			// debug($res); die();
 			foreach($res as $val)
 			{
 				$val['user'] = (int) $val['user'];
@@ -52,37 +53,8 @@ class UserMessagesModel extends APP_Model
 				}
 
 				$result[$hash]['id'] = ($val['target'] === $val['user'] || $val['target'] !== $user)?$val['target']:$val['user'];
-				if($val['unread'] > 0)
+				if((int) $val['unread'] > 0)
 					$result[$hash]['unread'] = $val['unread'];
-
-				// if(intval($val['user']) === $user)
-				// {
-				// 	$val['name'] = (!empty($val['target_full_name']))?$val['target_full_name']:$val['target_email'];
-				// 	$val['role'] = $val['target_role'];
-				// 	$val['img'] = $val['target_img'];
-				// }
-				// else
-				// {
-				// 	$val['name'] = (!empty($val['user_full_name']))?$val['user_full_name']:$val['user_email'];
-				// 	$val['target'] = $val['user'];
-				// 	$val['role'] = $val['user_role'];
-				// 	$val['img'] = $val['user_img'];
-				// }
-
-				// if(!array_key_exists($val['target'], $result))
-				// {
-				// 	// debug($val);
-				// 	$this->UserModel->prepareUser($val);
-
-				// 	$result[$val['target']] = [
-				// 		'id' => $val['target'],
-				// 		'name'=> $val['name'],
-				// 		'role'=> $val['role'],
-				// 		'role_name'=> UserModel::ROLES_NAME[$val['role']],
-				// 		'img' => $val['img'],
-				// 		'unread' => (int) $val['unread']
-				// 	];
-				// }
 			}
 		}
 

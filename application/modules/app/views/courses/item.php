@@ -135,7 +135,6 @@
 					<li><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 					<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
 					<li><i class="fa fa-times"></i>Личные онлайн встречи</li>
-					<li><i class="fa fa-times"></i>Сертификат об окончании курса</li>
 					<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
 					<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 				</ul>
@@ -218,7 +217,6 @@
 						<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 						<li class="checked"><i class="fa fa-times"></i>Груповые онлайн встречи</li>
 						<li><i class="fa fa-times"></i>Личные онлайн встречи</li>
-						<li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
 						<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
 						<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 					</ul>
@@ -277,7 +275,6 @@
 							<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 							<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
 							<li class="checked"><i class="fa fa-times"></i>Личные онлайн встречи</li>
-							<li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
 							<li><i class="fa fa-times"></i>Начало в назначенную дату</li>
 							<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 						</ul>
