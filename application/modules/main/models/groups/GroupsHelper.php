@@ -8,6 +8,11 @@ class GroupsHelper extends APP_Model
 		parent::__construct();
 	}
 
+	public static function getTypeName($type)
+	{
+	 	return (GroupsModel::TYPE[$type]['title'] ?? $type);
+	}
+
 	public function add($data)
 	{
 		try

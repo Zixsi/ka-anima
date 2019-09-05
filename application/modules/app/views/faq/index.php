@@ -21,7 +21,7 @@
 												</div>
 												<div id="faq-item<?=$item['id']?>" class="collapse <?=($show)?'show':''?>" aria-labelledby="faq-item--heading<?=$item['id']?>" data-parent="#accordion-<?=$section['id']?>">
 													<div class="card-body">
-														<p class="mb-0"><?=$item['answer']?><p>
+														<p class="mb-0"><?=url2link($item['answer'])?><p>
 													</div>
 												</div>
 											</div>

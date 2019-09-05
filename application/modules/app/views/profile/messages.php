@@ -10,7 +10,7 @@
 					</div>
 					<ul class="profile-list" style="border-right: 1px solid #f6f2f2;">
 						<?foreach($chats as $val):?>
-							<li class="profile-list-item">
+							<li class="profile-list-item <?=((int) $id === (int) $val['id'])?'selected':''?>">
 								<a href="/profile/messages/<?=$val['id']?>/">
 									<span class="pro-pic">
 										<img src="<?=$val['user']['img']?>" alt="" width="40" height="40">

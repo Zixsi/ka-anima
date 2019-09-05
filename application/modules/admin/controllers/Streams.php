@@ -12,6 +12,7 @@ class Streams extends APP_Controller
 	{
 		$data = [];
 		$data['items'] = $this->StreamsModel->list(0, ($_GET['filter'] ?? []));
+		$this->StreamsHelper->prepareList($data['items']);
 
 		$this->load->lview('streams/index', $data);
 	}

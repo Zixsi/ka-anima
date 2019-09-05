@@ -27,6 +27,7 @@ class TeachingStreams extends APP_Controller
 		if(cr_valid_key())
 		{
 			$form_data = $this->input->post(null, true);
+			$form_data['author'] = $this->user['id'];
 			if($id = $this->StreamsModel->add($form_data))
 			{
 				action(UserActionsModel::ACTION_STREAM_ADD, [

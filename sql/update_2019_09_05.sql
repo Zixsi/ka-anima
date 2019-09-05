@@ -1,0 +1,2 @@
+ALTER TABLE `streams` ADD `author` INT UNSIGNED NULL AFTER `ts`;
+ALTER TABLE `courses` ADD `trailer_url` VARCHAR(255) NULL AFTER `only_standart`, ADD `examples_url` VARCHAR(255) NULL AFTER `trailer_url`;

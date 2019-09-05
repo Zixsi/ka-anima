@@ -6,7 +6,7 @@
 		
 	</div>
 </div>
-
+<?//debug($items); die();?>
 <div class="card">
 	<div class="card-body">
 		<form action="" method="get" class="row">
@@ -29,6 +29,7 @@
 					<th>Тема</th>
 					<th>Дата</th>
 					<th>Статус</th>
+					<th>Автор</th>
 					<th class="text-right">Действие</th>
 				</tr>
 			</thead>
@@ -51,6 +52,9 @@
 								<?else:?>
 									<span class="badge badge-warning">Скоро</span>
 								<?endif;?>
+							</td>
+							<td>
+								<a href="/admin/users/user/<?=$val['author']?>/"><?=$val['author_name']?></a>
 							</td>
 							<td class="text-right">
 								<a href="./item/<?=$val['id']?>/" class="btn btn-xs btn-primary d-inline-block" title="Просмотр">

@@ -29,6 +29,8 @@ class CoursesHelper extends APP_Model
 				'teacher' => intval($data['teacher'] ?? 0),
 				'price' => json_encode($price),
 				'only_standart' => intval($data['only_standart'] ?? 0),
+				'trailer_url' => ($data['trailer_url'] ?? ''),
+				'examples_url' => ($data['examples_url'] ?? ''),
 			];
 
 			$this->form_validation->reset_validation();
@@ -80,7 +82,9 @@ class CoursesHelper extends APP_Model
 				'teacher' => intval($data['teacher'] ?? $course_item['teacher']),
 				'price' => json_encode($price),
 				'only_standart' => intval($data['only_standart'] ?? $course_item['only_standart']),
-				'img' => $course_item['img']
+				'img' => $course_item['img'],
+				'trailer_url' => ($data['trailer_url'] ?? $course_item['trailer_url']),
+				'examples_url' => ($data['examples_url'] ?? $course_item['examples_url']),
 			];
 
 			$this->form_validation->reset_validation();

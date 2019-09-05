@@ -46,7 +46,7 @@
 				<div class="row">
 					<div class="col-6">
 						<div class="form-group">
-							<label for="fperiod">Название</label>
+							<label for="fname">Название</label>
 							<input type="text" name="name" id="fname" class="form-control" placeholder="Название" value="<?=set_value('name', $item['name'], true)?>">
 						</div>
 					</div>
@@ -80,6 +80,20 @@
 									<button class="file-upload-browse btn btn-secondary" type="button">Выбрать</button>
 								</span>
 							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Трейлер (ссылка на youtube)</label>
+							<input type="text" name="trailer_url" class="form-control" placeholder="Трейлер (ссылка на youtube)" value="<?=set_value('trailer_url', $item['trailer_url'], true)?>">
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Пример работ (ссылка на youtube)</label>
+							<input type="text" name="examples_url" class="form-control" placeholder="Пример работ (ссылка на youtube)" value="<?=set_value('examples_url', $item['examples_url'], true)?>">
 						</div>
 					</div>
 				</div>

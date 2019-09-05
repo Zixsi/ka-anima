@@ -20,7 +20,7 @@ class GroupsModel extends APP_Model
 	const TYPE = [
 		self::TYPE_STANDART => ['title' => 'Стандартная'], 
 		self::TYPE_ADVANCED => ['title' => 'Расширенная'], 
-		self::TYPE_VIP => ['title' => 'VIP'], 
+		self::TYPE_VIP => ['title' => 'Премиум'], 
 		self::TYPE_PRIVATE => ['title' => 'Закрытая']
 	]; 
 	

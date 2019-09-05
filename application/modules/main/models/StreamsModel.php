@@ -22,7 +22,8 @@ class StreamsModel extends APP_Model
 				'url' => $data['url'] ?? '',
 				'name' => $data['name'] ?? '',
 				'description' => $data['description'] ?? '',
-				'ts' => $data['ts'] ?? ''
+				'ts' => $data['ts'] ?? '',
+				'author' => $data['author'] ?? null
 			];
 
 			$this->form_validation->reset_validation();
@@ -60,7 +61,8 @@ class StreamsModel extends APP_Model
 				'url' => $data['url'] ?? $item['url'],
 				'name' => $data['name'] ?? $item['name'],
 				'description' => $data['description'] ?? $item['description'],
-				'ts' => $data['ts'] ?? $item['ts']
+				'ts' => $data['ts'] ?? $item['ts'],
+				'author' => $data['author'] ?? $item['author']
 			];
 
 			$this->form_validation->reset_validation();

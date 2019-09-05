@@ -175,6 +175,8 @@ $autoload['model'] = [
 	'main/faq/FaqHelper',
 
 	'main/VideoModel',
+	'main/VideoHelper',
 	'main/StreamsModel',
+	'main/StreamsHelper',
 	'main/OptionsModel',
 ];

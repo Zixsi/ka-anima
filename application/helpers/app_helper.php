@@ -273,3 +273,15 @@ function thumb($src)
 
 	return $src;
 }
+
+function url2link($text)
+{
+	return preg_replace('/(http:\/\/[[:print:]]+)/sm', '<a href="$1" target="_blank">$1</a>', $text);
+}
+
+function getVideoId($url)
+{
+	preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
+
+	return $match[1] ?? '';
+}

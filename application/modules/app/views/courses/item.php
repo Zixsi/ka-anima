@@ -5,6 +5,11 @@
 				<h3 class="card-title"><?=$item['name']?></h3>
 				<img src="<?=$item['img_src']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
 				<p><?=$item['description']?></p>
+				<?/*if(!empty($item['trailer_url'])):?>
+					<div class="video-wrap">
+						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				<?endif;*/?>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
 
 				<?if($lectures):?>
@@ -42,6 +47,29 @@
 				<?endif;?>
 			</div>
 		</div>
+
+		<?if(!empty($item['trailer_url'])):?>
+			<div class="card course-card--groups mb-4">
+				<div class="card-body pb-3">
+					<h3 class="card-title">Трейлер курса</h3>
+					<div class="video-wrap">
+						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		<?endif;?>
+
+		<?if(!empty($item['examples_url'])):?>
+			<div class="card course-card--groups mb-4">
+				<div class="card-body pb-3">
+					<h3 class="card-title">Работы студентов</h3>
+					<div class="video-wrap">
+						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['examples_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				</div>
+			</div>
+		<?endif;?>
+
 		<div class="card course-card--groups">
 			<div class="card-body pb-3">
 				<h3 class="card-title">Группы</h3>
@@ -239,7 +267,7 @@
 						<input type="hidden" name="type" value="vip">
 						<div class="text-center pricing-card-head">
 							<div class="badge badge-danger info--date-start"><?=($vip_offer['ts_formated'] ?? '')?></div>
-							<h3>VIP</h3>
+							<h3>Премиум</h3>
 							<p>Нужен наставник!</p>
 							<h1 class="font-weight-normal mb-4">
 								<span class="price-value price-value--full active"><?=number_format($item['price']['vip']['full'], 2, '.', ' ')?></span>

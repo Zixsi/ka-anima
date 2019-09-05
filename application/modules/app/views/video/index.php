@@ -9,6 +9,7 @@
         var video_playes_params = {
             post_message_config: false,
             volume: 50,
+            debug: false,
             muted: false,
             auto_quality: false,
             report: false,
@@ -34,43 +35,151 @@
             background-color: #000000;
             position: relative;
         }
-		#player-watermark {position: absolute; top: 0; bottom: 0; left: 0; right: 0; z-index: 5; height: 100px; width: 300px;}
     </style>
 </head>
 <body>
-<canvas id="player-watermark"></canvas>
-<script src="<?=TEMPLATE_DIR?>/admin_1/assets/scripts/player.js"></script>
+<script src="<?=TEMPLATE_DIR?>/tools/player.js"></script>
 <script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
 
-       /* var b = document.body;
-        var c = document.getElementById("player-watermark");
-        var p = document.getElementById("ya-html5-video-player");
-        var ctx = c.getContext("2d");
-        ctx.clearRect(0,0, 100, 300);
-        ctx.fillStyle = "#fff";
-        ctx.strokeStyle = "#fff";
-        ctx.font = "5rem Arial";
-        ctx.fillText('UID_1', 0, 100);
+    String.random = function (length) {
+        let radom13chars = function () {
+            return Math.random().toString(16).substring(2, 15)
+        }
+        let loops = Math.ceil(length / 13)
+        return new Array(loops).fill(radom13chars).reduce((string, func) => {
+            return string + func()
+        }, '').substring(0, length)
+    }
 
-        setInterval(function(){
-            var x = Math.round(Math.random() * 600);
-            var y = Math.round(Math.random() * 400);
-            c.style.left = x + 'px';
-            c.style.top = y + 'px';
-        }, 1000);*/
+    function createCanvas(parent)
+    {
+        if(parent == null || parent == undefined)
+            return;
 
-        //var e=document.getElementById("ya-html5-video-player2")
-        //var e=document.getElementById("ya-html5-video-player2"),t=document.createElement("canvas");t.id="player-watermark",t.style.zIndex=5,t.style.width="100%",t.style.height="100%",t.style.position="absolute",t.style.top=0,t.style.left=0,t.style.opacity=.5,e.appendChild(t);
+        var id, canvas;
+        id = String.random(16);
+        canvas = document.createElement("canvas");
+        canvas.id = id;
+        parent.insertBefore(canvas, parent.childNodes[0]);
 
-        
-        //window.player.on("pause",function(){clearInterval(window.inter);var e=document.getElementById("player-watermark");e.getContext("2d").clearRect(0,0,e.width,e.height)});
+        return id;
+    }
 
-        /*var watermark=function(n){var a=document.getElementById("player-watermark"),i=a.getContext("2d");i.fillStyle="#fff",i.strokeStyle="#fff",i.font="italic 5rem Arial";var r=i.measureText(n).width,l=getFontHeight(i.font);window.inter=setInterval(function(){i.clearRect(0,0,a.width,a.height);var e=Math.round(Math.random()*a.width),t=Math.round(Math.random()*a.height);e=e>a.width-r?a.width-r:e,t=t>a.height-l?a.height-l:t,i.fillText(n,e,t)},1e3)},getFontHeight=function(e){var t=document.createElement("span");t.appendChild(document.createTextNode("height")),document.body.appendChild(t),t.style.cssText="font: "+e+"; white-space: nowrap; display: inline;";var n=t.offsetHeight;return document.body.removeChild(t),n};
+    function updateCanvas(canvas)
+    {
+        if(canvas == null || canvas == undefined)
+            return;
 
-        //watermark("UID<?=$user['id']?>");
-        watermark("UID_1");*/
-    });
+        var parent, width, height, pos; 
+        parent = canvas.parentNode;
+        canvas.style.position = 'absolute';
+        // canvas.style.backgroundColor = '#ff0000';
+        canvas.style.opacity = 1.0;
+        width = parseInt(parent.offsetWidth * 0.3);
+        height = parseInt(width / 5);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        pos = calcPos(canvas, parent);
+        canvas.style.left = pos.x + 'px';
+        canvas.style.top = pos.y + 'px';
+    }
+
+    function calcPos(canvas, parent)
+    {
+        if(posUpdateTimer <= 0)
+        {
+            var x, y;
+            x = Math.random() * ((parent.offsetWidth - canvas.offsetWidth) - 1) + 1
+            y = Math.random() * ((parent.offsetHeight - canvas.offsetHeight) - 1) + 1
+            posLast = {x: x, y: y};
+            posUpdateTimer = posUpdateInterval;
+        }
+
+        return posLast;
+    }
+
+    function checkCanvas(parent)
+    {
+        var canvas;
+        canvas = document.getElementById(canvasId);
+        if(canvasId == null || canvas == null || canvas == undefined)
+        {
+            var item = document.getElementsByTagName("canvas")[0];
+            if(item !== undefined)
+                parent.removeChild(item);
+
+            canvasId = createCanvas(parent);
+            canvas = document.getElementById(canvasId);
+        }
+
+        updateCanvas(canvas);
+    }
+
+    function drawText(canvasId, text)
+    {
+        var canvas, ctx, canvasWidth, canvasHeight, fontSize, scaleWidth, scaleHeight, scaleWidthReverse;
+
+        if(canvasId == null)
+            return;
+
+        canvas = document.getElementById(canvasId);
+        if(canvas == null || canvas == undefined)
+            return;
+
+        canvasWidth = canvas.offsetWidth;
+        canvasHeight = canvas.offsetHeight;
+        scaleWidth = 200 / canvasWidth;
+        scaleWidthReverse = canvasWidth / 200;
+        scaleHeight = 100 / canvasHeight;
+        fontSize = 20 * scaleWidthReverse;
+
+        ctx = canvas.getContext("2d");
+        // console.log(text);
+        ctx.save();
+        ctx.clearRect(0, 0, 10000, 10000);
+        ctx.scale(scaleWidth, scaleHeight);
+        ctx.fillStyle = "#ffffff";
+        ctx.strokeStyle = "#ffffff";
+        ctx.font = "bold " + fontSize + "px Arial";
+        ctx.fillText(text, parseInt(10 * scaleWidthReverse), parseInt(45 * scaleWidthReverse));
+
+        ctx.restore();
+    }
+
+    function listenPlayerEvents(videoPlayer)
+    {
+        videoPlayer.addEventListener("play", function() { pause = false; }, true);
+        videoPlayer.addEventListener("pause", function() { pause = true; }, true);
+    }
+
+    var parent, canvasId, posLast, posUpdateInterval, posUpdateTimer, tickTime, pause, player;
+    posUpdateInterval = 5000;
+    posUpdateTimer = 0;
+    tickTime = 100;
+    pause = false;
+    setInterval(function(){
+        if(parent == null)
+        {
+            player = document.getElementById("ya-html5-video-player");
+            if(player && player != undefined)
+            {
+                var videoPlayer = player.getElementsByTagName("video")[0];
+                parent = player.children[0].children[0].children[1];
+
+                listenPlayerEvents(videoPlayer);
+            }
+        }
+
+        checkCanvas(parent);
+        drawText(canvasId, '<?=$mark?>');
+
+        if(pause == false)
+            posUpdateTimer -= tickTime;
+
+    }, tickTime);
+});
 </script>
 </body>
 </html>

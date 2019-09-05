@@ -1,5 +1,4 @@
 <div class="row">
-	<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?> [<?=$group['type']?>] <?=$group['code']?></h3>
 	<?$this->load->view('groups/menu');?>
 
 	<?if($list):?>

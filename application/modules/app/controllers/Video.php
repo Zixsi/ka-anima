@@ -16,17 +16,27 @@ class Video extends APP_Controller
 	{
 		$data = [];
 		$data['user'] = $this->Auth->user();
-
-		// TODO
-		// Проверка юзера на доступ к видео
-		// Если что то пошло не так отображать заглушку
+		$data['code'] = md5($data['user']['id']);
 		
-		$data['video'] = false;
+		$data['video'] = '0000000000000000000000000';
 		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.jpg';
 
-		if($video = $this->VideoModel->byVideoCode($code))
-			$data['video'] = $video['video_url'];
+		$data['mark'] = $code;
+		$video = $this->VideoHelper->getDetailInfo($code);
+		$data['video'] = $video['video_url'];
 
-		$this->load->lview('video/index', $data);
+		$data['mark'] = $code;
+		if(isset($video['course']['code']))
+			$data['mark'] = $video['course']['code'].'#'.$data['user']['id'];
+
+		$courseId = (int) ($video['course']['id'] ?? 0);
+		$lectureId = (int) ($video['source']['id'] ?? 0);
+
+		// Проверка юзера на доступ к видео
+		// Если что то пошло не так отображать заглушку
+		if($this->VideoHelper->checkVideoAccess($data['user']['id'], $courseId, $lectureId) === false)
+			$this->load->lview('video/index_404');
+		else
+			$this->load->lview('video/index', $data);
 	}
 }
