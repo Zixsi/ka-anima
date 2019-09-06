@@ -22,6 +22,20 @@ class Courses extends APP_Controller
 		$this->load->lview('courses/calendar', $data);
 	}
 
+	public function archive($id = null)
+	{
+		$data = [];
+		$data['items'] = $this->GroupsModel->getList($id);
+		$filter = [
+			'with_subscribed' => true, // с подписанными пользователями
+		];
+		$this->GroupsHelper->prepareListForAdmin($data['items']);
+
+		// debug($data['items']); die();
+
+		$this->load->lview('courses/archive', $data);
+	}
+
 	public function add()
 	{
 		$data = [];

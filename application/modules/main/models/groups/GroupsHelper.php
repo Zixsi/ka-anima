@@ -236,6 +236,34 @@ class GroupsHelper extends APP_Model
 		$data = $result;
 	}
 
+	public function prepareListForAdmin(&$data = [])
+	{
+		$result = [];
+
+		// проставляем информацию для каждой группы
+		foreach($data as $val)
+		{
+			$val['subscription_cnt'] = (int) $val['subscription_cnt'];
+			$val['timestamp_start'] = strtotime($val['ts']);
+			$val['timestamp_end'] = strtotime($val['ts_end']);
+			$val['status'] = $this->getStatus($val['timestamp_start'], $val['timestamp_end']);
+
+			if(!isset($result[$val['status']]))
+			{
+				$info = $this->statusInfo($val['status']);
+				$info['status'] = $val['status'];
+				$info['items'] = [];
+				$result[$val['status']] = $info;
+			}
+
+			$result[$val['status']]['items'][] = $val;
+		}
+
+		ksort($result);
+		$result = array_values($result);
+		$data = $result;
+	}
+
 	public function statusInfo($value)
 	{
 		$result = null;
@@ -262,6 +290,12 @@ class GroupsHelper extends APP_Model
 		}
 
 		return $result;
+	}
+
+	public function getStatus($start, $end)
+	{
+		$ts = time();
+		return ($end > $ts)?(($start > $ts)?1:0):-1;
 	}
 
 	// код группы

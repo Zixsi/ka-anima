@@ -37,6 +37,7 @@
 											<li class="dropdown-item"><a href="./edit/<?=$item['id']?>/">Редактировать</a></li>
 											<li class="dropdown-item"><a href="./<?=$item['id']?>/lectures/">Лекции</a></li>
 											<li class="dropdown-item"><a href="javascript: void(0);" data-value="<?=$item['id']?>" class="btn-add-group">Добавить группу</a></li>
+											<li class="dropdown-item"><a href="/admin/courses/<?=$item['id']?>/">Архив</a></li>
 										</ul>
 									</div>
 								</div>

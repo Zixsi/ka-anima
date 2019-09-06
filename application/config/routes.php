@@ -11,6 +11,7 @@ $route['cli'] = 'cli/index';
 $route['cli/(.*)'] = 'cli/$1';
 
 $route['admin'] = 'admin/main';
+$route['admin/courses/(:num)'] = 'admin/Courses/archive/$1';
 $route['admin/courses/(:num)/lectures'] = 'admin/Lectures/index/$1';
 $route['admin/courses/(:num)/lectures/(.*)'] = 'admin/Lectures/$2/$1';
 $route['admin/courses/(.*)'] = 'admin/Courses/$1';

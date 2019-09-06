@@ -28,6 +28,8 @@ class Groups extends APP_Controller
 		$type = $data['item']['type'];
 
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
+		// debug($data['item']);
+		// debug($data['users']); die();
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
 		// лекции группы

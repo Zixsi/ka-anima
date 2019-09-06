@@ -63,4 +63,30 @@ class TransactionsModel extends APP_Model
 
 		return [];
 	}
+
+	// стата движения бабок по дням
+	public function getStatByDays($from, $to)
+	{
+		$binds = [$from, $to];
+		$sql = 'SELECT 
+					SUM(amount) as value, ((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) as ts 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					type = \''.self::TYPE_IN.'\' AND 
+					status = \''.self::STATUS_SUCCESS.'\' AND 
+					ts >= ? AND 
+					ts < ?
+				GROUP BY 
+					((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) 
+				ORDER BY 
+					ts ASC';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return [];
+	}
 }

@@ -24,8 +24,8 @@
 								</tr>
 							<?endforeach;?>
 						<?else:?>
-							<tr colspan="3">
-								<td>Ученики отсутствуют</td>
+							<tr>
+								<td colspan="3" class="text-center">Ученики отсутствуют</td>
 							</tr>
 						<?endif;?>
 					</tbody>

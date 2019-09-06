@@ -182,6 +182,36 @@ class GroupsModel extends APP_Model
 		return [];
 	}
 
+	public function getList($courseId = null)
+	{
+		$binds = [];
+
+		$sql = 'SELECT 
+					g.* , c.name, s.cnt as subscription_cnt 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
+				LEFT JOIN 
+					(SELECT target, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE target_type = \'course\' GROUP BY target) as s ON(s.target = g.id) 
+				WHERE 
+					deleted = 0 ';
+
+		if((int) $courseId > 0)
+		{
+			$sql .= ' AND g.course_id = ? ';
+			$binds[] = [$courseId];
+		}
+
+		$sql .= ' ORDER BY 
+					ts_end ASC';
+
+		if($res = $this->db->query($sql, $binds))
+			return $res->result_array();
+
+		return  [];
+	}
+
 	// список активных групп
 	public function getActiveGroups()
 	{
@@ -265,54 +295,6 @@ class GroupsModel extends APP_Model
 
 		return  [];
 	}
-
-	// список предложений 
-	/*public function listOffers()
-	{
-		$result = [];
-		$now = new DateTime('now');
-		$now->setTime(0, 0, 0);
-		$start_ts = clone $now;
-		$start_ts->modify('-2 weeks'); // за 2 недели после старата
-		$end_ts = clone $now;
-		$end_ts->modify('+3 months'); // за 3 месяца до старта
-
-		$bind = [
-			$start_ts->format('Y-m-d 00:00:00'), 
-			$end_ts->format('Y-m-d 00:00:00'), 
-			$now->format('Y-m-d 00:00:00')
-		];
-
-		$sql = 'SELECT 
-					c.id, c.code, c.name, c.description, c.price, c.only_standart, f.full_path as img   
-				FROM 
-					'.self::TABLE.' as g 
-				LEFT JOIN 
-					'.self::TABLE_COURSES.' as c ON(c.id = g.course_id) 
-				LEFT JOIN 
-					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
-				WHERE 
-					c.active = 1 AND 
-					g.deleted = 0 AND 
-					(g.ts > ? AND g.ts < ?) AND 
-					g.ts_end > ? AND 
-					g.type NOT IN(\'vip\', \'private\')
-				GROUP BY 
-					c.id 
-				ORDER BY 
-					c.id ASC';
-
-		if($res = $this->db->query($sql, $bind))
-		{
-			$rows = $res->result_array();
-			if(is_array($rows))
-				$result = $rows;
-
-			$this->prepareOffersList($result);
-		}
-
-		return $result;
-	}*/
 
 	// список предложений для курса
 	public function listOffersForCourse($course)

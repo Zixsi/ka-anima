@@ -84,4 +84,38 @@ class TransactionsHelper extends APP_Model
 
 		return $info[$status] ?? null;
 	}
+
+	public function prepareStat(&$data)
+	{
+		foreach($data as &$value)
+		{
+			$value['date'] = date(DATE_FORMAT_SHORT, $value['ts']);
+		}
+	}
+
+	public function prepareStatChart($data)
+	{
+		$result = [
+			'labels' => [],
+			'values' => []
+		];
+
+		foreach($data as $value)
+		{
+			$result['labels'][] = $value['date'];
+			$result['values'][] = $value['value'];
+		}
+
+		if(count($result['labels']))
+			$result['labels'] = '"' . implode('","', $result['labels']) . '"';
+		else
+			$result['labels'] = '';
+
+		if(count($result['values']))
+			$result['values'] = implode(',', $result['values']);
+		else
+			$result['values'] = '';
+
+		return $result;
+	}
 }
