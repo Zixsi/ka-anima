@@ -19,7 +19,7 @@
 							<?foreach($users as $val):?>
 								<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
 									<td><a href="./?user=<?=$val['id']?>"><?=$val['full_name']?></a></td>
-									<td class="text-center"><?=$val['reviews']?> / <?=$item['cnt']?></td>
+									<td class="text-center"><?=$val['reviews']?> / <?=($item['cnt'] ?? 0)?></td>
 									<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
 								</tr>
 							<?endforeach;?>

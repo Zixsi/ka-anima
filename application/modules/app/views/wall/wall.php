@@ -29,7 +29,7 @@
 								<?endif;?>
 								<br><small><?=$val['ts']?></small>
 							</h4>
-							<?=htmlspecialchars($val['text'])?>
+							<?=str_replace("\r\n", '<br>', htmlspecialchars($val['text']))?>
 							<hr>
 							<div class="wall-item-tools">
 								<button type="button" class="btn btn-comments" data-id="<?=$val['id']?>">

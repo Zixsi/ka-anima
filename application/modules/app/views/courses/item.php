@@ -1,15 +1,10 @@
 <div class="row">
-	<div class="col-7">
+	<div class="col-12 col-xl-7 pb-3">
 		<div class="card course-card">
 			<div class="card-body">
 				<h3 class="card-title"><?=$item['name']?></h3>
 				<img src="<?=$item['img_src']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
 				<p><?=$item['description']?></p>
-				<?/*if(!empty($item['trailer_url'])):?>
-					<div class="video-wrap">
-						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-					</div>
-				<?endif;*/?>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
 
 				<?if($lectures):?>
@@ -32,53 +27,63 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-5">
-		<div class="card course-card--teacher mb-4">
-			<div class="card-body text-center">
-				<div>
-					<a href="/profile/<?=$teacher['id']?>/">
-						<img src="<?=$teacher['img']?>" class="img-lg rounded-circle mb-2" alt="profile image"/>
-					</a>
-					<h4><?=$teacher['full_name']?></h4>
-					<p class="text-muted mb-0"><?=$teacher['role_name']?></p>
-				</div>
-				<?if(!empty($teacher['title'])):?>
-					<p class="mt-2 card-text"><?=$teacher['title']?></p>
-				<?endif;?>
-			</div>
-		</div>
-
-		<?if(!empty($item['trailer_url'])):?>
-			<div class="card course-card--groups mb-4">
-				<div class="card-body pb-3">
-					<h3 class="card-title">Трейлер курса</h3>
-					<div class="video-wrap">
-						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+	<div class="col-12 col-xl-5">
+		<div class="row">
+			<div class="col-12 order-3 col-md-6 col-xl-12 order-xl-3">
+				<div class="card course-card--teacher mb-3">
+					<div class="card-body text-center">
+						<div>
+							<a href="/profile/<?=$teacher['id']?>/">
+								<img src="<?=$teacher['img']?>" class="img-lg rounded-circle mb-2" alt="profile image"/>
+							</a>
+							<h4><?=$teacher['full_name']?></h4>
+							<p class="text-muted mb-0"><?=$teacher['role_name']?></p>
+						</div>
+						<?if(!empty($teacher['title'])):?>
+							<p class="mt-2 card-text"><?=$teacher['title']?></p>
+						<?endif;?>
 					</div>
 				</div>
 			</div>
-		<?endif;?>
 
-		<?if(!empty($item['examples_url'])):?>
-			<div class="card course-card--groups mb-4">
-				<div class="card-body pb-3">
-					<h3 class="card-title">Работы студентов</h3>
-					<div class="video-wrap">
-						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['examples_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+			<?if(!empty($item['trailer_url'])):?>
+				<div class="col-12 order-1 col-sm-6 col-xl-12 order-xl-1">
+					<div class="card course-card--groups mb-3">
+						<div class="card-body pb-3">
+							<h3 class="card-title">Трейлер курса</h3>
+							<div class="video-wrap">
+								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		<?endif;?>
+			<?endif;?>
 
-		<div class="card course-card--groups">
-			<div class="card-body pb-3">
-				<h3 class="card-title">Группы</h3>
-				<?foreach($offers as $key => $val):?>
-					<a href="./?date=<?=$val['ts_formated']?>" class="btn-date-change">
-						<div class="title"><?=$val['ts_formated']?> - <?=$val['ts_end_formated']?></div>
-						<span for="group_<?=$val['code']?>" class="btn btn-<?=($selected_offer_index === $key)?'primary':'secondary'?>">Выбрать</span>
-					</a>
-				<?endforeach;?>
+			<?if(!empty($item['examples_url'])):?>
+				<div class="col-12 order-2 col-sm-6 col-xl-12 order-xl-2">
+					<div class="card course-card--groups mb-3">
+						<div class="card-body pb-3">
+							<h3 class="card-title">Работы студентов</h3>
+							<div class="video-wrap">
+								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['examples_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+					</div>
+				</div>
+			<?endif;?>
+
+			<div class="col-12 order-4 col-md-6 col-xl-12 order-xl-4">
+				<div class="card course-card--groups">
+					<div class="card-body pb-3">
+						<h3 class="card-title">Группы</h3>
+						<?foreach($offers as $key => $val):?>
+							<a href="./?date=<?=$val['ts_formated']?>" class="btn-date-change">
+								<div class="title"><?=$val['ts_formated']?> - <?=$val['ts_end_formated']?></div>
+								<span for="group_<?=$val['code']?>" class="btn btn-<?=($selected_offer_index === $key)?'primary':'secondary'?>">Выбрать</span>
+							</a>
+						<?endforeach;?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

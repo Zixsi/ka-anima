@@ -66,7 +66,9 @@ class WallHelper extends APP_Model
 			$limit = (int) ($data['limit'] ?? 20);
 			$offset = (int) ($data['offset'] ?? 0);
 
-			return $this->WallModel->list($data['target'], $limit, $offset);
+			$result = $this->WallModel->list($data['target'], $limit, $offset);
+			$this->prepareList($result);
+			return $result;
 		}
 		catch(Exception $e)
 		{
@@ -85,7 +87,9 @@ class WallHelper extends APP_Model
 				throw new Exception('не выбран родительский элемент');
 
 
-			return $this->WallModel->child($data['id']);
+			$result = $this->WallModel->child($data['id']);
+			$this->prepareList($result);
+			return $result;
 		}
 		catch(Exception $e)
 		{
@@ -93,5 +97,13 @@ class WallHelper extends APP_Model
 		}
 
 		return false;
+	}
+
+	public function prepareList(&$list)
+	{
+		foreach($list as &$val)
+		{
+			$val['text'] = str_replace("\r\n", '<br>', htmlspecialchars($val['text']));
+		}
 	}
 }

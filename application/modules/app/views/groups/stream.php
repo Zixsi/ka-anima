@@ -50,7 +50,7 @@
 		<div class="col-12">
 			<div class="alert alert-danger text-center" style="font-size: 24px;">Нет запланированных онлайн встреч</div>
 			<div class="text-center" style="padding: 50px 0px;">
-				<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="300" height="300">
+				<img src="<?=IMG_DUMMY?>" width="300" height="300">
 			</div>
 		</div>
 	</div>

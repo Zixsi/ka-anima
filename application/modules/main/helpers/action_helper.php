@@ -1,11 +1,11 @@
 <?php
 
 // добавить действие
-function action($action, $data = [])
+function action($action, $data = [], $user = null)
 {
 	$c = &get_instance();
 	return $c->UserActionsHelper->add([
-		'user' => $c->Auth->userID(),
+		'user' => (($user)?$user:$c->Auth->userID()),
 		'action' => $action,
 		'data' => $data
 	]);

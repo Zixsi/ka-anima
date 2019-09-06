@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         parent = canvas.parentNode;
         canvas.style.position = 'absolute';
         // canvas.style.backgroundColor = '#ff0000';
-        canvas.style.opacity = 1.0;
+        canvas.style.opacity = 0.65;
         width = parseInt(parent.offsetWidth * 0.3);
         height = parseInt(width / 5);
         canvas.style.width = width + 'px';

@@ -304,6 +304,7 @@ class GroupsHelper extends APP_Model
 		];
 
 		$this->SubscriptionModel->add($params);
+		action(UserActionsModel::ACTION_COURSE_SUBSCR, ['group_code' => $group['code'], 'period' => 'full'], $user['id']);
 
 		return true;
 	}

@@ -462,6 +462,38 @@ function wallComponent()
 		$(this).height(this.scrollHeight);
 	});
 
+	var shift_press = false;
+	wall_input.on('keydown', function(e){
+		switch(e.which)
+		{
+			case 16:
+				shift_press = true;
+				break;
+			case 13:
+				if(shift_press == false)
+				{
+					$(this).closest('form').submit();
+					e.preventDefault();
+				}
+				break;
+			default:
+				// empty
+				break;
+		}
+	});
+
+	wall_input.on('keyup', function(e){
+		switch(e.which)
+		{
+			case 16:
+				shift_press = false;
+				break;
+			default:
+				// empty
+				break;
+		}
+	});
+
 	$('body').on('click', '#wall-component .wall-item-tools .btn-comments', function(){
 		var is_loaded_child = $(this).hasClass('loaded');
 		var parent_id = $(this).data('id');
@@ -469,7 +501,7 @@ function wallComponent()
 		// получить список дочерних комментариев
 		if(!is_loaded_child)
 		{
-			console.log(parent_id);
+			// console.log(parent_id);
 			$(this).addClass('loaded');
 			$('body').trigger('wall:update-childs', {id: parent_id});
 		}
@@ -484,6 +516,8 @@ function wallComponent()
 			});
 		}
 	});
+
+
 
 	wall_btn_load_more.on('click', function(){
 		var btn = $(this);

@@ -48,7 +48,7 @@
 							</div>
 						<?else:?>
 							<div class="text-center" style="background-color: #f6f6f6;">
-								<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="60%" height="auto">
+								<img src="<?=IMG_DUMMY?>" width="60%" height="auto">
 							</div>
 						<?endif;?>
 					</div>
@@ -91,7 +91,7 @@
 														<span class="badge bg-danger" style="position: absolute; top: -8px; right: 5px;">!</span>
 													<?endif;?>
 													<a href="/groups/<?=$group['code']?>/review/<?=$item['id']?>/<?=($filter_url)?'?'.$filter_url:''?>">
-														<img src="<?=TEMPLATE_DIR?>/admin_1/assets/img/unicorn.jpg" width="100%">
+														<img src="<?=IMG_DUMMY?>" width="100%">
 													</a>
 													<div class="caption">
 														<span><?=date('d-m-Y', strtotime($item['ts']))?></span><br>

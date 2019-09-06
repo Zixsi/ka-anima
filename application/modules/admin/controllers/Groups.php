@@ -24,7 +24,9 @@ class Groups extends APP_Controller
 		$params = $this->input->get(null, true);
 
 		// ученики группы
-		$type = ($data['item']['type'] === 'standart')?'advanced':$data['item']['type'];
+		// $type = ($data['item']['type'] === 'standart')?'advanced':$data['item']['type'];
+		$type = $data['item']['type'];
+
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
