@@ -182,7 +182,7 @@ class GroupsModel extends APP_Model
 		return [];
 	}
 
-	public function getList($courseId = null)
+	public function getList($courseId = null, $filter = [])
 	{
 		$binds = [];
 
@@ -201,6 +201,12 @@ class GroupsModel extends APP_Model
 		{
 			$sql .= ' AND g.course_id = ? ';
 			$binds[] = [$courseId];
+		}
+
+		if(isset($filter['search']) && mb_strlen($filter['search']) >= 3)
+		{
+			$sql .= ' AND g.code LIKE ? ';
+			$binds[] = '%'.$filter['search'].'%';
 		}
 
 		$sql .= ' ORDER BY 
@@ -542,5 +548,39 @@ class GroupsModel extends APP_Model
 		}
 
 		return $result;
+	}
+
+	// список групп для рассылки
+	public function getListForMailing($day = 2)
+	{
+		// Выбираем записи за $day дней до начала
+		// $ts = new DateTime('2019-11-02 13:56:22');
+		$ts = new DateTime('now');
+		$ts->modify('+'. $day .' days');
+		$date = $ts->format(DATE_FORMAT_DB_SHORT);
+		$dateStart = $date.' 00:00:00';
+		$dateEnd = $date.' 23:59:59';
+
+		$binds = [$dateStart, $dateEnd];
+		$sql = 'SELECT 
+					g.*, s.cnt as subscription_cnt 
+				FROM 
+					'.self::TABLE.' as g 
+				LEFT JOIN 
+					(SELECT target, count(*) as cnt FROM '.self::TABLE_SUBSCRIPTION.' WHERE target_type = \'course\' GROUP BY target) as s ON(s.target = g.id) 
+				WHERE 
+					g.deleted = 0 AND 
+					g.ts >= ? AND 
+					g.ts <= ? AND 
+					s.cnt > 0 
+				ORDER BY 
+					g.id ASC';
+ 
+		if($res = $this->db->query($sql, $binds))
+		{
+			return $res->result_array();
+		}
+
+		return  [];
 	}
 }

@@ -9,6 +9,17 @@
 
 <div class="card">
 	<div class="card-body">
+		<form action="" method="get" class="row">
+			<div class="col-6">
+				<div class="input-group mb-4">
+					<input type="text" name="search" placeholder="Поиск по коду" value="<?=set_value2('search')?>" class="form-control">
+					<div class="input-group-append">
+						<button type="submit" class="btn btn-md btn-outline-primary">Поиск</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
 		<?if($items):?>
 			<ul class="nav nav-tabs" role="tablist">
 				<?foreach($items as $key => $item):?>

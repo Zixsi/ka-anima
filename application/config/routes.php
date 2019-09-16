@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // (:any), (:num)
 
-$route['default_controller'] = 'app/main';
+$route['default_controller'] = 'app/main/index';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -56,4 +56,5 @@ $route['courses/(:any)/review'] = 'app/courses/review/$1';
 $route['courses/(:any)/review/(:num)'] = 'app/courses/review/$1/$2';
 $route['courses/(:any)/stream'] = 'app/courses/stream/$1';
 $route['courses/(:any)/stream/(:num)'] = 'app/courses/stream/$1/$2';
+
 $route['(.*)'] = 'app/$1';

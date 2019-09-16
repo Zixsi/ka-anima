@@ -30,10 +30,12 @@ class TeachingStreams extends APP_Controller
 			$form_data['author'] = $this->user['id'];
 			if($id = $this->StreamsModel->add($form_data))
 			{
-				action(UserActionsModel::ACTION_STREAM_ADD, [
+				$actionParams = [
 					'item_id' => $id,  
-					'item_name' => $form_data['name'], 
-				]);
+					'item_name' => $form_data['name'],
+				];
+				Action::send(Action::STREAM_ADD, [$actionParams]);
+
 				header('Location: ../');
 			}
 		}
@@ -62,10 +64,11 @@ class TeachingStreams extends APP_Controller
 			{
 				$data['item'] = $this->StreamsModel->getByID($id);
 
-				action(UserActionsModel::ACTION_STREAM_EDIT, [
+				$actionParams = [
 					'item_id' => $data['item']['id'],  
 					'item_name' => $data['item']['name'], 
-				]);
+				];
+				Action::send(Action::STREAM_UPDATE, [$actionParams]);
 
 				header('Location: ../../');
 			}

@@ -25,10 +25,11 @@ class Courses extends APP_Controller
 	public function archive($id = null)
 	{
 		$data = [];
-		$data['items'] = $this->GroupsModel->getList($id);
-		$filter = [
-			'with_subscribed' => true, // с подписанными пользователями
-		];
+		$data['filter'] = $this->input->get();
+		$data['items'] = $this->GroupsModel->getList($id, $data['filter']);
+		// $filter = [
+		// 	'with_subscribed' => true, // с подписанными пользователями
+		// ];
 		$this->GroupsHelper->prepareListForAdmin($data['items']);
 
 		// debug($data['items']); die();

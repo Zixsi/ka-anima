@@ -49,12 +49,13 @@ class ReviewHelper extends APP_Model
 			if($this->VideoModel->prepareAndSet($id, 'review', $data['video_url']))
 				throw new Exception('ошибка добавления');
 
-			action(UserActionsModel::ACTION_REVIEW_ADD, [
+			$actionParams = [
 				'group_code' => $group['code'], 
 				'lecture_name' => $lecture['name'], 
 				'user_id' => $user['id'],
 				'user_name' => $user['full_name']
-			]);
+			];
+			Action::send(Action::REVIEW_ADD, [$actionParams]);
 
 			if($this->db->trans_status() === false)
 			{
@@ -93,12 +94,13 @@ class ReviewHelper extends APP_Model
 			if($this->VideoModel->remove($id, 'review') === false)
 				throw new Exception('ошибка удаления 2');
 
-			action(UserActionsModel::ACTION_REVIEW_DEL, [
+			$actionParams = [
 				'group_code' => $group['code'], 
 				'lecture_name' => $item['lecture_name'], 
 				'user_id' => $user['id'],
 				'user_name' => $user['full_name']
-			]);
+			];
+			Action::send(Action::REVIEW_DELETE, [$actionParams]);
 
 			if($this->db->trans_status() === false)
 			{

@@ -175,7 +175,7 @@
 </div>
 
 
-<div class="modal fade" id="group--add-user-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+<div class="modal fade" id="group--add-user-modal" role="dialog" aria-labelledby="" aria-hidden="true">
 	<div class="modal-dialog modal-md">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -185,20 +185,10 @@
 			<div class="modal-body">
 				<form action="" method="post">
 					<input type="hidden" name="group_id" value="<?=$item['id']?>">
-					<?if($item['type'] === 'standart'):?>
-						<div class="form-group users-block">
-							<select name="type" class="form-control">
-								<option value="none">-- нет --</option>
-								<option value="standart">Стандартная</option>
-								<option value="advanced">Расширенная</option>
-							</select>
-						</div>
-					<?else:?>
-						<input type="hidden" name="type" value="<?=$item['type']?>">
-					<?endif;?>
+					<input type="hidden" name="type" value="<?=$item['type']?>">
 					<div class="form-group users-block">
 						<div>
-							<select name="user" class="form-control" id="select2-users" style="width: 100%;"></select>
+							<select name="user" class="form-controll" id="select2-users" style="width: 100%;"></select>
 						</div>
 					</div>
 					<div class="form-group text-right">

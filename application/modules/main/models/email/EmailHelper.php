@@ -32,9 +32,9 @@ class EmailHelper extends APP_Model
 		
 		$params = [
 			'site' => $this->site,
-			'url' => $this->site['url'].'/auth/confirmation/?code='.($data['code'] ?? '')
+			'url' => $this->site['url'].'auth/confirmation/?code='.($data['code'] ?? $data['hash'] ?? '')
 		];
-		$html = $this->load->viewl('email', 'email/registration', $params, true);
+		$html = $this->load->viewl('email', 'email/registration', $params, true, 'app');
 
 		$this->email->to(($data['email'] ?? null));
 		$this->email->subject('Регистрация');
@@ -54,9 +54,9 @@ class EmailHelper extends APP_Model
 		
 		$params = [
 			'site' => $this->site,
-			'url' => $this->site['url'].'/auth/recovery/?code='.($data['code'] ?? '')
+			'url' => $this->site['url'].'auth/recovery/?code='.($data['code'] ?? $data['hash'] ?? '')
 		];
-		$html = $this->load->viewl('email', 'email/forgot', $params, true);
+		$html = $this->load->viewl('email', 'email/forgot', $params, true, 'app');
 
 		$this->email->to(($data['email'] ?? null));
 		$this->email->subject('Восстановление пароля');
@@ -68,4 +68,46 @@ class EmailHelper extends APP_Model
 
 		return $res;
 	}
+
+	public function mailing($data = [])
+	{
+		$result = null;
+		$params = json_decode($data['data'], true);
+
+		switch($data['event'])
+		{
+			case Action::MAILING:
+				$result = $this->sendMailingEvent($params);
+				break;
+			case Action::REGISTRATION:
+				$result = $this->registration($params);
+				break;
+			case Action::FORGOT:
+				$result = $this->forgot($params);
+				break;
+			default:
+				// empty
+				break;
+		}
+		
+		return $result;
+	}
+
+	private function sendMailingEvent($params)
+	{
+		$this->init();
+		$params['site'] = $this->site;
+		$html = $this->load->viewl('email', 'email/mailing_'.$params['type'], $params, true, 'app');
+
+		$this->email->to(($params['email'] ?? null));
+		$this->email->subject('Информация');
+		$this->email->message($html);
+
+		$res = $this->email->send();
+		// if(!$res)
+		// 	echo $this->email->print_debugger(array('headers'));
+
+		return $res;
+	}
+
 }

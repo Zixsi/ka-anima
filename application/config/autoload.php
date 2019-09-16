@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa');
+$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa', 'main/action');
 
 /*
 | -------------------------------------------------------------------
@@ -79,7 +79,7 @@ $autoload['libraries'] = array('database', 'security', 'form_validation', /*'ses
 |	$autoload['drivers'] = array('cache' => 'cch');
 |
 */
-$autoload['drivers'] = array();
+$autoload['drivers'] = array('cache');
 
 /*
 | -------------------------------------------------------------------
@@ -89,7 +89,7 @@ $autoload['drivers'] = array();
 |
 |	$autoload['helper'] = array('url', 'file');
 */
-$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'text', 'main/extensions', 'main/action');
+$autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'text', 'main/extensions');
 
 /*
 | -------------------------------------------------------------------
@@ -173,10 +173,13 @@ $autoload['model'] = [
 	'main/pay/PaySystem',
 	'main/faq/FaqModel',
 	'main/faq/FaqHelper',
+	'main/tasks/TasksModel',
+	'main/tasks/TasksHelper',
 
 	'main/VideoModel',
 	'main/VideoHelper',
 	'main/StreamsModel',
 	'main/StreamsHelper',
 	'main/OptionsModel',
+	'main/StatsHelper',
 ];

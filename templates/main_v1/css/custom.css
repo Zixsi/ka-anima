@@ -21,6 +21,8 @@
 .dropdown-menu {font-size: 0.813rem;}
 .sidebar {min-height: 100vh;}
 
+.card .card-title {text-transform: none;}
+
 /*=====================================================================================================*/
 
 .auth .brand-logo {text-align: center;}
@@ -97,8 +99,8 @@
 .video-wrap iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
 
 @media (min-width: 1440px) {
-	.video-wrap {padding-bottom: 0%; height: auto; max-width: 480px; height: 320px; margin: 0 auto; }
-	.video-wrap iframe {position: relative;}
+	.video-wrap.video-wrap-limited {padding-bottom: 0%; height: auto; max-width: 480px; height: 320px; margin: 0 auto; }
+	.video-wrap.video-wrap-limited iframe {position: relative;}
 }
 
 

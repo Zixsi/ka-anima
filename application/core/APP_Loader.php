@@ -13,10 +13,10 @@ class APP_Loader extends MX_Loader
 		return $this->view($this->layout, $vars, $return);
 	}
 
-	public function viewl($layout, $view, $vars = [], $return = FALSE)
+	public function viewl($layout, $view, $vars = [], $return = FALSE, $module = null)
 	{
 		$this->content_view = $view;
-		return $this->view($layout, $vars, $return);
+		return $this->view($layout, $vars, $return, $module);
 	}
 
 	public function content()

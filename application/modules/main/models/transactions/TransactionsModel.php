@@ -78,7 +78,7 @@ class TransactionsModel extends APP_Model
 					ts >= ? AND 
 					ts < ?
 				GROUP BY 
-					((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) 
+					ts
 				ORDER BY 
 					ts ASC';
 		$res = $this->db->query($sql, $binds);
@@ -88,5 +88,56 @@ class TransactionsModel extends APP_Model
 		}
 
 		return [];
+	}
+
+	// стата движения бабок по месяцам
+	public function getStatByMonths($from, $to)
+	{
+		$binds = [$from, $to];
+		$sql = 'SELECT 
+					SUM(amount) as value, DATE_FORMAT(ts, \'%Y-%m-01\') as ts_group 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					type = \''.self::TYPE_IN.'\' AND 
+					status = \''.self::STATUS_SUCCESS.'\' AND 
+					ts >= ? AND 
+					ts < ?
+				GROUP BY 
+					ts_group 
+				ORDER BY 
+					ts_group ASC';
+
+		$res = $this->db->query($sql, $binds);
+		if($result = $res->result_array())
+		{
+			foreach($result as &$value)
+			{
+				$value['ts'] = $value['ts_group'];
+				unset($value['ts_group']);
+			}
+
+			return $result;
+		}
+
+		return [];
+	}
+
+	// общая сумма дохода
+	public function getTotalAmount()
+	{
+		$binds = [];
+		$sql = 'SELECT 
+					SUM(amount) as value  
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					type = \''.self::TYPE_IN.'\' AND 
+					status = \''.self::STATUS_SUCCESS.'\' ';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->row_array())
+			return(float) $res['value'];
+
+		return (float) 0;
 	}
 }

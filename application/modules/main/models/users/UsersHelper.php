@@ -149,4 +149,46 @@ class UsersHelper extends APP_Model
 
 		return get_rel_path($img['full_path']);
 	}
+
+	public function setLastActive($id)
+	{
+		$this->UserModel->update($id, ['ts_last_active' => date(DATE_FORMAT_DB_FULL)]);
+	}
+
+	public function getStatRegistration($period)
+	{
+		$result = [];
+		$to = new DateTime('now');
+		$to->setTime(23, 59, 59);
+		$from = clone $to;
+
+		switch($period)
+		{
+			case 'year':
+				$from->modify('-1 year');
+				break;
+			case 'month':
+			default:
+				$from->modify('-1 month');
+				break;
+		}
+
+		$from->setTime(0, 0, 0);
+
+		$date_from = $from->format(DATE_FORMAT_DB_FULL);
+		$date_to = $to->format(DATE_FORMAT_DB_FULL);
+
+		switch($period)
+		{
+			case 'year':
+				$result = $this->UserModel->getRegistrationStatByMonths($date_from, $date_to);
+				break;
+			case 'month':
+			default:
+				$result = $this->UserModel->getRegistrationStatByDays($date_from, $date_to);
+				break;
+		}
+
+		return $result;
+	}
 }

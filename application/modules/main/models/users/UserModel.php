@@ -142,6 +142,14 @@ class UserModel extends APP_Model
 			$sql .= ' AND deleted = 0 ';
 		}
 
+		if(isset($filter['search']) && mb_strlen($filter['search']) >= 3)
+		{
+			$sql .= ' AND (email LIKE ? OR name LIKE ? OR lastname LIKE ?) ';
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+			$bind[] = '%'.$filter['search'].'%';
+		}
+
 		if(count($order))
 		{
 			$sql_order = [];
@@ -288,5 +296,89 @@ class UserModel extends APP_Model
 	public function pwdSalt()
 	{
 		return sha1(microtime(true));
+	}
+
+	// стата движения бабок по дням
+	public function getRegistrationStatByDays($from, $to)
+	{
+		$binds = [$from, $to];
+		$sql = 'SELECT 
+					COUNT(*) as value, ((UNIX_TIMESTAMP(ts_created) DIV 86400) * 86400) as ts 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					ts_created >= ? AND 
+					ts_created < ? 
+				GROUP BY 
+					ts
+				ORDER BY 
+					ts ASC';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return [];
+	}
+
+	// стата движения бабок по месяцам
+	public function getRegistrationStatByMonths($from, $to)
+	{
+		$binds = [$from, $to];
+		$sql = 'SELECT 
+					COUNT(*) as value, DATE_FORMAT(ts_created, \'%Y-%m-01\') as ts_group 
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					ts_created >= ? AND 
+					ts_created < ? 
+				GROUP BY 
+					ts_group
+				ORDER BY 
+					ts_group ASC';
+		$res = $this->db->query($sql, $binds);
+		if($result = $res->result_array())
+		{
+			foreach($result as &$value)
+			{
+				$value['ts'] = $value['ts_group'];
+				unset($value['ts_group']);
+			}
+
+			return $result;
+		}
+
+		return [];
+	}
+
+	public function getCountTotal()
+	{
+		$sql = 'SELECT COUNT(*) as value FROM '.self::TABLE.' ';
+		$res = $this->db->query($sql, []);
+		if($res = $res->row_array())
+			return $res['value'];
+
+		return 0;
+	}
+
+	public function getCountActive()
+	{
+		$sql = 'SELECT COUNT(*) as value FROM '.self::TABLE.' WHERE active = 1';
+		$res = $this->db->query($sql, []);
+		if($res = $res->row_array())
+			return $res['value'];
+
+		return 0;
+	}
+
+	public function getCountBlocked()
+	{
+		$sql = 'SELECT COUNT(*) as value FROM '.self::TABLE.' WHERE blocked = 1';
+		$res = $this->db->query($sql, []);
+		if($res = $res->row_array())
+			return $res['value'];
+
+		return 0;
 	}
 }

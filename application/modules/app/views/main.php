@@ -2,7 +2,7 @@
 $tpl_user = $this->Auth->user();
 $this->notifications->load();
 $notifications = $this->notifications->list();
-$unread_messages = $this->UserMessagesModel->cntUnreadAll($tpl_user['id']);
+$unread_messages = $this->UserMessagesModel->cntUnreadAll(($tpl_user['id'] ?? 0));
 ?>
 <!DOCTYPE html>
 <html lang="en">

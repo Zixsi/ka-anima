@@ -279,4 +279,38 @@ class StreamsModel extends APP_Model
 
 		return false;
 	}
+
+
+	// список для рассылки
+	public function getListForMailing($day = 2)
+	{
+		// Выбираем записи за $day дней до начала
+		// $ts = new DateTime('2019-11-02 13:56:22');
+		$ts = new DateTime('now');
+		$ts->modify('+'. $day .' days');
+		$date = $ts->format(DATE_FORMAT_DB_SHORT);
+		$dateStart = $date.' 00:00:00';
+		$dateEnd = $date.' 23:59:59';
+
+		$binds = [$dateStart, $dateEnd];
+
+		$sql = 'SELECT 
+					s.*, g.type as group_type, g.code as group_code
+				FROM 
+					'.self::TABLE.' as s 
+				LEFT JOIN 
+					'.self::TABLE_GROUPS.' as g ON(s.group_id = g.id) 
+				WHERE 
+					s.ts >= ? AND 
+					s.ts <= ? 
+				ORDER BY 
+					s.id ASC';
+
+		if($res = $this->db->query($sql, $binds))
+		{
+			return $res->result_array();
+		}
+
+		return  [];
+	}
 }

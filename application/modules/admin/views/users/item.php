@@ -149,8 +149,8 @@
 						<button class="btn btn-danger"><i class="mdi mdi-delete"></i> Удален</button>
 					<?endif;?>
 				</p>
-				<p>Дата регистрации: <?=date('d.m.Y H:i:s', strtotime($item['ts_created']))?></p>
-				<p>Дата последней активности: 00.00.000 00:00:00</p>
+				<p>Дата регистрации: <?=date(DATE_FORMAT_FULL, strtotime($item['ts_created']))?></p>
+				<p>Дата последней активности: <?=date(DATE_FORMAT_FULL, strtotime($item['ts_last_active']))?></p>
 			</div>
 		</div>
 		<?if((int) $item['role'] == 0):?>
@@ -294,14 +294,16 @@
 						<thead>
 							<tr>
 								<th width="180">Дата</th>
+								<th width="180">Действие</th>
 								<th>Описание</th>
 							</tr>
 						</thead>
 						<tbody>
 						<?foreach($actions as $item):?>
 							<tr>
-								<td><?=date('d.m.Y H:i:s', strtotime($item['date']))?></td>
-								<td><?=action_print_description($item)?></td>
+								<td><?=date(DATE_FORMAT_FULL, strtotime($item['date']))?></td>
+								<td><?=$item['action']?></td>
+								<td><?=$item['description']?></td>
 							</tr>
 						<?endforeach;?>
 						</tbody>

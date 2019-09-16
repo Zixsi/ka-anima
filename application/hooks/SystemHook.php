@@ -33,7 +33,7 @@ class SystemHook
 		if(is_cli() == true)
 			return;
 
-		$c = $this->CI->router->fetch_class();		
+		$c = $this->CI->router->fetch_class();
 		$a = $this->CI->router->fetch_method();
 		$d = $this->CI->uri->segment(1);
 
@@ -56,6 +56,12 @@ class SystemHook
 		if($check)
 		{
 			$is_admin = $this->CI->Auth->isAdmin();
+
+			if($this->CI->cache->file->get('user_'. $user['id'] .'_checkAuth') === false)
+			{
+				$this->CI->UsersHelper->setLastActive($user['id']);
+				$this->CI->cache->file->save('user_'. $user['id'] .'_checkAuth', 1, 60);
+			}
 
 			// если контроллер авторизации, но не страница из списка
 			if($c === 'auth' && !in_array($a, ['logout', 'confirmation']))

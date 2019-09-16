@@ -16,11 +16,11 @@
 						<?if(($start_course = days_to_date($group['ts'])) > 0):?>
 							<p>Курс начнется через: <?=$start_course?> дней</p>
 						<?endif;?>
-						<p>Начало обучения: <?=date('d-m-Y', strtotime($group['ts']))?></p>
-						<p>Завершение обучения:  <?=date('d-m-Y', strtotime($group['ts_end']))?></p>
+						<p>Начало обучения: <?=date(DATE_FORMAT_SHORT, strtotime($group['ts']))?></p>
+						<p>Завершение обучения:  <?=date(DATE_FORMAT_SHORT, strtotime($group['ts_end']))?></p>
 						<p>Всего недель курса: <?=$group['cnt_all']?></p>
 						<p>Текущая неделя: <?=$group['current_week']?></p>
-						<p>Дней до окончания: 0</p>
+						<p>Дней до окончания: <?=((($end_course = days_to_date($group['ts_end'])) > 0)?$end_course:0)?></p>
 					</div>
 				</div>
 			</div>

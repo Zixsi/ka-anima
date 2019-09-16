@@ -85,36 +85,39 @@ class TransactionsHelper extends APP_Model
 		return $info[$status] ?? null;
 	}
 
-	public function prepareStat(&$data)
+	public function getStat($period)
 	{
-		foreach($data as &$value)
-		{
-			$value['date'] = date(DATE_FORMAT_SHORT, $value['ts']);
-		}
-	}
+		$result = [];
+		$to = new DateTime('now');
+		$to->setTime(23, 59, 59);
+		$from = clone $to;
 
-	public function prepareStatChart($data)
-	{
-		$result = [
-			'labels' => [],
-			'values' => []
-		];
-
-		foreach($data as $value)
+		switch($period)
 		{
-			$result['labels'][] = $value['date'];
-			$result['values'][] = $value['value'];
+			case 'year':
+				$from->modify('-1 year');
+				break;
+			case 'month':
+			default:
+				$from->modify('-1 month');
+				break;
 		}
 
-		if(count($result['labels']))
-			$result['labels'] = '"' . implode('","', $result['labels']) . '"';
-		else
-			$result['labels'] = '';
+		$from->setTime(0, 0, 0);
 
-		if(count($result['values']))
-			$result['values'] = implode(',', $result['values']);
-		else
-			$result['values'] = '';
+		$date_from = $from->format(DATE_FORMAT_DB_FULL);
+		$date_to = $to->format(DATE_FORMAT_DB_FULL);
+
+		switch($period)
+		{
+			case 'year':
+				$result = $this->TransactionsModel->getStatByMonths($date_from, $date_to);
+				break;
+			case 'month':
+			default:
+				$result = $this->TransactionsModel->getStatByDays($date_from, $date_to);
+				break;
+		}
 
 		return $result;
 	}

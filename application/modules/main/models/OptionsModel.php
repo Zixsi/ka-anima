@@ -17,7 +17,7 @@ class OptionsModel extends APP_Model
 	// кол-во недель доступности курса до старта
 	public static function getNumberWeeksBeforeStartCourse()
 	{
-		return 4;
+		return 8;
 	}
 
 	// кол-во недель доступности курса после старта

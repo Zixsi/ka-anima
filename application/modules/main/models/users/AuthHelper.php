@@ -16,19 +16,19 @@ class AuthHelper extends APP_Model
 		if($this->form_validation->run('auth_login') === false)
 			throw new AppBadLogicExtension($this->form_validation->error_string());
 
-		if(($res = $this->UserModel->getByEmail($data['email'])) === false)
+		if(($user = $this->UserModel->getByEmail($data['email'])) === false)
 			throw new AppBadLogicExtension('Пользователь не найден');
 
-		if($this->UserModel->pwdHash($data['password']) !== $res['password'])
+		if($this->UserModel->pwdHash($data['password']) !== $user['password'])
 			throw new AppBadLogicExtension('Неверный логин или пароль');
 
-		if((int) $res['blocked'] === 1)
+		if((int) $user['blocked'] === 1)
 		{
 			$email_support = $this->config->item('email_support');
 			throw new AppBadLogicExtension('Пользователь заблокирован. Обратитесь в службу технической поддержки '.$email_support);
 		}
 
-		unset($res['password']);
+		unset($user['password']);
 		if(isset($data['remember']))
 		{
 			$time = 3600 * 24 *30;
@@ -41,10 +41,10 @@ class AuthHelper extends APP_Model
 			delete_cookie('email');
 		}
 
-		$res['last_update'] = time();
+		$user['last_update'] = time();
 
-		$this->setUser($res);
-		action(UserActionsModel::ACTION_LOGIN);
+		$this->setUser($user);
+		Action::send(Action::LOGIN, [$user]);
 		
 		return true;
 	}
@@ -71,19 +71,17 @@ class AuthHelper extends APP_Model
 
 		if($user_id = $this->UserModel->add($user_fields))
 		{
-			// отправляем письмо
-			$email_params = [
-				'email' => $user_fields['email'],
-				'code' => $user_fields['hash']
-			];
-			if($this->EmailHelper->registration($email_params) === false)
-				throw new AppBadLogicExtension('Произошла ошибка при отправке письма');
+			$user = $this->UserModel->getByID($user_id);
+			unset($user['password']);
 
 			// авторизуем
-			$user = $this->UserModel->getByID($user_id);
 			$this->setUser($user);
-			action(UserActionsModel::ACTION_LOGIN);
+
+			Action::send(Action::REGISTRATION, [$user]);
+			Action::send(Action::LOGIN, [$user]);
 		}
+		else
+			throw new AppBadLogicExtension('Ошибка создания пользователя. Повторите запрос позже');
 			
 		return true;
 	}
@@ -152,7 +150,9 @@ class AuthHelper extends APP_Model
 
 	public function logout()
 	{
-		$this->session->sess_destroy();
+		$session_cookie_name = $this->config->item('sess_cookie_name');
+		if(!empty($_COOKIE[$session_cookie_name]))
+			$this->session->sess_destroy();
 	}
 
 	public function setUser($user = [])

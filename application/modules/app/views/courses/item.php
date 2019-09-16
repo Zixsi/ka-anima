@@ -51,7 +51,7 @@
 					<div class="card course-card--groups mb-3">
 						<div class="card-body pb-3">
 							<h3 class="card-title">Трейлер курса</h3>
-							<div class="video-wrap">
+							<div class="video-wrap video-wrap-limited">
 								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['trailer_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
 						</div>
@@ -64,7 +64,7 @@
 					<div class="card course-card--groups mb-3">
 						<div class="card-body pb-3">
 							<h3 class="card-title">Работы студентов</h3>
-							<div class="video-wrap">
+							<div class="video-wrap video-wrap-limited">
 								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=getVideoId($item['examples_url'])?>" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 							</div>
 						</div>

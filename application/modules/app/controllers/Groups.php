@@ -329,11 +329,13 @@ class Groups extends APP_Controller
 				{
 					$this->FilesModel->createThumb($file_data);
 
-					action(UserActionsModel::ACTION_HOMEWORK_FILE_ADD, [
+					$actionParams = [
 						'group_code' => $data['group']['code'], 
 						'lecture_name' => $data['lecture']['name'], 
 						'file_name' => $file_data['orig_name']
-					]);
+					];
+
+					Action::send(Action::HOMEWORK_UPLOAD, [$actionParams]);
 				}
 			}
 
@@ -364,12 +366,15 @@ class Groups extends APP_Controller
 				if(isset($params['target']) && $params['target'] == 'homework')
 				{
 					$lecture = $this->LecturesModel->getByID($params['lecture']);
-					action(UserActionsModel::ACTION_HOMEWORK_FILE_DOWNLOAD, [
+
+					$actionParams =[
 						'group_code' => $group['code'], 
 						'lecture_name' => $lecture['name'], 
 						'user_id' => $data['user']['id'],
 						'user_name' => $data['user']['full_name']
-					]);
+					];
+					
+					Action::send(Action::HOMEWORK_DOWNLOAD, [$actionParams]);
 					
 					$this->HomeworkHelper->download($group['id'], $params['lecture'], $params['user']);
 				}

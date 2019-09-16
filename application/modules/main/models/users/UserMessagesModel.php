@@ -99,7 +99,7 @@ class UserMessagesModel extends APP_Model
 		$bind = [$user];
 		$sql = 'SELECT count(*) as cnt FROM '.self::TABLE.' WHERE target = ? AND is_read = 0';
 		if($res = $this->db->query($sql, $bind)->row_array())
-			return (int) $res['cnt'];
+			return (int) ($res['cnt'] ?? 0);
 
 		return 0;
 	}

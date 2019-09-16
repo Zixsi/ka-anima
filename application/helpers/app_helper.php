@@ -160,6 +160,20 @@ function set_select2($field, $value = '', $default = false)
 	return ($input === $value) ? ' selected="selected"' : '';
 }
 
+
+function set_value2($field, $default = '', $html_escape = TRUE)
+{
+	$CI =& get_instance();
+
+	$value = (isset($CI->form_validation) && is_object($CI->form_validation) && $CI->form_validation->has_rule($field))
+		? $CI->form_validation->set_value($field, $default)
+		: ($CI->input->post($field, FALSE) ?? $CI->input->get($field, FALSE));
+
+	isset($value) OR $value = $default;
+	return ($html_escape) ? html_escape($value) : $value;
+}
+
+
 function is_active_menu_item($c, $a = null)
 {
 	$CI =& get_instance();
@@ -284,4 +298,14 @@ function getVideoId($url)
 	preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $url, $match);
 
 	return $match[1] ?? '';
+}
+
+function getIp()
+{
+	return ($_SERVER['HTTP_X_REAL_IP'] ?? $_SERVER['HTTP_CLIENT_IP'] ?? $_SERVER['HTTP_X_FORWARDED_FOR'] ?? $_SERVER['REMOTE_ADDR']);
+}
+
+function getUserAgent()
+{
+	return ($_SERVER['HTTP_USER_AGENT'] ?? '');
 }

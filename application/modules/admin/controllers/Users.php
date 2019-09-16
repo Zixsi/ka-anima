@@ -31,6 +31,7 @@ class Users extends APP_Controller
 		$data['transactions'] = $this->TransactionsHelper->listByUser($id);
 		$data['streams'] = $this->StreamsModel->list($id, []);
 		$data['actions'] = $this->UserActionsModel->listByUser($id);
+		$this->UserActionsHelper->prepareList($data['actions']);
 		
 		// debug($data); die();
 

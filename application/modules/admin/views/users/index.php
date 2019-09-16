@@ -12,6 +12,12 @@
 		<div class="card">
 			<div class="card-body">
 				<form action="" method="get" id="filter-user-form">
+					<div class="input-group mb-4">
+						<input type="text" name="search" value="<?=set_value2('search')?>" class="form-control">
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-md btn-outline-primary">Поиск</button>
+						</div>
+					</div>
 					<p class="lead mb-4">Роли</p>
 					<ul class="list-group mb-4 list-group-filter">
 						<li class="list-group-item">
@@ -77,7 +83,7 @@
 						*/?>
 					</ul>
 				</form>
-				<button type="button" class="btn btn-md btn-block btn-primary" data-toggle="modal" data-target="#add-user-modal">Добавить пользователя</button>
+				<button type="button" class="btn btn-md btn-block btn-outline-primary" data-toggle="modal" data-target="#add-user-modal">Добавить пользователя</button>
 			</div>
 		</div>
 	</div>

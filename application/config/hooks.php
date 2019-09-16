@@ -52,3 +52,11 @@ $hook['pre_controller'][] = array(
 	'filepath' => 'hooks',
 	'params'   => []
 );
+
+$hook['pre_controller'][] = array(
+	'class'    => 'ActionHook',
+	'function' => 'listenActions',
+	'filename' => 'ActionHook.php',
+	'filepath' => 'hooks',
+	'params'   => []
+);
