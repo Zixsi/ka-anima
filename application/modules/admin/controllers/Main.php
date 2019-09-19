@@ -24,6 +24,13 @@ class Main extends APP_Controller
 			'blocked' => $this->UserModel->getCountBlocked()
 		];
 
+		$data['stat']['courses']['summary']['items'] = $this->TransactionsModel->getCourseSummaryStat();
+		$data['stat']['courses']['summary']['chart'] = $this->StatsHelper->prepareChartCoursesPie($data['stat']['courses']['summary']['items']);
+		$data['stat']['courses']['months']['items'] = $this->TransactionsHelper->getCourseStatByMonths();
+		$data['stat']['courses']['months']['chart'] = $this->StatsHelper->prepareChartCoursesMonth($data['stat']['courses']['months']['items']);
+		
+		// debug($data['stat']['courses']['months']); die();
+
 		$this->load->lview('main/index', $data);
 	}
 }

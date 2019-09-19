@@ -618,37 +618,62 @@ function wallComponent()
 	}
 }
 
-function drawChart(selector, label, labels, values)
+function drawChart(selector, label, labels, values, type = 'line', multy = false)
 {
 	if(selector.length)
 	{
 		var areaChartData, areaChartOptions, areaChartCanvas, areaChart;
-
-		areaChartData = {
-			labels: labels,
-			datasets: [{
-				label: label,
-				data: values,
-				backgroundColor: [
+		var backgroundColors = [
 					'rgba(255, 99, 132, 0.2)',
 					'rgba(54, 162, 235, 0.2)',
 					'rgba(255, 206, 86, 0.2)',
 					'rgba(75, 192, 192, 0.2)',
 					'rgba(153, 102, 255, 0.2)',
 					'rgba(255, 159, 64, 0.2)'
-				],
-				borderColor: [
+				];
+		var borderColors = [
 					'rgba(255,99,132,1)',
 					'rgba(54, 162, 235, 1)',
 					'rgba(255, 206, 86, 1)',
 					'rgba(75, 192, 192, 1)',
 					'rgba(153, 102, 255, 1)',
 					'rgba(255, 159, 64, 1)'
-				],
-				borderWidth: 1,
-				fill: true, // 3: no fill
-			}]
-		};
+				];
+
+		if(multy)
+		{
+			areaChartData = {
+				labels: labels,
+				datasets: []
+			};
+
+			values.forEach(function(e, i){
+				areaChartData.datasets.push({
+					label: e.label,
+					data: e.values,
+					backgroundColor: backgroundColors[i],
+					borderColor: borderColors[i],
+					borderWidth: 1,
+					fill: true, // 3: no fill
+				});
+			});
+
+			console.log(areaChartData);
+		}
+		else
+		{
+			areaChartData = {
+				labels: labels,
+				datasets: [{
+					label: label,
+					data: values,
+					backgroundColor: backgroundColors,
+					borderColor: borderColors,
+					borderWidth: 1,
+					fill: true, // 3: no fill
+				}]
+			};
+		}
 
 		areaChartOptions = {
 			plugins: {
@@ -660,7 +685,7 @@ function drawChart(selector, label, labels, values)
 		
 		areaChartCanvas = selector.get(0).getContext("2d");
 		areaChart = new Chart(areaChartCanvas, {
-			type: 'line',
+			type: type,
 			data: areaChartData,
 			options: areaChartOptions
 		});

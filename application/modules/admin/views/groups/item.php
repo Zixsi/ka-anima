@@ -128,7 +128,7 @@
 		<?endif;?>
 	</div>
 	<div class="col-6">
-		<div class="card">
+		<div class="card mb-4">
 			<div class="card-header">
 				<h3 class="card-title pt-2">Онлайн встречи</h3>
 			</div>
@@ -171,6 +171,14 @@
 				</table>
 			</div>
 		</div>
+		<div class="card mb-4">
+			<div class="card-header">
+				<h3 class="card-title pt-2">Статистика</h3>
+			</div>
+			<div class="card-body">
+				<canvas id="chart-income"></canvas>
+			</div>
+		</div>
 	</div>
 </div>
 
@@ -199,3 +207,10 @@
 		</div>
 	</div>
 </div>
+
+<script src="<?=TEMPLATE_DIR?>/main_v1/vendors/chart.js/Chart.min.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {
+	drawChart($("#chart-income"), 'Доход', [<?=$stat['labels']?>], [<?=$stat['values']?>]);
+});
+</script>

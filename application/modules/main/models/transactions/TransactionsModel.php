@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class TransactionsModel extends APP_Model
 {
 	const TABLE = 'transactions';
+	const TABLE_COURSES = 'courses';
 	const TYPE_IN = 'IN';
 	const TYPE_OUT = 'OUT';
 	const TYPE = [
@@ -139,5 +140,118 @@ class TransactionsModel extends APP_Model
 			return(float) $res['value'];
 
 		return (float) 0;
+	}
+
+	// суммарная статистика дохода по курсам
+	public function getCourseSummaryStat()
+	{
+		$binds = [];
+		$sql = 'SELECT 
+					SUM(t.amount) as value, t.course_id, c.name   
+				FROM 
+					'.self::TABLE.' as t 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = t.course_id) 
+				WHERE 
+					t.type = \''.self::TYPE_IN.'\' AND 
+					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.course_id > 0 
+				GROUP BY 
+					t.course_id';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->result_array())
+		{
+			return $res;
+		}
+
+		return [];
+	}
+
+	// общая сумма дохода курса
+	public function getCourseTotalAmount($id)
+	{
+		$binds = [(int) $id];
+		$sql = 'SELECT 
+					SUM(amount) as value  
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					type = \''.self::TYPE_IN.'\' AND 
+					status = \''.self::STATUS_SUCCESS.'\' AND 
+					course_id = ?';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->row_array())
+			return(float) $res['value'];
+
+		return (float) 0;
+	}
+
+	// стата движения бабок по месяцам
+	public function getCourseStatByMonths($from, $to)
+	{
+		$binds = [$from, $to];
+		$sql = 'SELECT 
+					SUM(t.amount) as value, DATE_FORMAT(t.ts, \'%Y-%m-01\') as ts_group, t.course_id, c.name   
+				FROM 
+					'.self::TABLE.' as t 
+				LEFT JOIN 
+					'.self::TABLE_COURSES.' as c ON(c.id = t.course_id) 
+				WHERE 
+					t.type = \''.self::TYPE_IN.'\' AND 
+					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.course_id > 0 AND 
+					t.ts >= ? AND 
+					t.ts < ?
+				GROUP BY 
+					t.course_id, ts_group 
+				ORDER BY 
+					ts_group ASC';
+
+		$res = $this->db->query($sql, $binds);
+		if($result = $res->result_array())
+		{
+			foreach($result as &$value)
+			{
+				$value['ts'] = $value['ts_group'];
+				unset($value['ts_group']);
+			}
+
+			return $result;
+		}
+
+		return [];
+	}
+
+	// стата движения бабок по месяцам
+	public function getGroupStatByMonths($id)
+	{
+		$binds = [(int) $id];
+		$sql = 'SELECT 
+					SUM(t.amount) as value, DATE_FORMAT(t.ts, \'%Y-%m-01\') as ts_group   
+				FROM 
+					'.self::TABLE.' as t 
+				WHERE 
+					t.type = \''.self::TYPE_IN.'\' AND 
+					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.group_id > 0 
+				GROUP BY 
+					ts_group 
+				ORDER BY 
+					ts_group ASC';
+
+		$res = $this->db->query($sql, $binds);
+		if($result = $res->result_array())
+		{
+			foreach($result as &$value)
+			{
+				$value['ts'] = $value['ts_group'];
+				$value['date'] = $value['ts_group'];
+				unset($value['ts_group']);
+			}
+
+			return $result;
+		}
+
+		return [];
 	}
 }

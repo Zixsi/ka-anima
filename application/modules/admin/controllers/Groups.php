@@ -54,7 +54,9 @@ class Groups extends APP_Controller
 		}
 
 		$data['streams'] = $this->StreamsModel->byGroupList($data['item']['id']);
-		// debug($data); die();
+
+		$stat = $this->TransactionsModel->getGroupStatByMonths($data['item']['id']);
+		$data['stat'] = $this->StatsHelper->prepareChart($stat);
 
 		$this->load->lview('groups/item', $data);
 	}

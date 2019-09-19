@@ -121,4 +121,41 @@ class TransactionsHelper extends APP_Model
 
 		return $result;
 	}
+
+	public function getCourseStatByMonths()
+	{
+		$result = [];
+		$to = new DateTime();
+		$from = clone $to;
+		$from->modify('-1 year');
+		$from->setDate($from->format('Y'), $from->format('n'), 1);
+
+		$initMonth = [];
+		$fromIterator = clone $from;
+		for($i = 0; $i < 13; $i++)
+		{
+			$initMonth[$fromIterator->format(DATE_FORMAT_DB_SHORT)] = 0;
+			$fromIterator->modify('+1 month');
+		}
+
+		$items = $this->TransactionsModel->getCourseStatByMonths($from->format(DATE_FORMAT_DB_FULL), $to->format(DATE_FORMAT_DB_FULL));
+		if(count($items))
+		{
+			foreach($items as $item)
+			{
+				$key = $item['course_id'];
+				if(array_key_exists($key, $result) === false)
+				{
+					$result[$key] = [
+						'name' => $item['name'],
+						'values' => $initMonth
+					];
+				}
+
+				$result[$key]['values'][$item['ts']] = $item['value'];
+			}
+		}
+
+		return $result;
+	}
 }

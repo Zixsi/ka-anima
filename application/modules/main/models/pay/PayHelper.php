@@ -37,7 +37,9 @@ class PayHelper extends APP_Model
 			'type' => TransactionsModel::TYPE_IN,
 			'amount' => $data['price'],
 			'description' => $this->makePayDescription($data),
-			'data' => json_encode($data)
+			'data' => json_encode($data),
+			'course_id' => (int) ($data['params']['course_id'] ?? 0),
+			'group_id' => (int) ($data['params']['group_id'] ?? 0)
 		];
 
 		if(($id = $this->TransactionsHelper->add($tx)) === false)
@@ -89,16 +91,26 @@ class PayHelper extends APP_Model
 		if(($item = $this->SubscriptionModel->getByHash(($data['hash'] ?? ''))) === false)
 			throw new Exception('неверный идентификатор подписки', 1);
 
+		$params = [];
+
+		if($item['target_type'] === 'course')
+		{
+			if(($group_item = $this->GroupsModel->getById($item['target'])) !== false)
+				$params['course_id'] = $group_item['course_id'];
+			$params['group_id'] = $item['target'];
+		}
+
 		$res = $this->SubscriptionHelper->prepareSubscr($item);
+		$params['amount'] = $res['amount'];
+
 		$payData = new PayData(PayData::OBJ_TYPE_SUBSCR, $item['id'], $item['type']);
 		foreach($res['items'] as $val)
 		{
 			$payData->addRow($val['description'], $val['price']);
 		}
+
 		$payData->setPeriod($res['ts_start'], $res['ts_end']);
-		$payData->setParams([
-			'amount' => $res['amount']
-		]);
+		$payData->setParams($params);
 		$payData->calcPrice();
 
 		return $payData->toArray();
@@ -136,7 +148,9 @@ class PayHelper extends APP_Model
 		$payData->setParams([
 			'amount' => $group['amount'],
 			'price' => ($group['data']['price'] ?? null),
-			'subscr_type' => $group['subscr_type']
+			'subscr_type' => $group['subscr_type'],
+			'course_id' => $course_item['id'],
+			'group_id' => $group_item['id']
 		]);
 		$payData->setNew(true);
 		$payData->calcPrice();

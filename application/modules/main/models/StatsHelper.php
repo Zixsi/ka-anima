@@ -38,4 +38,57 @@ class StatsHelper extends APP_Model
 
 		return $result;
 	}
+
+	public function prepareChartCoursesPie($data)
+	{
+		$result = [
+			'labels' => [],
+			'values' => []
+		];
+
+		foreach($data as $value)
+		{
+			$result['labels'][] = $value['name'];
+			$result['values'][] = $value['value'];
+		}
+
+		if(count($result['labels']))
+			$result['labels'] = '"' . implode('","', $result['labels']) . '"';
+		else
+			$result['labels'] = '';
+
+		if(count($result['values']))
+			$result['values'] = implode(',', $result['values']);
+		else
+			$result['values'] = '';
+
+		return $result;
+	}
+	
+	public function prepareChartCoursesMonth($data)
+	{
+		$result = [
+			'labels' => [],
+			'data' => []
+		];
+
+		foreach($data as $value)
+		{
+			if(empty($result['labels']))
+				$result['labels'] = array_keys($value['values']);
+
+			$result['data'][] = [
+				'label' => $value['name'],
+				'values' => array_values($value['values'])
+			];
+		}
+
+		if(count($result['labels']))
+			$result['labels'] = '"' . implode('","', $result['labels']) . '"';
+		else
+			$result['labels'] = '';
+
+		return $result;
+	}
+	
 }
