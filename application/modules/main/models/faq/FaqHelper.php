@@ -37,18 +37,21 @@ class FaqHelper extends APP_Model
 	{
 		$result = [];
 
-		foreach($data as $val)
+		if(is_array($data) && count($data))
 		{
-			if(!array_key_exists($val['section'], $result))
+			foreach($data as $val)
 			{
-				$result[$val['section']] = [
-					'id' => $val['section'],
-					'name' => ($sections[$val['section']]['name'] ?? '- - -'),
-					'items' => []
-				];
-			}
+				if(!array_key_exists($val['section'], $result))
+				{
+					$result[$val['section']] = [
+						'id' => $val['section'],
+						'name' => ($sections[$val['section']]['name'] ?? '- - -'),
+						'items' => []
+					];
+				}
 
-			$result[$val['section']]['items'][] = $val;
+				$result[$val['section']]['items'][] = $val;
+			}
 		}
 
 
