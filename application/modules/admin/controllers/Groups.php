@@ -57,6 +57,7 @@ class Groups extends APP_Controller
 
 		$stat = $this->TransactionsModel->getGroupStatByMonths($data['item']['id']);
 		$data['stat'] = $this->StatsHelper->prepareChart($stat);
+		$data['statTotal'] = $this->TransactionsModel->getGroupTotalAmount($data['item']['id']);
 
 		$this->load->lview('groups/item', $data);
 	}

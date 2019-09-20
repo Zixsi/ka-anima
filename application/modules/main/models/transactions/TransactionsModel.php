@@ -70,7 +70,7 @@ class TransactionsModel extends APP_Model
 	{
 		$binds = [$from, $to];
 		$sql = 'SELECT 
-					SUM(amount) as value, ((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) as ts 
+					SUM(amount) as value, ((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) as ts2 
 				FROM 
 					'.self::TABLE.' 
 				WHERE 
@@ -79,13 +79,19 @@ class TransactionsModel extends APP_Model
 					ts >= ? AND 
 					ts < ?
 				GROUP BY 
-					ts
+					ts2
 				ORDER BY 
-					ts ASC';
+					ts2 ASC';
 		$res = $this->db->query($sql, $binds);
-		if($res = $res->result_array())
+		if($result = $res->result_array())
 		{
-			return $res;
+			foreach($result as &$value)
+			{
+				$value['ts'] = $value['ts2'];
+				unset($value['ts2']);
+			}
+			
+			return $result;
 		}
 
 		return [];
@@ -222,18 +228,38 @@ class TransactionsModel extends APP_Model
 		return [];
 	}
 
-	// стата движения бабок по месяцам
-	public function getGroupStatByMonths($id)
+	// общая сумма дохода группы
+	public function getGroupTotalAmount($id)
 	{
 		$binds = [(int) $id];
 		$sql = 'SELECT 
-					SUM(t.amount) as value, DATE_FORMAT(t.ts, \'%Y-%m-01\') as ts_group   
+					SUM(amount) as value  
+				FROM 
+					'.self::TABLE.' 
+				WHERE 
+					type = \''.self::TYPE_IN.'\' AND 
+					status = \''.self::STATUS_SUCCESS.'\' AND 
+					group_id = ?';
+		$res = $this->db->query($sql, $binds);
+		if($res = $res->row_array())
+			return(float) $res['value'];
+
+		return (float) 0;
+	}
+
+	// стата движения бабок по месяцам
+	public function getGroupStatByMonths($id)
+	{
+		// SUM(t.amount) as value, DATE_FORMAT(t.ts, \'%Y-%m-01\') as ts_group   
+		$binds = [(int) $id];
+		$sql = 'SELECT 
+					SUM(t.amount) as value, ((UNIX_TIMESTAMP(ts) DIV 86400) * 86400) as ts_group   
 				FROM 
 					'.self::TABLE.' as t 
 				WHERE 
 					t.type = \''.self::TYPE_IN.'\' AND 
 					t.status = \''.self::STATUS_SUCCESS.'\' AND 
-					t.group_id > 0 
+					t.group_id = ? 
 				GROUP BY 
 					ts_group 
 				ORDER BY 
@@ -245,7 +271,8 @@ class TransactionsModel extends APP_Model
 			foreach($result as &$value)
 			{
 				$value['ts'] = $value['ts_group'];
-				$value['date'] = $value['ts_group'];
+				// $value['date'] = $value['ts_group'];
+				$value['date'] = date(DATE_FORMAT_DB_SHORT, $value['ts_group']);
 				unset($value['ts_group']);
 			}
 

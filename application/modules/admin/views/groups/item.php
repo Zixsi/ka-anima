@@ -176,6 +176,7 @@
 				<h3 class="card-title pt-2">Статистика</h3>
 			</div>
 			<div class="card-body">
+				<h3><?=number_format($statTotal, 2, '.', ' ')?> <?=PRICE_CHAR?></h3>
 				<canvas id="chart-income"></canvas>
 			</div>
 		</div>
