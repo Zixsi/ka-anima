@@ -12,7 +12,7 @@
 		<div class="card">
 			<div class="card-body">
 				<h5><?=$item['ts_formated']?></h5>
-				<img src="<?=$item['img']?>" class="pb-4">
+				<img src="/<?=$item['img']?>" class="pb-4">
 				<div><?=$item['description']?></div>
 				<div><?=$item['text']?></div>
 			</div>
