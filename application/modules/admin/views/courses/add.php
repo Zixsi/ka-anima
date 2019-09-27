@@ -78,13 +78,49 @@
 				<div class="row">
 					<div class="col-6">
 						<div class="form-group">
+							<label>Meta keywords</label>
+							<textarea name="meta_keyword" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_keyword', '', true)?></textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Meta description</label>
+							<textarea name="meta_description" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_description', '', true)?></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Основные программы</label>
+							<textarea name="text_app_main" id="" class="form-control" placeholder="" rows="8"><?=set_value('text_app_main', '', true)?></textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Дополнительные программы</label>
+							<textarea name="text_app_other" id="" class="form-control" placeholder="" rows="8"><?=set_value('text_app_other', '', true)?></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Вступительный текст</label>
+							<textarea name="preview_text" id="" class="form-control" placeholder="" rows="8"><?=set_value('preview_text', '', true)?></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
 							<label for="fdescription">Описание</label>
 							<textarea name="description" id="fdescription" class="form-control" placeholder="Описание" rows="16"><?=set_value('description', '', true)?></textarea>
 						</div>
 					</div>
 					<div class="col-6">
 						<div class="form-group">
-							<label for="fdescription">Стоимость</label>
+							<label for="">Стоимость</label>
 							<?foreach($structure['price'] as $key => $val):?>
 								<div class="row">
 									<div class="col-2">
@@ -121,3 +157,21 @@
 		</div>
 	</div>
 </div>
+
+<link href="<?=TEMPLATE_DIR?>/tools/editor/styles/simditor.css" rel="stylesheet">
+<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/module.js"></script>
+<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/hotkeys.js"></script>
+<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/uploader.js"></script>
+<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/simditor.js"></script>
+
+<script>
+$(document).ready(function(){
+	var editor_conf = ['title','bold','italic','underline','fontScale','ol','ul'];
+	var editor = new Simditor({
+		id: 'fdescription',
+		textarea: $('#fdescription'),
+		toolbar: editor_conf,
+		pasteImage: false,
+	});
+});
+</script>

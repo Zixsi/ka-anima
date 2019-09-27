@@ -1,0 +1,27 @@
+.simditor .simditor-body video{
+    width: 100px;
+    height: 100px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+}
+.simditor .simditor-body iframe {
+  border: 0 none;
+}
+
+.simditor-icon-video-o:before {
+  content: '';
+  background: transparent url('data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDU4IDU4IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1OCA1ODsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJweCIgaGVpZ2h0PSI1MTJweCI+CjxnPgoJPHBhdGggZD0iTTM2LjUzNywyOC4xNTZsLTExLTdjLTAuMzA4LTAuMTk1LTAuNjk4LTAuMjA4LTEuMDE5LTAuMDMzQzI0LjE5OSwyMS4yOTksMjQsMjEuNjM1LDI0LDIydjE0ICAgYzAsMC4zNjUsMC4xOTksMC43MDEsMC41MTksMC44NzdDMjQuNjY5LDM2Ljk1OSwyNC44MzQsMzcsMjUsMzdjMC4xODcsMCwwLjM3NC0wLjA1MywwLjUzNy0wLjE1NmwxMS03ICAgQzM2LjgyNSwyOS42NiwzNywyOS4zNDIsMzcsMjlTMzYuODI1LDI4LjM0LDM2LjUzNywyOC4xNTZ6IE0yNiwzNC4xNzlWMjMuODIxTDM0LjEzNywyOUwyNiwzNC4xNzl6IiBmaWxsPSIjMDAwMDAwIi8+Cgk8cGF0aCBkPSJNNTcsNkg0N0gxMUgxQzAuNDQ4LDYsMCw2LjQ0NywwLDd2MTF2MTF2MTF2MTFjMCwwLjU1MywwLjQ0OCwxLDEsMWgxMGgzNmgxMGMwLjU1MiwwLDEtMC40NDcsMS0xVjQwVjI5VjE4VjcgICBDNTgsNi40NDcsNTcuNTUyLDYsNTcsNnogTTEwLDI4SDJ2LTloOFYyOHogTTIsMzBoOHY5SDJWMzB6IE0xMiw0MFYyOVYxOFY4aDM0djEwdjExdjExdjEwSDEyVjQweiBNNTYsMjhoLTh2LTloOFYyOHogTTQ4LDMwaDh2OSAgIGgtOFYzMHogTTU2LDh2OWgtOFY4SDU2eiBNMiw4aDh2OUgyVjh6IE0yLDUwdi05aDh2OUgyeiBNNTYsNTBoLTh2LTloOFY1MHoiIGZpbGw9IiMwMDAwMDAiLz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K') no-repeat center center;
+  background-size: cover;
+  width: 18px;
+  height: 18px;
+  display: inline-block !important;
+  color: #000;
+  vertical-align: middle;
+}
+
+iframe.real-video {background-color: #ccc;}
+
+.video-settings button.J_UploadVideoBtn {width: 1px; height: 1px; position: absolute; left: -9999px;}
+.video-settings .btn-row {padding-left: 8px;}
+.video-settings .video-btn {text-decoration: none; border: 0 none; padding: 3px 8px; font-size: 12px; line-height: 12px;}
+.video-settings .video-btn.del {float: right; color: #fff; background-color: #db524b;}

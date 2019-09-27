@@ -50,11 +50,20 @@ class SystemHook
 		// контроллер авторизации и метод выхода
 		// то делаем редирект на авторизацию
 		if(!$check && (!in_array($c, $ignored) || ($c === 'auth' && $a === 'logout')))
+		{
+			setRequestBackUri();
 			redirect('/auth/');
+		}
 
 		// если авторизован
 		if($check)
 		{
+			if($backUri = getRequestBackUri())
+			{
+				clearRequestBackUri();
+				redirect(urldecode($backUri));
+			}
+
 			$is_admin = $this->CI->Auth->isAdmin();
 
 			if($this->CI->cache->file->get('user_'. $user['id'] .'_checkAuth') === false)

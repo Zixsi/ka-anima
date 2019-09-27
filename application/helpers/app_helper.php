@@ -309,3 +309,22 @@ function getUserAgent()
 {
 	return ($_SERVER['HTTP_USER_AGENT'] ?? '');
 }
+
+function setRequestBackUri()
+{
+	setcookie('backRequestUri', urlencode($_SERVER['REQUEST_URI']), time() + 86400, '/');
+}
+
+function getRequestBackUri()
+{
+	$result = null;
+	if(isset($_COOKIE['backRequestUri']))
+		$result = $_COOKIE['backRequestUri'];
+	
+	return $result;
+}
+
+function clearRequestBackUri()
+{
+	setcookie('backRequestUri', '', 0, '/');
+}

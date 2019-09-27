@@ -68,6 +68,10 @@
 								</span>
 							</div>
 						</div>
+						<div class="form-group col-12">
+							<label>Ссылка на статью в блоге</label>
+							<input type="text" name="blog_url" class="form-control" value="<?=$item['blog_url']?>">
+						</div>
 						<?if($item['role'] != '5'):?>
 							<div class="form-group col-6">
 								<label>Роль</label>

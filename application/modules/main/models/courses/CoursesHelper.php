@@ -31,6 +31,11 @@ class CoursesHelper extends APP_Model
 				'only_standart' => intval($data['only_standart'] ?? 0),
 				'trailer_url' => ($data['trailer_url'] ?? ''),
 				'examples_url' => ($data['examples_url'] ?? ''),
+				'text_app_main' => ($data['text_app_main'] ?? ''),
+				'text_app_other' => ($data['text_app_other'] ?? ''),
+				'preview_text' => ($data['preview_text'] ?? ''),
+				'meta_keyword' => ($data['meta_keyword'] ?? ''),
+				'meta_description' => ($data['meta_description'] ?? '')
 			];
 
 			$this->form_validation->reset_validation();
@@ -85,6 +90,11 @@ class CoursesHelper extends APP_Model
 				'img' => $course_item['img'],
 				'trailer_url' => ($data['trailer_url'] ?? $course_item['trailer_url']),
 				'examples_url' => ($data['examples_url'] ?? $course_item['examples_url']),
+				'text_app_main' => ($data['text_app_main'] ?? $course_item['text_app_main']),
+				'text_app_other' => ($data['text_app_other'] ?? $course_item['text_app_other']),
+				'preview_text' => ($data['preview_text'] ?? $course_item['preview_text']),
+				'meta_keyword' => ($data['meta_keyword'] ?? $course_item['meta_keyword']),
+				'meta_description' => ($data['meta_description'] ?? $course_item['meta_description'])
 			];
 
 			$this->form_validation->reset_validation();
