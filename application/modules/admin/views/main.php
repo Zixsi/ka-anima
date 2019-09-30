@@ -20,11 +20,11 @@ $tpl_user = $CI->Auth->user();
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/owl/assets/owl.theme.default.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/select2/select2.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.css">
+	<link href="<?=TEMPLATE_DIR?>/tools/editor/styles/simditor.css" rel="stylesheet">
 	<!-- MAIN CSS -->
 
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
-	<script src="<?=TEMPLATE_DIR?>/main_v1/js/main.js?v=<?=VERSION?>"></script>
 </head>
 
 <body>
@@ -184,7 +184,11 @@ $tpl_user = $CI->Auth->user();
 	<script src="<?=TEMPLATE_DIR?>/tools/owl/owl.carousel.min.js"></script>
 	<script src="<?=TEMPLATE_DIR?>/tools/toastr/toastr.min.js"></script>	
 	<script src="<?=TEMPLATE_DIR?>/tools/select2/select2.min.js"></script>	
-	<script src="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.min.js"></script>	
+	<script src="<?=TEMPLATE_DIR?>/tools/ekko-lightbox/ekko-lightbox.min.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/module.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/hotkeys.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/uploader.js"></script>
+	<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/simditor.js"></script>
 
 	<script src="<?=TEMPLATE_DIR?>/main_v1/js/app.js?v=<?=VERSION?>"></script>
 	<script src="<?=TEMPLATE_DIR?>/main_v1/js/admin.js?v=<?=VERSION?>"></script>

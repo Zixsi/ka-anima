@@ -72,6 +72,10 @@
 							<input type="text" name="soc" id="fsoc" class="form-control" placeholder="" value="<?=set_value('soc', $user['soc'], true)?>">
 						</div>
 						<div class="form-group col-12">
+							<label for="fsoc">Ссылка на Discord</label>
+							<input type="text" name="discord" id="fsoc" class="form-control" placeholder="" value="<?=set_value('discord', $user['discord'], true)?>">
+						</div>
+						<div class="form-group col-12">
 							<button type="submit" class="btn btn-primary">Сохранить</button>
 						</div>
 					</div>

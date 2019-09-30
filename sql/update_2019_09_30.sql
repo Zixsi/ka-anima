@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `discord` VARCHAR(255) NULL AFTER `blog_url`;

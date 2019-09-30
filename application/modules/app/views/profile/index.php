@@ -53,6 +53,14 @@
 										</span>
 									</p>
 								<?endif;?>
+								<?if(!empty($user['discord'])):?>
+									<p class="clearfix">
+										<span class="float-left">Discord</span>
+										<span class="float-right text-muted">
+											<a href="<?=prep_url($user['discord'])?>" target="_blank"><?=prep_url($user['discord'])?></a>
+										</span>
+									</p>
+								<?endif;?>
 							</div>
 						<?endif;?>
 					</div>

@@ -52,6 +52,7 @@ class UserModel extends APP_Model
 			'img' => ($data['img'] ?? ''),
 			'soc' => ($data['soc'] ?? ''),
 			'title' => ($data['title'] ?? ''),
+			'discord' => ($data['discord'] ?? ''),
 		];
 
 		return $this->update($id, $data);

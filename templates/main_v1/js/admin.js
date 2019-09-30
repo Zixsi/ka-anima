@@ -9,8 +9,23 @@ $(document).ready(function(){
 	usersListener();
 	courseListener();
 	groupListener();
+	textEditor();
 });
 
+
+function textEditor()
+{
+	if($('#fdescription').length > 0)
+	{
+		var editorFdescriptionConf = ['title','bold','italic','underline','fontScale','ol','ul'];
+		var editorFdescription = new Simditor({
+			id: 'fdescription',
+			textarea: $('#fdescription'),
+			toolbar: editorFdescriptionConf,
+			pasteImage: false,
+		});
+	}
+}
 
 function courseListener()
 {

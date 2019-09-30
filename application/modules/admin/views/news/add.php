@@ -35,7 +35,7 @@
 				</div>
 				<div class="form-group">
 					<label for="">Детальное описание</label>
-					<textarea name="text" class="form-control" rows="20"><?=htmlspecialchars(set_value('text', '', true))?></textarea>
+					<textarea name="text" id="fdescription" class="form-control" rows="20"><?=htmlspecialchars(set_value('text', '', true))?></textarea>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary">Сохранить</button>

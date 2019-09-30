@@ -113,6 +113,10 @@
 							<label>Соцсеть</label>
 							<input type="text" name="soc" class="form-control" value="<?=$item['soc']?>">
 						</div>
+						<div class="form-group col-6">
+							<label>Ссылка на Discord</label>
+							<input type="text" name="discord" class="form-control" value="<?=$item['discord']?>">
+						</div>
 					</div>
 					<h4>Сброс пароля</h4>
 					<div class="row">

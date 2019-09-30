@@ -157,21 +157,3 @@
 		</div>
 	</div>
 </div>
-
-<link href="<?=TEMPLATE_DIR?>/tools/editor/styles/simditor.css" rel="stylesheet">
-<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/module.js"></script>
-<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/hotkeys.js"></script>
-<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/uploader.js"></script>
-<script src="<?=TEMPLATE_DIR?>/tools/editor/scripts/simditor.js"></script>
-
-<script>
-$(document).ready(function(){
-	var editor_conf = ['title','bold','italic','underline','fontScale','ol','ul'];
-	var editor = new Simditor({
-		id: 'fdescription',
-		textarea: $('#fdescription'),
-		toolbar: editor_conf,
-		pasteImage: false,
-	});
-});
-</script>
