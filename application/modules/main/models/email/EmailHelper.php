@@ -35,8 +35,11 @@ class EmailHelper extends APP_Model
 			'url' => $this->site['url'].'auth/confirmation/?code='.($data['code'] ?? $data['hash'] ?? '')
 		];
 		$html = $this->load->viewl('email', 'email/registration', $params, true, 'app');
+		$to = ($data['email'] ?? null);
+		if($this->checkEmailMx($to))
+			return false;
 
-		$this->email->to(($data['email'] ?? null));
+		$this->email->to($to);
 		$this->email->subject('Регистрация');
 		$this->email->message($html);
 
@@ -58,7 +61,11 @@ class EmailHelper extends APP_Model
 		];
 		$html = $this->load->viewl('email', 'email/forgot', $params, true, 'app');
 
-		$this->email->to(($data['email'] ?? null));
+		$to = ($data['email'] ?? null);
+		if($this->checkEmailMx($to))
+			return false;
+
+		$this->email->to($to);
 		$this->email->subject('Восстановление пароля');
 		$this->email->message($html);
 
@@ -99,7 +106,11 @@ class EmailHelper extends APP_Model
 		$params['site'] = $this->site;
 		$html = $this->load->viewl('email', 'email/mailing_'.$params['type'], $params, true, 'app');
 
-		$this->email->to(($params['email'] ?? null));
+		$to = ($params['email'] ?? null);
+		if($this->checkEmailMx($to))
+			return false;
+
+		$this->email->to($to);
 		$this->email->subject('Информация');
 		$this->email->message($html);
 
@@ -110,4 +121,13 @@ class EmailHelper extends APP_Model
 		return $res;
 	}
 
+	private  function checkEmailMx($to)
+	{
+		$emailArr = explode('@', $to);
+		$emailHost = end($emailArr);
+		getmxrr($emailHost, $mx);
+		
+		return (!$mx || count($mx) == 0)?false:true;
+	}
+	
 }
