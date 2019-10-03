@@ -7,7 +7,7 @@
 					<div class="card-body">
 						<span class="text-muted text-small"><?=$val['ts_formated']?></span>
 						<h4 class="card-title mt-1"><a href="/news/<?=$val['id']?>/" class="text-primary"><?=$val['title']?></a></h4>
-						<p class="card-text"><?=$val['text']?></p>
+						<p class="card-text"><?=$val['description']?></p>
 					</div>
 				</div>
 			</div>
