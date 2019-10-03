@@ -24,6 +24,9 @@ class NewsModel extends APP_Model
 
 	public function add($data = [])
 	{
+		$data['description'] = htmlspecialchars($data['description'] ?? '');
+		$data['text'] = htmlspecialchars($data['text'] ?? '');
+
 		if($this->db->insert(self::TABLE, $data))
 			return $this->db->insert_id();
 
@@ -32,6 +35,11 @@ class NewsModel extends APP_Model
 
 	public function update(int $id, array $data = [])
 	{
+		if(isset($data['description']))
+			$data['description'] = htmlspecialchars($data['description'] ?? '');
+		if(isset($data['text']))
+			$data['text'] = htmlspecialchars($data['text'] ?? '');
+
 		$this->db->where('id', $id);
 		if($this->db->update(self::TABLE, $data))
 			return true;
@@ -73,5 +81,9 @@ class NewsModel extends APP_Model
 			$data['img'] = IMG_DEFAULT_300_200;
 		if(substr($data['img'], 0, 1) !== '/')
 			$data['img'] = '/'.$data['img'];
+
+		$data['description'] = htmlspecialchars_decode($data['description'] ?? '');
+		$data['text'] = htmlspecialchars_decode($data['text'] ?? '');
+
 	}
 }

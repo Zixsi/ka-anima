@@ -55,18 +55,18 @@
 					<div class="video-info">
 						<?if(!empty($lecture['description'])):?>
 							<h4>Описание</h4>
-							<p><?=$lecture['description']?></p>
+							<div><?=$lecture['description']?></div>
 						<?endif;?>
 
 						<?if(!empty($lecture['task'])):?>
 							<h4>Задание</h4>
-							<p><?=$lecture['task']?></p>
+							<div><?=$lecture['task']?></div>
 						<?endif;?>
 
 						<?if(!empty($lecture['files'])):?>
 							<h4>Файлы к заданию</h4>
 							<?foreach($lecture['files'] as $val):?>
-								<p><a href="/file/download/<?=$val['id']?>" target="_blank"><?=$val['name']?></a></p>
+								<div><a href="/file/download/<?=$val['id']?>" target="_blank"><?=$val['name']?></a></div>
 							<?endforeach;?>
 						<?endif;?>
 					</div>

@@ -25,6 +25,17 @@ function textEditor()
 			pasteImage: false,
 		});
 	}
+
+	if($('#ftask').length > 0)
+	{
+		var editorFdescriptionConf = ['title','bold','italic','underline','fontScale','ol','ul'];
+		var editorFdescription = new Simditor({
+			id: 'ftask',
+			textarea: $('#ftask'),
+			toolbar: editorFdescriptionConf,
+			pasteImage: false,
+		});
+	}
 }
 
 function courseListener()

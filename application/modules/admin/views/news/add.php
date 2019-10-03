@@ -16,7 +16,7 @@
 				<div class="row">
 					<div class="form-group col-6">
 						<label for="ftitle">Заголовок</label>
-						<input type="text" name="title" id="ftitle" class="form-control" value="<?=htmlspecialchars(set_value('title', '', true))?>">
+						<input type="text" name="title" id="ftitle" class="form-control" value="<?=htmlspecialchars_decode(set_value('title', '', true))?>">
 					</div>
 					<div class="form-group col-6">
 						<label>Изображение</label>
@@ -31,11 +31,11 @@
 				</div>
 				<div class="form-group">
 					<label for="">Описание</label>
-					<textarea name="description" class="form-control" rows="8"><?=htmlspecialchars(set_value('description', '', true))?></textarea>
+					<textarea name="description" class="form-control" rows="8"><?=htmlspecialchars_decode(set_value('description', '', true))?></textarea>
 				</div>
 				<div class="form-group">
 					<label for="">Детальное описание</label>
-					<textarea name="text" id="fdescription" class="form-control" rows="20"><?=htmlspecialchars(set_value('text', '', true))?></textarea>
+					<textarea name="text" id="fdescription" class="form-control" rows="20"><?=htmlspecialchars_decode(set_value('text', '', true))?></textarea>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary">Сохранить</button>

@@ -22,7 +22,7 @@
 					</div>
 					<div class="form-group col-6">
 						<label for="ftitle">Заголовок</label>
-						<input type="text" name="title" id="ftitle" class="form-control" value="<?=htmlspecialchars(set_value('title', $item['title'], true))?>">
+						<input type="text" name="title" id="ftitle" class="form-control" value="<?=htmlspecialchars_decode(set_value('title', $item['title'], true))?>">
 					</div>
 					<div class="form-group col-6">
 						<label>Изображение</label>
@@ -37,11 +37,11 @@
 				</div>
 				<div class="form-group">
 					<label for="">Описание</label>
-					<textarea name="description" class="form-control" rows="10"><?=htmlspecialchars(set_value('description', $item['description'], true))?></textarea>
+					<textarea name="description" class="form-control" rows="10"><?=htmlspecialchars_decode(set_value('description', $item['description'], true))?></textarea>
 				</div>
 				<div class="form-group">
 					<label for="">Детальное описание</label>
-					<textarea name="text" id="fdescription" class="form-control" rows="20"><?=htmlspecialchars(set_value('text', $item['text'], true))?></textarea>
+					<textarea name="text" id="fdescription" class="form-control" rows="20"><?=htmlspecialchars_decode(set_value('text', $item['text'], true))?></textarea>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary">Сохранить</button>
