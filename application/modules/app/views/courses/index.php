@@ -23,7 +23,7 @@
 						<h4 class="card-title mt-1">
 							<a href="/courses/<?=$val['code']?>/" class="text-primary"><?=$val['name']?></a>
 						</h4>
-						<div class="card-text"><?=strip_tags($val['description'])?></div>
+						<div class="card-text"><?=strip_tags($val['preview_text'])?></div>
 						<div class="text-center">
 							<a href="/courses/<?=$val['code']?>/" class="btn btn-primary btn-block">Подробнее</a>
 						</div>
