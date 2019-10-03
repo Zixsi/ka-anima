@@ -4,7 +4,8 @@
 			<div class="card-body">
 				<h3 class="card-title"><?=$item['name']?></h3>
 				<img src="<?=$item['img_src']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
-				<p><?=$item['description']?></p>
+				<div><?=$item['preview_text']?></div>
+				<div><?=$item['description']?></div>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
 
 				<?if($lectures):?>

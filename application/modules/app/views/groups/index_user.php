@@ -23,7 +23,7 @@
 								<span class="text-primary"><?=$val['name']?> <?=$val['ts_f']?> - <?=$val['ts_end_f']?></span>
 							<?endif;?>
 						</h4>
-						<p class="card-text"><?=strip_tags($val['preview_text'])?></p>
+						<div class="card-text"><?=strip_tags($val['preview_text'])?></div>
 						<div class="text-center">
 							<?if($val['subscr_active']):?>
 								<a href="/groups/<?=$val['code']?>/" class="btn btn-primary btn-block">Просмотр</a>

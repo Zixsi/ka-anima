@@ -163,7 +163,7 @@ class SubscriptionModel extends APP_Model
 
 		$bind = [(int) $user, date('Y-m-d H:i:s')];
 		$sql = 'SELECT 
-					c.id, c.code as course_code, c.name, c.description, cg.ts, cg.ts_end, cg.id as course_group, cg.code as code, f.full_path as img, 
+					c.id, c.code as course_code, c.name, c.description, c.preview_text, cg.ts, cg.ts_end, cg.id as course_group, cg.code as code, f.full_path as img, 
 					s.ts_end as subscr_ts_end, s.type as subscr_type, s.subscr_type as subscr_pay_type, s.hash   
 				FROM 
 					'.self::TABLE.' as s 
