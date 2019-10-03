@@ -2,7 +2,9 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $config['base_url'] = '';
+$config['land_url'] = '';
 $config['project_name'] = 'Kaanima';
 $config['default_layout'] = 'main';
+$config['nouse_metriks'] = true;
 
 $config['email_support'] = '';

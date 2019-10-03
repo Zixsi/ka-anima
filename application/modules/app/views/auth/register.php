@@ -59,7 +59,7 @@
 			<div class="form-check">
 				<label class="form-check-label text-muted">
 					<input type="checkbox" class="form-check-input" name="agree" value="1">
-					Я согласен со всеми условиями
+					Я согласен со всеми условиями <a href="<?=$landUrl?>/terms/" target="_blank">Правила и условия</a> <a href="<?=$landUrl?>/policy/" target="_blank">Политика конфиденциальности</a>
 				</label>
 			</div>
 		</div>

@@ -28,7 +28,10 @@ class Auth extends APP_Controller
 
 	public function register()
 	{
-		$this->load->lview('auth/register', []);
+		$data = [];
+		$data['landUrl'] = $this->config->item('land_url');
+
+		$this->load->lview('auth/register', $data);
 	}
 
 	public function forgot()
