@@ -9,7 +9,7 @@
 </ul>
 
 <div class="row" id="courses--list">
-	<?if($items):?>
+	<?if(!count($items)):?>
 		<?//debug($items);?>
 		<?foreach($items as $val):?>
 			<div class="col-12 col-sm-6 col-lg-4 col-xl-3 item">
@@ -35,5 +35,9 @@
 				</div>
 			</div>
 		<?endforeach;?>
+	<?else:?>
+		<div class="col-12">
+			<h4 class="text-center">Здесь будут подписки на курс</h4>
+		</div>
 	<?endif;?>
 </div>
