@@ -3,6 +3,7 @@ $tpl_user = $this->Auth->user();
 $this->notifications->load();
 $notifications = $this->notifications->list();
 $unread_messages = $this->UserMessagesModel->cntUnreadAll(($tpl_user['id'] ?? 0));
+$landUrl = $this->config->item('land_url');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -239,6 +240,13 @@ $unread_messages = $this->UserMessagesModel->cntUnreadAll(($tpl_user['id'] ?? 0)
 							</a>
 						</li>
 					<?endif;?>
+
+					<li class="nav-item">
+						<a class="nav-link" href="<?=$landUrl?>/#contacts">
+							<i class="mdi mdi-email-outline menu-icon"></i>
+							<span class="menu-title">Контакты</span>
+						</a>
+					</li>
 				</ul>
 			</nav>
 			<div class="main-panel">

@@ -9,7 +9,7 @@
 </ul>
 
 <div class="row" id="courses--list">
-	<?if(!count($items)):?>
+	<?if(count($items)):?>
 		<?//debug($items);?>
 		<?foreach($items as $val):?>
 			<div class="col-12 col-sm-6 col-lg-4 col-xl-3 item">
