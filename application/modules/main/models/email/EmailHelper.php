@@ -36,8 +36,11 @@ class EmailHelper extends APP_Model
 		];
 		$html = $this->load->viewl('email', 'email/registration', $params, true, 'app');
 		$to = ($data['email'] ?? null);
+		var_dump($data);
 		if($this->checkEmailMx($to))
 			return false;
+
+		var_dump('check success');
 
 		$this->email->to($to);
 		$this->email->subject('Регистрация');

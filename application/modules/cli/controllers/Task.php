@@ -25,7 +25,6 @@ class Task extends APP_Controller
 			switch($item['event'])
 			{
 				case Action::REGISTRATION:
-					var_dump($item);
 					$status = $this->EmailHelper->registration($item['data']);
 					break;
 				case Action::FORGOT:
