@@ -36,8 +36,7 @@ class EmailHelper extends APP_Model
 		];
 		$html = $this->load->viewl('email', 'email/registration', $params, true, 'app');
 		$to = ($data['email'] ?? null);
-		var_dump($data);
-		if($this->checkEmailMx($to))
+		if($this->checkEmailMx($to) === false)
 			return false;
 
 		var_dump('check success');
@@ -65,7 +64,7 @@ class EmailHelper extends APP_Model
 		$html = $this->load->viewl('email', 'email/forgot', $params, true, 'app');
 
 		$to = ($data['email'] ?? null);
-		if($this->checkEmailMx($to))
+		if($this->checkEmailMx($to) === false)
 			return false;
 
 		$this->email->to($to);
@@ -110,7 +109,7 @@ class EmailHelper extends APP_Model
 		$html = $this->load->viewl('email', 'email/mailing_'.$params['type'], $params, true, 'app');
 
 		$to = ($params['email'] ?? null);
-		if($this->checkEmailMx($to))
+		if($this->checkEmailMx($to) === false)
 			return false;
 
 		$this->email->to($to);
