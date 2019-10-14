@@ -18,15 +18,14 @@ class Task extends APP_Controller
 		echo 'START'.PHP_EOL;
 		
 		$list = $this->TasksHelper->getEmailTasks();
-		var_dump($list);
 		foreach($list as $item)
 		{
 			$status = false;
 			$item['data'] = json_decode($item['data'], true);
-			var_dump($item);
 			switch($item['event'])
 			{
 				case Action::REGISTRATION:
+					var_dump($item);
 					$status = $this->EmailHelper->registration($item['data']);
 					break;
 				case Action::FORGOT:
