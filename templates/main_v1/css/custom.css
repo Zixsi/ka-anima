@@ -214,3 +214,6 @@
 .mail-sidebar .profile-list-item {position: relative;}
 .mail-sidebar .profile-list-item .notification-ripple {top: 10px; right: 10px;}
 .mail-sidebar .menu-bar .profile-list-item.selected {background-color: #e8e9ed;}
+
+#support-ticket .card.answer {margin-left: 50px; background-color: #fff8bc; border-color: #ffc107;}
+#support-ticket-list {}

@@ -106,7 +106,7 @@
 						<tbody>
 							<?if($items):?>
 								<?foreach($items as $item):?>
-									<tr>
+									<tr <?=((int) $item['active'] === 0)?'class="table-danger"':''?>>
 										<td>
 											<?if($item['deleted'] == 1):?>
 												<i class="mdi mdi-delete"></i>

@@ -37,11 +37,11 @@ class ReviewHelper extends APP_Model
 			elseif(!filter_var($data['video_url'], FILTER_VALIDATE_URL))
 				throw new Exception('невалидный url видео');
 
-			$data['file_url'] = ($data['file_url'] ?? '');
-			if(empty($data['file_url']))
-				throw new Exception('пустой url файла');
-			elseif(!filter_var($data['file_url'], FILTER_VALIDATE_URL))
-				throw new Exception('невалидный url файла');
+			// $data['file_url'] = ($data['file_url'] ?? '');
+			// if(empty($data['file_url']))
+			// 	throw new Exception('пустой url файла');
+			// elseif(!filter_var($data['file_url'], FILTER_VALIDATE_URL))
+			// 	throw new Exception('невалидный url файла');
 
 			if(($id = $this->ReviewModel->add($data)) === false)
 				throw new Exception('ошибка добавления');

@@ -159,6 +159,12 @@ $tpl_user = $CI->Auth->user();
 							<span class="menu-title">Онлайн встречи</span>
 						</a>
 					</li>
+					<li class="nav-item <?=is_active_menu_item('supportcontroller')?'active':''?>">
+						<a class="nav-link" href="/admin/support/">
+							<i class="mdi mdi-human-greeting menu-icon"></i>
+							<span class="menu-title">Тех. поддержка</span>
+						</a>
+					</li>
 					<li class="nav-item <?=is_active_menu_item('users')?'active':''?>">
 						<a class="nav-link" href="/admin/users/">
 							<i class="mdi mdi-account-circle menu-icon"></i>

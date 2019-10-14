@@ -25,6 +25,11 @@ class Video extends APP_Controller
 		$video = $this->VideoHelper->getDetailInfo($code);
 		$data['video'] = $video['video_url'];
 
+		if($_GET['debug'])
+		{
+			debug($video); die();
+		}
+
 		$data['mark'] = $code;
 		if(isset($video['course']['code']))
 			$data['mark'] = $video['course']['code'].'#'.$data['user']['id'];

@@ -19,6 +19,9 @@ $route['admin/groups/(:any)'] = 'admin/Groups/item/$1';
 $route['admin/faq/sections/add'] = 'admin/faq/addSections';
 $route['admin/faq/sections/(:num)'] = 'admin/faq/editSections/$1';
 
+$route['admin/support'] = 'admin/SupportController/index';
+$route['admin/support/(:any)/(:any)'] = 'admin/SupportController/$1/$2';
+$route['admin/support/(:any)'] = 'admin/SupportController/$1';
 
 $route['admin/(.*)'] = 'admin/$1';
 
@@ -44,6 +47,9 @@ $route['teachingstreams/(.*)'] = 'app/TeachingStreams/$1';
 $route['video/(.*)'] = 'app/video/index/$1';
 $route['news/(.*)'] = 'app/news/item/$1';
 
+$route['support'] = 'app/SupportController/index';
+$route['support/(:any)/(:any)'] = 'app/SupportController/$1/$2';
+$route['support/(:any)'] = 'app/SupportController/$1';
 
 //$route['groups/(:num)'] = 'app/Groups/index/$1';
 $route['courses'] = 'app/courses/index';
