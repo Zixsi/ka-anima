@@ -28,7 +28,7 @@ class Video extends APP_Controller
 		if($video['source_type'] === 'review')
 		{
 			$data['mark'] = '';
-			if($item = $this->ReviewModel->getByID($video['source_id']);)
+			if($item = $this->ReviewModel->getByID($video['source_id']))
 			{
 				if((int) $data['user']['id'] !== (int) $item['user'])
 					$this->load->lview('video/index_404');
