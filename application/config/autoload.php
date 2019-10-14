@@ -58,7 +58,7 @@ $autoload['packages'] = array();
 |
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
-$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa', 'main/action');
+$autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa', 'main/action', 'main/support');
 
 /*
 | -------------------------------------------------------------------
@@ -176,6 +176,7 @@ $autoload['model'] = [
 	'main/tasks/TasksModel',
 	'main/tasks/TasksHelper',
 
+	'main/SupportModel',
 	'main/VideoModel',
 	'main/VideoHelper',
 	'main/StreamsModel',

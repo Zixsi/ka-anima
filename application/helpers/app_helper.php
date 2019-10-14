@@ -1,15 +1,15 @@
 <?
-function ShowError($text)
+function showError($text)
 {
-	if(empty($text) == FALSE)
+	if(empty($text) == false)
 	{
 		echo '<div class="alert alert-danger">'.$text.'</div>';
 	}
 }
 
-function ShowSuccess($text)
+function showSuccess($text)
 {
-	if(empty($text) == FALSE)
+	if(empty($text) == false)
 	{
 		echo '<div class="alert alert-success">'.$text.'</div>';
 	}
@@ -327,4 +327,23 @@ function getRequestBackUri()
 function clearRequestBackUri()
 {
 	setcookie('backRequestUri', '', 0, '/');
+}
+
+function num2word($num, $words)
+{
+    $num = $num % 100;
+    if ($num > 19) {
+        $num = $num % 10;
+    }
+    switch ($num) {
+        case 1: {
+            return($words[0]);
+        }
+        case 2: case 3: case 4: {
+            return($words[1]);
+        }
+        default: {
+            return($words[2]);
+        }
+    }
 }

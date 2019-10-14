@@ -62,7 +62,9 @@
 																<a href="<?=$val['review']['video_url']?>" target="_blank" class="btn btn-primary btn-block">Видео</a>
 															</div>
 															<div class="col-6">
-																<a href="<?=$val['review']['file_url']?>" target="_blank" class="btn btn-primary btn-block">Файл</a>
+																<?if(!empty($val['review']['file_url'])):?>
+																	<a href="<?=$val['review']['file_url']?>" target="_blank" class="btn btn-primary btn-block">Файл</a>
+																<?endif;?>
 															</div>
 														</div>
 														<?if(!empty($val['review']['text'])):?>
@@ -72,12 +74,11 @@
 																</div>
 															</div>
 														<?endif;?>
-														<?/*
 														<div class="row">
 															<div class="col-12 text-right">
 																<button type="button" class="btn btn-secondary btn-xs bnt-remove-review" data-id="<?=$val['review']['id']?>">Удалить ревью</button>
 															</div>
-														</div>*/?>
+														</div>
 														<hr>
 													<?endif;?>
 												</div>

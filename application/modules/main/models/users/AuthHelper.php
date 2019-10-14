@@ -174,6 +174,11 @@ class AuthHelper extends APP_Model
 		return (int) ($this->user()['id'] ?? 0);
 	}
 
+	public function getUserId()
+	{
+		return $this->userID();
+	}
+
 	public function userRole()
 	{
 		return (int) $this->user()['role'];

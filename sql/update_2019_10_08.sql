@@ -1,0 +1,22 @@
+CREATE TABLE `support_ticket` ( 
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , 
+	`code` VARCHAR(80) NOT NULL , 
+	`user` INT UNSIGNED NOT NULL , 
+	`text` TEXT NOT NULL , 
+	`status` ENUM('PENDING','DECLINED', 'COMPLETED') NOT NULL DEFAULT 'PENDING', 
+	`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`), 
+	INDEX `user` (`user`), 
+	INDEX `code` (`code`)
+) ENGINE = InnoDB;
+
+
+CREATE TABLE `support_message` ( 
+	`id` INT UNSIGNED NOT NULL AUTO_INCREMENT , 
+	`target` INT UNSIGNED NOT NULL , 
+	`user` INT UNSIGNED NOT NULL , 
+	`text` TEXT NOT NULL , 
+	`date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP , 
+	PRIMARY KEY (`id`), 
+	INDEX `target` (`target`)
+) ENGINE = InnoDB;

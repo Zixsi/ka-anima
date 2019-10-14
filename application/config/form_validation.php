@@ -286,6 +286,22 @@ $config['message'] = [
 	]
 ];
 
+$config['support_add_ticket'] = [
+	[
+		'field' => 'text',
+		'label' => 'Текст обращения',
+		'rules' => 'required|min_length[10]'
+	]
+];
+
+$config['support_add_ticket_message'] = [
+	[
+		'field' => 'text',
+		'label' => 'Текст сообщения',
+		'rules' => 'required|min_length[10]'
+	]
+];
+
 //========================================================================//
 
 // создание пользователя

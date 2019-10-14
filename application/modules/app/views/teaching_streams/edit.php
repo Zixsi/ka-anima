@@ -10,7 +10,7 @@
 <div class="card">
 	<div class="card-body" style="padding-top: 30px;">
 		<div class="col-xs-12">
-			<?=ShowError($error);?>
+			<?=showError($error);?>
 			<form action="./" method="POST" enctype="multipart/form-data">
 				<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 				<div class="row">

@@ -240,9 +240,16 @@ $landUrl = $this->config->item('land_url');
 							</a>
 						</li>
 					<?endif;?>
+					
+					<li class="nav-item <?=is_active_menu_item('supportcontroller')?'active':''?>">
+						<a class="nav-link" href="/support/">
+							<i class="mdi mdi-human-greeting menu-icon"></i>
+							<span class="menu-title">Тех. поддержка</span>
+						</a>
+					</li>
 
 					<li class="nav-item">
-						<a class="nav-link" href="<?=$landUrl?>/#contacts">
+						<a class="nav-link" href="<?=$landUrl?>/#contacts" target="_blank">
 							<i class="mdi mdi-email-outline menu-icon"></i>
 							<span class="menu-title">Контакты</span>
 						</a>
