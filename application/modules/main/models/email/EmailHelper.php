@@ -39,8 +39,6 @@ class EmailHelper extends APP_Model
 		if($this->checkEmailMx($to) === false)
 			return false;
 
-		var_dump('check success');
-
 		$this->email->to($to);
 		$this->email->subject('Регистрация');
 		$this->email->message($html);
