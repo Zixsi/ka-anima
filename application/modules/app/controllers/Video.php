@@ -25,23 +25,30 @@ class Video extends APP_Controller
 		$video = $this->VideoHelper->getDetailInfo($code);
 		$data['video'] = $video['video_url'];
 
-		if($_GET['debug'])
+		if($video['source_type'] === 'review')
 		{
-			debug($video); die();
+			$data['mark'] = '';
+			if($item = $this->ReviewModel->getByID($video['source_id']);)
+			{
+				if((int) $data['user']['id'] !== (int) $item['user'])
+					$this->load->lview('video/index_404');
+			}
+		}
+		else
+		{
+			$data['mark'] = $code;
+			if(isset($video['course']['code']))
+				$data['mark'] = $video['course']['code'].'#'.$data['user']['id'];
+
+			$courseId = (int) ($video['course']['id'] ?? 0);
+			$lectureId = (int) ($video['source']['id'] ?? 0);
+
+			// Проверка юзера на доступ к видео
+			// Если что то пошло не так отображать заглушку
+			if($this->VideoHelper->checkVideoAccess($data['user']['id'], $courseId, $lectureId) === false)
+				$this->load->lview('video/index_404');
 		}
 
-		$data['mark'] = $code;
-		if(isset($video['course']['code']))
-			$data['mark'] = $video['course']['code'].'#'.$data['user']['id'];
-
-		$courseId = (int) ($video['course']['id'] ?? 0);
-		$lectureId = (int) ($video['source']['id'] ?? 0);
-
-		// Проверка юзера на доступ к видео
-		// Если что то пошло не так отображать заглушку
-		if($this->VideoHelper->checkVideoAccess($data['user']['id'], $courseId, $lectureId) === false)
-			$this->load->lview('video/index_404');
-		else
-			$this->load->lview('video/index', $data);
+		$this->load->lview('video/index', $data);
 	}
 }
