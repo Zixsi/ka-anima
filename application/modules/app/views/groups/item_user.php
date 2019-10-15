@@ -43,7 +43,7 @@
 	<?if($lectures_is_active && $subscr_is_active):?>
 
 		<div class="col-12">
-			<h3><?=$lecture['name']?></h3>
+			<h3><?=($lecture['name'] ?? '- - -')?></h3>
 		</div>
 
 		<div class="col-5">
@@ -74,7 +74,7 @@
 			</div>
 		</div>
 		<div class="col-7">
-			<?if($lecture['type'] == 0 && $lecture['can_upload_files'] && ($data['subscr']['type'] ?? '') !== 'standart'):?>
+			<?if(($lecture['type'] ?? 0) == 0 && $lecture['can_upload_files'] && ($data['subscr']['type'] ?? '') !== 'standart'):?>
 				<div class="card mb-4">
 					<div class="card-body">
 						<h3 class="card-title">Загрузка заданий</h3>

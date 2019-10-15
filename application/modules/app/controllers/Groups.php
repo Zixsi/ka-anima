@@ -109,7 +109,7 @@ class Groups extends APP_Controller
 		$last_active_lecture = $this->prepareLectures($data['lectures']);
 		$data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
 
-		if($data['lectures_is_active'] && $data['subscr_is_active'])
+		if($data['lectures_is_active'] && $data['subscr_is_active'] && (int) $data['lecture_id'] > 0)
 		{
 			if(empty($data['lectures'][$data['lecture_id']]) OR $data['lectures'][$data['lecture_id']]['active'] == 0)
 				header('Location: /groups/'.$data['group']['code'].'/lecture/'.$last_active_lecture);
