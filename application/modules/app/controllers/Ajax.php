@@ -28,6 +28,8 @@ class Ajax extends APP_Controller
 
 		$this->bind('review.add', $this, 'reviewAdd');
 		$this->bind('review.delete', $this, 'reviewDelete');
+		$this->bind('review.edit', $this, 'reviewEdit');
+		$this->bind('review.getItem', $this, 'reviewGetItem');
 
 		$this->run();
 	}
@@ -129,6 +131,40 @@ class Ajax extends APP_Controller
 		}
 
 		$this->jsonrpc->result(false);
+	}
+
+	private function reviewEdit()
+	{
+		try
+		{
+			$params = $this->request['params'];
+			unset($params['id']); 
+			if($this->ReviewHelper->edit($this->request['params']['id'], $this->request['params']) === false)
+				throw new Exception($this->ReviewHelper->getLastError());
+			
+			$this->jsonrpc->result('Успешно');
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result(false);
+	}
+
+	private function reviewGetItem()
+	{
+		$result = [];
+		try
+		{
+			$result = $this->ReviewModel->getByID(($this->request['params']['id'] ?? 0));
+		}
+		catch(Exception $e)
+		{
+			$this->jsonrpc->error(-32099, $e->getMessage());
+		}
+
+		$this->jsonrpc->result($result);
 	}
 
 	// добавить сообщение на стену 

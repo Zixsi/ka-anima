@@ -60,7 +60,7 @@ function toastrMsg(type, text)
 		showHideTransition: 'slide',
 		icon: 'error',
 		position: 'top-right',
-		hideAfter: 5000,
+		hideAfter: 500000,
 	};
 
 	switch(type)
@@ -399,6 +399,8 @@ function appListener()
 	// добавление ревью
 	var add_review_modal = $('#add-review-modal');
 	var add_review_modal_form = add_review_modal.find('form');
+	var edit_review_modal = $('#edit-review-modal');
+	var edit_review_modal_form = edit_review_modal.find('form');
 	
 	$('.btn-add-review').on('click', function(){
 		var params = {
@@ -410,11 +412,20 @@ function appListener()
 		add_review_modal.modal('show');
 	});
 
-	$('.bnt-remove-review').on('click', function(){
+	$('.btn-edit-review').on('click', function(){
+		var id = $(this).data('id');
+		ajaxQuery('review.getItem', {id: id}, function(res){
+			// console.log(res);
+			setFormInput(edit_review_modal_form, res);
+			edit_review_modal.modal('show');
+		});
+	});
+
+	$('.btn-remove-review').on('click', function(){
 		ajaxQuery('review.delete', $(this).data('id'), function(res){
-			toastrMsg('success', res);
 			add_review_modal.modal('hide');
-			window.location.reload(true);
+			toastrMsg('success', res);
+			reloadPage(300);
 		});
 
 		return false;
@@ -423,13 +434,31 @@ function appListener()
 	add_review_modal_form.on('submit', function(){
 		var params = $(this).serializeControls();
 		ajaxQuery('review.add', params, function(res){
-			toastrMsg('success', res);
 			add_review_modal.modal('hide');
-			window.location.reload(true);
+			toastrMsg('success', res);
+			reloadPage(300);
 		});
 
 		return false;
 	});
+
+	edit_review_modal_form.on('submit', function(){
+		var params = $(this).serializeControls();
+		ajaxQuery('review.edit', params, function(res){
+			edit_review_modal.modal('hide');
+			toastrMsg('success', res);
+			reloadPage(300);
+		});
+
+		return false;
+	});
+}
+
+function reloadPage(timeout = 0)
+{
+	setTimeout(function(){
+		window.location.reload(true);
+	}, timeout);
 }
 
 function paySuccess()

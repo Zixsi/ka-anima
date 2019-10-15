@@ -76,7 +76,8 @@
 														<?endif;?>
 														<div class="row">
 															<div class="col-12 text-right">
-																<button type="button" class="btn btn-secondary btn-xs bnt-remove-review" data-id="<?=$val['review']['id']?>">Удалить ревью</button>
+																<button type="button" class="btn btn-outline-primary btn-xs btn-edit-review" data-toggle="modal" data-id="<?=$val['review']['id']?>">Редактировать ревью</button>
+																<button type="button" class="btn btn-outline-secondary btn-xs btn-remove-review" data-id="<?=$val['review']['id']?>">Удалить ревью</button>
 															</div>
 														</div>
 														<hr>
@@ -136,6 +137,37 @@
 					<input type="hidden" name="group" value="0">
 					<input type="hidden" name="user" value="0">
 					<input type="hidden" name="lecture" value="0">
+					<div class="form-group">
+						<label>Ссылка на видео</label>
+						<input type="text" name="video_url" value="" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Ссылка на файл</label>
+						<input type="text" name="file_url" value="" class="form-control">
+					</div>
+					<div class="form-group">
+						<label>Рекомендация</label>
+						<textarea name="text" class="form-control" style="height: 120px;"></textarea>
+					</div>
+					<div class="form-group text-right">
+						<button type="submit" class="btn btn-primary">Сохранить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="edit-review-modal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Ревью</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="" method="post">
+					<input type="hidden" name="id" value="0">
 					<div class="form-group">
 						<label>Ссылка на видео</label>
 						<input type="text" name="video_url" value="" class="form-control">

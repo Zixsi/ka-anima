@@ -87,7 +87,7 @@ class Support
 	public function getTickets()
 	{
 		$params = [
-			'status' => [SupportModel::PENDING]
+			// 'status' => [SupportModel::PENDING]
 		];
 		if($result = $this->c->SupportModel->getList($params))
 			$this->prepareTickets($result);
@@ -114,6 +114,19 @@ class Support
 		{
 			$row['user_info'] = $this->c->UserModel->getByID($row['user']);
 		}
+	}
+
+	public function splitByStatus($items)
+	{
+		$result = [];
+
+		if(is_array($items) && count($items))
+		{
+			foreach($items as $row)
+				$result[$row['status']][] = $row;
+		}
+
+		return $result;
 	}
 
 	/**

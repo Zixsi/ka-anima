@@ -8,6 +8,8 @@ class SupportController extends APP_Controller
 		$data = [];
 		$data['items'] = $this->support->getTickets();
 		$this->support->prepareAdminTickets($data['items']);
+		$data['items'] = $this->support->splitByStatus($data['items']);
+		$data['statusList'] = $this->support->getStatusList();
 
 		// debug($data['items']); die();
 		$this->load->lview('support/index', $data);

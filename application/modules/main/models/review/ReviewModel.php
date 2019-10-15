@@ -30,6 +30,15 @@ class ReviewModel extends APP_Model
 		return false;
 	}
 
+	public function update($id, $data = [])
+	{
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			return true;
+
+		return false;
+	}
+
 	public function delete($id)
 	{
 		return $this->db->delete(self::TABLE, ['id' => $id]);
