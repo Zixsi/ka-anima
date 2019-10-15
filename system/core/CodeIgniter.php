@@ -491,6 +491,8 @@ if ( ! is_php('5.4'))
 		}
 		else
 		{
+			log_message('error', json_encode($_SERVER));
+			log_message('error', json_encode($RTR));
 			show_404($RTR->directory.$class.'/'.$method);
 		}
 	}
