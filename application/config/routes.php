@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // (:any), (:num)
 
-$route['default_controller'] = 'app/main/index';
+$route['default_controller'] = 'app/main';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
@@ -30,6 +30,12 @@ $route['profile/(:num)'] = 'app/Profile/index/$1';
 $route['profile/(.*)'] = 'app/Profile/$1';
 $route['profile/messages/(:num)'] = 'app/Profile/messages/$1';
 
+$route['transactions'] = 'app/transactions/index';
+$route['users'] = 'app/users/index';
+$route['faq'] = 'app/faq/index';
+$route['pay'] = 'app/pay/index';
+
+$route['groups'] = 'app/groups/index';
 $route['groups/(:any)'] = 'app/groups/item/$1';
 $route['groups/(:any)/lecture/(:num)'] = 'app/groups/item/$1/$2';
 $route['groups/(:any)/group'] = 'app/groups/group/$1';
@@ -63,4 +69,14 @@ $route['courses/(:any)/review/(:num)'] = 'app/courses/review/$1/$2';
 $route['courses/(:any)/stream'] = 'app/courses/stream/$1';
 $route['courses/(:any)/stream/(:num)'] = 'app/courses/stream/$1/$2';
 
-$route['(.*)'] = 'app/$1';
+$route['auth'] = 'app/auth/index';
+$route['auth/register'] = 'app/auth/register';
+$route['auth/forgot'] = 'app/auth/forgot';
+$route['auth/recovery'] = 'app/auth/recovery';
+$route['auth/confirmation'] = 'app/auth/confirmation';
+$route['auth/logout'] = 'app/auth/logout';
+
+$route['ajax'] = 'app/ajax/index';
+
+
+// $route['(.*)'] = 'app/$1';
