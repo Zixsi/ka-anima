@@ -55,7 +55,7 @@
 							</a>
 							<div class="ml-sm-3 ml-md-0 ml-xl-3 mt-2 mt-sm-0 mt-md-2 mt-xl-0">
 								<h6 class="mb-0"><?=$item['full_name']?></h6>
-								<p class="text-muted mb-1"><?=$item['email']?></p>
+								<?/*<p class="text-muted mb-1"><?=$item['email']?></p>*/?>
 								<p class="mb-0 text-success font-weight-bold"><?=($item['role_name'] ?? ' ')?></p>
 							</div>
 
