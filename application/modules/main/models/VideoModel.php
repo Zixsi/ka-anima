@@ -88,6 +88,8 @@ class VideoModel extends APP_Model
 					'ts' => date('Y-m-d H:i:s')
 				];
 
+				log_message('error', json_encode($data));
+
 				if($this->db->update(self::TABLE, $data))
 					return true;
 			}
