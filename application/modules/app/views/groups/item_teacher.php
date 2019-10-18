@@ -51,6 +51,7 @@
 									<?$n = 1;?>
 									<?foreach($homeworks as $val):?>
 										<div class="tab-pane fade <?=($n === 1)?'active show':''?>" id="tab-content-<?=$n?>" role="tabpanel">
+											<h4 class="mb-4 mt-2"><?=$val['name']?></h4>
 											<?if(count($val['homeworks'])):?>
 												<div class="pb-2">
 													<?if(empty($val['review'])):?>

@@ -18,7 +18,7 @@
 									</tr>
 									<tr>
 										<td><b>Лекция:</b></td>
-										<td><?=$review_item['lecture_name']?></td>
+										<td>№<?=$lectures[$review_item['lecture_id']]['index']?> - <?=$review_item['lecture_name']?></td>
 									</tr>
 
 									<?if(intval($review_item['user']) !== 0):?>

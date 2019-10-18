@@ -197,11 +197,18 @@ class Groups extends APP_Controller
 		$filter = $this->input->get('filter', true);
 		$data['filter_url'] = http_build_query(['filter' => $filter]);
 		$data['items'] = $this->ReviewModel->getByGroup($group_id, $filter);
-		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
+		$data['lectures'] = [];
+		$lectures = $this->LecturesGroupModel->listForGroup($group_id);
+		foreach($lectures as $key => $row)
+		{
+			$row['index'] = $key;
+			$data['lectures'][$row['id']] = $row;
+		}
+
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
 		$data['not_viewed'] = $this->ReviewModel->notViewedItems((int) $this->user['id'], $group_id);
 
-		// debug($data); die();
+		// debug($data['review_item']); die();
 		$this->load->lview('groups/reviews', $data);
 	}
 
