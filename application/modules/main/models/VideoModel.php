@@ -53,15 +53,21 @@ class VideoModel extends APP_Model
 			if(in_array(strtolower($type), self::VIDEO_TYPES) == false)
 				throw new Exception('Invalid video type', 1);
 
+			log_message('error', $url);
 			$this->load->library(['ydvideo']);
 			if($video = $this->ydvideo->getVideo($url))
+			{
+				log_message('error', json_encode($video));
 				$this->set($source_id, $url, $video['video'], $type, 'mp4');
+			}
+			else
+				throw new Exception('empty video answer', 1);
 
 			return false;
 		}
 		catch(Exception $e)
 		{
-			// 
+			log_message('error', $e->getMessage());
 		}
 
 		return false;
@@ -103,7 +109,7 @@ class VideoModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			// 
+			log_message('error', $e->getMessage());
 		}
 
 		return false;
