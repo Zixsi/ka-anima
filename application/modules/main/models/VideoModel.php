@@ -63,7 +63,7 @@ class VideoModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			log_message('error', $e->getMessage());
+			// log_message('error', $e->getMessage());
 		}
 
 		return false;
@@ -84,15 +84,15 @@ class VideoModel extends APP_Model
 					'ts' => date('Y-m-d H:i:s')
 				];
 
-				log_message('error', json_encode(['source_id' => $source_id, 'source_type' => $type, 'type' => $format]));
-				log_message('error', json_encode($data));
+				// log_message('error', json_encode(['source_id' => $source_id, 'source_type' => $type, 'type' => $format]));
+				// log_message('error', json_encode($data));
 
 				if($this->db->update(self::TABLE, $data))
 				{
 					log_message('error', 'success');
 					return true;
 				}
-				log_message('error', 'error update');
+				// log_message('error', 'error update');
 			}
 			else
 			{
@@ -112,7 +112,7 @@ class VideoModel extends APP_Model
 		}
 		catch(Exception $e)
 		{
-			log_message('error', $e->getMessage());
+			// log_message('error', $e->getMessage());
 		}
 
 		return false;

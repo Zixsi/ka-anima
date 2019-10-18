@@ -111,7 +111,7 @@ class ReviewHelper extends APP_Model
 			if(isset($data['text']))
 				$params['text'] = $data['text'];
 
-			if(($id = $this->ReviewModel->update($id, $params)) === false)
+			if($this->ReviewModel->update($id, $params) === false)
 				throw new Exception('ошибка обновления');
 
 			if($item['video_url'] !== $params['video_url'])
