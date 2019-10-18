@@ -88,7 +88,11 @@ class VideoModel extends APP_Model
 				log_message('error', json_encode($data));
 
 				if($this->db->update(self::TABLE, $data))
+				{
+					log_message('error', 'success');
 					return true;
+				}
+				log_message('error', 'error update');
 			}
 			else
 			{
