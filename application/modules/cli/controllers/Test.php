@@ -8,13 +8,19 @@ class Test extends APP_Controller
 		$this->load->library(['ydvideo']);
 	}
 
-	// php index.php cli test index
-	public function index()
+	// php index.php cli test index 1 qwerty
+	public function index($id, $password)
 	{
 		var_dump('TEST');
+		
+		if(($user = $this->UserModel->getById($id)) === false)
+			throw new AppBadLogicExtension('Неверный код');
 
-		// $res = $this->ydvideo->getVideo('https://yadi.sk/i/A1gCKCnrQOROxw');
-		// //$res = $this->ydvideo->getVideo('https://yadi.sk/i/6Ojacwq_-4DMRA');
-		// var_dump($res);
+		$params = [
+			'password' => $this->UserModel->pwdHash($password),
+			'hash' => sha1($user['email'].time())
+		];
+		$this->UserModel->update($user['id'], $params);
+		var_dump('OK');
 	}
 }
