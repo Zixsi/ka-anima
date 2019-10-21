@@ -20,12 +20,12 @@
 								<?$end = ($val['ts_end_timestamp'] < time());?>
 								<tr <?=($user && $val['id'] == $user['id'])?'class="bg-info"':''?>>
 									<td>
-										<?//if(((int) $val['ts_end_timestamp'] < time() && (int) $val['ts_end_timestamp'] < (int) $item['timestamp_end'])):?>
+										<?if(((int) $val['ts_end_timestamp'] < time() && (int) $val['ts_end_timestamp'] < (int) $item['timestamp_end'])):?>
 											<span class="badge bg-danger text-white" 
 										data-toggle="tooltip" 
 										data-placement="bottom" 
 										data-original-title="не продлена подписка" style="margin: 0px 5px 5px 0px;">!</span>
-										<?//endif;?>
+										<?endif;?>
 										<a href="./?user=<?=$val['id']?>" style="display: inline-block;"><?=$val['full_name']?></a>
 									</td>
 									<td class="text-center"><?=$val['reviews']?> / <?=($item['cnt'] ?? 0)?></td>
