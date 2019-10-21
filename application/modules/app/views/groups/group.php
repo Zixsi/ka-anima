@@ -52,7 +52,9 @@
 			</div>
 		</div>
 
-		<?=$this->wall->show($group['id'])?>
+		<?if($subscr['type'] !== 'standart'):?>
+			<?=$this->wall->show($group['id'])?>
+		<?endif;?>
 	</div>
 	<div class="col-6">
 		<div class="card course-card--teacher mb-4">

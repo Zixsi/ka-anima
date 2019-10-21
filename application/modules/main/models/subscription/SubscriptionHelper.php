@@ -92,7 +92,8 @@ class SubscriptionHelper extends APP_Model
 			$diff_total = $ts_end_obj->diff($ts_curr);
 
 			// рассчитываем остаток оплаты 
-			$amount = (ceil($diff_total->days / 28) - 1) * $price;
+			// $amount = (ceil($diff_total->days / 28) - 1) * $price;
+			$amount = (floor($diff_total->days / 28) - 1) * $price;
 			
 			// Если разница между датой окончания и месяцем оплаты меньше или равно 1 недели 
 			// то устанавливаем дату окончания курса

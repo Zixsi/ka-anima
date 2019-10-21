@@ -40,7 +40,7 @@
 		<div class="col-12">
 			<div class="alert alert-danger text-center" style="font-size: 24px;">Нет запланированных онлайн встреч</div>
 			<div class="text-center mt-4">
-				<img src="<?=IMG_UNICORN?>" width="300" height="300">
+				<img src="<?=IMG_DUMMY?>" width="300" height="300">
 			</div>
 		</div>
 	</div>

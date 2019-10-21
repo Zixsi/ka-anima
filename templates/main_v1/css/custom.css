@@ -217,3 +217,5 @@
 
 #support-ticket .card.answer {margin-left: 50px; background-color: #fff8bc; border-color: #ffc107;}
 #support-ticket-list {}
+
+table tr.bg-info td , table tr.bg-info a {color: #ffffff;}

@@ -139,6 +139,7 @@ class Groups extends APP_Controller
 		}
 
 		$this->setHomeworkStatus($group_id, $this->user['id'], $data['lectures']);
+		// debug($data);
 
 		$this->load->lview('groups/item_user', $data);
 	}
@@ -164,6 +165,7 @@ class Groups extends APP_Controller
 		$data['wall'] = $this->WallModel->list($group_id);
 		// debug($data['wall']); die();
 
+		// debug($data); die();
 		$this->load->lview('groups/group', $data);
 	}
 

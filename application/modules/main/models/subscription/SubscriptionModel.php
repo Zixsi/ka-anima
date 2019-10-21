@@ -223,7 +223,6 @@ class SubscriptionModel extends APP_Model
 			return $res;
 		}
 
-
 		return false;
 	}
 
@@ -242,15 +241,13 @@ class SubscriptionModel extends APP_Model
 			}
 
 			$sql = 'SELECT 
-						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.img 
+						u.id, u.email, CONCAT_WS(\' \', u.name, u.lastname) as full_name, u.img, s.ts_end  
 					FROM 
 						'.self::TABLE.' as s 
 					LEFT JOIN 
 						'.self::TABLE_USERS.' as u ON(s.user = u.id) 
 					WHERE 
 						s.target = ? AND s.target_type = \'course\' '.$sql_where.' 
-					GROUP BY 
-						s.user 
 					ORDER BY 
 						s.user ASC';
 
@@ -262,6 +259,7 @@ class SubscriptionModel extends APP_Model
 				foreach($res as $val)
 				{
 					$this->UserModel->prepareUser($val);
+					$val['ts_end_timestamp'] = strtotime($val['ts_end']);
 					$result[$val['id']] = $val;
 				}
 

@@ -10,7 +10,7 @@
 						<a href="/groups/<?=$group['code']?>/lecture/<?=$item['id']?>" data-index="<?=$i?>" class="week-item active <?=($lecture_id == $item['id'])?'current':''?>">
 							<span class="number">
 								<span><?=$i?></span>
-								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+								<?if(isset($item['homework_fail']) && $item['homework_fail'] && ($subscr['type'] ?? '') !== 'standart'):?>
 									<span class="badge bg-danger" 
 										data-toggle="tooltip" 
 										data-placement="bottom" 
@@ -23,7 +23,7 @@
 						<span class="week-item">
 							<span class="number">
 								<span><?=$i?></span>
-								<?if(isset($item['homework_fail']) && $item['homework_fail']):?>
+								<?if(isset($item['homework_fail']) && $item['homework_fail'] && ($subscr['type'] ?? '') !== 'standart'):?>
 									<span class="badge bg-danger" 
 										data-toggle="tooltip" 
 										data-placement="bottom" 
@@ -74,7 +74,7 @@
 			</div>
 		</div>
 		<div class="col-7">
-			<?if(($lecture['type'] ?? 0) == 0 && $lecture['can_upload_files'] && ($data['subscr']['type'] ?? '') !== 'standart'):?>
+			<?if(($lecture['type'] ?? 0) == 0 && $lecture['can_upload_files'] && ($subscr['type'] ?? '') !== 'standart'):?>
 				<div class="card mb-4">
 					<div class="card-body">
 						<h3 class="card-title">Загрузка заданий</h3>
@@ -147,15 +147,9 @@
 </div>
 
 <?if($subscr_is_active == false):?>
-	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/subscription/">Продлите чтобы получить доступ.</a></div>
-	<div class="text-center" style="padding: 50px 0px;">
-		<img src="<?=IMG_UNICORN?>" width="300" height="300">
-	</div>
+	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/pay/?action=renewal&hash=<?=$subscr['hash']?>">Продлите чтобы получить доступ.</a></div>
 <?elseif($lectures_is_active == false):?>
 	<div class="alert alert-danger text-center" style="font-size: 24px;">
 		<span>Нет активных лекций</span><br>
-	</div>
-	<div class="text-center" style="padding: 50px 0px;">
-		<img src="<?=IMG_UNICORN?>" width="300" height="300">
 	</div>
 <?endif;?>

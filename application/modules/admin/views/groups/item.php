@@ -17,8 +17,17 @@
 					<tbody>
 						<?if($users):?>
 							<?foreach($users as $val):?>
-								<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
-									<td><a href="./?user=<?=$val['id']?>"><?=$val['full_name']?></a></td>
+								<?$end = ($val['ts_end_timestamp'] < time());?>
+								<tr <?=($user && $val['id'] == $user['id'])?'class="bg-info"':''?>>
+									<td>
+										<?//if(((int) $val['ts_end_timestamp'] < time() && (int) $val['ts_end_timestamp'] < (int) $item['timestamp_end'])):?>
+											<span class="badge bg-danger text-white" 
+										data-toggle="tooltip" 
+										data-placement="bottom" 
+										data-original-title="не продлена подписка" style="margin: 0px 5px 5px 0px;">!</span>
+										<?//endif;?>
+										<a href="./?user=<?=$val['id']?>" style="display: inline-block;"><?=$val['full_name']?></a>
+									</td>
 									<td class="text-center"><?=$val['reviews']?> / <?=($item['cnt'] ?? 0)?></td>
 									<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
 								</tr>
