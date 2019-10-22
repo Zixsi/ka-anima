@@ -102,7 +102,7 @@ class Groups extends APP_Controller
 		$group_id = $data['group']['id'];
 
 		$data['subscr'] = $this->checkSubscr($group_id);
-		$data['subscr_is_active'] = ($data['subscr'])?true:false;
+		$data['subscr_is_active'] = (($data['subscr']['active'] ?? false))?true:false;
 
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
 		$data['lecture_id'] = ((int) $lecture === 0)?current($data['lectures'])['id']:$lecture;
@@ -152,7 +152,7 @@ class Groups extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
 		$group_id = (int) ($data['group']['id']);
 
-		if(($data['subscr'] = $this->checkSubscr($group_id)) === false)
+		if(($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false)
 			header('Location: /groups/'.$data['group']['code'].'/');
 			
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
@@ -176,7 +176,7 @@ class Groups extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
 		$group_id = (int) ($data['group']['id']);
 
-		if(($data['subscr'] = $this->checkSubscr($group_id)) === false)
+		if(($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false)
 			header('Location: /groups/'.$data['group']['code'].'/');
 
 		if(($data['subscr']['type'] ?? '') === 'standart')
@@ -221,7 +221,7 @@ class Groups extends APP_Controller
 		$data['group'] = $this->CoursesGroupsModel->getByCode($group);
 		$group_id = (int) ($data['group']['id']);
 
-		if(($data['subscr'] = $this->checkSubscr($group_id)) === false)
+		if(($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false)
 			header('Location: /groups/'.$data['group']['code'].'/');
 
 		$data['group'] = $this->CoursesGroupsModel->getByID($group_id);
@@ -258,13 +258,7 @@ class Groups extends APP_Controller
 	// проверка подписки
 	private function checkSubscr($id)
 	{
-		if(($subscr = $this->SubscriptionModel->get($this->user['id'], $id, 'course')) == false)
-			return false;
-
-		if(strtotime($subscr['ts_end']) < time())
-			return false;
-
-		return $subscr;
+		return $this->SubscriptionModel->get($this->user['id'], $id, 'course');
 	}
 
 	// подготовка лекций

@@ -147,9 +147,9 @@
 </div>
 
 <?if($subscr_is_active == false):?>
-	<div class="alert alert-danger text-center" style="font-size: 24px;">Ваша подписка закончилась. <a href="/pay/?action=renewal&hash=<?=$subscr['hash']?>">Продлите чтобы получить доступ.</a></div>
+	<div class="alert alert-danger text-center" style="font-size: 18px;">Ваша подписка закончилась. <a href="/pay/?action=renewal&hash=<?=$subscr['hash']?>">Продлите чтобы получить доступ.</a></div>
 <?elseif($lectures_is_active == false):?>
-	<div class="alert alert-danger text-center" style="font-size: 24px;">
+	<div class="alert alert-danger text-center" style="font-size: 18px;">
 		<span>Нет активных лекций</span><br>
 	</div>
 <?endif;?>
