@@ -43,9 +43,10 @@ class EmailHelper extends APP_Model
 		$this->email->subject('Регистрация');
 		$this->email->message($html);
 
-		$res = $this->email->send();
-		// if(!$res)
-		// 	echo $this->email->print_debugger(array('headers'));
+		if(($res = $this->email->send()) === false)
+		{
+			log_message('error', $this->email->print_debugger(array('headers')));
+		}
 
 		return $res;
 	}
@@ -69,9 +70,10 @@ class EmailHelper extends APP_Model
 		$this->email->subject('Восстановление пароля');
 		$this->email->message($html);
 
-		$res = $this->email->send();
-		// if(!$res)
-		// 	echo $this->email->print_debugger(array('headers'));
+		if(($res = $this->email->send()) === false)
+		{
+			log_message('error', $this->email->print_debugger(array('headers')));
+		}
 
 		return $res;
 	}
@@ -114,9 +116,10 @@ class EmailHelper extends APP_Model
 		$this->email->subject('Информация');
 		$this->email->message($html);
 
-		$res = $this->email->send();
-		// if(!$res)
-		// 	echo $this->email->print_debugger(array('headers'));
+		if(($res = $this->email->send()) === false)
+		{
+			log_message('error', $this->email->print_debugger(array('headers')));
+		}
 
 		return $res;
 	}
