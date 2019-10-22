@@ -33,7 +33,10 @@ class Users extends APP_Controller
 		$data['actions'] = $this->UserActionsModel->listByUser($id);
 		$this->UserActionsHelper->prepareList($data['actions']);
 		
-		// debug($data); die();
+		if($_GET['debug'])
+		{
+			debug($data['subscribes']); die();
+		}
 
 		$this->load->lview('users/item', $data);
 	}
