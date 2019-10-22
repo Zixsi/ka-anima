@@ -111,6 +111,17 @@ class UsersHelper extends APP_Model
 		return true;
 	}
 
+	public function sendConfirmEmail($id)
+	{
+		if(($item = $this->UserModel->getByID($id)) === false)
+			throw new Exception('Пользователь не найден', 1);
+
+		if($this->EmailHelper->registration($item) === false)
+			throw new Exception('Неудалось отправить', 1);
+
+		return true;
+	}
+
 	// подготовка изображения профиля перед установкой
 	public function prepareProfileImg($name)
 	{

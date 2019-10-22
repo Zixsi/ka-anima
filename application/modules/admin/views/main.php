@@ -28,6 +28,9 @@ $tpl_user = $CI->Auth->user();
 </head>
 
 <body>
+	<div class="page-loader">
+		<div class="loader"><div class="loader-spin"></div><div class="loader-message"></div></div>
+	</div>
 	<div class="container-scroller">
 		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
 			<div class="text-left navbar-brand-wrapper d-flex align-items-center justify-content-between">

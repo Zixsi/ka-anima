@@ -12,7 +12,6 @@ $(document).ready(function(){
 	textEditor();
 });
 
-
 function textEditor()
 {
 	if($('#fdescription').length > 0)
@@ -152,6 +151,15 @@ function usersListener()
 				window.location.reload(true);
 			}, 1000);
 		});
+
+		return false;
+	});
+
+	$('.btn-send-email-confirm').on('click', function(){
+
+		ajaxQuery('user.sendConfirmEmail', $(this).data('id'), function(res){
+			toastrMsg('success', res);
+		}, true);
 
 		return false;
 	});

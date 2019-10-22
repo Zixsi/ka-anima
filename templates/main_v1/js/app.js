@@ -90,16 +90,6 @@ function toastrMsg(type, text)
 	$.toast(options);
 }
 
-function showPageLoader()
-{
-	$('.page-loader').addClass('ld-loading');
-}
-
-function hidePageLoader()
-{
-	$('.page-loader').removeClass('ld-loading');
-}
-
 function clearInput(t)
 {
 	t.find('input, textarea, select').each(function(){
@@ -181,10 +171,24 @@ function setFormInput(t, data)
 	});
 }
 
-// ajax запрос
-function ajaxQuery(method, params, callback)
+function showPageLoader(message = null)
 {
-	showPageLoader();
+	if(message)
+		$('.page-loader').find('.loader-message').html(message).show();
+	$('.page-loader').addClass('ld-loading');
+}
+
+function hidePageLoader()
+{
+	$('.page-loader').removeClass('ld-loading').find('.loader-message').hide().empty();
+}
+
+// ajax запрос
+function ajaxQuery(method, params, callback, loader = false)
+{
+	if(loader)
+		showPageLoader();
+
 	var query = {'method': method, 'params': params};
 	setTimeout(function(){
 		$.ajax({
@@ -211,10 +215,12 @@ function ajaxQuery(method, params, callback)
 					toastrMsg('error', res.error.message);
 				}
 
-				hidePageLoader();
+				if(loader)
+					hidePageLoader();
 			},
 			error: function(e, code){
-				hidePageLoader();
+				if(loader)
+					hidePageLoader();
 				toastrMsg('error', 'AJAX ERROR');
 				// console.log(e.responseText);
 			}
@@ -222,9 +228,11 @@ function ajaxQuery(method, params, callback)
 	}, GLOBAL_TIME_DELAY);
 }
 
-function ajaxFilesQuery(method, params, files, callback)
+function ajaxFilesQuery(method, params, files, callback, loader = false)
 {
-	showPageLoader();
+	if(loader)
+		showPageLoader();
+
 	var query = {'method': method, 'params': params};
 
 	var formData = new FormData();
@@ -274,10 +282,12 @@ function ajaxFilesQuery(method, params, files, callback)
 					toastrMsg('error', res.error.message);
 				}
 
-				hidePageLoader();
+				if(loader)
+					hidePageLoader();
 			},
 			error: function(e, code){
-				hidePageLoader();
+				if(loader)
+					hidePageLoader();
 				toastrMsg('error', 'AJAX ERROR');
 				// console.log(e.responseText);
 			}

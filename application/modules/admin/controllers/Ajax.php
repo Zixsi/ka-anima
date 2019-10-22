@@ -49,6 +49,9 @@ class Ajax extends APP_Controller
 				// case 'user.remove':
 				// 	$this->userRemove();
 				// break;
+				case 'user.sendConfirmEmail':
+					$this->userSendConfirmEmail();
+				break;
 				case 'user.block':
 					$this->userBlock();
 				break;
@@ -119,6 +122,13 @@ class Ajax extends APP_Controller
 			$params['img'] = '/'.$img;
 
 		$this->UsersHelper->edit(($this->request['params']['id'] ?? 0), $params);
+		$this->jsonajax->result('Успешно');
+	}
+
+	// повторная отправка письма о регитрации
+	private function userSendConfirmEmail()
+	{
+		$this->UsersHelper->sendConfirmEmail(($this->request['params'] ?? 0));
 		$this->jsonajax->result('Успешно');
 	}
 
