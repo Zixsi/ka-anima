@@ -75,7 +75,7 @@ class SubscriptionHelper extends APP_Model
 
 		$ts_end = $item['ts_end'];
 		$subscr_type = 0; // полная подписка
-		$amount = $price; // остаток для оплаты
+		$amount = 0; // остаток для оплаты
 
 		// если оплата за месяц
 		if($data['period'] == 'month')
