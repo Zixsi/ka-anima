@@ -27,8 +27,8 @@
 					<input type="text" name="question" id="fquestion" class="form-control" value="<?=set_value('question', $item['question'], true)?>">
 				</div>
 				<div class="form-group">
-					<label for="fanswer">Ответ</label>
-					<textarea name="answer" id="fanswer" class="form-control" rows="10"><?=set_value('answer', $item['answer'], true)?></textarea>
+					<label for="editor1">Ответ</label>
+					<textarea name="answer" id="editor1" class="form-control" rows="10"><?=htmlspecialchars_decode(set_value('answer', $item['answer'], true))?></textarea>
 				</div>
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary">Сохранить</button>

@@ -35,6 +35,28 @@ function textEditor()
 			pasteImage: false,
 		});
 	}
+
+	if($('#editor1').length > 0)
+	{
+		var editorFdescriptionConf = ['title','bold','italic','underline','fontScale','ol','ul'];
+		var editorFdescription = new Simditor({
+			id: 'editor1',
+			textarea: $('#editor1'),
+			toolbar: editorFdescriptionConf,
+			pasteImage: false,
+		});
+	}
+
+	if($('#editor2').length > 0)
+	{
+		var editorFdescriptionConf = ['title','bold','italic','underline','fontScale','ol','ul'];
+		var editorFdescription = new Simditor({
+			id: 'editor2',
+			textarea: $('#editor2'),
+			toolbar: editorFdescriptionConf,
+			pasteImage: false,
+		});
+	}
 }
 
 function courseListener()
