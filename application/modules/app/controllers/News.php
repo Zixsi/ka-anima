@@ -15,6 +15,8 @@ class News extends APP_Controller
 		if(($data['item'] = $this->NewsModel->getById($id)) === false)
 			show_404();
 
+		$data['item']['text'] = url2link(htmlspecialchars_decode($data['item']['text']));
+
 		$this->load->lview('news/item', $data);
 	}
 }
