@@ -38,18 +38,18 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['upload_userfile_not_set'] = 'Unable to find a post variable called userfile.';
-$lang['upload_file_exceeds_limit'] = 'The uploaded file exceeds the maximum allowed size in your PHP configuration file.';
-$lang['upload_file_exceeds_form_limit'] = 'The uploaded file exceeds the maximum size allowed by the submission form.';
-$lang['upload_file_partial'] = 'The file was only partially uploaded.';
+$lang['upload_file_exceeds_limit'] = 'Загруженный файл превышает максимально допустимый размер';
+$lang['upload_file_exceeds_form_limit'] = 'Загруженный файл превышает максимально допустимый размер';
+$lang['upload_file_partial'] = 'Файл был загружен только частично';
 $lang['upload_no_temp_directory'] = 'The temporary folder is missing.';
 $lang['upload_unable_to_write_file'] = 'The file could not be written to disk.';
 $lang['upload_stopped_by_extension'] = 'The file upload was stopped by extension.';
-$lang['upload_no_file_selected'] = 'You did not select a file to upload.';
-$lang['upload_invalid_filetype'] = 'The filetype you are attempting to upload is not allowed.';
-$lang['upload_invalid_filesize'] = 'The file you are attempting to upload is larger than the permitted size.';
-$lang['upload_invalid_dimensions'] = 'The image you are attempting to upload doesn\'t fit into the allowed dimensions.';
-$lang['upload_destination_error'] = 'A problem was encountered while attempting to move the uploaded file to the final destination.';
+$lang['upload_no_file_selected'] = 'Не выбран файл для загрузки';
+$lang['upload_invalid_filetype'] = 'Тип файла, который вы пытаетесь загрузить, запрещен';
+$lang['upload_invalid_filesize'] = 'Файл, который вы пытаетесь загрузить, больше разрешенного размера.';
+$lang['upload_invalid_dimensions'] = 'Изображение, которое вы пытаетесь загрузить, не вписывается в разрешенные размеры.';
+$lang['upload_destination_error'] = 'Возникла проблема при попытке переместить загруженный файл в конечный пункт назначения.';
 $lang['upload_no_filepath'] = 'The upload path does not appear to be valid.';
-$lang['upload_no_file_types'] = 'You have not specified any allowed file types.';
-$lang['upload_bad_filename'] = 'The file name you submitted already exists on the server.';
+$lang['upload_no_file_types'] = 'Файл не входит в список разрешеных типов';
+$lang['upload_bad_filename'] = 'Отправленное вами имя файла уже существует на сервере';
 $lang['upload_not_writable'] = 'The upload destination folder does not appear to be writable.';

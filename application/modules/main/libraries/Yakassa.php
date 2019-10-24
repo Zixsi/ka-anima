@@ -8,6 +8,9 @@ class Yakassa
 	const SHOP_ID = 596353;
 	const SHOP_SECRET = 'test_jE756N0-1ucAcDX0oFSNG8xAyZvaxDQNBPBlyuTwelM';
 
+	// const SHOP_ID = 593472;
+	// const SHOP_SECRET = 'test_jE756N0-live_fd0W786Z6pfmU89V5k7uBkB1yLUgpF0WC1GHHFKkqKY';
+	
 	private $client;
 	private $paymentParams = [
 		'description' => '',
