@@ -286,6 +286,8 @@ class GroupsModel extends APP_Model
 				ORDER BY 
 					g.ts_end ASC, g.ts ASC';
 
+		debug($sql);
+		debug($bind);
 		if($res = $this->db->query($sql, $bind))
 		{
 			$res = $res->result_array();
