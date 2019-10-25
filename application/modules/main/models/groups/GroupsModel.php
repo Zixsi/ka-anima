@@ -253,8 +253,9 @@ class GroupsModel extends APP_Model
 		if($active)
 		{
 			$bind[] = $now->format('Y-m-d H:i:s');
-			$bind[] = $now->format('Y-m-d H:i:s');
-			$sql_where .= ' AND (g.ts <= ? AND g.ts_end > ?) ';
+			// $bind[] = $now->format('Y-m-d H:i:s');
+			// $sql_where .= ' AND (g.ts <= ? AND g.ts_end > ?) ';
+			$sql_where .= ' AND g.ts_end > ? ';
 		}
 
 		if(($filter['with_subscribed'] ?? false))
