@@ -45,7 +45,7 @@
 				<?endforeach;?>
 			</div>
 		<?else:?>
-			<div class="alert alert-info">
+			<div class="alert alert-info text-center">
 				<h5>Список групп пуст. Отображаются только группы с подписанными пользователями.</h5>
 			</div>
 		<?endif;?> 		
