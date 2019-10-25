@@ -27,7 +27,7 @@ class Groups extends APP_Controller
 	{
 		$data = [];
 		$filter = [
-			'with_subscribed' => true, // с подписанными пользователями
+			// 'with_subscribed' => true, // с подписанными пользователями
 		];
 		$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false, $filter);
 		$this->GroupsHelper->prepareListForTeacher($data['items'], $filter);
