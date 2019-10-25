@@ -30,6 +30,7 @@ class Groups extends APP_Controller
 			'with_subscribed' => true, // с подписанными пользователями
 		];
 		$data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false, $filter);
+		debug($data['items']); die();
 		$this->GroupsHelper->prepareListForTeacher($data['items'], $filter);
 
 		$this->load->lview('groups/index_teacher', $data);
