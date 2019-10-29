@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 // Загрузка файлов домашних заданий
 $config['upload_homework'] = [
 	'upload_path' => './data/homework/',
-	'allowed_types' => 'jpeg|jpg|png|mp4|rar|zip',
+	'allowed_types' => 'jpeg|jpg|png|mp4|rar|zip|mov',
 	'max_size' => 10240, // 10 мб
 	'max_width' => 4096,
 	'max_height' => 4096,
