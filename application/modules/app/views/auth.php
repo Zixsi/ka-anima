@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
 </head>
 <body>
+	<?include 'metriks.php';?>
 	<div class="page-loader">
 		<div class="loader">
 			<div class="jumping-dots-loader"><span></span><span></span><span></span></div>

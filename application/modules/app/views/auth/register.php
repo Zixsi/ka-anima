@@ -65,7 +65,7 @@
 			</div>
 		</div>
 		<div class="mt-3">
-			<button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Регистрация</button>
+			<button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn" onclick="ym(55112686, 'reachGoal', 'RegSchool'); return true;">Регистрация</button>
 		</div>
 		<div class="text-center mt-4 font-weight-light">
 			Уже есть аккаунт? <a href="/auth/" class="text-primary">Авторизация</a>

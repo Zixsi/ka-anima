@@ -174,7 +174,7 @@
 				</ul>
 				<div class="wrapper">
 					<?if($selected_offer_index !== null && $this->Auth->isActive()):?>
-						<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+						<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 					<?else:?>
 						<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 					<?endif;?>
@@ -256,7 +256,7 @@
 					</ul>
 					<div class="wrapper">
 						<?if($selected_offer_index !== null  && $this->Auth->isActive()):?>
-							<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+							<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 						<?else:?>
 							<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 						<?endif;?>
@@ -314,7 +314,7 @@
 						</ul>
 						<div class="wrapper">
 							<?if($vip_offer !== null && $this->Auth->isActive()):?>
-								<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
+								<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 							<?else:?>
 								<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 							<?endif;?>
