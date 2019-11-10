@@ -94,6 +94,7 @@
 					<table class="table">
 						<thead>
 							<tr>
+								<th width="70">ID</th>
 								<th width="70">#</th>
 								<th width="70"></th>
 								<th>Имя</th>
@@ -107,6 +108,7 @@
 							<?if($items):?>
 								<?foreach($items as $item):?>
 									<tr <?=((int) $item['active'] === 0)?'class="table-danger"':''?>>
+										<td><?=(int) $item['id']?></td>
 										<td>
 											<?if($item['deleted'] == 1):?>
 												<i class="mdi mdi-delete"></i>

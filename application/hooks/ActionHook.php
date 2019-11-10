@@ -51,6 +51,18 @@ class ActionHook
 		];
 
 		$this->CI->TasksHelper->add(TasksModel::TYPE_EMAIL, Action::REGISTRATION, $params, 5, $user['email']);
+
+
+		$paramsUnisender = [
+			'list_ids' => '19169561',
+			'double_optin' => 3,
+			'fields' => [
+				'email' => $user['email'],
+				'name' => $user['name'].' '.$user['lastname']
+			]
+		];
+		
+		$this->CI->unisender->subscribe($paramsUnisender);
 	}
 
 	/**
