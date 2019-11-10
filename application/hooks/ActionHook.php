@@ -58,10 +58,10 @@ class ActionHook
 			'double_optin' => 3,
 			'fields' => [
 				'email' => $user['email'],
-				'name' => $user['name'].' '.$user['lastname']
+				'Name' => $user['name'].' '.$user['lastname']
 			]
 		];
-		
+
 		$this->CI->unisender->subscribe($paramsUnisender);
 	}
 
