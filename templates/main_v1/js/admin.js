@@ -282,4 +282,35 @@ function groupListener()
 
 		return false;
 	});
+
+	$('#group-set-teacher').on('submit', function(){
+		if(confirm("Вы уверены что хотите сменить преподавателя?"))
+		{
+			var params = $(this).serializeControls();
+			ajaxQuery('setGroupTeacher', params, function(res){
+				toastrMsg('success', res);
+				setTimeout(function(){
+					window.location.reload(true);
+				}, 1000);
+			});
+		}
+
+		return false;
+	});
+
+	$('.group-remove-user').on('submit', function(){
+		if(confirm("Вы уверены что хотите удалить ученика?"))
+		{
+			var params = $(this).serializeControls();
+			ajaxQuery('removeGroupUser', params, function(res){
+				toastrMsg('success', res);
+				setTimeout(function(){
+					window.location.reload(true);
+				}, 1000);
+			});
+		}
+
+		return false;
+	});
+
 }

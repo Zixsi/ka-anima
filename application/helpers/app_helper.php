@@ -347,3 +347,54 @@ function num2word($num, $words)
         }
     }
 }
+
+function extractItemId($data, $key = 'id')
+{
+	$result = null;
+	if(is_array($data))
+	{
+		if(array_key_exists($key, $data))
+			$result = $data[$key];
+		else
+		{
+			foreach($data as $row)
+				$result[] = $row[$key];
+		}
+	}
+
+	return $result;
+}
+
+function groupByField($data, $key, $uniqe = false)
+{
+	$result = [];
+
+	if(is_array($data) && empty($data) === false && empty($key) === false)
+	{
+		foreach($data as $row)
+		{
+			if(array_key_exists($key, $row) === false)
+				continue;
+
+			$itemKey = $row[$key];
+			if($uniqe)
+			{
+				$result[$itemKey] = $row;
+			}
+			else
+			{
+				if(array_key_exists($itemKey, $result) === false)
+					$result[$itemKey] = [];
+
+				$result[$itemKey][] = $row;
+			}
+		}
+	}
+
+	return $result;
+}
+
+function setArrayKeys($data, $key)
+{
+	return groupByField($data, $key, true);
+}

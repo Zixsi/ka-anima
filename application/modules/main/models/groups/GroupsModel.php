@@ -38,6 +38,14 @@ class GroupsModel extends APP_Model
 		return false;
 	}
 
+	public function update($id, $data = [])
+	{
+		$this->db->where('id', $id);
+		$this->db->update(self::TABLE, $data);
+
+		return true;
+	}
+
 	// группа по id
 	public function getByID($id)
 	{

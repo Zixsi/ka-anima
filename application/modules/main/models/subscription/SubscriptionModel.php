@@ -57,6 +57,16 @@ class SubscriptionModel extends APP_Model
 		return false;
 	}
 
+	public function removeSubscription($user, $target, $targetType = 'course')
+	{
+		$this->db->delete(self::TABLE, [
+			'user' => (int) $user,
+			'target' => (int) $target,
+			'target_type' => $targetType
+		]);
+		return true;
+	}
+
 	public function getByID($id)
 	{
 		$res = $this->db->query('SELECT * FROM '.self::TABLE.' WHERE id = ?', [$id]);
