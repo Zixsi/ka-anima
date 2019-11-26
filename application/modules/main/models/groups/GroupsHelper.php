@@ -495,4 +495,28 @@ class GroupsHelper extends APP_Model
 
 		return array_values($result);
 	}
+
+	public function setTeacher($groupId, $teacherId)
+	{
+		if($this->GroupsModel->getByID((int) $groupId) === null)
+			throw new Exception('Группа не найдена', 1);
+
+		if($this->UserModel->getByID($teacherId) === null)
+			throw new Exception('Пользователь не найден', 1);
+
+		$this->GroupsModel->update($groupId, ['teacher' => $teacherId]);
+		return true;
+	}
+
+	public function removeUser($groupId, $userId)
+	{
+		if($this->GroupsModel->getByID((int) $groupId) === null)
+			throw new Exception('Группа не найдена', 1);
+
+		if($this->UserModel->getByID($userId) === null)
+			throw new Exception('Пользователь не найден', 1);
+
+		$this->SubscriptionModel->removeSubscription($userId, $groupId);
+		return true;
+	}
 }

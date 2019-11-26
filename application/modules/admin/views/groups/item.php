@@ -5,13 +5,50 @@
 				<h3 class="card-title pt-2">Группа <?=$item['name']?> (<?=$item['code']?>)</h3>
 			</div>
 			<div class="card-body">
-				<button type="button" class="btn btn-primary" id="group--add-user-btn">Добавить ученика</button>
+				<div>
+					<h4>Преподаватель</h4>
+					<div class="row">
+						<div class="col-12 col-md-6 pt-2">
+							<?if(array_key_exists($item['teacher'], $teacherList)):?>
+								<a href="/admin/users/user/<?=$item['teacher']?>/" target="_blank"><?=$teacherList[$item['teacher']]['full_name']?></a>
+							<?else:?>
+								<span>--- нет ---</span>
+							<?endif;?>
+						</div>
+						<div class="col-12 col-md-6">
+							<?if(count($teacherList)):?>
+								<form action="" method="post" id="group-set-teacher">
+									<input type="hidden" name="group" value="<?=$item['id']?>">
+									<div class="input-group">
+										<select name="teacher" class="form-control">
+											<?foreach($teacherList as $row):?>
+												<option value="<?=$row['id']?>"><?=htmlspecialchars($row['full_name'])?></option>
+											<?endforeach;?>
+										</select>
+										<div class="input-group-append">
+											<button type="submit" class="btn btn-primary">Назначить</button>
+										</div>
+									</div>
+								</form>
+							<?endif;?>
+						</div>
+					</div>
+					<hr>
+				</div>
+				<div>
+					<div class="float-right">
+						<button type="button" class="btn btn-primary" id="group--add-user-btn">Добавить ученика</button>
+					</div>
+					<h4 class="pt-2">Ученики</h4>
+					<div class="clearfix"></div>
+				</div>
 				<table class="table table-bordered mt-4">
 					<thead>
 						<tr>
 							<th>Ученик</th>
 							<th class="text-center" width="120">Задания</th>
 							<th class="text-center" width="120">Непроверено</th>
+							<th class="text-right" width="50"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -30,6 +67,15 @@
 									</td>
 									<td class="text-center"><?=$val['reviews']?> / <?=($item['cnt'] ?? 0)?></td>
 									<td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
+									<td class="text-right">
+										<form action="" method="post" class="group-remove-user">
+											<input type="hidden" name="group" value="<?=$item['id']?>">
+											<input type="hidden" name="user" value="<?=$val['id']?>">
+											<button type="submit" class="btn btn-outline-danger btn-sm" title="Удалить ученика из группы">
+												<i class="fa fa-close"></i>
+											</button>
+										</form>
+									</td>
 								</tr>
 							<?endforeach;?>
 						<?else:?>

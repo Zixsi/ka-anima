@@ -156,6 +156,12 @@ $tpl_user = $CI->Auth->user();
 							<span class="menu-title">Курсы</span>
 						</a>
 					</li>
+					<?/*<li class="nav-item <?=is_active_menu_item('workshop')?'active':''?>">
+						<a class="nav-link" href="/admin/workshop/">
+							<i class="mdi mdi-brush menu-icon"></i>
+							<span class="menu-title">Мастерская</span>
+						</a>
+					</li>*/?>
 					<li class="nav-item <?=is_active_menu_item('streams')?'active':''?>">
 						<a class="nav-link" href="/admin/streams/">
 							<i class="mdi mdi-message-video menu-icon"></i>

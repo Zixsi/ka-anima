@@ -22,14 +22,12 @@ class Groups extends APP_Controller
 			show_404();
 
 		$params = $this->input->get(null, true);
-
-		// ученики группы
-		// $type = ($data['item']['type'] === 'standart')?'advanced':$data['item']['type'];
 		$type = $data['item']['type'];
 
+		$data['teacherList'] = $this->UserModel->listTeachers();
+		$data['teacherList'] = setArrayKeys($data['teacherList'], 'id');
+		// debug($data['teacherList']); die();
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
-		// debug($data['item']);
-		// debug($data['users']); die();
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
 		// лекции группы
