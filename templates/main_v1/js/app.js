@@ -339,6 +339,22 @@ function datetimepicker()
 	});
 }
 
+function datetimepicker2()
+{
+	if($('.datetimepicker2').length < 1)
+		return;
+
+	$.datetimepicker.setLocale('ru');
+
+	$('.datetimepicker2').datetimepicker({
+		format: 'Y-m-d H:00:00',
+		formatDate: 'Y-m-d',
+		lang:'ru',
+		timepicker: true,
+		dayOfWeekStart: 1
+	});
+}
+
 
 //====================================================================//
 
@@ -383,6 +399,7 @@ function appListener()
 {	
 	datepiker();
 	datetimepicker();
+	datetimepicker2();
 
 	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
 		event.preventDefault();

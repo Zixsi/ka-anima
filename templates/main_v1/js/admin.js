@@ -9,6 +9,7 @@ $(document).ready(function(){
 	usersListener();
 	courseListener();
 	groupListener();
+	workshopListener();
 	textEditor();
 });
 
@@ -313,4 +314,17 @@ function groupListener()
 		return false;
 	});
 
+}
+
+function workshopListener()
+{
+	$('#workshop-form').on('change', 'select[name="type"]', function(){
+		var val = $(this).val();
+		$(this).closest('form').find('[data-type]').each(function(i, e){
+			if($(e).data('type') === val)
+				$(e).show();
+			else
+				$(e).hide();
+		});
+	});
 }

@@ -26,6 +26,11 @@ class Ydvideo
 		return false;
 	}
 
+	public function validUrl($url)
+	{
+		return $this->getVideoContent($url, true);
+	}
+
 	public function parseVideoFromHtml($html, $preview = false)
 	{
 		$search_start = 'id="store-prefetch">';
@@ -43,10 +48,12 @@ class Ydvideo
 		}
 
 		$last = end($json['resources'][$json['rootResourceId']]['videoStreams']['videos']);
+		$duration = (int) $json['resources'][$json['rootResourceId']]['videoStreams']['duration'];
 		$result = [
 			'preview' => $json['resources'][$json['rootResourceId']]['meta']['xxxlPreview'],
 			'video' => $last['url'],
-			'player' => self::PLAYER
+			'player' => self::PLAYER,
+			'duration' => $duration
 		];
 
 		if($preview)
@@ -58,8 +65,9 @@ class Ydvideo
 		return $result;
 	}
 	
-	public function getVideoContent($url)
+	public function getVideoContent($url, $returnHtml = true)
 	{
+		$result = false;
 		curl_setopt($this->curl, CURLOPT_URL, $url); 
 		//curl_setopt($this->curl, CURLOPT_USERAGENT, self::UA);
 		//curl_setopt($this->curl, CURLOPT_REFERER, self::BASE_URL);
@@ -71,9 +79,12 @@ class Ydvideo
 
 		if($code ===  200)
 		{
-			return $html;
+			if($returnHtml)
+				$result = $html;
+			else 
+				$result = true;
 		}
 
-		return false;
+		return $result;
 	}
 }

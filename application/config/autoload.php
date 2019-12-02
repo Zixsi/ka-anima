@@ -183,4 +183,5 @@ $autoload['model'] = [
 	'main/StreamsHelper',
 	'main/OptionsModel',
 	'main/StatsHelper',
+	'main/WorkshopModel',
 ];

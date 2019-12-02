@@ -33,5 +33,9 @@ class Test extends APP_Controller
 		// ];
 		// $this->UserModel->update($user['id'], $params);
 		// var_dump('OK');
+
+		// $this->load->library(['ydvideo']);
+		// $res = $this->ydvideo->getVideo('https://yadi.sk/i/NQ6Dce7dem1n-Q');
+		// debug($res);
 	}
 }

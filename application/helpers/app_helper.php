@@ -91,7 +91,7 @@ function get_rel_path($path)
 	return str_replace('\\', '/', str_replace(FCPATH, '', $path));
 }
 
-function Debug($data = [])
+function debug($data = [])
 {
 	echo '<pre>'; print_r($data); echo '</pre>';
 }
@@ -397,4 +397,36 @@ function groupByField($data, $key, $uniqe = false)
 function setArrayKeys($data, $key)
 {
 	return groupByField($data, $key, true);
+}
+
+function isValidYoutubeVideoUrl($url)
+{
+	return (empty(getVideoId($url)) === false);
+}
+
+function isValidYandexVideoUrl($url)
+{
+	$CI =& get_instance();
+	$CI->load->library('ydvideo');
+	return $CI->ydvideo->validUrl($url);
+}
+
+function uploadFile($name, $config)
+{
+	$result = false;
+
+	if(isset($_FILES[$name]) && empty($_FILES[$name]['name']) === false)
+	{
+		$CI =& get_instance();
+		$CI->load->config('upload');
+		$uploadConfig = $CI->config->item($config);
+		$CI->load->library('upload', $uploadConfig);
+
+		if($CI->upload->do_upload($name) == false)
+			throw new Exception($CI->upload->display_errors(), 1);
+
+		$result = $CI->upload->data();
+	}
+
+	return $result;
 }

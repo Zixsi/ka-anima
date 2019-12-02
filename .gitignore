@@ -28,7 +28,8 @@ data/users/*
 !data/news
 data/news/*
 !data/news/dummy
-
+data/workshop/*
+!data/workshop/dummy
 
 # IDE Files
 #-------------------------
