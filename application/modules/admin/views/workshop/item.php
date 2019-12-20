@@ -113,87 +113,86 @@
 						</div>
 					<?endif;?>
 				</div>
-
-				<?if($item['type'] === 'collection'):?>
-					<div class="mb-2">
-						<div class="pull-right">
-							<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#add-video-workshop">Добавить видео</button>
-						</div>
-						<h5 class="pt-3 mt-0">Видео</h5>
-						<div class="clearfix"></div>
+			</form>
+			<?if($item['type'] === 'collection'):?>
+				<div class="mb-2">
+					<div class="pull-right">
+						<button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#add-video-workshop">Добавить видео</button>
 					</div>
-					<table class="table mt-4">
-						<thead class="thead-light">
-							<tr>
-								<th>Название</th>
-								<th>Ссылка</th>
-								<th width="80">Длительность</th>
-								<th width="80">Сортировка</th>
-								<th width="80" class="text-right">Действие</th>
-							</tr>
-						</thead>
-						<tbody>
-							<?if(count($videos)):?>
-								<?foreach($videos as $video):?>
-									<tr>
-										<td><?=$video['title']?></td>
-										<td><?=$video['code']?></td>
-										<td><?=time2hours($video['duration'])?></td>
-										<td><?=$video['sort']?></td>
-										<td>
-											<div class="btn-group">
-												<button type="button" class="btn btn-primary btn-sm" data-id="<?=$video['id']?>" data-toggle="modal" data-target="#edit-video-workshop<?=$video['id']?>"><i class="fa fa-edit"></i></button>
-												<button type="button" class="btn btn-danger btn-sm delete-video-workshop" data-id="<?=$video['id']?>"><i class="fa fa-trash"></i></button>
-											</div>
+					<h5 class="pt-3 mt-0">Видео</h5>
+					<div class="clearfix"></div>
+				</div>
+				<table class="table mt-4">
+					<thead class="thead-light">
+						<tr>
+							<th>Название</th>
+							<th>Ссылка</th>
+							<th width="80">Длительность</th>
+							<th width="80">Сортировка</th>
+							<th width="80" class="text-right">Действие</th>
+						</tr>
+					</thead>
+					<tbody>
+						<?if(count($videos)):?>
+							<?foreach($videos as $video):?>
+								<tr>
+									<td><?=$video['title']?></td>
+									<td><?=$video['code']?></td>
+									<td><?=time2hours($video['duration'])?></td>
+									<td><?=$video['sort']?></td>
+									<td>
+										<div class="btn-group">
+											<button type="button" class="btn btn-primary btn-sm" data-id="<?=$video['id']?>" data-toggle="modal" data-target="#edit-video-workshop<?=$video['id']?>"><i class="fa fa-edit"></i></button>
+											<button type="button" class="btn btn-danger btn-sm delete-video-workshop" data-id="<?=$video['id']?>"><i class="fa fa-trash"></i></button>
+										</div>
 
-											<div class="modal fade edit-video-workshop" id="edit-video-workshop<?=$video['id']?>" tabindex="-1" role="dialog">
-												<div class="modal-dialog" role="document">
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title">Редактировать видео</h5>
-															<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
-														</div>
-														<div class="modal-body">
-															<form action="" method="post">
-																<input type="hidden" name="id" value="<?=$video['id']?>">
-																<div class="form-group">
-																	<label class="form-label">Название</label>
-																	<input type="text" name="title" value="<?=htmlspecialchars($video['title'])?>" class="form-control">
-																</div>
-																<div class="form-group">
-																	<label class="form-label">Ссылка</label>
-																	<input type="text" name="code" value="<?=htmlspecialchars($video['code'])?>" class="form-control" disabled="true">
-																</div>
-																<div class="form-group">
-																	<label class="form-label">Сортировка</label>
-																	<input type="number" name="sort" value="<?=$video['sort']?>" min="0" max="65535" class="form-control">
-																</div>
-																<div class="form-group">
-																	<button type="submit" class="btn btn-primary btn-block">Сохранить</button>
-																</div>
-															</form>
-														</div>
+										<div class="modal fade edit-video-workshop" id="edit-video-workshop<?=$video['id']?>" tabindex="-1" role="dialog">
+											<div class="modal-dialog" role="document">
+												<div class="modal-content">
+													<div class="modal-header">
+														<h5 class="modal-title">Редактировать видео</h5>
+														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+															<span aria-hidden="true">&times;</span>
+														</button>
+													</div>
+													<div class="modal-body">
+														<form action="" method="post">
+															<input type="hidden" name="id" value="<?=$video['id']?>">
+															<div class="form-group">
+																<label class="form-label">Название</label>
+																<input type="text" name="title" value="<?=htmlspecialchars($video['title'])?>" class="form-control">
+															</div>
+															<div class="form-group">
+																<label class="form-label">Ссылка</label>
+																<input type="text" name="code" value="<?=htmlspecialchars($video['code'])?>" class="form-control" disabled="true">
+															</div>
+															<div class="form-group">
+																<label class="form-label">Сортировка</label>
+																<input type="number" name="sort" value="<?=$video['sort']?>" min="0" max="65535" class="form-control">
+															</div>
+															<div class="form-group">
+																<button type="submit" class="btn btn-primary btn-block">Сохранить</button>
+															</div>
+														</form>
 													</div>
 												</div>
 											</div>
-										</td>
-									</tr>
-								<?endforeach;?>
-							<?else:?>
-								<tr>
-									<td colspan="5" class="text-center">Список видео пуст</td>
+										</div>
+									</td>
 								</tr>
-							<?endif;?>
-						</tbody>
-					</table>
-				<?endif;?>
-				<hr>
-				<div class="form-group pt-2">
-					<button type="submit" class="btn btn-primary">Сохранить</button>
-				</div>
-			</form>
+							<?endforeach;?>
+						<?else:?>
+							<tr>
+								<td colspan="5" class="text-center">Список видео пуст</td>
+							</tr>
+						<?endif;?>
+					</tbody>
+				</table>
+			<?endif;?>
+			<hr>
+			<div class="form-group pt-2">
+				<button type="submit" class="btn btn-primary" form="workshop-form">Сохранить</button>
+			</div>
 		</div>
 	</div>
 </div>

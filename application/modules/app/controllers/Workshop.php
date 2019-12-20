@@ -18,7 +18,8 @@ class Workshop extends APP_Controller
 			$subscriptionsId = array_map(function($val){return (int) $val;}, $subscriptionsId);
 
 		$filter = [
-			'ignore' => $subscriptionsId
+			'ignore' => $subscriptionsId,
+			'status' => true
 		];
 		$data['items'] = $this->WorkshopModel->getList($filter);
 		$data['types'] = $this->WorkshopModel->getTypes();

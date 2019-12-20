@@ -127,6 +127,12 @@ class WorkshopModel extends APP_Model
 			}
 		}
 
+		if(isset($params['status']))
+		{
+			$result['binds'][':status'] = ($params['status'])?1:0;
+			$result['where'][] = 'status = :status';
+		}
+
 		return $result;
 	}
 }

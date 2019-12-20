@@ -29,6 +29,8 @@ class Workshop extends APP_Controller
 		$item = new WorkshopEntity($item);
 		$params = $this->input->post(null, true);
 
+		// debug($item); die();
+
 		if(cr_valid_key())
 		{
 			try
