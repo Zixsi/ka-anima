@@ -40,16 +40,16 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-6" data-type="webinar" <?if(empty(set_select('type', 'webinar'))):?>style="display: none;"<?endif;?>>
+					<div class="col-6">
 						<div class="form-group">
-							<label>Дата начала</label>
+							<label>Дата начала <small>(только для вебинара)</small></label>
 							<input type="text" name="date" class="form-control datetimepicker2" value="<?=set_value('date', date('Y-m-d H:i:00'), true)?>">
 						</div>
 					</div>
 					<div class="col-6">
-						<div class="form-group" data-type="collection" <?if(empty(set_select('type', 'collection'))):?>style="display: none;"<?endif;?>>
-							<label>Стоимость</label>
-							<input type="text" name="price" class="form-control" value="<?=set_value('price', '0', true)?>">
+						<div class="form-group">
+							<label>Стоимость <small>(только для коллекции)</small></label>
+							<input type="number" name="price" class="form-control" step="0.01" value="<?=set_value('price', '0', true)?>">
 						</div>
 					</div>
 				</div>
@@ -85,54 +85,24 @@
 							<input type="text" name="video" class="form-control" value="<?=set_value('video', '', true)?>">
 						</div>
 					</div>
+				</div>
+				<div class="row">
 					<div class="col-6">
 						<div class="form-group">
 							<label>Описание трейлера / вебинара</label>
 							<textarea name="description" class="form-control" placeholder="" rows="8"><?=set_value('description', '', true)?></textarea>
 						</div>
 					</div>
-				</div>
-				<div class="row" data-type="collection" <?if(empty(set_select('type', 'collection'))):?>style="display: none;"<?endif;?>>
 					<div class="col-6">
 						<div class="form-group">
-							<label>Видео</label>
-							<?$videoListIndex = 0?>
-							<?if(count($item['video_list'])):?>
-								<?foreach($item['video_list'] as $key => $row):?>
-									<div class="form-group row">
-										<div class="col-6">
-											<label class="form-label">Название</label>
-											<input type="text" name="video_list[<?=$key?>][name]" class="form-control" value="<?=htmlspecialchars($row['name'] ?? '')?>">
-										</div>
-										<div class="col-6">
-											<label class="form-label">Ссылка</label>
-											<input type="text" name="video_list[<?=$key?>][url]" class="form-control" value="<?=htmlspecialchars($row['url'] ?? '')?>">
-										</div>
-									</div>
-									<?$videoListIndex++;?>
-								<?endforeach;?>
-							<?endif;?>
-
-							<?for($i = 0; $i < 2; $i++):?>
-								<div class="form-group row">
-									<div class="col-6">
-										<label class="form-label">Название</label>
-										<input type="text" name="video_list[<?=$videoListIndex?>][name]" class="form-control" value="">
-									</div>
-									<div class="col-6">
-										<label class="form-label">Ссылка</label>
-										<input type="text" name="video_list[<?=$videoListIndex?>][url]" class="form-control" value="">
-									</div>
-								</div>
-								<?$videoListIndex++;?>
-							<?endfor;?>
-						</div>
-					</div>
-					<div class="col-6">
-						<div class="form-group">
-							<label>Описание видео</label>
+							<label>Описание видео коллекции <small>(только для коллекции)</small></label>
 							<textarea name="video_description" class="form-control" placeholder="" rows="8"><?=set_value('video_description', '', true)?></textarea>
 						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+						<div class="alert alert-info"><i class="fa fa-info"></i>Добавление видео в коллекцию будет доступно после создания записи</div>
 					</div>
 				</div>
 				<div class="form-group">

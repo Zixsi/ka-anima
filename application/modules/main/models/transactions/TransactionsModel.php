@@ -161,6 +161,7 @@ class TransactionsModel extends APP_Model
 				WHERE 
 					t.type = \''.self::TYPE_IN.'\' AND 
 					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.source = \'course\' AND 
 					t.course_id > 0 
 				GROUP BY 
 					t.course_id';
@@ -184,6 +185,7 @@ class TransactionsModel extends APP_Model
 				WHERE 
 					type = \''.self::TYPE_IN.'\' AND 
 					status = \''.self::STATUS_SUCCESS.'\' AND 
+					source = \'course\' AND 
 					course_id = ?';
 		$res = $this->db->query($sql, $binds);
 		if($res = $res->row_array())
@@ -205,6 +207,7 @@ class TransactionsModel extends APP_Model
 				WHERE 
 					t.type = \''.self::TYPE_IN.'\' AND 
 					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.source = \'course\' AND 
 					t.course_id > 0 AND 
 					t.ts >= ? AND 
 					t.ts < ?
@@ -239,6 +242,7 @@ class TransactionsModel extends APP_Model
 				WHERE 
 					type = \''.self::TYPE_IN.'\' AND 
 					status = \''.self::STATUS_SUCCESS.'\' AND 
+					source = \'course\' AND 
 					group_id = ?';
 		$res = $this->db->query($sql, $binds);
 		if($res = $res->row_array())
@@ -259,6 +263,7 @@ class TransactionsModel extends APP_Model
 				WHERE 
 					t.type = \''.self::TYPE_IN.'\' AND 
 					t.status = \''.self::STATUS_SUCCESS.'\' AND 
+					t.source = \'course\' AND 
 					t.group_id = ? 
 				GROUP BY 
 					ts_group 

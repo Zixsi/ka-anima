@@ -22410,7 +22410,7 @@ code {
   font-weight: 400;
   font-size: 0.875rem;
   height: auto;
-  padding: 0.875rem 0.875rem;
+  /*padding: 0.875rem 0.875rem;*/
 }
 
 /*select.form-control, select.asColorPicker-input, .dataTables_wrapper select,

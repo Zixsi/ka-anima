@@ -93,7 +93,7 @@ function get_rel_path($path)
 
 function debug($data = [])
 {
-	echo '<pre>'; print_r($data); echo '</pre>';
+	echo '<pre>'; var_dump($data); echo '</pre>';
 }
 
 // Получить день месяца у дня недели. Например первого воскресенья августа
@@ -365,6 +365,26 @@ function extractItemId($data, $key = 'id')
 	return $result;
 }
 
+function extractValues($data, $field, $key = null)
+{
+	$result = [];
+	if(is_array($data))
+	{
+		foreach($data as $row)
+		{
+			if(array_key_exists($field, $row))
+			{
+				if($key && isset($row[$key]))
+					$result[$row[$key]] = $row[$field];
+				else
+					$result[] = $row[$field];
+			}
+		}
+	}
+
+	return $result;
+}
+
 function groupByField($data, $key, $uniqe = false)
 {
 	$result = [];
@@ -427,6 +447,42 @@ function uploadFile($name, $config)
 
 		$result = $CI->upload->data();
 	}
+
+	return $result;
+}
+
+function time2minutes($val)
+{
+	$val = (int) $val;
+	$m = floor($val / 60);
+	$s = $val - ($m * 60);
+	$m = str_pad($m, 2, '0', STR_PAD_LEFT);
+	$s = str_pad($s, 2, '0', STR_PAD_LEFT);
+
+	return $m.':'.$s;
+}
+
+function time2hours($val)
+{
+	$val = (int) $val;
+	$h = floor($val / 3600);
+	$val = $val - ($h * 3600);
+	$m = floor($val / 60);
+	$s = $val - ($m * 60);
+	$h = str_pad($h, 2, '0', STR_PAD_LEFT);
+	$m = str_pad($m, 2, '0', STR_PAD_LEFT);
+	$s = str_pad($s, 2, '0', STR_PAD_LEFT);
+
+	return $h.':'.$m.':'.$s;
+}
+
+function priceFormat($value, $char = true, $showFree = true)
+{
+	$result = null;
+	if($showFree && (float) $value === 0.0)
+		$result = 'FREE';
+	else
+		$result = number_format((float) $value, 2, '.', ' ') . ($char?'&nbsp;&nbsp;' . PRICE_CHAR:'');
 
 	return $result;
 }

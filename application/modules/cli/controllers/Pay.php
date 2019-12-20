@@ -21,6 +21,7 @@ class Pay extends APP_Controller
 		];
 
 		$list = $this->TransactionsModel->list($filter);
+		// debug($list); die();
 		foreach($list as $val)
 		{
 			if(empty($val['pay_system_hash']))

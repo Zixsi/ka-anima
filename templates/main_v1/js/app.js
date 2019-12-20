@@ -323,6 +323,22 @@ function datepiker()
 	});
 }
 
+function datepikerDb()
+{
+	if($('.datepiker-db').length < 1)
+		return;
+
+	$.datetimepicker.setLocale('ru');
+
+	$('.datepiker-db').datetimepicker({
+		format: 'Y-m-d',
+		formatDate: 'Y-m-d',
+		lang:'ru',
+		timepicker: false,
+		dayOfWeekStart: 1
+	});
+}
+
 function datetimepicker()
 {
 	if($('.datetimepicker').length < 1)
@@ -398,6 +414,7 @@ function authListener()
 function appListener()
 {	
 	datepiker();
+	datepikerDb();
 	datetimepicker();
 	datetimepicker2();
 

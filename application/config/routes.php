@@ -25,6 +25,7 @@ $route['admin/support/(:any)'] = 'admin/SupportController/$1';
 
 $route['admin/workshop'] = 'admin/workshop/index';
 $route['admin/workshop/item/(:num)'] = 'admin/workshop/item/$1';
+$route['admin/workshop/view/(:num)'] = 'admin/workshop/view/$1';
 $route['admin/workshop/add'] = 'admin/workshop/add';
 $route['admin/workshop/(.*)'] = 'admin/workshop/$1';
 
@@ -39,6 +40,8 @@ $route['transactions'] = 'app/transactions/index';
 $route['users'] = 'app/users/index';
 $route['faq'] = 'app/faq/index';
 $route['pay'] = 'app/pay/index';
+
+$route['subscription'] = 'app/subscription/index';
 
 $route['groups'] = 'app/groups/index';
 $route['groups/(:any)'] = 'app/groups/item/$1';
@@ -75,6 +78,8 @@ $route['courses/(:any)/stream'] = 'app/courses/stream/$1';
 $route['courses/(:any)/stream/(:num)'] = 'app/courses/stream/$1/$2';
 
 $route['workshop'] = 'app/workshop/index';
+$route['workshop/item/(:any)/(:any)'] = 'app/workshop/item/$1/$2';
+$route['workshop/item/(:any)'] = 'app/workshop/item/$1';
 $route['workshop/(.*)'] = 'app/workshop/$1';
 
 $route['auth'] = 'app/auth/index';

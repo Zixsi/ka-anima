@@ -39,10 +39,10 @@ class Groups extends APP_Controller
 	// список групп пользователя
 	private function indexUser()
 	{
-		$data = [];
-		$data['items'] = $this->SubscriptionModel->groupsList($this->user['id']);
-		
-		$this->load->lview('groups/index_user', $data);
+		header('Location: /subscription/');
+		// $data = [];
+		// $data['items'] = $this->SubscriptionModel->groupsList($this->user['id']);
+		// $this->load->lview('groups/index_user', $data);
 	}
 
 	public function item($code, $lecture = 0)

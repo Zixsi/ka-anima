@@ -12,6 +12,9 @@ class Workshop extends APP_Controller
 	public function index()
 	{
 		$data = [];
+		$data['items'] = $this->WorkshopModel->getList();
+		$data['subscribeCount'] = $this->SubscriptionModel->getSubscribeCount(null, 'workshop');
+		$data['subscribeCount'] = extractValues($data['subscribeCount'], 'count', 'id');
 
 		$this->load->lview('workshop/index', $data);
 	}
@@ -19,6 +22,36 @@ class Workshop extends APP_Controller
 	public function item($id = 0)
 	{
 		$data = [];
+		if(($item = $this->WorkshopModel->getItem($id)) === null)
+			show_404();
+
+		$data['error'] = null;
+		$item = new WorkshopEntity($item);
+		$params = $this->input->post(null, true);
+
+		if(cr_valid_key())
+		{
+			try
+			{	
+				$item->parseParams($params);
+				$this->WorkshopModel->validate($item->toDbArray());
+				if($img = uploadFile('img', 'upload_workshop'))
+					$item->setImg(get_rel_path($img['full_path']));
+				
+				$this->WorkshopModel->update($item->getId(), $item->toDbArray());
+				redirect('/admin/workshop/item/'.$item->getId().'/');
+			}
+			catch(Exception $e)
+			{
+				$data['error'] = $e->getMessage();
+			}
+		}
+
+		$data['csrf'] = cr_get_key();
+		$data['item'] = $item->toArray();
+		$data['teachers'] = $this->UserModel->listTeachers();
+		$data['videos'] = $this->VideoModel->getList(['source_id' => $data['item']['id'], 'source_type' => 'workshop']);
+		// debug($data['videos']); die();
 
 		$this->load->lview('workshop/item', $data);
 	}
@@ -49,7 +82,22 @@ class Workshop extends APP_Controller
 		}
 
 		$data['item'] = $item->toArray();
+		$data['teachers'] = $this->UserModel->listTeachers();
 		$data['csrf'] = cr_get_key();
 		$this->load->lview('workshop/add', $data);
 	}
+
+	public function view($id = 0)
+	{
+		$data = [];
+		if(($item = $this->WorkshopModel->getItem($id)) === null)
+			show_404();
+
+		$data['item'] = $item;
+		$data['subscriptionUsers'] = $this->SubscriptionModel->getGroupUsers($id, null, 'workshop');
+
+		// debug($data['subscriptionUsers']); die();
+		$this->load->lview('workshop/view', $data);
+	}
+
 }

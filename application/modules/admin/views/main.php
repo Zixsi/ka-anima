@@ -180,6 +180,21 @@ $tpl_user = $CI->Auth->user();
 							<span class="menu-title">Пользователи</span>
 						</a>
 					</li>
+					<li class="nav-item <?=is_active_menu_item('reports')?'active':''?>">
+						<a class="nav-link" data-toggle="collapse" href="#ui-reports">
+							<i class="mdi mdi-chart-bar menu-icon"></i>
+							<span class="menu-title">Отчеты</span>
+							<i class="menu-arrow"></i>
+						</a>
+						<div class="collapse <?=is_active_menu_item('reports')?'show':''?>" id="ui-reports">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item">
+									<a class="nav-link" href="/admin/reports/pay/">Оплата</a>
+								</li>
+							</ul>
+						</div>
+					</li>
+
 				</ul>
 			</nav>
 			<div class="main-panel">

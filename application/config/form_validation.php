@@ -130,28 +130,38 @@ $config['transaction'] = [
 	]
 ];
 
-$config['subscription'] = [
-	[
-		'field' => 'user',
-		'label' => 'User',
-		'rules' => 'required|integer'
-	],
-	[
-		'field' => 'service',
-		'label' => 'Service',
-		'rules' => 'required|integer'
-	],
-	[
-		'field' => 'price_month',
-		'label' => 'Price month',
-		'rules' => 'required|numeric|greater_than[0]'
-	],
-	[
-		'field' => 'price_full',
-		'label' => 'Price full',
-		'rules' => 'required|numeric|greater_than[0]'
-	]
-];
+// $config['subscription'] = [
+// 	[
+// 		'field' => 'user',
+// 		'label' => 'Пользователь',
+// 		'rules' => 'required|integer'
+// 	],
+// 	[
+// 		'field' => 'type',
+// 		'label' => 'Тип',
+// 		'rules' => 'required|in_list[standart,advanced,vip,private]'
+// 	],
+// 	[
+// 		'field' => 'target',
+// 		'label' => 'Цель',
+// 		'rules' => 'required|integer'
+// 	],
+// 	[
+// 		'field' => 'target_type',
+// 		'label' => 'Тип цели',
+// 		'rules' => 'required'
+// 	],
+// 	[
+// 		'field' => 'ts_start',
+// 		'label' => 'Дата начала',
+// 		'rules' => 'required'
+// 	],
+// 	[
+// 		'field' => 'ts_end',
+// 		'label' => 'Дата окончания',
+// 		'rules' => 'required'
+// 	]
+// ];
 
 $config['courses_groups'] = [
 	[
@@ -339,3 +349,37 @@ $config['user_add'] = [
 ];
 
 // =========================================================================== //
+
+
+$config['video'] = [
+	[
+		'field' => 'source_id',
+		'label' => 'Идентификатор источника',
+		'rules' => 'required|integer'
+	],
+	[
+		'field' => 'source_type',
+		'label' => 'Тип источника',
+		'rules' => 'required'
+	],
+	[
+		'field' => 'code',
+		'label' => 'Ссылка на видео',
+		'rules' => 'required|isValidYandexVideoUrl',
+		'errors' => ['isValidYandexVideoUrl' => 'Невалидная ссылка яндекс видео']
+	],
+	[
+		'field' => 'video_code',
+		'label' => 'Код видео',
+		'rules' => 'required|is_unique[video.video_code]'
+	],
+];
+
+$config['video_workshop'] = [
+	[
+		'field' => 'title',
+		'label' => 'Название',
+		'rules' => 'trim|required|min_length[3]|max_length[255]'
+	]
+];
+$config['video_workshop'] += $config['video'];

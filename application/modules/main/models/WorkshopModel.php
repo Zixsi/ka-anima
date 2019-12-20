@@ -5,8 +5,10 @@ class WorkshopModel extends APP_Model
 {
 	const TABLE = 'workshop';
 
-	// collection
-	// webinar
+	private $types = [
+		'webinar' => 'Вебинар',
+		'collection' => 'Коллекция'
+	];
 
 	public function add($data)
 	{
@@ -14,6 +16,48 @@ class WorkshopModel extends APP_Model
 			return $this->db->insert_id();
 	
 		return false;
+	}
+
+	public function update($id, $data = [])
+	{
+		$result = false;
+		unset($data['id']);
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			$result = true;
+
+		return $result;
+	}
+
+	public function getItem($id)
+	{
+		return $this->getByField('id', $id);
+	}
+
+	public function getByField($key, $value)
+	{
+		return $this->db
+		->from(self::TABLE)
+		->where($key, $value)
+		->get()->row_array();
+	}
+
+	public function getList($filter = [])
+	{
+		$result = [];
+		$filterParams = $this->parseListFilter($filter);
+		$binds = $filterParams['binds'];
+
+		$sql = 'SELECT * FROM '.self::TABLE.' ';
+		if(count($filterParams['where']))
+			$sql .= ' WHERE '.implode(' AND ', $filterParams['where']);
+
+		if($res = $this->query($sql, $binds)->result_array())
+		{
+			$result = $res;
+		}		
+
+		return $result;
 	}
 	
 	public function validate($params)
@@ -24,16 +68,22 @@ class WorkshopModel extends APP_Model
 		$this->form_validation->set_data($params);
 		
 		$this->form_validation->set_rules('title', 'Название', 'required|min_length[3]');
+		$this->form_validation->set_rules('video', 'Ссылка на трейлер / вебинар', ['required', ['video', function($value){
+			if(isValidYoutubeVideoUrl($value) === false)
+				$this->form_validation->set_message('video', 'Неверный источник видео');
+
+			return true;
+		}]]);
 
 		switch(($params['type'] ?? null))
 		{
 			case 'webinar':
-				$this->validateWebinar();
+				$this->form_validation->set_rules('date', 'Дата начала', 'required');
 				break;
 			
 			case 'collection':
 			default:
-				$this->validateCollection();
+				// empty
 				break;
 		}
 
@@ -41,51 +91,42 @@ class WorkshopModel extends APP_Model
 			throw new Exception($this->form_validation->error_string(), 1);
 	}
 
-	private function validateWebinar()
+	public function getTypes()
 	{
-		$this->form_validation->set_rules('video', 'Ссылка на трейлер / вебинар', ['required', ['video', function($value){
-			if(isValidYoutubeVideoUrl($value) === false)
-				$this->form_validation->set_message('video', 'Неверный источник видео');
-
-			return true;
-		}]]);
-		$this->form_validation->set_rules('date', 'Дата начала', 'required');
+		return $this->types;
 	}
 
-	private function validateCollection()
+	public function parseListFilter($params = [])
 	{
-		$this->form_validation->set_rules('video', 'Ссылка на трейлер / вебинар', ['required', ['video', function($value){
-			if(isValidYandexVideoUrl($value) === false)
-				$this->form_validation->set_message('video', 'Неверный источник видео');
+		$result = [
+			'binds' => [],
+			'where' => [],
+			'offset' => 0,
+			'limit' => 9999
+		];
 
-			return true;
-		}]]);
-
-		$this->form_validation->set_rules('video_list', 'Видео', [['video_list', function($value){
-			$value = json_decode($value, true);
-			try
+		if(isset($params['id']) && empty($params['id']) === false)
+		{
+			if(is_array($params['id']))
+				$result['where'][] = 'id IN('.implode(',', $params['id']).')';
+			else
 			{
-				if(empty($value))
-					throw new Exception('Список видео пуст', 1);
-				
-				foreach($value as $key => $row)
-				{
-					if(empty($row['name']))
-						throw new Exception('пустое название на строке ' . ($key + 1), 1);
-					elseif(empty($row['url']))
-						throw new Exception('пустая ссылка на строке ' . ($key + 1), 1);
-
-					if(isValidYandexVideoUrl($row['url']) === false)
-						throw new Exception('неверный источник видео на строке' . ($key + 1), 1);
-				}
+				$result['binds'][':id'] = $params['id'];
+				$result['where'][] = 'id = :id';
 			}
-			catch(Exception $e)
+		}
+
+		if(isset($params['ignore']) && empty($params['ignore']) === false)
+		{
+			if(is_array($params['ignore']))
+				$result['where'][] = 'id NOT IN('.implode(',', $params['ignore']).')';
+			else
 			{
-				$this->form_validation->set_message('video_list', 'Поле Видео '.$e->getMessage());
-				return false;
+				$result['binds'][':ignore'] = $params['ignore'];
+				$result['where'][] = 'id != :ignore';
 			}
+		}
 
-			return true;
-		}]]);
+		return $result;
 	}
 }

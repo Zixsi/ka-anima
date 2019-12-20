@@ -198,8 +198,8 @@ $landUrl = $this->config->item('land_url');
 							</a>
 						</li>
 						<?if($this->Auth->isActive()):?>
-							<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
-								<a class="nav-link" href="/groups/">
+							<li class="nav-item <?=(is_active_menu_item('subscription') || is_active_menu_item('groups'))?'active':''?>">
+								<a class="nav-link" href="/subscription/">
 									<i class="mdi mdi-bell menu-icon"></i>
 									<span class="menu-title">Подписки</span>
 								</a>

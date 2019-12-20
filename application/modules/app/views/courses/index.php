@@ -1,12 +1,14 @@
 <h3>Курсы</h3>
 <ul class="nav nav-pills nav-pills-custom">
 	<li class="nav-item">
-		<a class="nav-link active" href="/courses/">Предложения</a>
+		<a class="nav-link active" href="/courses/">Курсы</a>
 	</li>
-
+	<li class="nav-item">
+		<a class="nav-link" href="/workshop/">Мастерская</a>
+	</li>
 	<?if($this->Auth->isActive()):?>
 		<li class="nav-item">
-			<a class="nav-link" href="/groups/">Подписки</a>
+			<a class="nav-link" href="/subscription/">Подписки</a>
 		</li>
 	<?endif;?>
 </ul>
@@ -31,5 +33,9 @@
 				</div>
 			</div>
 		<?endforeach;?>
+	<?else:?>
+		<div class="col-12 pt-4">
+			<h4 class="text-center">Список предложений пуст</h4>
+		</div>
 	<?endif;?>
 </div>

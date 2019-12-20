@@ -5,9 +5,11 @@ class PayData
 {
 	const OBJ_TYPE_COURSE = 'course'; // курс
 	const OBJ_TYPE_SUBSCR = 'subscription'; // подписка
+	const OBJ_TYPE_WORKSHOP = 'workshop'; // мастерская
 	const OBJ_TYPES = [ // список типов
 		self::OBJ_TYPE_COURSE,
-		self::OBJ_TYPE_SUBSCR
+		self::OBJ_TYPE_SUBSCR,
+		self::OBJ_TYPE_WORKSHOP
 	];
 
 	const ITEM = [

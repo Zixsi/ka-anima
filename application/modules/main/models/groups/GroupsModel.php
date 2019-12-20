@@ -498,15 +498,19 @@ class GroupsModel extends APP_Model
 			{
 				case 'advanced':
 					$val['style'] = 'mdi mdi-brightness-5';
+					$val['iconChar'] = 'A';
 				break;
 				case 'vip':
 					$val['style'] = 'mdi mdi-brightness-6';
+					$val['iconChar'] = 'V';
 				break;
 				case 'private':
 					$val['style'] = 'mdi mdi-brightness-7';
+					$val['iconChar'] = 'P';
 				break;
 				default:
 					$val['style'] = 'mdi mdi-brightness-1';
+					$val['iconChar'] = 'S';
 				break;
 			}
 

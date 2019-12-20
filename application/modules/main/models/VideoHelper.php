@@ -50,4 +50,47 @@ class VideoHelper extends APP_Model
 
 		return $hasAccess;
 	}
+
+	public function prepareVideoList(&$data)
+	{
+		if(is_array($data))
+		{
+			foreach($data as &$row)
+			{
+				if(isset($row['duration']))
+					$row['duration_f'] = time2hours($row['duration']);
+			}
+		}
+	}
+
+	public function add(array $params)
+	{
+		$this->form_validation->reset_validation();
+		$this->form_validation->set_data($params);
+
+		if($this->form_validation->run('video') === false)
+			throw new Exception($this->form_validation->error_string(), 1);
+
+		return $this->VideoModel->add($params);
+	}
+
+	public function update(int $id, array $params)
+	{
+		return $this->VideoModel->update($id, $params);
+	}
+
+	public function getTotalDuration($data)
+	{
+		$result = 0;
+		if(is_array($data))
+		{
+			foreach($data as $row)
+			{
+				if(isset($row['duration']))
+					$result += (int) $row['duration'];
+			}
+		}
+
+		return $result;
+	}
 }
