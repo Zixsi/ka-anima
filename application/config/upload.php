@@ -23,6 +23,16 @@ $config['upload_course'] = [
 	'remove_spaces' => true
 ];
 
+$config['upload_workshop'] = [
+	'upload_path' => './data/workshop/',
+	'allowed_types' => 'jpeg|jpg|png',
+	'max_size' => 2048, // 2 мб
+	'max_width' => 2048,
+	'max_height' => 2048,
+	'encrypt_name' => true,
+	'remove_spaces' => true
+];
+
 // Файлы лекций
 $config['upload_lectures'] = [
 	'upload_path' => './data/lectures/',

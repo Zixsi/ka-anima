@@ -121,6 +121,14 @@ class UserModel extends APP_Model
 			$sql .= ' AND role = '.((int) $filter['role']).' ';
 		}
 
+		if(isset($filter['id']) && empty($filter['id']) === false)
+		{
+			if(is_array($filter['id']))
+				$sql .= ' AND id IN('.implode(',', $filter['id']).') ';
+			else
+				$sql .= ' AND id = '.((int) $filter['id']).' ';
+		}
+
 		// группа
 		if(isset($filter['group']) && $filter['group'] !== 'all' && $filter['group'] !== '')
 		{

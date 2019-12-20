@@ -8,7 +8,7 @@ class Main extends APP_Controller
 		$data = [];
 		$data['period'] = ($this->input->get('period', true) ?? 'mounth');
 
-		$data['stat']['transactions']['items'] = $this->TransactionsHelper->getStat($data['period']);;
+		$data['stat']['transactions']['items'] = $this->TransactionsHelper->getStat($data['period']);
 		$this->StatsHelper->prepare($data['stat']['transactions']['items']);
 		$data['stat']['transactions']['chart'] = $this->StatsHelper->prepareChart($data['stat']['transactions']['items']);
 		$data['stat']['transactions']['info'] = [
@@ -28,8 +28,10 @@ class Main extends APP_Controller
 		$data['stat']['courses']['summary']['chart'] = $this->StatsHelper->prepareChartCoursesPie($data['stat']['courses']['summary']['items']);
 		$data['stat']['courses']['months']['items'] = $this->TransactionsHelper->getCourseStatByMonths();
 		$data['stat']['courses']['months']['chart'] = $this->StatsHelper->prepareChartCoursesMonth($data['stat']['courses']['months']['items']);
-		
-		// debug($data['stat']['courses']['months']); die();
+
+
+		$workshopItems = $this->SubscriptionHelper->getStatCount($data['period'], 'workshop');
+		$data['stat']['workshop']['chart'] = $this->StatsHelper->prepareChart($workshopItems);
 
 		$this->load->lview('main/index', $data);
 	}

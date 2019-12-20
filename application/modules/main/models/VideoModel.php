@@ -7,11 +7,52 @@ class VideoModel extends APP_Model
 	const VIDEO_TYPES = [
 		'lecture', // лекция
 		'review', // ревью 
+		'workshop', // мастерская 
 	];
 
 	public function __construct()
 	{
 		parent::__construct();
+	}
+
+	public function add($data)
+	{
+		if($this->db->insert(self::TABLE, $data))
+			return $this->db->insert_id();
+	
+		return false;
+	}
+
+	public function update($id, $data = [])
+	{
+		$result = false;
+		unset($data['id']);
+		$this->db->where('id', $id);
+		if($this->db->update(self::TABLE, $data))
+			$result = true;
+
+		return $result;
+	}
+
+	public function getItem($id)
+	{
+		return $this->getByField('id', $id);
+	}
+
+	public function getByField($key, $value)
+	{
+		return $this->db
+		->from(self::TABLE)
+		->where($key, $value)
+		->get()->row_array();
+	}
+
+	public function delete(int $id)
+	{
+		$this->db->where('id', $id);
+		$this->db->delete(self::TABLE);
+			
+		return true;
 	}
 
 	// удаление 
@@ -28,11 +69,31 @@ class VideoModel extends APP_Model
 	public function bySource($id, $type = 'lecture')
 	{
 		$bind = [$id, $type];
-		$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ?';
+		$sql = 'SELECT * FROM '.self::TABLE.' WHERE source_id = ? AND source_type = ? ORDER BY sort DESC, id ASC';
 		if($res = $this->db->query($sql, $bind)->row_array())
 			return $res;
 
 		return false;
+	}
+
+	public function getList(array $params = [])
+	{
+		$result = [];
+		$filter = $this->prepareFilter($params);
+		$binds = $filter['binds'];
+
+		$sql = 'SELECT * FROM '.self::TABLE;
+		if(count($filter['where']))
+			$sql .= ' WHERE '.implode(' AND ', $filter['where']);
+
+		$sql .= ' ORDER BY sort ASC, id ASC';
+
+		if($res = $this->query($sql, $binds)->result_array())
+		{
+			$result = $res;
+		}
+
+		return $result;
 	}
 
 	public function byVideoCode($code)
@@ -121,5 +182,34 @@ class VideoModel extends APP_Model
 			return $res;
 
 		return false;
+	}
+
+	public function makeCode()
+	{
+		return md5(random_string('alnum', 8) . microtime(true));
+	}
+
+	private function prepareFilter(array $params)
+	{
+		$result = [
+			'where' => [],
+			'binds' => [],
+			'limit' => 0,
+			'offset' => 0
+		];
+
+		if(isset($params['source_id']) && (int) $params['source_id'] > 0)
+		{
+			$result['binds'][':source_id'] = (int) $params['source_id'];
+			$result['where'][] = 'source_id = :source_id';
+		}
+
+		if(isset($params['source_type']) && empty($params['source_type']) === false)
+		{
+			$result['binds'][':source_type'] = $params['source_type'];
+			$result['where'][] = 'source_type = :source_type';
+		}
+
+		return $result;
 	}
 }

@@ -47,7 +47,8 @@
 											<div class="item-row">
 												<?foreach($val as $v):?>
 													<span class="roadmap-mark colored"  style="left: <?=$v['mark']['left']?>px; width: <?=$v['mark']['width']?>px;">
-														<span class="icon colored"><i class="<?=$v['style']?>"></i></span>
+														<?/*<span class="icon colored"><i class="<?=$v['style']?>"></i></span>*/?>
+														<span class="icon colored"><?=$v['iconChar']?></span>
 														<span><?=$v['title']?></span>
 														<div class="info">
 															<ul>

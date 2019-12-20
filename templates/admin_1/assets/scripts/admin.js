@@ -471,4 +471,3 @@ function groupListener()
 		return false;
 	});
 }
-//  

@@ -88,6 +88,17 @@
 	</div>
 </div>
 
+<div class="row pb-4">
+	<div class="col-6">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Мастерская кол-во подписок</h4>
+				<canvas id="workshop-chart"></canvas>
+			</div>
+		</div>
+	</div>
+</div>
+
  <script src="<?=TEMPLATE_DIR?>/main_v1/vendors/chart.js/Chart.min.js"></script>
 
 <script>
@@ -102,5 +113,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	drawChart($("#users-chart-registration"), 'Регистрации', [<?=$stat['users']['chart']['labels']?>], [<?=$stat['users']['chart']['values']?>]);
 	drawChart($("#courses-chart-income"), 'Доход', [<?=$stat['courses']['summary']['chart']['labels']?>], [<?=$stat['courses']['summary']['chart']['values']?>], 'bar');
 	drawChart($("#courses-months-chart-income"), 'Доход', [<?=$stat['courses']['months']['chart']['labels']?>], <?=json_encode($stat['courses']['months']['chart']['data'])?>, 'line', true );
+
+	drawChart($("#workshop-chart"), 'Кол-во подписок', [<?=$stat['workshop']['chart']['labels']?>], [<?=$stat['workshop']['chart']['values']?>]);
 });
 </script>

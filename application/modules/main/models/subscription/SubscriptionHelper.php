@@ -3,6 +3,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SubscriptionHelper extends APP_Model
 {
+	private $objectTypes = [
+		'course' => 'Курс',
+		'webinar' => 'Вебинар',
+		'collection' => 'Коллекция'
+	];
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -229,6 +235,26 @@ class SubscriptionHelper extends APP_Model
 		return ($this->SubscriptionModel->add($params))?true:false;
 	}
 
+	// обработка данных транзакции для мастерской
+	public function processingWorkshop($data)
+	{
+		// если новый добавляем
+		$params = [
+			'user' => $data['user'],
+			'type' => 'standart',
+			'target' => $data['object']['id'],
+			'target_type' => 'workshop',
+			'description' => $data['name'],
+			'ts_start' => date(DATE_FORMAT_DB_FULL),
+			'ts_end' => $data['ts_end'],
+			'subscr_type' => 0,
+			'amount' => 0,
+			'data' => json_encode(['price' => $data['price']])
+		];
+
+		return ($this->SubscriptionModel->add($params))?true:false;
+	}
+
 	// 
 	public function processingSubscription($data)
 	{
@@ -238,5 +264,170 @@ class SubscriptionHelper extends APP_Model
 		];
 
 		return ($this->SubscriptionModel->update($data['object']['id'], $params))?true:false;
+	}
+
+	public function add(array $data = [])
+	{
+		$data['hash'] = $this->SubscriptionModel->makeHash();
+		$this->validateAdd($data);
+		return $this->SubscriptionModel->add($data);
+	}
+
+	public function validateAdd(array $data = [])
+	{
+		$this->form_validation->reset_validation();
+		$this->form_validation->set_rules('user', 'Пользователь', ['required', 'integer']);
+		$this->form_validation->set_rules('type', 'Тип', ['required', 'in_list[standart,advanced,vip,private]']);
+		$this->form_validation->set_rules('target', 'Цель', ['required', 'integer']);
+		$this->form_validation->set_rules('target_type', 'Тип цели', ['required']);
+		$this->form_validation->set_rules('ts_start', 'Дата начала', ['required']);
+		$this->form_validation->set_rules('ts_end', 'Дата окончания', ['required']);
+
+		$this->form_validation->set_data($data);
+		if($this->form_validation->run() == false)
+			throw new Exception($this->form_validation->error_string(), 1);
+	}
+
+	public function validateUpdate(array $data = [])
+	{
+		
+	}
+
+	// Подписка на мастерскую
+	public function subscribeWorkshop($id, $user)
+	{
+		if(($item = $this->WorkshopModel->getItem($id)) === null)
+			throw new Exception('Элемент ненайден', 1);
+
+		if($this->SubscriptionModel->сheck($user, $id, 'workshop'))
+			throw new Exception('Уже подписан', 1);
+
+		$dateEnd = new DateTime();
+		$dateEnd->modify('+1 year');
+
+		$params = [
+			'user' => (int) $user,
+			'type' => 'standart',
+			'target' => (int) $id,
+			'target_type' => 'workshop',
+			'description' => $item['title'],
+			'ts_start' => date(DATE_FORMAT_DB_FULL),
+			'ts_end' => $dateEnd->format(DATE_FORMAT_DB_FULL),
+		];
+
+		return $this->add($params);
+	}
+
+
+	public function prepareList(&$data)
+	{
+		$result = [];
+
+		foreach($data as $row)
+		{
+			$rowItem = [
+				'code' => '',
+				'type' => $row['target_type'],
+				'subType' => null,
+				'name' => '',
+				'description' => '',
+				'img' => null,
+				'tsStart' => strtotime($row['ts_start']),
+				'tsEnd' => strtotime($row['ts_end']),
+				'hash' => $row['hash'],
+				'isActive' => false,
+				'url' => '',
+			];
+
+			switch($row['target_type'])
+			{
+				case 'workshop': // мастерская
+					$item = $this->WorkshopModel->getItem((int) $row['target']);
+					$rowItem['code'] = $item['code'];
+					$rowItem['subType'] = $item['type'];
+					$rowItem['objectType'] = $item['type'];
+					$rowItem['description'] = $item['description'];
+					$rowItem['name'] = $item['title'];
+					$rowItem['img'] = $item['img'];
+					$rowItem['isActive'] = true;
+					$rowItem['url'] = '/workshop/item/'. $item['code'] .'/';
+				break;
+
+				default: // курсы
+					$item = $this->GroupsModel->getByIdDetail((int) $row['target']);
+					$rowItem['code'] = $item['code'];
+					$rowItem['subType'] = $row['type'];
+					$rowItem['objectType'] = $rowItem['type'];
+					$rowItem['name'] = $item['name'];
+					$rowItem['description'] = $item['description'];
+					$rowItem['img'] = $item['img_src'];
+					$rowItem['isActive'] = $row['active'];
+					$rowItem['url'] = '/groups/'. $item['code'] .'/';
+				break;
+			}
+
+			if(empty($rowItem['img']))
+				$rowItem['img'] = IMG_DEFAULT_16_9;
+
+			// $rowItem['objectType']
+			$rowItem['objectTypeName'] = $this->getObjectTypeName($rowItem['objectType']);
+
+			$result[] = $rowItem;
+		}
+
+		$data = $result;
+	}
+
+	public function getObjectTypes()
+	{
+		$result = [
+			'course' => 'Курс'
+		];
+		$workshopTypes = $this->WorkshopModel->getTypes();
+		$result = array_merge($result, $workshopTypes);
+
+		return $result;
+	}
+
+	public function getObjectTypeName($code)
+	{
+		$types = $this->getObjectTypes();
+		return array_key_exists($code, $types)?$types[$code]:null;
+	}
+
+	public function getStatCount($period, $type = null)
+	{
+		$result = [];
+		$to = new DateTime('now');
+		$to->setTime(23, 59, 59);
+		$from = clone $to;
+
+		switch($period)
+		{
+			case 'year':
+				$from->modify('-1 year');
+				break;
+			case 'month':
+			default:
+				$from->modify('-1 month');
+				break;
+		}
+
+		$from->setTime(0, 0, 0);
+		$date_from = $from->format(DATE_FORMAT_DB_FULL);
+		$date_to = $to->format(DATE_FORMAT_DB_FULL);
+
+		switch($period)
+		{
+			case 'year':
+				$result = $this->SubscriptionModel->getStatCountByMonths($date_from, $date_to, $type);
+				break;
+			case 'month':
+			default:
+				$result = $this->SubscriptionModel->getStatCountByDays($date_from, $date_to, $type);
+				break;
+		}
+
+		return $result;
 	}
 }

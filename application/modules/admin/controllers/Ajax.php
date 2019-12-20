@@ -73,6 +73,21 @@ class Ajax extends APP_Controller
 				case 'wall.message.child':
 					$this->wallMessageChild();
 				break;
+				case 'addVideoWorkshop':
+					$this->addVideoWorkshop();
+				break;
+				case 'updateVideoWorkshop':
+					$this->updateVideoWorkshop();
+				break;
+				case 'deleteVideoWorkshop':
+					$this->deleteVideoWorkshop();
+				break;
+				case 'addUserWorkshop':
+					$this->addUserWorkshop();
+				break;
+				case 'removeSubscription':
+					$this->removeSubscription();
+				break;
 				default:
 					throw new Exception('method not found', 1);
 				break;
@@ -205,5 +220,65 @@ class Ajax extends APP_Controller
 			throw new Exception($this->WallHelper->getLastError(), 1);
 		
 		$this->jsonajax->result($res);
+	}
+
+
+	private function addVideoWorkshop()
+	{
+		$params = $this->request['params'];
+		$params['video_code'] = $this->VideoModel->makeCode();
+		$this->form_validation->reset_validation();
+		$this->form_validation->set_data($params);
+		if($this->form_validation->run('video_workshop') === false)
+			throw new Exception($this->form_validation->error_string(), 1);
+
+		if($video = $this->ydvideo->getVideo($params['code']))
+		{
+			$params['video_url'] = $video['video'];
+			$params['duration'] = floor($video['duration'] / 1000);
+			$params['ts'] = date(DATE_FORMAT_DB_FULL);
+		}
+
+		$this->VideoModel->add($params);
+		$this->jsonajax->result('Успешно');
+	}
+
+	private function updateVideoWorkshop()
+	{
+		$params = $this->request['params'];
+		$this->form_validation->reset_validation();
+		$this->form_validation->set_rules('title', 'Название', 'trim|required|min_length[3]|max_length[255]');
+		$this->form_validation->set_data($params);
+		if($this->form_validation->run() === false)
+			throw new Exception($this->form_validation->error_string(), 1);
+
+		$this->VideoModel->update($params['id'], $params);
+		$this->jsonajax->result('Успешно');
+	}
+
+	private function deleteVideoWorkshop()
+	{
+		$params = $this->request['params'];
+		if($this->VideoModel->getItem($params['id']))
+		{
+			$this->VideoModel->delete($params['id']);
+			$this->jsonajax->result('Успешно');
+		}
+
+		$this->jsonajax->result('Элемент не найден');
+	}
+
+	private function addUserWorkshop()
+	{
+		$params = $this->request['params'];
+		$this->SubscriptionHelper->subscribeWorkshop(($params['id'] ?? 0), ($params['user'] ?? 0));
+		$this->jsonajax->result('Успешно');
+	}
+
+	private function removeSubscription()
+	{
+		$params = $this->request['params'];
+		$this->SubscriptionModel->remove($params['id']);
+		$this->jsonajax->result('Успешно');
 	}
 }

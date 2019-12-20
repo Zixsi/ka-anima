@@ -191,16 +191,15 @@ $landUrl = $this->config->item('land_url');
 								<span class="menu-title">Курсы</span>
 							</a>
 						</li>
-						<?/*
 						<li class="nav-item <?=is_active_menu_item('workshop')?'active':''?>">
 							<a class="nav-link" href="/workshop/">
 								<i class="mdi mdi-brush menu-icon"></i>
 								<span class="menu-title">Мастерская</span>
 							</a>
-						</li>*/?>
+						</li>
 						<?if($this->Auth->isActive()):?>
-							<li class="nav-item <?=is_active_menu_item('groups')?'active':''?>">
-								<a class="nav-link" href="/groups/">
+							<li class="nav-item <?=(is_active_menu_item('subscription') || is_active_menu_item('groups'))?'active':''?>">
+								<a class="nav-link" href="/subscription/">
 									<i class="mdi mdi-bell menu-icon"></i>
 									<span class="menu-title">Подписки</span>
 								</a>

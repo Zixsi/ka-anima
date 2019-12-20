@@ -66,6 +66,9 @@ class TransactionsHelper extends APP_Model
 			case  PayData::OBJ_TYPE_SUBSCR:
 				return  $this->SubscriptionHelper->processingSubscription($data);
 			break;
+			case  PayData::OBJ_TYPE_WORKSHOP:
+				return  $this->SubscriptionHelper->processingWorkshop($data);
+			break;
 			default:
 				// empty 
 			break;

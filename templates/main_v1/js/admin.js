@@ -9,6 +9,8 @@ $(document).ready(function(){
 	usersListener();
 	courseListener();
 	groupListener();
+	workshopListener();
+	subscriptionListener();
 	textEditor();
 });
 
@@ -313,4 +315,88 @@ function groupListener()
 		return false;
 	});
 
+}
+
+function workshopListener()
+{
+	var addVideoModal = $('#add-video-workshop');
+	var addVideoModalForm = addVideoModal.find('form');
+	var editVideoModal = $('.edit-video-workshop');
+	var editVideoModalForm = editVideoModal.find('form');
+
+	addVideoModalForm.on('submit', function(){
+		var params = $(this).serializeControls();
+		ajaxQuery('addVideoWorkshop', params, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+
+	editVideoModalForm.on('submit', function(){
+		var params = $(this).serializeControls();
+		ajaxQuery('updateVideoWorkshop', params, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});	
+
+	$('.delete-video-workshop').on('click', function(){
+		if(confirm('Вы действительно хотите удалить это видео?'))
+		{
+			var params = {'id': $(this).data('id')};
+			ajaxQuery('deleteVideoWorkshop', params, function(res){
+				toastrMsg('success', res);
+				setTimeout(function(){
+					window.location.reload(true);
+				}, 1000);
+			});
+		}
+
+		return false;
+	});
+
+	$('.add-user-workshop').on('click', function(){
+		var id = $(this).data('id')
+		var target = $(this).data('target')
+
+		$(target).find('input[name="id"]').val(id).end().modal('show');
+	});
+
+	$('#add-user-workshop-modal form').on('submit', function(){
+		var params = $(this).serializeControls();
+		ajaxQuery('addUserWorkshop', params, function(res){
+			toastrMsg('success', res);
+			setTimeout(function(){
+				window.location.reload(true);
+			}, 1000);
+		});
+
+		return false;
+	});
+}
+
+function subscriptionListener()
+{
+	$('.btn-removeSubscription').on('click', function(){
+		var id = $(this).data('id');
+		if(confirm('Вы действительно хотите отменить подписку?'))
+		{
+			ajaxQuery('removeSubscription', {id: id}, function(res){
+				toastrMsg('success', res);
+				setTimeout(function(){
+					window.location.reload(true);
+				}, 1000);
+			});
+		}
+
+		return false;
+	});
 }

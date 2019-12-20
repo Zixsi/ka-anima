@@ -323,6 +323,22 @@ function datepiker()
 	});
 }
 
+function datepikerDb()
+{
+	if($('.datepiker-db').length < 1)
+		return;
+
+	$.datetimepicker.setLocale('ru');
+
+	$('.datepiker-db').datetimepicker({
+		format: 'Y-m-d',
+		formatDate: 'Y-m-d',
+		lang:'ru',
+		timepicker: false,
+		dayOfWeekStart: 1
+	});
+}
+
 function datetimepicker()
 {
 	if($('.datetimepicker').length < 1)
@@ -333,6 +349,22 @@ function datetimepicker()
 	$('.datetimepicker').datetimepicker({
 		format: 'd.m.Y H:i:s',
 		formatDate: 'd.m.Y',
+		lang:'ru',
+		timepicker: true,
+		dayOfWeekStart: 1
+	});
+}
+
+function datetimepicker2()
+{
+	if($('.datetimepicker2').length < 1)
+		return;
+
+	$.datetimepicker.setLocale('ru');
+
+	$('.datetimepicker2').datetimepicker({
+		format: 'Y-m-d H:00:00',
+		formatDate: 'Y-m-d',
 		lang:'ru',
 		timepicker: true,
 		dayOfWeekStart: 1
@@ -382,7 +414,9 @@ function authListener()
 function appListener()
 {	
 	datepiker();
+	datepikerDb();
 	datetimepicker();
+	datetimepicker2();
 
 	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
 		event.preventDefault();

@@ -39,7 +39,8 @@ class PayHelper extends APP_Model
 			'description' => $this->makePayDescription($data),
 			'data' => json_encode($data),
 			'course_id' => (int) ($data['params']['course_id'] ?? 0),
-			'group_id' => (int) ($data['params']['group_id'] ?? 0)
+			'group_id' => (int) ($data['params']['group_id'] ?? 0),
+			'source' => (($data['object']['type'] === 'workshop')?'workshop':'course')
 		];
 
 		if(($id = $this->TransactionsHelper->add($tx)) === false)
@@ -119,6 +120,43 @@ class PayHelper extends APP_Model
 	// разобрать параметры новой подписки
 	private function parseNew($data)
 	{
+		$payData = null;
+		switch(($data['target'] ?? null))
+		{
+			case 'workshop':
+				$payData = $this->parseWorkshop($data);
+				break;
+			default:
+				$payData = $this->parseCurse($data);
+				break;
+		}
+
+		return $payData->toArray();
+	}
+
+	private function parseWorkshop($data)
+	{
+		if(($item = $this->WorkshopModel->getByField('code', ($data['code'] ?? null))) === false)
+			throw new Exception('неверный код', 1);
+
+		$payData = new PayData(PayData::OBJ_TYPE_WORKSHOP, $item['id'], 'standart');
+		$payData->setName($item['title']);
+		$payData->addRow($item['title'], $item['price']);
+
+		$date = new DateTime($item['date']);
+		$date->modify('+1 year');
+		$payData->setPeriod($item['date'], $date->format(DATE_FORMAT_DB_FULL));
+		$payData->setParams([
+			'course_id' => $item['id']
+		]);
+		$payData->setNew(true);
+		$payData->calcPrice();
+
+		return $payData;
+	}
+
+	private function parseCurse($data)
+	{
 		if(($course_item = $this->CoursesModel->getByCode(($data['course'] ?? null))) === false)
 			throw new Exception('неверный код курса', 1);
 
@@ -155,7 +193,7 @@ class PayHelper extends APP_Model
 		$payData->setNew(true);
 		$payData->calcPrice();
 
-		return $payData->toArray();
+		return $payData;
 	}
 
 	// описание оплаты из списка

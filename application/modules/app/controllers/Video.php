@@ -14,6 +14,7 @@ class Video extends APP_Controller
 	
 	public function index($code = null)
 	{
+		$show404 = false;
 		$data = [];
 		$data['user'] = $this->Auth->user();
 		$data['code'] = md5($data['user']['id']);
@@ -34,6 +35,16 @@ class Video extends APP_Controller
 			// 		$this->load->lview('video/index_404');
 			// }
 		}
+		elseif($video['source_type'] === 'workshop')
+		{
+			$data['mark'] = $code;
+			$item = $this->WorkshopModel->getItem($video['source_id']);
+			if(isset($item['code']))
+				$data['mark'] = $item['code'].'#'.$data['user']['id'];
+
+			if($this->SubscriptionModel->сheck($data['user']['id'], $video['source_id'], 'workshop') === false)
+				$show404 = true;
+		}
 		else
 		{
 			$data['mark'] = $code;
@@ -46,9 +57,12 @@ class Video extends APP_Controller
 			// Проверка юзера на доступ к видео
 			// Если что то пошло не так отображать заглушку
 			if($this->VideoHelper->checkVideoAccess($data['user']['id'], $courseId, $lectureId) === false)
-				$this->load->lview('video/index_404');
+				$show404 = true;
 		}
 
-		$this->load->lview('video/index', $data);
+		if($show404)
+			$this->load->lview('video/index_404');
+		else
+			$this->load->lview('video/index', $data);
 	}
 }
