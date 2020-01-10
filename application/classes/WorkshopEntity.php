@@ -10,6 +10,7 @@ class WorkshopEntity
 	private $video;
 	private $video_description;
 	private $img;
+	private $img_land_bg;
 	private $teacher = 0;
 	private $date;
 	private $price = 0;
@@ -34,6 +35,11 @@ class WorkshopEntity
 	public function setImg($value)
 	{
 		$this->img = $value;
+	}
+
+	public function setImgLandBg($value)
+	{
+		$this->img_land_bg = $value;
 	}
 
 	public function makeCode()
