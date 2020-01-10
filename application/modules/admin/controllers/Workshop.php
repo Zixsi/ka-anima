@@ -39,6 +39,9 @@ class Workshop extends APP_Controller
 				$this->WorkshopModel->validate($item->toDbArray());
 				if($img = uploadFile('img', 'upload_workshop'))
 					$item->setImg(get_rel_path($img['full_path']));
+
+				if($img = uploadFile('img_land_bg', 'upload_workshop'))
+					$item->setImgLandBg(get_rel_path($img['full_path']));
 				
 				$this->WorkshopModel->update($item->getId(), $item->toDbArray());
 				redirect('/admin/workshop/item/'.$item->getId().'/');
@@ -73,6 +76,10 @@ class Workshop extends APP_Controller
 				$this->WorkshopModel->validate($item->toDbArray());
 				if($img = uploadFile('img', 'upload_workshop'))
 					$item->setImg(get_rel_path($img['full_path']));
+
+				if($img = uploadFile('img_land_bg', 'upload_workshop'))
+					$item->setImgLandBg(get_rel_path($img['full_path']));
+				
 				$item->makeCode();
 				$this->WorkshopModel->add($item->toDbArray());
 				redirect('/admin/workshop/');

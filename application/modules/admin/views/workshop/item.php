@@ -88,6 +88,25 @@
 							</div>
 						</div>
 					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Изображение для ленда (1920х600)</label>
+							<input type="file" name="img_land_bg" class="file-upload-default">
+							<div class="input-group">
+								<input type="text" class="form-control file-upload-info" disabled="" placeholder="Загрузка файла">
+								<span class="input-group-append">
+									<button class="file-upload-browse btn btn-secondary" type="button">Выбрать</button>
+								</span>
+							</div>
+							<?if(empty($item['img_land_bg']) === false):?>
+								<div class="row mt-2">
+									<div class="col-12">
+										<img src="/<?=$item['img_land_bg']?>" class="thumbnail mb-2" width="300">
+									</div>
+								</div>
+							<?endif;?>
+						</div>
+					</div>
 				</div>
 				<div class="row">
 					<div class="col-6">

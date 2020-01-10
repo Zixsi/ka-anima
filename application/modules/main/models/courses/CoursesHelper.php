@@ -46,6 +46,9 @@ class CoursesHelper extends APP_Model
 			if($img_id = $this->uploadImg('img', 'upload_course'))
 				$item['img'] = $img_id;
 
+			if($img = uploadFile('img_land_bg', 'upload_course'))
+				$item['img_land_bg'] = get_rel_path($img['full_path']);
+
 			if($this->CoursesModel->add($item) === false)
 				throw new Exception('Ошибка добавления', 1);
 
@@ -104,6 +107,9 @@ class CoursesHelper extends APP_Model
 
 			if($img_id = $this->uploadImg('img', 'upload_course'))
 				$item['img'] = $img_id;
+
+			if($img = uploadFile('img_land_bg', 'upload_course'))
+				$item['img_land_bg'] = get_rel_path($img['full_path']);
 
 			if($this->CoursesModel->update($id, $item) === false)
 				throw new Exception('Ошибка обновления', 1);
