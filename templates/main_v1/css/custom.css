@@ -439,3 +439,13 @@ table tr.bg-info td , table tr.bg-info a {color: #ffffff;}
 #player-module .video-info {font-size: 0.9rem;}
 
 hr.primary {border-top-color: #25378b;}
+
+#auth--register-form .form-check .form-check-label input[type="checkbox"] + .input-helper:before {
+  border: solid #25378b;
+  border-width: 1px;
+  background: transparent;
+}
+
+#auth--register-form .form-check .form-check-label input[type="checkbox"]:checked + .input-helper:before {
+  background: #25378b;
+}
