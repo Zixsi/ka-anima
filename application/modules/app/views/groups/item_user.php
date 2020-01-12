@@ -1,7 +1,7 @@
 <div class="row">
 	<?$this->load->view('groups/menu');?>
 
-	<div class="col-8 offset-2">
+	<div class="col-12 col-md-8 offset-md-2">
 		<div class="week-panel owl-carousel">
 			<?$i = 0;?>
 			<?if(is_array($lectures)):?>
@@ -46,7 +46,7 @@
 			<h3><?=($lecture['name'] ?? '- - -')?></h3>
 		</div>
 
-		<div class="col-5">
+		<div class="col-12 col-md-5">
 			<div class="card">
 				<div class="card-body">
 					<div class="video-wrap mb-4">
@@ -73,7 +73,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-7">
+		<div class="col-12 col-md-7">
 			<?if(($lecture['type'] ?? 0) == 0 && $lecture['can_upload_files'] && ($subscr['type'] ?? '') !== 'standart'):?>
 				<div class="card mb-4">
 					<div class="card-body">
@@ -82,7 +82,7 @@
 							<div class="alert alert-danger"><?=$error?></div>
 						<?endif;?>
 						<div class="row">
-							<div class="col-6" style="font-size: 14px;">
+							<div class="col-12 col-md-6" style="font-size: 14px;">
 								<p><b>Видео файлы (mp4, mov) и картинки (jpg, png) пожалуйста, загружайте отдельными файлами.</b></p>
 								<p><b>Файлы других типов</b> (не видео и не картинки, а файлы Maya, 3DS Max, RealFlow, Z-Brush и др.) <b>загружайте заархивированными как RAR или ZIP</b>. После загрузки каждого архива, отдельно можете загрузить превью (пример) картинку или видео того что было загружено в архиве.</p>
 
@@ -91,7 +91,7 @@
 								Другие файлы загружать как архивы <b>RAR</b> или <b>ZIP</b>.
 								Максимальный размер файлов: <b>250 МБ</b></p>
 							</div>
-							<div class="col-6">
+							<div class="col-12 col-md-6">
 								<form action="" method="post" class="form" enctype="multipart/form-data">
 									<input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
 									<div class="form-group">

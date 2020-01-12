@@ -2,7 +2,7 @@
 	<?$this->load->view('groups/menu');?>
 
 	<?if($list):?>
-		<div class="col-8 offset-2">
+		<div class="col-12 col-md-8 offset-md-2">
 			<div class="week-panel owl-carousel">
 				<?$i = 1;?>
 				<?foreach($list as $stream_item):?>
@@ -24,7 +24,7 @@
 				<div class="alert alert-danger text-center" style="font-size: 24px;">Начало <?=date('d-m-Y H:i:s', strtotime($item['ts']))?></div>
 			</div>
 		<?endif;?>
-		<div class="col-6">
+		<div class="col-12 col-md-6">
 			<div class="card">
 				<div class="card-body">
 					<div class="video-wrap">
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-6">
+		<div class="col-12 col-md-6">
 			<div class="card">
 				<div class="card-body">
 					<iframe src="<?=$item['chat']?>" width="100%" height="600px" frameborder="0"></iframe>

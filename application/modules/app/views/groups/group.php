@@ -1,18 +1,18 @@
 <div class="row">
 	<?$this->load->view('groups/menu');?>
 
-	<div class="col-6">
+	<div class="col-12 col-md-6">
 		<div class="card mb-4">
 			<div class="card-body">
 				<div class="row">
-					<div class="col-6">
+					<div class="col-12 col-md-6">
 						<?if(empty($group['img_src'])):?>
 							<span class="img-rounded" style="display: block; width: 100%; height: 100px; background-color: #ccc;"></span>
 						<?else:?>
 							<img src="/<?=$group['img_src']?>" class="img-rounded" style="width: 100%; height: auto;">
 						<?endif;?>
 					</div>
-					<div class="col-6 text-right">
+					<div class="col-12 col-md-6 text-right">
 						<?if(($start_course = days_to_date($group['ts'])) > 0):?>
 							<p>Курс начнется через: <?=$start_course?> дней</p>
 						<?endif;?>
@@ -33,7 +33,7 @@
 					<?$lectures = array_chunk($lectures, ceil(count($lectures) / 3));?>
 					<div class="row">
 						<?foreach($lectures as $col):?>
-							<div class="col-4">
+							<div class="col-12 col-md-4">
 								<ul>
 									<?foreach($col as $val):?>
 										<li>
@@ -56,7 +56,7 @@
 			<?=$this->wall->show($group['id'])?>
 		<?endif;?>
 	</div>
-	<div class="col-6">
+	<div class="col-12 col-md-6">
 		<div class="card course-card--teacher mb-4">
 			<div class="card-body text-center">
 				<div>

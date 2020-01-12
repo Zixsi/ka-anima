@@ -103,7 +103,7 @@ $landUrl = $this->config->item('land_url');
 						</div>
 					</li>
 				</ul>
-				<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+				<button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas" style="color: #ffffff;">
 					<span class="mdi mdi-menu"></span>
 				</button>
 			</div>

@@ -1,8 +1,8 @@
 <div class="row mb-4">
-	<div class="col-10">
+	<div class="col-12 col-sm-9">
 		<h3><?=htmlspecialchars($item['title'])?></h3>
 	</div>
-	<div class="col-2 text-right">
+	<div class="d-none d-sm-block col-sm-3 text-right">
 		<a href="/" class="btn btn-outline-primary">Назад</a>
 	</div>
 </div>
@@ -16,6 +16,9 @@
 				<div><?=url2link($item['description'])?></div>
 				<div><?=url2link($item['text'])?></div>
 			</div>
+		</div>
+		<div class="text-right mt-2 d-block d-sm-none">
+			<a href="/" class="btn btn-outline-primary">Назад</a>
 		</div>
 	</div>
 </div>

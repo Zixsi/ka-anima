@@ -1,8 +1,8 @@
 <div class="row mb-3">
-	<div class="col-10">
+	<div class="col-12 col-sm-9">
 		<h3 class="pt-2"><?=htmlspecialchars($item['title'])?></h3>
 	</div>
-	<div class="col-2 text-right">
+	<div class="d-none d-sm-block col-sm-3 text-right text-right">
 		<a href="/workshop/" class="btn btn-outline-primary">Назад</a>
 	</div>
 </div>
@@ -13,7 +13,7 @@
 			<div class="card-body">
 				<div class="wrap" style="background-color: #2c2f41;">
 					<div class="row">
-						<div class="col-8 mx-auto video-container">
+						<div class="col-12 col-md-8 mx-auto video-container">
 							<div class="video-wrap">
 								<?if($item['type'] === 'webinar' && $access === false):?>
 									<div style="width: 100%; height: 100%; background-size: cover; background-image: url('/<?=$item['img']?>');" class="iframe"></div>
@@ -52,7 +52,14 @@
 							</div>
 						</div>
 						<?if($showRightColl):?>
-							<div class="col-4 playlist-container">
+							<div class="col-12 col-md-4 playlist-container">
+								<div class="playlist-head in d-block d-md-none">
+									<span><i class="fa fa-bars"></i> Список лекций</span>
+									<span class="icon">
+										<i class="fa fa-chevron-down"></i>
+										<i class="fa fa-chevron-up"></i>
+									</span>
+								</div>
 								<div class="playlist-wrap <?=($item['type'] === 'webinar')?'nowrap':''?>">
 									<?if($item['type'] === 'webinar'):?>
 										<iframe src="<?=$item['chat']?>" width="100%" height="100%" frameborder="0"></iframe>
@@ -95,7 +102,7 @@
 				<div class="row mt-4">
 					<div class="col-11 mx-auto">
 						<div class="row">
-							<div class="col-8">
+							<div class="col-12 col-sm-8">
 								<h3 class="mt-2 text-primary"><?=htmlspecialchars($item['title'])?><?=(empty($currentVideo) === false)?': '.htmlspecialchars($currentVideo['title']):''?></h3>
 								<div>
 									<?if($teacher):?>
@@ -116,7 +123,7 @@
 								<?endif;?>
 							</div>
 							<?if($access === false):?>
-								<div class="col-4 text-right">
+								<div class="col-12 col-sm-4 text-right mt-3 mt-sm-0">
 									<span class="mr-2" style="font-size: 22px;"><?=priceFormat($item['price'])?></span>
 									<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></a>
 								</div>
@@ -135,6 +142,10 @@
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="text-right mt-2 d-block d-sm-none">
+			<a href="/workshop/" class="btn btn-outline-primary">Назад</a>
 		</div>
 	</div>
 </div>

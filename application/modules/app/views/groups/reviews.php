@@ -5,7 +5,7 @@
 		<div class="panel panel-headline">
 			<div class="panel-body">
 				<div class="row">
-					<div class="col-5">
+					<div class="col-12 col-md-5">
 						<?if($review_item):?>
 							<div class="video-wrap">
 								<iframe src="/video/<?=$review_item['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
@@ -52,11 +52,11 @@
 							</div>
 						<?endif;?>
 					</div>
-					<div class="col-7">
+					<div class="col-12 col-md-7">
 						<div class="card mb-4">
 							<div class="card-body">
 								<form action="" method="get" class="row">
-									<div class="form-groupp col-4">
+									<div class="form-groupp col-12 col-md-4">
 										<select class="form-control" name="filter[lecture]">
 											<option value="0" <?=set_select2('filter[lecture]', '0', true)?>>-- All lectures --</option>
 											<?if($lectures):?>
@@ -66,7 +66,7 @@
 											<?endif;?>
 										</select>
 									</div>
-									<div class="form-groupp col-4"">
+									<div class="form-groupp col-12 col-md-4">
 										<select class="form-control" name="filter[user]">
 											<option value="0" <?=set_select2('filter[user]', '0', true)?>>-- All users --</option>
 											<?foreach($users as $val):?>
@@ -74,7 +74,7 @@
 											<?endforeach;?>
 										</select>
 									</div>
-									<div class="form-groupp col-4"">
+									<div class="form-groupp col-12 col-md-4">
 										<button type="submit" class="btn btn-md btn-primary">Фильтровать</button>
 									</div>
 								</form>
@@ -85,7 +85,7 @@
 								<div class="row group-reviews-list">
 									<?if($items):?>
 										<?foreach($items as $item):?>
-											<div class="col-3">
+											<div class="col-12 col-md-3">
 												<div class="img-thumbnail">
 													<?if(is_array($not_viewed) && in_array($item['id'], $not_viewed)):?>
 														<span class="badge bg-danger" style="position: absolute; top: -8px; right: 5px;">!</span>
