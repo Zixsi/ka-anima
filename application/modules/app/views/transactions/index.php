@@ -5,6 +5,11 @@
 		<div class="card">
 			<div class="card-body">
 				<?if($items):?>
+					<div class="alert alert-fill-warning" role="alert">
+						<i class="mdi mdi-alert-circle"></i>
+						<span>После успешного подтверждения оплаты курс можно будет найти во вкладке <a href="/subscription/">Подписки</a></span>
+					</div>
+
 					<table class="table table-striped">
 						<thead>
 							<tr>
