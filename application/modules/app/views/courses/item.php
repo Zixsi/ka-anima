@@ -4,6 +4,22 @@
 			<div class="card-body">
 				<h3 class="card-title"><?=$item['name']?></h3>
 				<img src="<?=$item['img_src']?>" alt="<?=$item['name']?>" title="<?=$item['name']?>" class="course-card--img">
+
+				<div class="info-stat">
+					<div class="stat">
+						<div class="stat-value"><?=(int) $item['cnt_main']?></div>
+						<div class="stat-label">Недель <br>обучения</div>
+					</div>
+					<div class="stat">
+						<div class="stat-value"><?=(int) ($item['cnt_main'] * 2)?></div>
+						<div class="stat-label">Насыщеных <br>задания</div>
+					</div>
+					<div class="stat">
+						<div class="stat-value"><?=ceil((int) $item['cnt_main'] * 3.5)?></div>
+						<div class="stat-label">Часа <br>занятий</div>
+					</div>
+				</div>
+
 				<div><?=$item['preview_text']?></div>
 				<div><?=$item['description']?></div>
 				<h4 class="mt-3 card-title">Лекции курса</h4>
@@ -22,10 +38,24 @@
 						<?endforeach;?>
 					</div>
 				<?endif;?>
-				<?//debug($offers);?>
-				<?//$item['free']?>
+				
+				<div>
+					<h4 class="title">Данные курса</h4>
+					<?if(empty($item['text_app_main']) === false):?>
+						<p><b>Основные программы:</b> <?=$item['text_app_main']?></p>
+					<?endif;?>
+					<?if(empty($item['text_app_other']) === false):?>
+						<p><b>Дополнительные программы:</b> <?=$item['text_app_other']?></p>
+					<?endif;?>
+					<p><b>Требования к студенту:</b> Желание учиться. Все необходимые знания по используемым программам будут предоставлены на курсе.</p>
+					<p><b>Требования к компьютеру:</b> Процессор Intel i3 или AMD А6, оперативная память 8гб, видеокарта GeForce или Radeon с памятью 2гб и более.</p>
+					<p><b>Другие требования:</b> От 5 до 12 часов в неделю, на просмотр материалов и выполнения заданий.</p>
+				</div>
+
 				<div class="clearfix"></div>
 			</div>
+
+			<?//debug($item);?>
 		</div>
 	</div>
 	<div class="col-12 col-xl-5">
