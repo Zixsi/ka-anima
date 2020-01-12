@@ -6,7 +6,7 @@
 		<a href="/workshop/" class="btn btn-outline-primary">Назад</a>
 	</div>
 </div>
-
+<?//debug($item);?>
 <div class="row">
 	<div class="col-12 mx-auto">
 		<div class="card" id="player-module">
@@ -15,24 +15,38 @@
 					<div class="row">
 						<div class="col-8 mx-auto video-container">
 							<div class="video-wrap">
-								<?if(empty($currentVideo)):?>
-									<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-								<?else:?>
-									<?if($access === false):?>
-										<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-										<div class="video-lock">
-											<div class="row h-100">
-												<div class="col-12 my-auto text-center">
-													<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
-													<div>
-														<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
-													</div>
+								<?if($item['type'] === 'webinar' && $access === false):?>
+									<div style="width: 100%; height: 100%; background-size: cover; background-image: url('/<?=$item['img']?>');" class="iframe"></div>
+									<div class="video-lock">
+										<div class="row h-100">
+											<div class="col-12 my-auto text-center">
+												<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
+												<div>
+													<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
 												</div>
 											</div>
 										</div>
+									</div>
+								<?else:?>
+									<?if(empty($currentVideo)):?>
+										<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>?modestbranding=1&rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 									<?else:?>
-										<iframe src="/video/<?=$currentVideo['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+										<?if($access === false):?>
+											<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>?modestbranding=1&rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+											<div class="video-lock">
+												<div class="row h-100">
+													<div class="col-12 my-auto text-center">
+														<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
+														<div>
+															<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										<?else:?>
+											<iframe src="/video/<?=$currentVideo['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+										<?endif;?>
 									<?endif;?>
 								<?endif;?>
 							</div>
@@ -94,6 +108,10 @@
 									<div class="video-info">
 										<span class="mr-4"><i class="fa fa-clock-o mr-2 text-primary"></i><?=time2hours($totalDuration)?></span>
 										<span><i class="fa fa-video-camera mr-2 text-primary"></i><?=(count($videos) + 1)?> видео</span>
+									</div>
+								<?else:?>
+									<div class="video-info">
+										<span class="mr-4"><i class="fa fa-clock-o mr-2 text-primary"></i><?=$item['date']?></span>
 									</div>
 								<?endif;?>
 							</div>

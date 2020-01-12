@@ -20,7 +20,7 @@ class Video extends APP_Controller
 		$data['code'] = md5($data['user']['id']);
 		
 		$data['video'] = '0000000000000000000000000';
-		$data['video_img'] = 'https://school.cgaim.ru/'.TEMPLATE_DIR.'/assets/player-preview.jpg';
+		$data['video_img'] = 'https://school.cgaim.ru'.TEMPLATE_DIR.'/assets/player-preview.jpg';
 
 		$data['mark'] = $code;
 		$video = $this->VideoHelper->getDetailInfo($code);
@@ -37,10 +37,10 @@ class Video extends APP_Controller
 		}
 		elseif($video['source_type'] === 'workshop')
 		{
-			$data['mark'] = $code;
+			$data['mark'] = substr($code, 0, 6);
 			$item = $this->WorkshopModel->getItem($video['source_id']);
 			if(isset($item['code']))
-				$data['mark'] = $item['code'].'#'.$data['user']['id'];
+				$data['mark'] .= '#'.$data['user']['id'];
 
 			if($this->SubscriptionModel->сheck($data['user']['id'], $video['source_id'], 'workshop') === false)
 				$show404 = true;

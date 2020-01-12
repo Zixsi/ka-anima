@@ -140,6 +140,9 @@ class UserModel extends APP_Model
 				case 'blocked':
 					$sql .= ' AND blocked = 1 ';
 				break;
+				case 'deactivated':
+					$sql .= ' AND active = 0 ';
+				break;
 				case 'deleted':
 					$sql .= ' AND deleted = 1 ';
 				break;

@@ -27,6 +27,11 @@
 				<div class="card">
 					<span class="badge badge-danger badge-type"><?=$types[$val['type']]?></span>
 					<span class="badge badge-danger badge-free"><?=priceFormat($val['price'])?></span>
+					<?if($val['type'] === 'webinar'):?>
+						<span class="badge badge-danger badge-date"><?=date(DATE_FORMAT_SHORT.' H:i', strtotime($val['date']))?></span>
+					<?else:?>
+						<span class="badge badge-danger badge-date"><?=date(DATE_FORMAT_SHORT, strtotime($val['date']))?></span>
+					<?endif;?>
 					<a href="/workshop/item/<?=$val['code']?>/"><img class="card-img-top" src="/<?=$val['img']?>" alt="<?=htmlspecialchars($val['title'])?>"></a>
 					<div class="card-body">
 						<h4 class="card-title mt-1">

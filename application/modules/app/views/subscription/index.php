@@ -18,6 +18,9 @@
 			<div class="col-12 col-sm-6 col-lg-4 col-xl-3 item">
 				<div class="card">
 					<span class="badge badge-danger badge-type"><?=$val['objectTypeName']?></span>
+					<?/*if($val['type'] === 'workshop'):?>
+						<span class="badge badge-danger badge-date"><?=date(DATE_FORMAT_SHORT, $val['tsStart'])?></span>
+					<?endif;*/?>
 					<a href="<?=$val['url']?>"><img class="card-img-top" src="/<?=$val['img']?>" alt="<?=$val['name']?>"></a>
 					<div class="card-body">
 						<h4 class="card-title mt-1">

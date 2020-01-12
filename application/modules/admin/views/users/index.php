@@ -72,6 +72,12 @@
 								<!--<span class="label label-primary label-pill pull-right">0</span>-->
 							</label>
 						</li>
+						<li class="list-group-item">
+							<input type="radio" name="group" id="from-filter-group5" <?=(($filter['group'] ?? '') === 'deactivated')?'checked':''?> value="deactivated">
+							<label for="from-filter-group5">
+								<span>Не активированные</span>
+							</label>
+						</li>
 						<?/*
 						<li class="list-group-item">
 							<input type="radio" name="group" id="from-filter-group4" <?=(($filter['group'] ?? '') === 'deleted')?'checked':''?> value="deleted">

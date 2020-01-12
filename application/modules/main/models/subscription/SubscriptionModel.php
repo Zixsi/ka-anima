@@ -228,7 +228,7 @@ class SubscriptionModel extends APP_Model
 				LEFT JOIN 
 					'.self::TABLE_FILES.' as f ON(f.id = c.img) 
 				WHERE 
-					s.user = ? AND cg.ts_end >= ? 
+					s.user = ? AND s.ts_end >= ? 
 				ORDER BY 
 					cg.id ASC';
 
