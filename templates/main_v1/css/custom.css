@@ -452,3 +452,32 @@ hr.primary {border-top-color: #25378b;}
 #auth--register-form .form-check .form-check-label input[type="checkbox"]:checked + .input-helper:before {
   background: #25378b;
 }
+
+
+.course-card .info-stat {
+  display: flex;
+  flex-grow: 1;
+  width: 60%;
+  margin: 25px auto;
+  justify-content: space-between;
+}
+
+.course-card .info-stat .stat {
+  width: 120px;
+  text-align: left;
+  color: #25378b;
+}
+
+.course-card .info-stat .stat-value {
+  font-size: 3rem;
+  line-height: 2.7rem;
+  font-weight: 600;
+}
+
+.course-card .info-stat .stat-label {
+  font-size: 1.1rem;
+    line-height: 1.3rem;
+    margin-top: 7px;
+    margin-left: 0px;
+    font-weight: 600;
+}
