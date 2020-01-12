@@ -248,6 +248,7 @@
 #courses--list .item {margin-bottom: 30px;}
 #courses--list .item .badge-free {position: absolute; top: 15px; right: 0px; font-size: 17px; min-width: 100px; font-weight: bold; padding-right: 20px; padding-left: 20px; border-top-right-radius: 0px; border-bottom-right-radius: 0px;}
 #courses--list .item .badge-type {position: absolute; top: 15px; left: 0px; font-size: 14px; min-width: 100px; font-weight: bold; padding-right: 20px; padding-left: 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;}
+#courses--list .item .badge-date {position: absolute; top: 45px; left: 0px; font-size: 13px; min-width: 100px; font-weight: bold; padding-right: 20px; padding-left: 20px; border-top-left-radius: 0px; border-bottom-left-radius: 0px;}
 #courses--list .item .card-text {height: 55px; overflow: hidden; text-overflow: ellipsis; margin-bottom: 20px; font-size: 0.8rem;}
 #courses--list .item .card-text p {font-size: 1em; margin: 0px;}
 #courses--list .card .card-title {min-height: 32px;}
@@ -294,11 +295,11 @@
 .week-panel .owl-nav button.owl-next {right: -40px; background-position: -40px 0px !important;}
 
 .video-wrap {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}
-.video-wrap iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
+.video-wrap iframe, .video-wrap .iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
 
 @media (min-width: 1440px) {
 	.video-wrap.video-wrap-limited {padding-bottom: 0%; height: auto; max-width: 480px; height: 320px; margin: 0 auto; }
-	.video-wrap.video-wrap-limited iframe {position: relative;}
+	.video-wrap.video-wrap-limited iframe, .video-wrap.video-wrap-limited .iframe  {position: relative;}
 }
 
 

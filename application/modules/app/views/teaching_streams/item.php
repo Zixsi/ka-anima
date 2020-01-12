@@ -19,7 +19,7 @@
 			<div class="card">
 				<div class="card-body">
 					<div class="video-wrap">
-						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+						<iframe width="100%" height="100%" src="https://www.youtube.com/embed/<?=$item['video_code']?>?modestbranding=1&rel=0&showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 					</div>
 					<div class="video-info pt-4">
 						<h4>Описание</h4>

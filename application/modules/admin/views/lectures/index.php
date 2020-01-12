@@ -13,6 +13,7 @@
 		<table class="table table-striped" id="admin-lectures-table">
 			<thead>
 				<tr>
+					<th>#</th>
 					<th>Id</th>
 					<th>Статус</th>
 					<th>Название</th>
@@ -22,8 +23,10 @@
 			</thead>
 			<tbody>
 				<?if(is_array($items)):?>
+					<?$i = 0;?>
 					<?foreach($items as $item):?>
 						<tr>
+							<td><?=$i?></td>
 							<td><?=$item['id']?></td>
 							<td>
 								<?if($item['active']):?>
@@ -43,6 +46,7 @@
 								</a>
 							</td>
 						</tr>
+						<?$i++;?>
 					<?endforeach;?>
 				<?endif;?>
 			</tbody>
