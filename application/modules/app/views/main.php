@@ -30,7 +30,7 @@ $landUrl = $this->config->item('land_url');
 
 <body>
 	<?if($this->config->item('nouse_metriks') !== true):?>
-		<?//include 'metriks.php';?>
+		<?include 'metriks.php';?>
 	<?endif;?>
 
 	<div class="container-scroller">
