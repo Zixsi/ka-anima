@@ -113,6 +113,20 @@
 					</div>
 				</div>
 				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Meta keywords</label>
+							<textarea name="meta_keyword" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_keyword', '', true)?></textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Meta description</label>
+							<textarea name="meta_description" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_description', '', true)?></textarea>
+						</div>
+					</div>
+				</div>
+				<div class="row">
 					<div class="col-12 col-md-6">
 						<div class="alert alert-info"><i class="fa fa-info"></i>Добавление видео в коллекцию будет доступно после создания записи</div>
 					</div>

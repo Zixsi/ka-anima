@@ -7,6 +7,8 @@ class WorkshopEntity
 	private $type;
 	private $title;
 	private $description;
+	private $meta_keyword;
+	private $meta_description;
 	private $video;
 	private $video_description;
 	private $img;
