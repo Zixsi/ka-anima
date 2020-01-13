@@ -38,7 +38,7 @@
     </style>
 </head>
 <body>
-<script src="<?=TEMPLATE_DIR?>/tools/player.js?v=0.1"></script>
+<script src="<?=TEMPLATE_DIR?>/tools/player.js?v=<?=VERSION?>"></script>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function(event) {
 
