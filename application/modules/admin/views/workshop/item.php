@@ -132,6 +132,20 @@
 						</div>
 					<?endif;?>
 				</div>
+				<div class="row">
+					<div class="col-6">
+						<div class="form-group">
+							<label>Meta keywords</label>
+							<textarea name="meta_keyword" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_keyword', $item['meta_keyword'], true)?></textarea>
+						</div>
+					</div>
+					<div class="col-6">
+						<div class="form-group">
+							<label>Meta description</label>
+							<textarea name="meta_description" id="" class="form-control" placeholder="" rows="8"><?=set_value('meta_description', $item['meta_description'], true)?></textarea>
+						</div>
+					</div>
+				</div>
 			</form>
 			<?if($item['type'] === 'collection'):?>
 				<div class="mb-2">
