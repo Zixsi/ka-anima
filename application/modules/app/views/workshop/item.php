@@ -54,7 +54,7 @@
 						<?if($showRightColl):?>
 							<div class="col-12 col-md-4 playlist-container">
 								<div class="playlist-head in d-block d-md-none">
-									<span><i class="fa fa-bars"></i> Список лекций</span>
+									<span><i class="fa fa-bars"></i> <?=($item['type'] === 'webinar')?'Чат':'Список лекций'?></span>
 									<span class="icon">
 										<i class="fa fa-chevron-down"></i>
 										<i class="fa fa-chevron-up"></i>

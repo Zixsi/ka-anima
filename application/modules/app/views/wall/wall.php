@@ -1,6 +1,6 @@
 <div id="wall-component">
 	<div class="card wall-panel mb-2">
-		<div class="card-body">
+		<div class="card-body py-4">
 			<form action="" method="post" class="form wall-from" id="wall-main-form">
 				<input type="hidden" name="group" value="<?=$target_id?>" data-const="true">
 				<div class="wall-from--input-wrap">

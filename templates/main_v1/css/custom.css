@@ -314,11 +314,11 @@
 #wall-component .wall-childs .media:first-child {margin-top: 20px;}
 #wall-component .wall-child-from {padding-top: 20px; padding-left: 40px;}
 #wall-component .wall-item-tools {}
-#wall-component .wall-item-tools .btn {padding: 0px 5px; margin-right: 20px; font-size: 18px; border: 0 none; box-shadow: none; background-color: transparent; outline: none;}
+#wall-component .wall-item-tools .btn {padding: 0px 5px; margin-right: 20px; font-size: 16px; border: 0 none; box-shadow: none; background-color: transparent; outline: none;}
 #wall-component .wall-item-tools .btn i {margin-right: 5px;}
 #wall-component .wall-wrap-childs {display: none;}
 #wall-component .media-object {width: 60px; height: 60px;}
-#wall-component .media-body {margin-left: 10px; font-size: 14px; word-break: break-word;}
+#wall-component .media-body {margin-left: 10px; font-size: 12px; word-break: break-word;}
 #wall-component .media-heading {font-size: 13px;}
 #wall-component a {color: #25378b;}
 
@@ -490,6 +490,10 @@ hr.primary {border-top-color: #25378b;}
 		font-weight: 600;
 }
 
+
+.email-wrapper .mail-sidebar .menu-bar .online-status {margin-top: 0px;}
+.email-wrapper .message-body .message-content {padding: 20px 15px; padding-top: 30px;}
+
 /*==============================================*/
 
 /*lg*/
@@ -522,6 +526,13 @@ hr.primary {border-top-color: #25378b;}
 	}
 
 	#player-module .playlist-head.in + .playlist-wrap {display: none;}
+
+	.email-wrapper .mail-sidebar {position: relative; left: 0px; order: 1; background: none; min-width: auto; z-index: unset;}
+	.email-wrapper .mail-sidebar .menu-bar {min-height: auto; max-height: none;}
+	.email-wrapper .mail-sidebar .menu-bar .profile-list {border-right: 0 none !important;}
+	.email-wrapper .mail-sidebar .menu-bar .wrapper {display: none;}
+	.email-wrapper .mail-view {order: 0;}
+	.email-wrapper.blank .message-body .message-content {padding: 15px;}
 } 
 
 /*xs*/

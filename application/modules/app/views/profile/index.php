@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-6 offset-3">
+	<div class="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
 		<?if(!$this->Auth->isActive()):?>
 			<div class="alert alert-fill-danger" role="alert">
 				<i class="mdi mdi-alert-circle"></i>
@@ -26,7 +26,7 @@
 									<?endif;?>
 									<a href="/profile/messages/<?=$user['id']?>/" class="btn btn-primary">Написать сообщение</a>
 								<?else:?>
-									<a href="/profile/friends/" class="btn btn-primary mr-1">Друзья (<?=$friends_cnt?>)</a>
+									<a href="/profile/friends/" class="btn btn-primary mr-1">Друзья <span class="d-none d-sm-inline">(<?=$friends_cnt?>)</span></a>
 									<a href="/profile/edit/" class="btn btn-primary">Редактировать</a>
 								<?endif;?>
 							</div>
