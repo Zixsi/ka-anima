@@ -88,7 +88,7 @@ class AuthHelper extends APP_Model
 
 	public function confirm($code)
 	{
-		if(($user = $this->UserModel->getByHash($code)) === false)
+		if(empty($code) || ($user = $this->UserModel->getByHash($code)) === false)
 			throw new AppBadLogicExtension('Неверный код подтверждения');
 
 		if((int) $user['active'] === 1)
@@ -96,10 +96,10 @@ class AuthHelper extends APP_Model
 
 		$this->UserModel->setActive($user['id'], true);
 		// если авторизован, сбрасываем значения в сессии
-		if(($user = $this->user()))
+		if(($userCurrent = $this->user()) && (int) $user['id'] === (int) $userCurrent['id'])
 		{
-			$user['active'] = 1;
-			$this->setUser($user);
+			$userCurrent['active'] = 1;
+			$this->setUser($userCurrent);
 		}
 
 		return true;

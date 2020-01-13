@@ -188,8 +188,8 @@
 					<div class="form-group">
 						<label>Роль</label>
 						<select name="role" class="form-control">
-							<option value="0" <?=($item['role'] == 0)?'selected="true"':''?>>ученик</option>
-							<option value="1" <?=($item['role'] == 1)?'selected="true"':''?>>преподаватель</option>
+							<option value="0">ученик</option>
+							<option value="1">преподаватель</option>
 						</select>
 					</div>
 					<div class="form-group">
