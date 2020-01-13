@@ -6,7 +6,7 @@ if(!isset($not_viewed))
 ?>
 <h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?> [<?=GroupsHelper::getTypeName($group['type'])?>]</h3>
 <div class="w-100"></div>
-<div class="col-6 offset-3 mb-2">
+<div class="col-12 mb-2">
 	<ul class="nav nav-pills nav-pills-custom">
 		<li class="nav-item">
 			<a href="/groups/<?=$group['code']?>/" class="nav-link <?=($section == 'index')?'active':''?>">Лекции</a>

@@ -418,6 +418,13 @@ function appListener()
 	datetimepicker();
 	datetimepicker2();
 
+	if($('#player-module').length > 0)
+	{
+		$('#player-module .playlist-head').on('click', function(){
+			$(this).toggleClass('in');
+		})
+	}
+
 	$(document).on('click', '[data-toggle="lightbox"]', function(event) {
 		event.preventDefault();
 		$(this).ekkoLightbox({ wrapping: false });

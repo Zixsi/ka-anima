@@ -28,7 +28,7 @@
 					<?$lectures = array_chunk($lectures, ceil(count($lectures) / 3));?>
 					<div class="row">
 						<?foreach($lectures as $col):?>
-							<div class="col-4">
+							<div class="col-12 col-md-4">
 								<ul>
 									<?foreach($col as $val):?>
 										<li><?=$val['name']?></li>
