@@ -486,3 +486,24 @@ function priceFormat($value, $char = true, $showFree = true)
 
 	return $result;
 }
+
+function getVimeoVideoId($url)
+{
+	preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/', $url, $match);
+	return $match[5] ?? '';
+}
+
+function getVideoIframeUrl($video)
+{
+	$result = '/video/'.$video['video_code'].'/';
+	if(strpos($video['code'], 'vimeo'))
+	{
+		$result = 'https://player.vimeo.com/video/' . getVimeoVideoId($video['code']);
+	}
+	elseif(isValidYoutubeVideoUrl($video['code']))
+	{
+		$result = 'https://www.youtube.com/embed/'.getVideoId($video['code']).'?modestbranding=1&rel=0&showinfo=0';
+	}
+	
+	return $result;
+}

@@ -13,6 +13,10 @@ class Test extends APP_Controller
 	{
 		var_dump('TEST');
 
+		var_dump(getVimeoVideoId('https://vimeo.com/384765808/0a180aadbb'));
+		var_dump(getVimeoVideoId('https://player.vimeo.com/video/384765808'));
+		// var_dump(getVimeoVideoId('https://player.vimeo.com/video/384765808'));
+
 		// $params = [
 		// 	'list_ids' => '19169561',
 		// 	'double_optin' => 3,

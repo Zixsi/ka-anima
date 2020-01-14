@@ -129,7 +129,12 @@ class Groups extends APP_Controller
 
 			$data['lecture']['video_code'] = '';
 			if($res = $this->VideoModel->bySource($data['lecture']['id']))
+			{
+				$data['lecture']['iframe_url'] = getVideoIframeUrl($res);
 				$data['lecture']['video_code'] = $res['video_code'];
+			}
+
+			// 
 
 			if(cr_valid_key())
 				$this->uploadHomeWork($data);
@@ -186,7 +191,7 @@ class Groups extends APP_Controller
 		$data['review_item'] = false; 
 		if($review > 0)
 		{
-			$review_item = $this->ReviewModel->getByID($review);
+			$review_item = $this->ReviewModel->getByID($review); 
 			// Если юзер не просматривал новое
 			if(intval($review_item['item_is_viewed'] ?? 1) === 0 && intval($review_item['user'] ?? 1) === (int) $this->user['id'])
 				$this->ReviewModel->setViewedStatus($review_item['id'], true);
@@ -195,6 +200,7 @@ class Groups extends APP_Controller
 				$review_item['user_name'] = $user['full_name'];
 
 			$data['review_item'] = $review_item;
+			$data['review_item']['iframe_url'] = getVideoIframeUrl(['code' => $review_item['video_url'], 'video_code' => $review_item['video_code']]);
 		}
 
 		$filter = $this->input->get('filter', true);

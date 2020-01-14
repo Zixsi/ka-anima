@@ -35,8 +35,11 @@ class Course extends APP_Controller
 			echo 'Count video => '.count($items).PHP_EOL;
 			foreach($items as $item)
 			{
-				$video = $this->ydvideo->getVideo($item['code']);
-				$this->VideoModel->set($item['source_id'], $item['code'], $video['video'], $item['source_type'], $item['type']);
+				if(strpos($item['code'], 'yadi.sk') !== false)
+				{
+					$video = $this->ydvideo->getVideo($item['code']);
+					$this->VideoModel->set($item['source_id'], $item['code'], $video['video'], $item['source_type'], $item['type']);
+				}
 			}
 		}
 		echo 'Update Video Url => End'.PHP_EOL;

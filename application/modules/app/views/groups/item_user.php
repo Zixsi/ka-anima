@@ -43,7 +43,7 @@
 										</div>
 									</div>
 								<?else:?>
-									<iframe src="/video/<?=$lecture['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+									<iframe src="<?=$lecture['iframe_url']?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 								<?endif;?>
 							</div>
 						</div>

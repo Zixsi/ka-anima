@@ -43,7 +43,7 @@
 						<div class="col-12 col-md-8 mx-auto video-container">
 							<div class="video-wrap">
 								<?if($review_item):?>
-									<iframe src="/video/<?=$review_item['video_code']?>/" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+									<iframe src="<?=$review_item['iframe_url']?>" width="100%" height="100%" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 								<?else:?>
 									<div class="video-lock">
 										<div class="row h-100">

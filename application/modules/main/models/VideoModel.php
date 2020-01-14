@@ -118,7 +118,7 @@ class VideoModel extends APP_Model
 			if($video = $this->ydvideo->getVideo($url))
 				$this->set($source_id, $url, $video['video'], $type, 'mp4');
 			else
-				throw new Exception('empty video answer', 1);
+				$this->set($source_id, $url, '', $type, 'mp4');
 
 			return false;
 		}

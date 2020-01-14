@@ -57,7 +57,9 @@ class Workshop extends APP_Controller
 		if(empty($videoCode) === false && empty($data['currentVideo']))
 			show_404();
 
-		// debug($data); die();
+		if($data['currentVideo'] !== null)
+			$data['currentVideo']['iframe_url'] = getVideoIframeUrl($data['currentVideo']);
+		// debug($data['currentVideo']); die();
 
 		$this->load->lview('workshop/item', $data);
 	}
