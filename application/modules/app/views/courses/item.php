@@ -127,6 +127,11 @@
 				<i class="mdi mdi-alert-circle"></i>
 				<span>Пользователь не активирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>
 			</div>
+		<?else:?>
+			<div class="alert alert-fill-warning" role="alert">
+				<i class="mdi mdi-alert-circle"></i>
+				<span>После успешного подтверждения оплаты курс можно будет найти во вкладке <a href="/subscription/">Подписки</a></span>
+			</div>
 		<?endif;?>
 	</div>
 	<div class="row pricing-table">

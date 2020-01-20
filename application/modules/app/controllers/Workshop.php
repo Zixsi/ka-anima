@@ -34,6 +34,7 @@ class Workshop extends APP_Controller
 		if(($data['item'] = $this->WorkshopModel->getByField('code', $id)) === null)
 			show_404();
 
+		$data['pageTitle'] = $data['item']['title'];
 		$this->load->library(['youtube']);
 		$userId = $this->Auth->getUserId();
 

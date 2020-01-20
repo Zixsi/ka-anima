@@ -6,6 +6,7 @@
 				<table class="table">
 					<thead>
 						<tr>
+							<th width="40">#</th>
 							<th>Ученик</th>
 							<th class="text-center" width="120">Задания</th>
 							<th class="text-center" width="120">Непроверено</th>
@@ -13,8 +14,10 @@
 					</thead>
 					<tbody>
 						<?if($users):?>
+							<?$i = 0;?>
 							<?foreach($users as $val):?>
 								<tr <?=($user && $val['id'] == $user['id'])?'class="info"':''?>>
+									<td><?=(++$i)?></td>
 									<td>
 										<a href="./?user=<?=$val['id']?>" class="text-primary"><?=$val['full_name']?></a>
 									</td>

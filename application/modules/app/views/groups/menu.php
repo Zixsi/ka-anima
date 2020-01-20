@@ -3,8 +3,15 @@ if(!isset($not_viewed))
 {
 	$not_viewed = $this->ReviewModel->notViewedItems((int) $this->user['id'], (int) $group['id']);
 }
+
+$timestamp_start = strtotime($group['ts']);
 ?>
-<h3 class="text-center" style="margin-bottom: 30px;"><?=$group['name']?> [<?=GroupsHelper::getTypeName($group['type'])?>]</h3>
+<h3 class="text-center" style="margin-bottom: 30px;">
+	<span><?=$group['name']?> [<?=GroupsHelper::getTypeName($group['type'])?>] </span>
+	<?if($timestamp_start > time()):?>
+		<span class="badge badge-danger">Начало <?=date(DATE_FORMAT_SHORT, $timestamp_start)?></span>
+	<?endif;?>
+</h3>
 <div class="w-100"></div>
 <div class="col-12 mb-2">
 	<ul class="nav nav-pills nav-pills-custom">

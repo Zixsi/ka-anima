@@ -17,8 +17,7 @@
 			</div>
 		</div>
 	<?endif;?>
-
-
+	<?//debug($lectures);?>
 	<div class="col-12 mx-auto">
 		<div class="card" id="player-module">
 			<div class="card-body py-0">
@@ -75,12 +74,16 @@
 												<span class="nav-link  <?=($lecture_id == $item['id'])?'active':''?>">
 														<i class="fa fa-lock"></i>
 													<span class="title"><?=$i?>. <?=$item['name']?></span>
-													<?if(isset($item['homework_fail']) && $item['homework_fail'] && ($subscr['type'] ?? '') !== 'standart'):?>
+
+													<?if((int) $item['active'] === 0):?>
+														<span class="float-right"><?=date(DATE_FORMAT_SHORT, strtotime($item['ts']))?></span>
+													<?endif;?>
+													<?/*if(isset($item['homework_fail']) && $item['homework_fail'] && ($subscr['type'] ?? '') !== 'standart'):?>
 														<span class="float-right"><span class="badge bg-danger" 
 															data-toggle="tooltip" 
 															data-placement="bottom" 
 															data-original-title="не загружено домашнее задание" style="color: #fff; font-weight: bold;">!</span></span>
-													<?endif;?>
+													<?endif;*/?>
 												</span>
 											<?endif;?>
 											<?$i++;?>

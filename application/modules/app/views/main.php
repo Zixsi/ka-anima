@@ -11,7 +11,7 @@ $landUrl = $this->config->item('land_url');
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="shortcut icon" href="<?=TEMPLATE_DIR?>/main_v1/img/favicon.ico" />
-	<title><?=$this->config->item('project_name')?></title>
+	<title><?=$this->config->item('project_name')?> <?=((isset($pageTitle) && empty($pageTitle) === false)?' - ' . $pageTitle:'')?></title>
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/mdi/css/materialdesignicons.min.css">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/font-awesome/css/font-awesome.min.css"/>
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/vendors/jquery-toast-plugin/jquery.toast.min.css">

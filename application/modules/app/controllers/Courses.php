@@ -28,6 +28,7 @@ class Courses extends APP_Controller
 			header('Location: ../');
 
 		$this->CoursesHelper->prepareItem($data['item']);
+		$data['pageTitle'] = $data['item']['name'];
 
 		// список предложений
 		$data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);

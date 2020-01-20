@@ -60,6 +60,7 @@ class Groups extends APP_Controller
 	{
 		$data = [];
 		$data['item'] = $item;
+		$data['pageTitle'] = $data['item']['name'];
 		$params = $this->input->get(null, true);
 
 		// ученики группы
@@ -100,6 +101,7 @@ class Groups extends APP_Controller
 		$data['error'] = null;
 		$data['section'] = 'index';
 		$data['group'] = $item;
+		$data['pageTitle'] = $data['group']['name'];
 		$group_id = $data['group']['id'];
 
 		$data['subscr'] = $this->checkSubscr($group_id);
@@ -160,6 +162,8 @@ class Groups extends APP_Controller
 
 		if(($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false)
 			header('Location: /groups/'.$data['group']['code'].'/');
+
+		$data['pageTitle'] = $data['group']['name'];
 			
 		$data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
 		$data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
@@ -188,6 +192,7 @@ class Groups extends APP_Controller
 		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /groups/'.$data['group']['code'].'/');
 
+		$data['pageTitle'] = $data['group']['name'];
 		$data['review_item'] = false; 
 		if($review > 0)
 		{
@@ -235,6 +240,7 @@ class Groups extends APP_Controller
 		if(($data['subscr']['type'] ?? '') === 'standart')
 			header('Location: /groups/'.$data['group']['code'].'/');
 
+		$data['pageTitle'] = $data['group']['name'];
 		$data['list'] = $this->StreamsModel->byGroupList($group_id);
 		$data['item'] = false;
 		$streams_id = $this->getStreamsIds($data['list']);
