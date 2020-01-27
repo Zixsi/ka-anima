@@ -7,6 +7,27 @@
 	</div>
 </div>
 <?//debug($item);?>
+
+<?if(!$this->Auth->isActive()):?>
+	<div class="row">
+		<div class="col-12">
+			<div class="alert alert-fill-danger" role="alert">
+				<i class="mdi mdi-alert-circle"></i>
+				<span>Пользователь не активирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>
+			</div>
+		</div>
+	</div>
+<?else:?>
+	<div class="row">
+		<div class="col-12">
+			<div class="alert alert-fill-warning" role="alert">
+				<i class="mdi mdi-alert-circle"></i>
+				<span>После успешного подтверждения оплаты курс можно будет найти во вкладке <a href="/subscription/">Подписки</a></span>
+			</div>
+		</div>
+	</div>
+<?endif;?>
+
 <div class="row">
 	<div class="col-12 mx-auto">
 		<div class="card" id="player-module">
@@ -20,10 +41,14 @@
 									<div class="video-lock">
 										<div class="row h-100">
 											<div class="col-12 my-auto text-center">
-												<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
-												<div>
-													<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
-												</div>
+												<?if(!$this->Auth->isActive()):?>
+													<div class="text">Пользователь не активирован. Подписка недоступна.</div>
+												<?else:?>
+													<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
+													<div>
+														<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
+													</div>
+												<?endif;?>
 											</div>
 										</div>
 									</div>
@@ -37,10 +62,14 @@
 											<div class="video-lock">
 												<div class="row h-100">
 													<div class="col-12 my-auto text-center">
-														<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
-														<div>
-															<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
-														</div>
+														<?if(!$this->Auth->isActive()):?>
+															<div class="text">Пользователь не активирован. Подписка недоступна.</div>
+														<?else:?>
+															<div class="text">Необходимо приобрести курс для получения доступа к видео</div>
+															<div>
+																<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-primary">Купить</a>
+															</div>
+														<?endif;?>
 													</div>
 												</div>
 											</div>
@@ -125,7 +154,11 @@
 							<?if($access === false):?>
 								<div class="col-12 col-sm-4 text-right mt-3 mt-sm-0">
 									<span class="mr-2" style="font-size: 22px;"><?=priceFormat($item['price'])?></span>
-									<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></a>
+									<?if(!$this->Auth->isActive()):?>
+										<button type="button" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></button>
+									<?else:?>
+										<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></a>
+									<?endif;?>
 								</div>
 							<?endif;?>
 						</div>

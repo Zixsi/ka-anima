@@ -200,16 +200,20 @@
 				</div>
 				<ul class="list-unstyled plan-features">
 					<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
-					<li><i class="fa fa-times"></i>Проверка домашних работ</li>
+					<?/*<li><i class="fa fa-times"></i>Проверка домашних работ</li>
 					<li><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 					<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
-					<li><i class="fa fa-times"></i>Личные онлайн встречи</li>
+					<li><i class="fa fa-times"></i>Личные онлайн встречи</li>*/?>
 					<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
-					<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
+					<?/*<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>*/?>
 				</ul>
 				<div class="wrapper">
-					<?if($selected_offer_index !== null && $this->Auth->isActive()):?>
-						<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+					<?if($selected_offer_index !== null):?>
+						<?if($this->Auth->isActive()):?>
+							<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+						<?else:?>
+							<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+						<?endif;?>
 					<?else:?>
 						<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 					<?endif;?>
@@ -285,13 +289,17 @@
 						<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
 						<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 						<li class="checked"><i class="fa fa-times"></i>Груповые онлайн встречи</li>
-						<li><i class="fa fa-times"></i>Личные онлайн встречи</li>
+						<?/*<li><i class="fa fa-times"></i>Личные онлайн встречи</li>*/?>
 						<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
-						<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
+						<?/*<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>*/?>
 					</ul>
 					<div class="wrapper">
-						<?if($selected_offer_index !== null  && $this->Auth->isActive()):?>
-							<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+						<?if($selected_offer_index !== null):?>
+							<?if($this->Auth->isActive()):?>
+								<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+							<?else:?>
+								<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+							<?endif;?>
 						<?else:?>
 							<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 						<?endif;?>
@@ -342,14 +350,18 @@
 							<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
 							<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
 							<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
-							<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
+							<?/*<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>**/?>
 							<li class="checked"><i class="fa fa-times"></i>Личные онлайн встречи</li>
-							<li><i class="fa fa-times"></i>Начало в назначенную дату</li>
+							<?/*<li><i class="fa fa-times"></i>Начало в назначенную дату</li>*/?>
 							<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
 						</ul>
 						<div class="wrapper">
-							<?if($vip_offer !== null && $this->Auth->isActive()):?>
-								<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+							<?if($vip_offer !== null):?>
+								<?if($this->Auth->isActive()):?>
+									<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+								<?else:?>
+									<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+								<?endif;?>
 							<?else:?>
 								<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
 							<?endif;?>
