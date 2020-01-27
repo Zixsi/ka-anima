@@ -23,6 +23,11 @@
 
 .card .card-title {text-transform: none;}
 
+.popover .popover-header, .popover .popover-body {background-color: #e94437; color: #ffffff;}
+.popover .popover-header {border-bottom: 1px solid #cccccc;}
+.bs-popover-top > .arrow::before, .bs-popover-auto[x-placement^="top"] > .arrow::before {border-top-color: #e94437;}
+.bs-popover-top > .arrow::after, .bs-popover-auto[x-placement^="top"] > .arrow::after {border-top-color: #e94437;}
+
 .ld-loading .panel-body, .ld-loading .over-white, .ld-loading .prof-body {
 	position: relative;
 }
@@ -257,7 +262,9 @@
 .course-card--img {margin: 0px 0px 15px 0px; width: 480px; max-width: 100%;}
 
 .pricing-table-wrapper {}
-.pricing-table ul li i {margin-right: 10px; background: #e1e6fa; color: #e1e6fa; width: 18px; height: 18px; border-radius: 2px;}
+.pricing-table .pricing-card .pricing-card-body .plan-features li {text-align: center;}
+.pricing-table .pricing-card .pricing-card-body .plan-features {height: 160px;}
+.pricing-table ul li i {display: none; margin-right: 10px; background: #e1e6fa; color: #e1e6fa; width: 18px; height: 18px; border-radius: 2px;}
 .pricing-table ul li i:before {display: inline-block; width: 18px; height: 18px; text-align: center; line-height: 18px; font-family: Material Design Icons; content: "\F12C"; font-size: .9375rem; font-weight: bold;}
 .pricing-table ul li.checked i {background: #25378b; color: #fff;}
 
@@ -533,6 +540,8 @@ hr.primary {border-top-color: #25378b;}
 	.email-wrapper .mail-sidebar .menu-bar .wrapper {display: none;}
 	.email-wrapper .mail-view {order: 0;}
 	.email-wrapper.blank .message-body .message-content {padding: 15px;}
+
+	.pricing-table .pricing-card .pricing-card-body .plan-features {height: auto;}
 } 
 
 /*xs*/
