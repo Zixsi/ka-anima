@@ -91,5 +91,7 @@ $route['auth/logout'] = 'app/auth/logout';
 
 $route['ajax'] = 'app/ajax/index';
 
+$route['file/download/(:num)'] = 'app/file/download/$1';
+
 
 // $route['(.*)'] = 'app/$1';
