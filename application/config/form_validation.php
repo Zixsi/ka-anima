@@ -29,7 +29,7 @@ $config['auth_register'] = [
 	[
 		'field' => 'email',
 		'label' => 'E-mail',
-		'rules' => 'required|valid_email|is_unique[users.email]'
+		'rules' => 'required|valid_email|is_unique[users.login]'
 	],
 	[
 		'field' => 'password',
@@ -324,7 +324,7 @@ $config['user_add'] = [
 	[
 		'field' => 'email',
 		'label' => 'E-mail',
-		'rules' => 'required|valid_email|is_unique[users.email]'
+		'rules' => 'required|valid_email|is_unique[users.login]'
 	],
 	[
 		'field' => 'name',

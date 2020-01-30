@@ -73,7 +73,7 @@ class SystemHook
 			}
 
 			// если контроллер авторизации, но не страница из списка
-			if($c === 'auth' && !in_array($a, ['logout', 'confirmation']))
+			if($c === 'auth' && !in_array($a, ['logout', 'confirmation', 'soc']))
 			{
 				if($is_admin)
 					redirect('/admin/');

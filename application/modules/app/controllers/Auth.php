@@ -72,5 +72,42 @@ class Auth extends APP_Controller
 		$this->load->lview('auth/confirmation', $data);
 	}
 
-	
+	public function soc()
+	{
+		$user_soc = $this->ulogin->getUser();
+		if(empty($user_soc) || empty($user_soc->getUid()))
+			redirect('/');
+
+		$login = $user_soc->makeEmail();
+		$user = $this->UserModel->getByLogin($login);
+
+		if ($this->Auth->check()) {
+
+			// предупреждение о том что будет произведена привязка / уже есть привязка
+			
+			// if ($user) {
+			// 	// если пользователь авторизован и есть в системе - редирект на главную
+			// 	$this->UserModel->setParent($user['id'], $this->Auth->getUserId());
+			// }
+			// else {
+			// 	// если пользователь авторизован и нет привязки к соц. сети - спрашиваем и привязываем если согласился
+			// 	$this->AuthSoc->socRegister($user_soc, $this->Auth->getUserId());
+			// }
+		}
+		else {
+			if ($user) {
+				// если пользователь неавторизован и есть в системе - авторизуем (через аккаунт соц. сети или связаный с ним обычный)
+				$id = (((int) $user['parent'] > 0)?$user['parent']:$user['id']);
+				$this->AuthSoc->socAuth($id);
+			}
+			else {
+				// если пользователь неавторизован и нет в системе - регистрируем
+				if ($id = $this->AuthSoc->socRegister($user_soc)) {
+					$this->AuthSoc->socAuth($id);
+				}
+			}
+		}
+		
+		redirect('/');
+	}
 }

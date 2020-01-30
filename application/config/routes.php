@@ -88,6 +88,7 @@ $route['auth/forgot'] = 'app/auth/forgot';
 $route['auth/recovery'] = 'app/auth/recovery';
 $route['auth/confirmation'] = 'app/auth/confirmation';
 $route['auth/logout'] = 'app/auth/logout';
+$route['auth/soc'] = 'app/auth/soc';
 
 $route['ajax'] = 'app/ajax/index';
 

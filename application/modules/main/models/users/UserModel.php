@@ -68,6 +68,11 @@ class UserModel extends APP_Model
 		return $this->getByField('id', (int) $id);
 	}
 
+	public function getByLogin($login)
+	{
+		return $this->getByField('login', $login);
+	}
+
 	public function getByEmail($email)
 	{
 		return $this->getByField('email', $email);
@@ -298,6 +303,11 @@ class UserModel extends APP_Model
 	public function setActive($id, $flag = true)
 	{
 		return $this->db->update(self::TABLE, ['active' => (($flag)?1:0)], ['id' => $id]);
+	}
+
+	public function setParent(int $id, int $parent = 0)
+	{
+		return $this->db->update(self::TABLE, ['parent' => $parent], ['id' => $id]);
 	}
 
 	public function pwdHash($password, $salt = false)
