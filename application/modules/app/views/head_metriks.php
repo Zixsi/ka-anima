@@ -1,1 +1,2 @@
 <script type="text/javascript">!function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?166",t.onload=function(){VK.Retargeting.Init("VK-RTRG-449822-56y5h"),VK.Retargeting.Hit()},document.head.appendChild(t)}();</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-449822-56y5h" style="position:fixed; left:-999px;" alt=""/></noscript>
+<script data-ad-client="ca-pub-4482230133944631" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
