@@ -155,7 +155,7 @@
 								<div class="col-12 col-sm-4 text-right mt-3 mt-sm-0">
 									<span class="mr-2" style="font-size: 22px;"><?=priceFormat($item['price'])?></span>
 									<?if(!$this->Auth->isActive()):?>
-										<button type="button" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></button>
+										<button type="button" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></button>
 									<?else:?>
 										<a href="/pay/?action=new&target=workshop&code=<?=$item['code']?>" class="btn btn-outline-primary"><?=((float) $item['price'] === 0.00)?'Получить':'Купить'?></a>
 									<?endif;?>

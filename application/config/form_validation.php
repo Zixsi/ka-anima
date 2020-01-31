@@ -362,11 +362,16 @@ $config['video'] = [
 		'label' => 'Тип источника',
 		'rules' => 'required'
 	],
+	// [
+	// 	'field' => 'code',
+	// 	'label' => 'Ссылка на видео',
+	// 	'rules' => 'required|isValidYandexVideoUrl',
+	// 	'errors' => ['isValidYandexVideoUrl' => 'Невалидная ссылка яндекс видео']
+	// ],
 	[
 		'field' => 'code',
 		'label' => 'Ссылка на видео',
-		'rules' => 'required|isValidYandexVideoUrl',
-		'errors' => ['isValidYandexVideoUrl' => 'Невалидная ссылка яндекс видео']
+		'rules' => 'required',
 	],
 	[
 		'field' => 'video_code',

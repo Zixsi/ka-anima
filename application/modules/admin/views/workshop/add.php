@@ -102,13 +102,13 @@
 					<div class="col-6">
 						<div class="form-group">
 							<label>Описание трейлера / вебинара</label>
-							<textarea name="description" class="form-control" placeholder="" rows="8"><?=set_value('description', '', true)?></textarea>
+							<textarea name="description" class="form-control" id="editor1" placeholder="" rows="8"><?=set_value('description', '', true)?></textarea>
 						</div>
 					</div>
 					<div class="col-6">
 						<div class="form-group">
 							<label>Описание видео коллекции <small>(только для коллекции)</small></label>
-							<textarea name="video_description" class="form-control" placeholder="" rows="8"><?=set_value('video_description', '', true)?></textarea>
+							<textarea name="video_description" class="form-control" id="editor2" placeholder="" rows="8"><?=set_value('video_description', '', true)?></textarea>
 						</div>
 					</div>
 				</div>
