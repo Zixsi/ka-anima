@@ -212,7 +212,7 @@
 						<?if($this->Auth->isActive()):?>
 							<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 						<?else:?>
-							<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+							<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 						<?endif;?>
 					<?else:?>
 						<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
@@ -298,7 +298,7 @@
 							<?if($this->Auth->isActive()):?>
 								<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 							<?else:?>
-								<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+								<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 							<?endif;?>
 						<?else:?>
 							<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>
@@ -360,7 +360,7 @@
 								<?if($this->Auth->isActive()):?>
 									<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
 								<?else:?>
-									<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Пользователь не активирован. Подписка недоступна." data-placement="top">Подписаться</button>
+									<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 								<?endif;?>
 							<?else:?>
 								<button type="button" class="btn btn-outline-secondary disabled btn-block">Подписаться</button>

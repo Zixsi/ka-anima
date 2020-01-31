@@ -120,14 +120,14 @@
 					<div class="col-6">
 						<div class="form-group">
 							<label>Описание трейлера / вебинара</label>
-							<textarea name="description" class="form-control" placeholder="" rows="8"><?=set_value('description', $item['description'], true)?></textarea>
+							<textarea name="description" class="form-control" id="editor1" placeholder="" rows="8"><?=set_value('description', $item['description'], true)?></textarea>
 						</div>
 					</div>
 					<?if($item['type'] === 'collection'):?>
 						<div class="col-6">
 							<div class="form-group">
 								<label>Описание видео коллекции <small>(только для коллекции)</small></label>
-								<textarea name="video_description" class="form-control" placeholder="" rows="8"><?=set_value('video_description', $item['video_description'], true)?></textarea>
+								<textarea name="video_description" class="form-control" id="editor2" placeholder="" rows="8"><?=set_value('video_description', $item['video_description'], true)?></textarea>
 							</div>
 						</div>
 					<?endif;?>
@@ -200,6 +200,10 @@
 																<input type="text" name="code" value="<?=htmlspecialchars($video['code'])?>" class="form-control" disabled="true">
 															</div>
 															<div class="form-group">
+																<label class="form-label">Длительность (секунд)</label>
+																<input type="number" name="duration" value="<?=((int) $video['duration'])?>" min="0" class="form-control">
+															</div>
+															<div class="form-group">
 																<label class="form-label">Сортировка</label>
 																<input type="number" name="sort" value="<?=$video['sort']?>" min="0" max="65535" class="form-control">
 															</div>
@@ -251,6 +255,10 @@
 						<div class="form-group">
 							<label class="form-label">Ссылка</label>
 							<input type="text" name="code" value="" class="form-control">
+						</div>
+						<div class="form-group">
+							<label class="form-label">Длительность (секунд)</label>
+							<input type="number" name="duration" value="0" min="0" class="form-control">
 						</div>
 						<div class="form-group">
 							<label class="form-label">Сортировка</label>

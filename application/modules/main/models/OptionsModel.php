@@ -11,7 +11,7 @@ class OptionsModel extends APP_Model
 	// стоимость подписки на год
 	public static function getPriceRenewYear()
 	{
-		return (float) 500;
+		return (float) 2000;
 	}
 
 	// кол-во недель доступности курса до старта

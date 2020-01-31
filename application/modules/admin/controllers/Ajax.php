@@ -232,12 +232,14 @@ class Ajax extends APP_Controller
 		if($this->form_validation->run('video_workshop') === false)
 			throw new Exception($this->form_validation->error_string(), 1);
 
-		if($video = $this->ydvideo->getVideo($params['code']))
-		{
-			$params['video_url'] = $video['video'];
-			$params['duration'] = floor($video['duration'] / 1000);
-			$params['ts'] = date(DATE_FORMAT_DB_FULL);
-		}
+		// if($video = $this->ydvideo->getVideo($params['code']))
+		// {
+		// 	$params['video_url'] = $video['video'];
+		// 	$params['duration'] = floor($video['duration'] / 1000);
+		// 	$params['ts'] = date(DATE_FORMAT_DB_FULL);
+		// }
+		
+		$params['ts'] = date(DATE_FORMAT_DB_FULL);
 
 		$this->VideoModel->add($params);
 		$this->jsonajax->result('Успешно');
