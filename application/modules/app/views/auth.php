@@ -10,9 +10,15 @@
 
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
+
+	<?if($this->config->item('nouse_metriks') !== true):?>
+		<?include 'head_metriks.php';?>
+	<?endif;?>
 </head>
 <body>
-	<?include 'metriks.php';?>
+	<?if($this->config->item('nouse_metriks') !== true):?>
+		<?include 'metriks.php';?>
+	<?endif;?>
 	<div class="page-loader">
 		<div class="loader">
 			<div class="jumping-dots-loader"><span></span><span></span><span></span></div>

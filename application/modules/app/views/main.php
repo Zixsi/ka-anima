@@ -26,6 +26,10 @@ $landUrl = $this->config->item('land_url');
 
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/style.css?v=<?=VERSION?>">
 	<link rel="stylesheet" href="<?=TEMPLATE_DIR?>/main_v1/css/custom.css?v=<?=VERSION?>">
+
+	<?if($this->config->item('nouse_metriks') !== true):?>
+		<?include 'head_metriks.php';?>
+	<?endif;?>
 </head>
 
 <body>
