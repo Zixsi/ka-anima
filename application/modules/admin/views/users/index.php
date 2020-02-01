@@ -105,6 +105,7 @@
 								<th width="70"></th>
 								<th>Имя</th>
 								<th>E-mail</th>
+								<th>Соцсеть</th>
 								<th width="120">Роль</th>
 								<th>Дата регистрации</th>
 								<th width="70" class="text-right">Действия</th>
@@ -131,6 +132,9 @@
 										</td>
 										<td>
 											<a href="./user/<?=$item['id']?>/"><?=$item['email']?></a>
+										</td>
+										<td>
+											<span><?=($item['network'] ?? '- - -')?></span>
 										</td>
 										<td>
 											<span class="badge badge-primary d-block"><?=$item['role_name']?></span>

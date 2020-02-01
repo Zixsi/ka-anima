@@ -72,6 +72,11 @@ class Auth extends APP_Controller
 		$this->load->lview('auth/confirmation', $data);
 	}
 
+	public function blocked()
+	{
+		$this->load->lview('auth/blocked');
+	}
+
 	public function soc()
 	{
 		if ($this->Auth->check()) {
@@ -86,15 +91,20 @@ class Auth extends APP_Controller
 		$user = $this->UserModel->getByLogin($login);
 
 		if ($user) {
-			// TODO проверка на блокировку
-			$this->AuthSoc->socAuth($user['id']);
+			if ((int) $user['blocked'] === 1) {
+				redirect('/auth/blocked/');
+			}
+			else {
+				$this->AuthSoc->socAuth($user['id']);
+			}
 		}
 		else {
 			if ($id = $this->AuthSoc->socRegister($user_soc)) {
 				$this->AuthSoc->socAuth($id);
 			}
 		}
-		
+
 		redirect('/');
 	}
+
 }

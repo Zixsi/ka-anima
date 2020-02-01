@@ -14,9 +14,11 @@
 									<i class="mdi mdi-dots-horizontal"></i>
 								</button>
 								<ul class="dropdown-menu dropdown-menu-right navbar-dropdown">
-									<li class="dropdown-item btn-send-email-confirm" data-id="<?=$item['id']?>">
-										<span>Отправить подтверждение E-mail</span>
-									</li>
+									<?if($item['active'] != 1):?>
+										<li class="dropdown-item btn-send-email-confirm" data-id="<?=$item['id']?>">
+											<span>Отправить подтверждение E-mail</span>
+										</li>
+									<?endif;?>
 									<li class="dropdown-divider"></li>
 									<?if($item['blocked'] == 0):?>
 										<li class="dropdown-item btn-user-block" data-id="<?=$item['id']?>">
@@ -48,6 +50,12 @@
 						</div>
 					</div>
 					<div class="row">
+						<?if(isset($item['network']) && empty($item['network']) === false):?>
+							<div class="form-group col-6">
+								<label>Соцсеть</label>
+								<input type="text" class="form-control" readonly value="<?=$item['network']?>">
+							</div>
+						<?endif;?>
 						<div class="form-group col-6">
 							<label>E-mail</label>
 							<input type="text" name="email" class="form-control" readonly value="<?=$item['email']?>">
