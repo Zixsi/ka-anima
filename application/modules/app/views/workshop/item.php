@@ -166,9 +166,9 @@
 						<div class="row">
 							<div class="col-12">
 								<?if($access === false || empty($currentVideo)):?>
-									<?=htmlspecialchars($item['description'])?>
+									<?=htmlspecialchars_decode($item['description'])?>
 								<?else:?>	
-									<?=htmlspecialchars($item['video_description'])?>
+									<?=htmlspecialchars_decode($item['video_description'])?>
 								<?endif;?>
 							</div>
 						</div>
