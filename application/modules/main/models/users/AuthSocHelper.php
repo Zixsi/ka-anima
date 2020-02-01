@@ -8,11 +8,11 @@ class AuthSocHelper extends AuthHelper
 		$login = $user->makeEmail();
 		$user_data = [
 			'login' => $login,
-			'email' => '',
+			'email' => $user->getEmail(),
 			'name' => $user->getFirstName(),
 			'lastname' => $user->getLastName(),
 			'password' => $this->UserModel->pwdHash($login),
-			'active' => 0,
+			'active' => 1,
 			'hash' => sha1($login . time()),
 			'network' => $user->getNetwork(),
 			'parent' => $parent

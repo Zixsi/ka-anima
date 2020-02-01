@@ -1,11 +1,6 @@
 <div class="row">
 	<div class="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-		<?if($this->Auth->hasEmail() === false):?>
-			<div class="alert alert-fill-danger" role="alert">
-				<i class="mdi mdi-alert-circle"></i>
-				<span>Пользователь не активирован. Подписка недоступна. Для активации укажите email и следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>
-			</div>
-		<?elseif($this->Auth->isActive() === false):?>
+		<?if($this->Auth->isActive() === false):?>
 			<div class="alert alert-fill-danger" role="alert">
 				<i class="mdi mdi-alert-circle"></i>
 				<span>Пользователь не активирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>
@@ -63,14 +58,6 @@
 										<span class="float-left">Discord</span>
 										<span class="float-right text-muted">
 											<a href="<?=prep_url($user['discord'])?>" target="_blank"><?=prep_url($user['discord'])?></a>
-										</span>
-									</p>
-								<?endif;?>
-								<?if($owner && empty($user['network'])):?>
-									<p class="clearfix">
-										<span class="float-left">Привязать авторизацию черз соц. сети</span>
-										<span class="float-right">
-											<?=$this->ulogin->getCode()?>
 										</span>
 									</p>
 								<?endif;?>

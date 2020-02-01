@@ -42,18 +42,22 @@ class UserModel extends APP_Model
 		return false;
 	}
 
-	public function updateProfile($id, $data = [])
+	public function updateProfile($id, $params = [])
 	{
 		$data = [
-			'name' => $data['name'] ?? '',
-			'lastname' => $data['lastname'] ?? '',
-			'birthday' => date('Y-m-d', strtotime($data['birthday'] ?? '')),
-			'phone' => $data['phone'] ?? '',
-			'img' => ($data['img'] ?? ''),
-			'soc' => ($data['soc'] ?? ''),
-			'title' => ($data['title'] ?? ''),
-			'discord' => ($data['discord'] ?? ''),
+			'name' => $params['name'] ?? '',
+			'lastname' => $params['lastname'] ?? '',
+			'birthday' => date('Y-m-d', strtotime($params['birthday'] ?? '')),
+			'phone' => $params['phone'] ?? '',
+			'img' => ($params['img'] ?? ''),
+			'soc' => ($params['soc'] ?? ''),
+			'title' => ($params['title'] ?? ''),
+			'discord' => ($params['discord'] ?? ''),
 		];
+
+		if (isset($params['email'])) {
+			$data['email'] = $params['email'];
+		}
 
 		return $this->update($id, $data);
 	}

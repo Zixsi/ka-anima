@@ -48,7 +48,11 @@ class Profile extends APP_Controller
 				if($img = $this->UsersHelper->prepareProfileImg('img'))
 					$form_data['img'] = '/'.$img;
 
-				if($id = $this->UserModel->updateProfile($data['user']['id'], $form_data))
+				if (empty($data['user']['network'])) {
+					unset($form_data['email']);
+				}
+
+				if($this->UserModel->updateProfile($data['user']['id'], $form_data))
 				{
 					$user = $this->UserModel->getByID($data['user']['id']);
 					$this->Auth->setUser($user);

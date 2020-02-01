@@ -30,7 +30,7 @@ class Ulogin
 		$providers = array_diff($providers, $ignore_providers);
 
 		if (count($providers)) {
-			$html = '<script src="//ulogin.ru/js/ulogin.js"></script><div id="uLogin" data-ulogin="display=panel;theme=flat;fields=first_name,last_name;providers='.implode(',', $providers).';hidden=;redirect_uri=' . $url . ';mobilebuttons=0;"></div>';
+			$html = '<script src="//ulogin.ru/js/ulogin.js"></script><div id="uLogin" data-ulogin="display=panel;theme=flat;fields=first_name,last_name,email;providers='.implode(',', $providers).';hidden=;redirect_uri=' . $url . ';mobilebuttons=0;"></div>';
 		}
 		
 		return $html;
@@ -49,6 +49,7 @@ class UloginUser
 {
 	private $first_name;
 	private $last_name;
+	private $email;
 	private $network;
 	private $uid;
 
@@ -86,6 +87,16 @@ class UloginUser
 	public function getLastName()
 	{
 		return $this->last_name;
+	}
+
+	private function setEmail($value)
+	{
+		$this->email = $value;
+	}
+
+	public function getEmail()
+	{
+		return $this->email;
 	}
 
 	private function setNetwork($value)
