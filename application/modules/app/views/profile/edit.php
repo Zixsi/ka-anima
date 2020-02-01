@@ -30,11 +30,11 @@
 							<input type="text" id="ftitle" name="title" class="form-control" placeholder="" value="<?=$user['title']?>">
 						</div>
 						<div class="form-group col-12 col-sm-6">
-							<label for="fperiod">E-mail</label>
-							<input type="text" class="form-control" placeholder="" value="<?=$user['email']?>" disabled="true">
+							<label>E-mail</label>
+							<input type="text" class="form-control" name="email" placeholder="" value="<?=$user['email']?>" <?=(empty($user['network']))?'disabled="true"':''?> >
 						</div>
 						<div class="form-group col-12 col-sm-6">
-							<label for="fperiod">
+							<label>
 								<span>Фото</span>
 								<span class="mdi mdi-information-outline" title="" style="font-size: 16px; cursor: pointer;"
 									data-toggle="tooltip" 
@@ -52,7 +52,7 @@
 					</div>
 					<div class="row">
 						<div class="form-group col-12 col-sm-6">
-							<label for="fperiod">Имя</label>
+							<label>Имя</label>
 							<input type="text" name="name" id="fname" class="form-control" placeholder="Имя" value="<?=set_value('name', $user['name'], true)?>">
 						</div>
 						<div class="form-group col-12 col-sm-6">

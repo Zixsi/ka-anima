@@ -17,6 +17,7 @@ class UsersHelper extends APP_Model
 		if($this->form_validation->run('user_add') == FALSE)
 			throw new Exception(current($this->form_validation->error_array()), 1);
 
+		$data['login'] = $data['email'];
 		$data['active'] = (int) ($data['active'] ?? 1);
 		$data['password'] = $this->UserModel->pwdHash($data['password']);
 		$data['hash'] = sha1(time());

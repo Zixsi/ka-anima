@@ -29,7 +29,7 @@ $config['auth_register'] = [
 	[
 		'field' => 'email',
 		'label' => 'E-mail',
-		'rules' => 'required|valid_email|is_unique[users.email]'
+		'rules' => 'required|valid_email|is_unique[users.login]'
 	],
 	[
 		'field' => 'password',
@@ -224,6 +224,11 @@ $config['stream_add'] = [
 
 $config['profile_edit'] = [
 	[
+		'field' => 'email',
+		'label' => 'E-mail',
+		'rules' => 'required|valid_email'
+	],
+	[
 		'field' => 'name',
 		'label' => 'Имя',
 		'rules' => 'required|min_length[2]|alpha_numeric_spaces_ru'
@@ -324,7 +329,7 @@ $config['user_add'] = [
 	[
 		'field' => 'email',
 		'label' => 'E-mail',
-		'rules' => 'required|valid_email|is_unique[users.email]'
+		'rules' => 'required|valid_email|is_unique[users.login]'
 	],
 	[
 		'field' => 'name',

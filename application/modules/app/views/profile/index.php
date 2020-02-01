@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-12 col-md-8 offset-md-2 col-xl-6 offset-xl-3">
-		<?if(!$this->Auth->isActive()):?>
+		<?if($this->Auth->isActive() === false):?>
 			<div class="alert alert-fill-danger" role="alert">
 				<i class="mdi mdi-alert-circle"></i>
 				<span>Пользователь не активирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>

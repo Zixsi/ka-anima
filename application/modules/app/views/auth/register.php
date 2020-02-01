@@ -5,6 +5,8 @@
 	<h4>Регистрация</h4>
 	<form action="" method="POST" class="pt-3" id="auth--register-form">
 		<input type="hidden" name="agree" value="0">
+		<input type="hidden" name="id" value="">
+		<input type="hidden" name="network" value="">
 		<div class="form-group">
 			<div class="input-group">
 				<div class="input-group-prepend bg-transparent">

@@ -16,7 +16,7 @@ class AuthHelper extends APP_Model
 		if($this->form_validation->run('auth_login') === false)
 			throw new AppBadLogicExtension($this->form_validation->error_string());
 
-		if(($user = $this->UserModel->getByEmail($data['email'])) === false)
+		if(($user = $this->UserModel->getByLogin($data['email'])) === false)
 			throw new AppBadLogicExtension('Пользователь не найден');
 
 		if($this->UserModel->pwdHash($data['password']) !== $user['password'])
@@ -61,6 +61,7 @@ class AuthHelper extends APP_Model
 			throw new AppBadLogicExtension('Необходимо принять условия соглашения');
 
 		$user_fields = [
+			'login' => $data['email'],
 			'email' => $data['email'],
 			'name' => $data['name'],
 			'lastname' => $data['lastname'],
@@ -107,7 +108,7 @@ class AuthHelper extends APP_Model
 
 	public function forgot($email)
 	{
-		if(($user = $this->UserModel->getByEmail($email)) === false)
+		if(($user = $this->UserModel->getByLogin($email)) === false)
 			throw new AppBadLogicExtension('Неверный адрес электронной почты');
 
 		$email_params = [
@@ -219,5 +220,10 @@ class AuthHelper extends APP_Model
 	public function isActive()
 	{
 		return (($user = $this->user()) && (int) $user['active'] === 1)?true:false;
+	}
+
+	public function hasEmail()
+	{
+		return (($user = $this->user()) && empty($user['email']) === false)?true:false;
 	}
 }

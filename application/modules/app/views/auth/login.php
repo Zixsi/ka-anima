@@ -37,6 +37,9 @@
 		<div class="my-3">
 			<button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Войти</button>
 		</div>
+		<div class="text-center">
+			<?=$this->ulogin->getCode()?>
+		</div>
 		<div class="text-center mt-4 font-weight-light">
 			У вас нет аккаунта? <a href="/auth/register/" class="text-primary">Создать</a>
 		</div>

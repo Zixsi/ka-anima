@@ -122,7 +122,7 @@
 
 <div class="container text-center pricing-table-wrapper pt-5">
 	<div>
-		<?if(!$this->Auth->isActive()):?>
+		<?if($this->Auth->isActive() === false):?>
 			<div class="alert alert-fill-danger" role="alert">
 				<i class="mdi mdi-alert-circle"></i>
 				<span>Пользователь не активирован. Подписка недоступна. Для активации следуйте инструкциям направленным на почту. Если письмо не пришло, проверьте папку спам.</span>
