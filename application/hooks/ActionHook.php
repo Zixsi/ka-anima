@@ -43,15 +43,17 @@ class ActionHook
 		$this->CI->UserActionsHelper->add($user['id'], Action::REGISTRATION);
 
 		// создание задания на отправку письма о регистрации
-		$params = [
-			'email' => $user['email'],
-			'hash' => $user['hash'],
-			'name' => $user['name'],
-			'lastname' => $user['lastname']
-		];
+		if (isset($user['network']) === false || empty($user['network'])) {
+			$params = [
+				'email' => $user['email'],
+				'hash' => $user['hash'],
+				'name' => $user['name'],
+				'lastname' => $user['lastname']
+			];
 
-		$this->CI->TasksHelper->add(TasksModel::TYPE_EMAIL, Action::REGISTRATION, $params, 5, $user['email']);
-
+			$this->CI->TasksHelper->add(TasksModel::TYPE_EMAIL, Action::REGISTRATION, $params, 5, $user['email']);
+		}
+		
 		$paramsUnisender = [
 			'list_ids' => '19169561',
 			'double_optin' => 3,

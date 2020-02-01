@@ -5,6 +5,7 @@ class AuthSocHelper extends AuthHelper
 {
 	public function socRegister(UloginUser $user, int $parent = 0)
 	{
+		$id = null;
 		$login = $user->makeEmail();
 		$user_data = [
 			'login' => $login,
@@ -18,7 +19,12 @@ class AuthSocHelper extends AuthHelper
 			'parent' => $parent
 		];
 
-		return $this->UserModel->add($user_data);
+		if (($id = $this->UserModel->add($user_data))) {
+			$user = $this->UserModel->getByID($id);
+			Action::send(Action::REGISTRATION, [$user]);
+		}
+
+		return $id;
 	}
 
 	public function socAuth(int $user_id)
