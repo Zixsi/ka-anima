@@ -189,7 +189,7 @@
 												<td><?=$val['full_name']?></td>
 												<td><?=$val['name']?></td>
 												<td class="text-right">
-													<a href="/file/download/<?=$val['id']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>
+													<a href="/file/download/<?=$val['file']?>" target="_blank" class="btn btn-primary btn-xs">Скачать</a>
 												</td>
 											</tr>
 										<?endforeach;?>
