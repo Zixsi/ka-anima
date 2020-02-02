@@ -507,3 +507,33 @@ function getVideoIframeUrl($video)
 	
 	return $result;
 }
+
+function makeUrl($params = [], $ignoreFields = [])
+{
+	$result = '/';
+	$urlParams = $_GET;
+	$params = array_merge($urlParams, $params);
+	foreach($ignoreFields as $val)
+		unset($params[$val]);
+
+	if(count($params))
+		$result .= '?' . http_build_query($params);
+
+	return $result;
+}
+
+function makeDefaultFormFields($params = [], $ignoreFields = [])
+{
+	$urlParams = $_GET;
+	$params = array_merge($urlParams, $params);
+	if(count($params))
+	{
+		foreach($params as $key => $val)
+		{
+			if(in_array(trim($key), $ignoreFields))
+				continue;
+			
+			echo '<input type="hidden" name="' . htmlspecialchars(trim($key)) . '" value="' . htmlspecialchars(trim($val)) . '">';
+		}
+	}
+}

@@ -168,6 +168,12 @@ $tpl_user = $CI->Auth->user();
 							<span class="menu-title">Онлайн встречи</span>
 						</a>
 					</li>
+					<li class="nav-item <?=is_active_menu_item('promocode')?'active':''?>">
+						<a class="nav-link" href="/admin/promocode/">
+							<i class="mdi mdi-qrcode menu-icon"></i>
+							<span class="menu-title">Промокоды</span>
+						</a>
+					</li>
 					<li class="nav-item <?=is_active_menu_item('supportcontroller')?'active':''?>">
 						<a class="nav-link" href="/admin/support/">
 							<i class="mdi mdi-human-greeting menu-icon"></i>

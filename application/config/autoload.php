@@ -185,4 +185,5 @@ $autoload['model'] = [
 	'main/OptionsModel',
 	'main/StatsHelper',
 	'main/WorkshopModel',
+	'main/PromocodeModel',
 ];
