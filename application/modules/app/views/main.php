@@ -211,6 +211,13 @@ $landUrl = $this->config->item('land_url');
 							<span class="menu-title">Контакты</span>
 						</a>
 					</li>
+
+					<li class="nav-item">
+						<a class="nav-link" href="/auth/logout/" target="_blank">
+							<i class="mdi mdi-logout menu-icon"></i>
+							<span class="menu-title">Выход</span>
+						</a>
+					</li>
 				</ul>
 			</nav>
 			<div class="main-panel">
