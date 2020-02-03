@@ -1,0 +1,1 @@
+ALTER TABLE `lectures_homework` CHANGE `comment` `comment` VARCHAR(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;

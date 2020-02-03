@@ -163,7 +163,7 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<textarea name="text" class="form-control" rows="5" placeholder="Комментарий к файлу"></textarea>
+										<textarea name="text" class="form-control" rows="5" placeholder="Комментарий к файлу (максимум 2000 символов)"></textarea>
 									</div>
 									<div class="form-group">
 										<button type="submit" class="btn btn-primary">Загрузить</button>
