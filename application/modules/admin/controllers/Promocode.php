@@ -75,8 +75,7 @@ class Promocode extends APP_Controller
 	{
 		return [
 			'course' => 'Курс',
-			'collection' => 'Коллекция',
-			'webinar' => 'Вебинар'
+			'workshop' => 'Мастерская'
 		];
 	}
 }

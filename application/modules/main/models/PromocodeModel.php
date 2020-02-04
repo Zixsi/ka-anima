@@ -1,98 +1,99 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class PromocodeModel extends APP_Model
 {
-	const TABLE = 'promocodes';
+    const TABLE = 'promocodes';
 
-	public function add($data)
-	{
-		$result = false;
-		if($this->db->insert(self::TABLE, $data))
-			$result = $this->db->insert_id();
-	
-		return $result;
-	}
+    public function add($data)
+    {
+        $result = false;
+        if ($this->db->insert(self::TABLE, $data)) {
+            $result = $this->db->insert_id();
+        }
+    
+        return $result;
+    }
 
-	public function update($id, $data = [])
-	{
-		$result = false;
-		unset($data['id']);
-		$this->db->where('id', $id);
-		if($this->db->update(self::TABLE, $data))
-			$result = true;
+    public function update($id, $data = [])
+    {
+        $result = false;
+        unset($data['id']);
+        $this->db->where('id', $id);
+        if ($this->db->update(self::TABLE, $data)) {
+            $result = true;
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 
-	public function getItem($id)
-	{
-		return $this->getByField('id', $id);
-	}
+    public function getItem($id)
+    {
+        return $this->getByField('id', $id);
+    }
 
-	public function getByField($key, $value)
-	{
-		return $this->db
-		->from(self::TABLE)
-		->where($key, $value)
-		->get()->row_array();
-	}
+    public function getByCode($code)
+    {
+        return $this->getByField('code', $code);
+    }
 
-	public function getList($filter = [])
-	{
-		$result = [];
-		$filterParams = $this->parseListFilter($filter);
-		$binds = $filterParams['binds'];
+    public function getByField($key, $value)
+    {
+        return $this->db
+        ->from(self::TABLE)
+        ->where($key, $value)
+        ->get()->row_array();
+    }
 
-		$sql = 'SELECT * FROM '.self::TABLE.' ';
-		if(count($filterParams['where']))
-			$sql .= ' WHERE '.implode(' AND ', $filterParams['where']);
+    public function getList($filter = [])
+    {
+        $result = [];
+        $filterParams = $this->parseListFilter($filter);
+        $binds = $filterParams['binds'];
 
-		if($res = $this->query($sql, $binds)->result_array())
-		{
-			$result = $res;
-		}		
+        $sql = 'SELECT * FROM '.self::TABLE.' ';
+        if (count($filterParams['where'])) {
+            $sql .= ' WHERE '.implode(' AND ', $filterParams['where']);
+        }
 
-		return $result;
-	}
+        if ($res = $this->query($sql, $binds)->result_array()) {
+            $result = $res;
+        }
 
-	public function parseListFilter($params = [])
-	{
-		$result = [
-			'binds' => [],
-			'where' => [],
-			'offset' => 0,
-			'limit' => 9999
-		];
+        return $result;
+    }
 
-		// if(isset($params['id']) && empty($params['id']) === false)
-		// {
-		// 	if(is_array($params['id']))
-		// 		$result['where'][] = 'id IN('.implode(',', $params['id']).')';
-		// 	else
-		// 	{
-		// 		$result['binds'][':id'] = $params['id'];
-		// 		$result['where'][] = 'id = :id';
-		// 	}
-		// }
+    public function parseListFilter($params = [])
+    {
+        $result = [
+            'binds' => [],
+            'where' => [],
+            'offset' => 0,
+            'limit' => 9999
+        ];
 
-		// if(isset($params['ignore']) && empty($params['ignore']) === false)
-		// {
-		// 	if(is_array($params['ignore']))
-		// 		$result['where'][] = 'id NOT IN('.implode(',', $params['ignore']).')';
-		// 	else
-		// 	{
-		// 		$result['binds'][':ignore'] = $params['ignore'];
-		// 		$result['where'][] = 'id != :ignore';
-		// 	}
-		// }
+        return $result;
+    }
 
-		// if(isset($params['status']))
-		// {
-		// 	$result['binds'][':status'] = ($params['status'])?1:0;
-		// 	$result['where'][] = 'status = :status';
-		// }
+    public function check($code)
+    {
+        $item = null;
+        try {
+            if ($item = $this->PromocodeModel->getByCode($code)) {
+                if ($item['date_from'] !== '0000-00-00 00:00:00' && empty($item['date_from']) === false && strtotime($item['date_from']) > time()) {
+                    throw new Exception("Срок действия промокода истек #1", 1);
+                }
 
-		return $result;
-	}
+                if ($item['date_to'] !== '0000-00-00 00:00:00' && empty($item['date_to']) === false && strtotime($item['date_to']) <= time()) {
+                    throw new Exception("Срок действия промокода истек #2", 1);
+                }
+            } else {
+                throw new Exception("Неверный промокод", 1);
+            }
+        } catch (Exception $e) {
+            throw new Exception("Неверный промокод", 1);
+        }
+
+        return $item;
+    }
 }

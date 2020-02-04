@@ -1,216 +1,220 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class PayHelper extends APP_Model
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    private $error_promocode = null;
 
-	// разбираем входные данные
-	public function parse($data)
-	{
-		$result = null;
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-		switch(($data['action'] ?? ''))
-		{
-			case 'new': // новая подписка
-				$result = $this->parseNew($data);
-			break;
-			case 'renewal': // обновления подписки
-				$result = $this->parseRenewal($data);
-			break;
-			default:
-				throw new Exception('неопределенное действие', 1);
-			break;
-		}
+    // разбираем входные данные
+    public function parse($data)
+    {
+        $result = null;
 
-		return $result;
-	}
+        switch (($data['action'] ?? '')) {
+            case 'new': // новая подписка
+                $result = $this->parseNew($data);
+                break;
+            case 'renewal': // обновления подписки
+                $result = $this->parseRenewal($data);
+                break;
+            default:
+                throw new Exception('неопределенное действие', 1);
+            break;
+        }
 
-	// создаем транзакцию оплаты
-	public function pay($data)
-	{
-		$tx = [
-			'user' => $data['user'],
-			'type' => TransactionsModel::TYPE_IN,
-			'amount' => $data['price'],
-			'description' => $this->makePayDescription($data),
-			'data' => json_encode($data),
-			'course_id' => (int) ($data['params']['course_id'] ?? 0),
-			'group_id' => (int) ($data['params']['group_id'] ?? 0),
-			'source' => (($data['object']['type'] === 'workshop')?'workshop':'course')
-		];
+        return $result;
+    }
 
-		if(($id = $this->TransactionsHelper->add($tx)) === false)
-			throw new Exception('ошибка создания транзакции', 1);
+    // создаем транзакцию оплаты
+    public function pay($data)
+    {
+        $tx = [
+            'user' => $data['user'],
+            'type' => TransactionsModel::TYPE_IN,
+            'amount' => $data['price'],
+            'description' => $this->makePayDescription($data),
+            'data' => json_encode($data),
+            'course_id' => (int) ($data['params']['course_id'] ?? 0),
+            'group_id' => (int) ($data['params']['group_id'] ?? 0),
+            'source' => (($data['object']['type'] === 'workshop')?'workshop':'course'),
+            'promocode' => $data['promocode']
+        ];
 
-		$base_url = $this->config->item('base_url');
-		$tx_item = $this->TransactionsModel->getByID($id);
-		
-		// если цена 0.00, запускаем обработку данных транзакции
-		if((int) $tx['amount'] === 0)
-		{
-			if($this->TransactionsHelper->processingData($tx_item['data']))
-				$this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_SUCCESS]);
+        if (($id = $this->TransactionsHelper->add($tx)) === false) {
+            throw new Exception('ошибка создания транзакции', 1);
+        }
 
-			header('Location: '.$base_url.PAY_RETURN_URL);
-		}
-		else
-		{
-			try
-			{
-				// обработка транзакций системой оплаты
-				if(($system = $this->PaySystem->select(PaySystem::YANDEX_KASSA)) === null)
-					throw new Exception('система оплаты неопледелена', 1);
+        $base_url = $this->config->item('base_url');
+        $tx_item = $this->TransactionsModel->getByID($id);
+        
+        // если цена 0.00, запускаем обработку данных транзакции
+        if ((int) $tx['amount'] === 0) {
+            if ($this->TransactionsHelper->processingData($tx_item['data'])) {
+                $this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_SUCCESS]);
+            }
 
-				$system->setReturnUrl($base_url.PAY_RETURN_URL);
-				$system->setBase($data['price'], 'Оплата услуг '.$this->config->item('project_name'));
-				$system->setItems($data['list']);
+            header('Location: '.$base_url.PAY_RETURN_URL);
+        } else {
+            try {
+                // обработка транзакций системой оплаты
+                if (($system = $this->PaySystem->select(PaySystem::YANDEX_KASSA)) === null) {
+                    throw new Exception('система оплаты неопледелена', 1);
+                }
 
-				$user = $this->Auth->user();
-				$system->setCustomer($user['full_name'], $user['email']);
-				$system->setMeta(['hash' => $tx_item['hash']]);
+                $system->setReturnUrl($base_url.PAY_RETURN_URL);
+                $system->setBase($data['price'], 'Оплата услуг '.$this->config->item('project_name'));
+                $system->setItems($data['list']);
 
-				$system->run();
-				$this->TransactionsModel->update($id, ['pay_system_hash' => $system->getOrderId()]);
+                $user = $this->Auth->user();
+                $system->setCustomer($user['full_name'], $user['email']);
+                $system->setMeta(['hash' => $tx_item['hash']]);
 
-				header('Location: '.$system->getPayUrl());
-			}
-			catch(Exception $e)
-			{
-				$this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_ERROR]);
-				throw new Exception($e->getMessage(), $e->getCode());
-			}
-		}
-	}
+                $system->run();
+                $this->TransactionsModel->update($id, ['pay_system_hash' => $system->getOrderId()]);
 
-	// разобрать параметры обновления
-	private function parseRenewal($data)
-	{
-		if(($item = $this->SubscriptionModel->getByHash(($data['hash'] ?? ''))) === false)
-			throw new Exception('неверный идентификатор подписки', 1);
+                header('Location: '.$system->getPayUrl());
+            } catch (Exception $e) {
+                $this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_ERROR]);
+                throw new Exception($e->getMessage(), $e->getCode());
+            }
+        }
+    }
 
-		$params = [];
+    // разобрать параметры обновления
+    private function parseRenewal($data)
+    {
+        if (($item = $this->SubscriptionModel->getByHash(($data['hash'] ?? ''))) === false) {
+            throw new Exception('неверный идентификатор подписки', 1);
+        }
 
-		if($item['target_type'] === 'course')
-		{
-			if(($group_item = $this->GroupsModel->getById($item['target'])) !== false)
-				$params['course_id'] = $group_item['course_id'];
-			$params['group_id'] = $item['target'];
-		}
+        $params = [];
 
-		$res = $this->SubscriptionHelper->prepareSubscr($item);
-		$params['amount'] = $res['amount'];
+        if ($item['target_type'] === 'course') {
+            if (($group_item = $this->GroupsModel->getById($item['target'])) !== false) {
+                $params['course_id'] = $group_item['course_id'];
+            }
+            $params['group_id'] = $item['target'];
+        }
 
-		$payData = new PayData(PayData::OBJ_TYPE_SUBSCR, $item['id'], $item['type']);
-		foreach($res['items'] as $val)
-		{
-			$payData->addRow($val['description'], $val['price']);
-		}
+        $res = $this->SubscriptionHelper->prepareSubscr($item);
+        $params['amount'] = $res['amount'];
 
-		$payData->setPeriod($res['ts_start'], $res['ts_end']);
-		$payData->setParams($params);
-		$payData->calcPrice();
+        $payData = new PayData(PayData::OBJ_TYPE_SUBSCR, $item['id'], $item['type']);
+        foreach ($res['items'] as $val) {
+            $payData->addRow($val['description'], $val['price']);
+        }
 
-		return $payData->toArray();
-	}
+        $payData->setPeriod($res['ts_start'], $res['ts_end']);
+        $payData->setParams($params);
+        $payData->calcPrice();
 
-	// разобрать параметры новой подписки
-	private function parseNew($data)
-	{
-		$payData = null;
-		switch(($data['target'] ?? null))
-		{
-			case 'workshop':
-				$payData = $this->parseWorkshop($data);
-				break;
-			default:
-				$payData = $this->parseCurse($data);
-				break;
-		}
+        // return $payData->toArray();
+        return $payData;
+    }
 
-		return $payData->toArray();
-	}
+    // разобрать параметры новой подписки
+    private function parseNew($data)
+    {
+        $payData = null;
+        switch (($data['target'] ?? null)) {
+            case 'workshop':
+                $payData = $this->parseWorkshop($data);
+                break;
+            default:
+                $payData = $this->parseCurse($data);
+                break;
+        }
 
-	private function parseWorkshop($data)
-	{
-		if(($item = $this->WorkshopModel->getByField('code', ($data['code'] ?? null))) === false)
-			throw new Exception('неверный код', 1);
+        // return $payData->toArray();
+        return $payData;
+    }
 
-		$payData = new PayData(PayData::OBJ_TYPE_WORKSHOP, $item['id'], 'standart');
-		$payData->setName($item['title']);
-		$payData->addRow($item['title'], $item['price']);
+    private function parseWorkshop($data)
+    {
+        if (($item = $this->WorkshopModel->getByField('code', ($data['code'] ?? null))) === false) {
+            throw new Exception('неверный код', 1);
+        }
 
-		$date = new DateTime($item['date']);
-		$date->modify('+1 year');
-		$payData->setPeriod($item['date'], $date->format(DATE_FORMAT_DB_FULL));
-		$payData->setParams([
-			'course_id' => $item['id']
-		]);
-		$payData->setNew(true);
-		$payData->calcPrice();
+        $payData = new PayData(PayData::OBJ_TYPE_WORKSHOP, $item['id'], 'standart');
+        $payData->setName($item['title']);
+        $payData->addRow($item['title'], $item['price']);
 
-		return $payData;
-	}
+        $date = new DateTime($item['date']);
+        $date->modify('+1 year');
+        $payData->setPeriod($item['date'], $date->format(DATE_FORMAT_DB_FULL));
+        $payData->setParams([
+            'course_id' => $item['id']
+        ]);
+        $payData->setNew(true);
+        $payData->calcPrice();
 
-	private function parseCurse($data)
-	{
-		if(($course_item = $this->CoursesModel->getByCode(($data['course'] ?? null))) === false)
-			throw new Exception('неверный код курса', 1);
+        return $payData;
+    }
 
-		if(!array_key_exists(($data['type'] ?? null), $this->SubscriptionModel::TYPES))
-			throw new Exception('неверный тип подписки', 1);
+    private function parseCurse($data)
+    {
+        if (($course_item = $this->CoursesModel->getByCode(($data['course'] ?? null))) === false) {
+            throw new Exception('неверный код курса', 1);
+        }
 
-		if(!in_array(($data['period'] ?? null), $this->SubscriptionModel::PERIOD_SUBSCR))
-			throw new Exception('неверный период подписки', 1);
+        if (!array_key_exists(($data['type'] ?? null), $this->SubscriptionModel::TYPES)) {
+            throw new Exception('неверный тип подписки', 1);
+        }
 
-		// TODO проверить есть ли у пользователя уже активная подписка VIP
+        if (!in_array(($data['period'] ?? null), $this->SubscriptionModel::PERIOD_SUBSCR)) {
+            throw new Exception('неверный период подписки', 1);
+        }
 
-		$data['group'] = $this->GroupsHelper->makeCode($course_item['code'], $data['type'], date('dmy', strtotime($data['group'] ?? 0)));
-		if(($group_item = $this->GroupsModel->getByCode($data['group'])) === false)
-			throw new Exception('неверный код группы', 1);
+        // TODO проверить есть ли у пользователя уже активная подписка VIP
 
-		// debug($group_item); die();
+        $data['group'] = $this->GroupsHelper->makeCode($course_item['code'], $data['type'], date('dmy', strtotime($data['group'] ?? 0)));
+        if (($group_item = $this->GroupsModel->getByCode($data['group'])) === false) {
+            throw new Exception('неверный код группы', 1);
+        }
 
-		$data['course'] = $group_item['course_id'];
-		$data['group'] = $group_item['id'];
-		$group = $this->SubscriptionHelper->prepareGroup($data);
-		$group['data'] = json_decode($group['data'], true);
+        // debug($group_item); die();
 
-		$payData = new PayData(PayData::OBJ_TYPE_COURSE, $group_item['id'], $data['type']);
-		$payData->setName($group['description']);
-		$payData->addRow($group['description'].' '.date(DATE_FORMAT_SHORT, strtotime($group['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($group['ts_end'])), $group['data']['price']);
-		$payData->setPeriod($group['ts_start'], $group['ts_end']);
-		$payData->setParams([
-			'amount' => $group['amount'],
-			'price' => ($group['data']['price'] ?? null),
-			'subscr_type' => $group['subscr_type'],
-			'course_id' => $course_item['id'],
-			'group_id' => $group_item['id']
-		]);
-		$payData->setNew(true);
-		$payData->calcPrice();
+        $data['course'] = $group_item['course_id'];
+        $data['group'] = $group_item['id'];
+        $group = $this->SubscriptionHelper->prepareGroup($data);
+        $group['data'] = json_decode($group['data'], true);
 
-		return $payData;
-	}
+        $payData = new PayData(PayData::OBJ_TYPE_COURSE, $group_item['id'], $data['type']);
+        $payData->setName($group['description']);
+        $payData->addRow($group['description'].' '.date(DATE_FORMAT_SHORT, strtotime($group['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($group['ts_end'])), $group['data']['price']);
+        $payData->setPeriod($group['ts_start'], $group['ts_end']);
+        $payData->setParams([
+            'amount' => $group['amount'],
+            'price' => ($group['data']['price'] ?? null),
+            'subscr_type' => $group['subscr_type'],
+            'course_id' => $course_item['id'],
+            'group_id' => $group_item['id']
+        ]);
+        $payData->setNew(true);
+        $payData->calcPrice();
 
-	// описание оплаты из списка
-	private function makePayDescription($data)
-	{
-		$result = [];
-		if(isset($data['list']) && is_array($data['list']) && count($data['list']))
-		{
-			foreach($data['list'] as $val)
-			{
-				$result[] = $val['description'];
-			}
-		}
+        return $payData;
+    }
 
-		if(empty($result))
-			$result[] = $data['name'].' '.date(DATE_FORMAT_SHORT, strtotime($data['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($data['ts_end']));
+    // описание оплаты из списка
+    private function makePayDescription($data)
+    {
+        $result = [];
+        if (isset($data['list']) && is_array($data['list']) && count($data['list'])) {
+            foreach ($data['list'] as $val) {
+                $result[] = $val['description'];
+            }
+        }
 
-		return implode(' + ', $result);
-	}
+        if (empty($result)) {
+            $result[] = $data['name'].' '.date(DATE_FORMAT_SHORT, strtotime($data['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($data['ts_end']));
+        }
+
+        return implode(' + ', $result);
+    }
 }

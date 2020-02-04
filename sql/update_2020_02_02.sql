@@ -12,3 +12,5 @@ CREATE TABLE `promocodes` (
 	INDEX `target_type` (`target_type`), 
 	UNIQUE `code` (`code`)
 ) ENGINE = InnoDB;
+
+ALTER TABLE `transactions` ADD `promocode` VARCHAR(40) NULL AFTER `source`;
