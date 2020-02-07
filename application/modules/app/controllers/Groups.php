@@ -78,7 +78,7 @@ class Groups extends APP_Controller
         $data['user'] = null;
         $data['homeworks'] = [];
         $data['total_not_verified_works'] = 0;
-        foreach ($users as $row) {
+        foreach ($data['users'] as $row) {
             $data['total_not_verified_works'] += $row['homeworks'] - $row['reviews'];
         }
 

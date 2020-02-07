@@ -47,7 +47,7 @@ class Pay extends APP_Controller
                         }
 
                         if ($promocode_item['target_type'] !== '' && (int) $promocode_item['target_id'] > 0) {
-                            if ($promocode_item['target_type'] === PayData::OBJ_TYPE_COURSE && (int) $data['course'] !== (int) $promocode_item['target_id']) {
+                            if ($promocode_item['target_type'] === PayData::OBJ_TYPE_COURSE && (int) $order->getCourseId() !== (int) $promocode_item['target_id']) {
                                 throw new Exception("Неподходящий промокод", 1);
                             } elseif ($promocode_item['target_type'] === PayData::OBJ_TYPE_WORKSHOP && (int) $order->getObjectId() !== (int) $promocode_item['target_id']) {
                                 throw new Exception("Неподходящий промокод", 1);

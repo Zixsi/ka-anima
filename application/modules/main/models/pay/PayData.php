@@ -103,6 +103,11 @@ class PayData
     {
         return $this->promocode;
     }
+
+    public function getCourseId()
+    {
+        return ($this->data['params']['course_id'] ?? 0);
+    }
     
     // расчитать итоговую сумму
     public function calcPrice()
