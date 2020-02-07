@@ -29,6 +29,13 @@ $route['admin/workshop/view/(:num)'] = 'admin/workshop/view/$1';
 $route['admin/workshop/add'] = 'admin/workshop/add';
 $route['admin/workshop/(.*)'] = 'admin/workshop/$1';
 
+$route['admin/promocode'] = 'admin/promocode/index';
+$route['admin/promocode/item/(:num)'] = 'admin/promocode/item/$1';
+$route['admin/promocode/view/(:num)'] = 'admin/promocode/view/$1';
+$route['admin/promocode/add'] = 'admin/promocode/add';
+$route['admin/promocode/(.*)'] = 'admin/promocode/$1';
+
+
 $route['admin/(.*)'] = 'admin/$1';
 
 $route['profile'] = 'app/Profile/index';

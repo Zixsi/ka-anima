@@ -393,3 +393,18 @@ $config['video_workshop'] = [
 	]
 ];
 $config['video_workshop'] += $config['video'];
+
+
+
+$config['promocode'] = [
+	[
+		'field' => 'code',
+		'label' => 'Код',
+		'rules' => 'required|alpha_dash|is_unique[promocodes.code]',
+	],
+	[
+		'field' => 'value',
+		'label' => 'Значение',
+		'rules' => 'required|numeric|greater_than[0]',
+	],
+];

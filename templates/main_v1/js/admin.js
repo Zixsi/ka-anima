@@ -381,6 +381,17 @@ function workshopListener()
 
 		return false;
 	});
+
+	$('#promocode-form select[name="target_type"]').on('change', function(){
+		let val = $(this).val();
+		let select_target = $('#promocode-form select[name="target_id"]');
+		select_target.find('optgroup').hide().end().val(0);
+		if(val === '' || val === null || val === undefined) {
+			// empty
+		} else {
+			select_target.find('optgroup[data-type="' + val + '"]').show();
+		}
+	});
 }
 
 function subscriptionListener()
