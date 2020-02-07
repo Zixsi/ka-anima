@@ -501,6 +501,8 @@ hr.primary {border-top-color: #25378b;}
 .email-wrapper .mail-sidebar .menu-bar .online-status {margin-top: 0px;}
 .email-wrapper .message-body .message-content {padding: 20px 15px; padding-top: 30px;}
 
+.notification-ripple.notification-relative {position: relative !important; display: inline-block; margin-left: 10px; margin-bottom: .4rem; font-size: 0.813rem; line-height: 1.3rem;}
+
 /*==============================================*/
 
 /*lg*/
