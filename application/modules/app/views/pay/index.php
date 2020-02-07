@@ -49,27 +49,31 @@ alert_error($error);
             </div>
             
             <div class="row pt-4">
+                
                 <div class="col-12 col-md-6 col-lg-4">
-                    <?php if (empty($promocode)) :?>
-                        <form action="" method="post">
-                            <div class="input-group">
-                                <input type="text" name="promocode" placeholder="Промокод" value="<?=set_value('promocode', '')?>" class="form-control">
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-success float-right">Применить</button>
+                    <?php if ($is_new) :?>
+                        <?php if (empty($promocode)) :?>
+                            <form action="" method="post">
+                                <div class="input-group">
+                                    <input type="text" name="promocode" placeholder="Промокод" value="<?=set_value('promocode', '')?>" class="form-control">
+                                    <div class="input-group-append">
+                                        <button type="submit" class="btn btn-success float-right">Применить</button>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                    <?php else :?>
-                        <form action="" method="post">
-                            <div class="input-group">
-                                <input type="hidden" name="del" value="1">
-                                <input type="hidden" name="promocode" value="<?=$promocode['code']?>">
-                                <button type="button" class="btn btn-success"><?=htmlspecialchars($promocode['code'])?></button>
-                                <button type="submit" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
-                            </div>
-                        </form>
+                            </form>
+                        <?php else :?>
+                            <form action="" method="post">
+                                <div class="input-group">
+                                    <input type="hidden" name="del" value="1">
+                                    <input type="hidden" name="promocode" value="<?=$promocode['code']?>">
+                                    <button type="button" class="btn btn-success"><?=htmlspecialchars($promocode['code'])?></button>
+                                    <button type="submit" class="btn btn-danger"><i class="mdi mdi-close"></i></button>
+                                </div>
+                            </form>
+                        <?php endif;?>
                     <?php endif;?>
                 </div>
+               
                 <div class="col-12 col-md-6 col-lg-8">
                         <?php if ($item['price'] !== $item['origin_price']) :?>
                         <h4 class="text-right mb-5">

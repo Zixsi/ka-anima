@@ -25,6 +25,7 @@ class Pay extends APP_Controller
         $data = [];
         $data['error'] = null;
         $data['promocode'] = null;
+        $data['is_new'] = false;
 
         try {
             $order_id = $this->input->get('order');
@@ -35,6 +36,7 @@ class Pay extends APP_Controller
             $data['item'] = $order->toArray();
 
             if ($order->isNew()) {
+                $data['is_new'] = true;
                 if ($promocode = $this->input->post('promocode')) {
                     if ($this->input->post('del')) {
                         $promocode_item = null;
