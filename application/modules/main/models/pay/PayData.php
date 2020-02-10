@@ -108,6 +108,11 @@ class PayData
     {
         return ($this->data['params']['course_id'] ?? 0);
     }
+
+    public function getSubscrType()
+    {
+        return $this->data['type'];
+    }
     
     // расчитать итоговую сумму
     public function calcPrice()
