@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------
@@ -51,12 +51,12 @@ $autoload['packages'] = array();
 |
 | Prototype:
 |
-|	$autoload['libraries'] = array('database', 'email', 'session');
+|   $autoload['libraries'] = array('database', 'email', 'session');
 |
 | You can also supply an alternative library name to be assigned
 | in the controller:
 |
-|	$autoload['libraries'] = array('user_agent' => 'ua');
+|   $autoload['libraries'] = array('user_agent' => 'ua');
 */
 $autoload['libraries'] = array('database', 'security', 'form_validation', /*'session',*/ 'uri', 'zip', 'image_lib', 'main/jsonrpc', 'main/jsonajax', 'wall', 'main/yakassa', 'main/action', 'main/support', 'main/unisender', 'main/ulogin');
 
@@ -71,12 +71,12 @@ $autoload['libraries'] = array('database', 'security', 'form_validation', /*'ses
 |
 | Prototype:
 |
-|	$autoload['drivers'] = array('cache');
+|   $autoload['drivers'] = array('cache');
 |
 | You can also supply an alternative property name to be assigned in
 | the controller:
 |
-|	$autoload['drivers'] = array('cache' => 'cch');
+|   $autoload['drivers'] = array('cache' => 'cch');
 |
 */
 $autoload['drivers'] = array('cache');
@@ -87,7 +87,7 @@ $autoload['drivers'] = array('cache');
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['helper'] = array('url', 'file');
+|   $autoload['helper'] = array('url', 'file');
 */
 $autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'text', 'main/extensions');
 
@@ -97,7 +97,7 @@ $autoload['helper'] = array('url', 'file', 'cookie', 'string', 'app', 'text', 'm
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['config'] = array('config1', 'config2');
+|   $autoload['config'] = array('config1', 'config2');
 |
 | NOTE: This item is intended for use ONLY if you have created custom
 | config files.  Otherwise, leave it blank.
@@ -111,7 +111,7 @@ $autoload['config'] = array('app');
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['language'] = array('lang1', 'lang2');
+|   $autoload['language'] = array('lang1', 'lang2');
 |
 | NOTE: Do not include the "_lang" part of your file.  For example
 | "codeigniter_lang.php" would be referenced as array('codeigniter');
@@ -125,65 +125,66 @@ $autoload['language'] = array();
 | -------------------------------------------------------------------
 | Prototype:
 |
-|	$autoload['model'] = array('first_model', 'second_model');
+|   $autoload['model'] = array('first_model', 'second_model');
 |
 | You can also supply an alternative model name to be assigned
 | in the controller:
 |
-|	$autoload['model'] = array('first_model' => 'first');
+|   $autoload['model'] = array('first_model' => 'first');
 */
 $autoload['model'] = [
-	'main/users/UserModel', 
-	'main/users/UsersHelper', 
-	'main/users/AuthHelper' => 'Auth', 
-	'main/users/AuthSocHelper' => 'AuthSoc', 
-	'main/users/UserActionsModel',
-	'main/users/UserActionsHelper',
-	'main/users/UserMessagesModel',
-	'main/users/UserMessagesHelper',
-	'main/users/UserFriendsModel',
+    'main/users/UserModel',
+    'main/users/UsersHelper',
+    'main/users/AuthHelper' => 'Auth',
+    'main/users/AuthSocHelper' => 'AuthSoc',
+    'main/users/UserActionsModel',
+    'main/users/UserActionsHelper',
+    'main/users/UserMessagesModel',
+    'main/users/UserMessagesHelper',
+    'main/users/UserFriendsModel',
 
-	'main/courses/CoursesModel', 
-	'main/courses/CoursesHelper', 
-	'main/courses/CoursesGroupsModel', 
+    'main/courses/CoursesModel',
+    'main/courses/CoursesHelper',
+    'main/courses/CoursesGroupsModel',
 
-	'main/lectures/LecturesHelper', 
-	'main/lectures/LecturesModel', 
-	'main/lectures/LecturesGroupModel', 
-	'main/lectures/LecturesHomeworkModel', 
+    'main/lectures/LecturesHelper',
+    'main/lectures/LecturesModel',
+    'main/lectures/LecturesGroupModel',
+    'main/lectures/LecturesHomeworkModel',
 
-	'main/groups/GroupsModel', 
-	'main/groups/GroupsHelper', 
+    'main/groups/GroupsModel',
+    'main/groups/GroupsHelper',
 
-	'main/FilesModel',
-	'main/AccessModel', 
-	
-	'main/subscription/SubscriptionModel', 
-	'main/subscription/SubscriptionHelper',
-	'main/transactions/TransactionsModel',
-	'main/transactions/TransactionsHelper',
-	'main/review/ReviewModel',
-	'main/review/ReviewHelper',
-	'main/homework/HomeworkHelper',
-	'main/wall/WallModel',
-	'main/wall/WallHelper',
-	'main/news/NewsModel',
-	'main/news/NewsHelper',
-	'main/email/EmailHelper',
-	'main/pay/PayHelper',
-	'main/pay/PaySystem',
-	'main/faq/FaqModel',
-	'main/faq/FaqHelper',
-	'main/tasks/TasksModel',
-	'main/tasks/TasksHelper',
+    'main/FilesModel',
+    'main/AccessModel',
+    
+    'main/subscription/SubscriptionModel',
+    'main/subscription/SubscriptionHelper',
+    'main/transactions/TransactionsModel',
+    'main/transactions/TransactionsHelper',
+    'main/review/ReviewModel',
+    'main/review/ReviewHelper',
+    'main/homework/HomeworkHelper',
+    'main/wall/WallModel',
+    'main/wall/WallHelper',
+    'main/news/NewsModel',
+    'main/news/NewsHelper',
+    'main/email/EmailHelper',
+    'main/pay/PayHelper',
+    'main/pay/PaySystem',
+    'main/faq/FaqModel',
+    'main/faq/FaqHelper',
+    'main/tasks/TasksModel',
+    'main/tasks/TasksHelper',
 
-	'main/SupportModel',
-	'main/VideoModel',
-	'main/VideoHelper',
-	'main/StreamsModel',
-	'main/StreamsHelper',
-	'main/OptionsModel',
-	'main/StatsHelper',
-	'main/WorkshopModel',
-	'main/PromocodeModel',
+    'main/SupportModel',
+    'main/VideoModel',
+    'main/VideoHelper',
+    'main/StreamsModel',
+    'main/StreamsHelper',
+    'main/OptionsModel',
+    'main/StatsHelper',
+    'main/WorkshopModel',
+    'main/PromocodeModel',
+    'main/NotificationModel',
 ];
