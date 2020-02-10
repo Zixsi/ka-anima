@@ -83,6 +83,17 @@ class Notifications
         return $result;
     }
 
+    public function addItem(
+        int $user,
+        string $type,
+        string $text = null,
+        string $param1 = null,
+        string $param2 = null,
+        string $param3 = null
+    ) {
+        $this->c->NotificationModel->add(get_defined_vars());
+    }
+
     public function changeItemStatus(int $id)
     {
         return $this->c->NotificationModel->setItemStatus($id, 1);

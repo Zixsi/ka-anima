@@ -11,7 +11,8 @@ class SupportController extends APP_Controller
     
         if (cr_valid_key()) {
             try {
-                $this->support->addTicket($data['post']);
+                $id = $this->support->addTicket($data['post']);
+                $this->notifications->addItem(0, 'support', null, $id);
                 header("Refresh:0");
             } catch (Exception $e) {
                 $data['error'] = $e->getMessage();
@@ -43,6 +44,8 @@ class SupportController extends APP_Controller
             try {
                 $data['post']['target'] = $data['item']['id'];
                 $this->support->addTicketMessage($data['post']);
+                $this->notifications->addItem(0, 'support', null, $data['item']['id']);
+
                 header("Refresh:0");
             } catch (Exception $e) {
                 $data['error'] = $e->getMessage();
