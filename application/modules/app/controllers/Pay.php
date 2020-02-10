@@ -46,12 +46,30 @@ class Pay extends APP_Controller
                             throw new Exception("Неподходящий промокод", 1);
                         }
 
+                        if ((int) $promocode_item['count'] > 0) {
+                            if ($this->PromocodeModel->getCountUsed($promocode_item['code']) >= (int) $promocode_item['count']) {
+                                throw new Exception("Достигнут лимит использования данного промокода", 1);
+                            }
+                        }
+
                         if ($promocode_item['target_type'] !== '' && (int) $promocode_item['target_id'] > 0) {
-                            if ($promocode_item['target_type'] === PayData::OBJ_TYPE_COURSE && (int) $order->getCourseId() !== (int) $promocode_item['target_id']) {
+                            if ($promocode_item['target_type'] === PayData::OBJ_TYPE_COURSE &&
+                                (int) $order->getCourseId() !== (int) $promocode_item['target_id']
+                            ) {
                                 throw new Exception("Неподходящий промокод", 1);
-                            } elseif ($promocode_item['target_type'] === PayData::OBJ_TYPE_WORKSHOP && (int) $order->getObjectId() !== (int) $promocode_item['target_id']) {
+                            } elseif ($promocode_item['target_type'] === PayData::OBJ_TYPE_WORKSHOP &&
+                                (int) $order->getObjectId() !== (int) $promocode_item['target_id']
+                            ) {
                                 throw new Exception("Неподходящий промокод", 1);
                             }
+                        }
+
+                        if (empty($promocode_item['subscr_type']) === false &&
+                            $promocode_item['target_type'] === $order->getObjectType() &&
+                            $order->getObjectType() ===  PayData::OBJ_TYPE_COURSE &&
+                            $order->getSubscrType() !== $promocode_item['subscr_type']
+                        ) {
+                            throw new Exception("Неподходящий промокод", 1);
                         }
                     }
 

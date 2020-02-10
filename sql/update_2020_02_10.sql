@@ -1,0 +1,1 @@
+ALTER TABLE `promocodes` ADD `subscr_type` VARCHAR(40) NULL AFTER `target_type`;

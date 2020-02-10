@@ -51,13 +51,53 @@ class PromocodeModel extends APP_Model
         $filterParams = $this->parseListFilter($filter);
         $binds = $filterParams['binds'];
 
-        $sql = 'SELECT * FROM '.self::TABLE.' ';
+        $sql = 'SELECT 
+                    p.*, t.count_use 
+                FROM 
+                    '.self::TABLE.' as p 
+                LEFT JOIN
+                    (
+                        SELECT 
+                            promocode as code, 
+                            count(*) as count_use 
+                        FROM 
+                            transactions 
+                        WHERE 
+                            status != \'ERROR\' AND 
+                            promocode IS NOT NULL 
+                        GROUP BY 
+                            promocode
+                    ) as t ON(t.code = p.code) ';
         if (count($filterParams['where'])) {
             $sql .= ' WHERE '.implode(' AND ', $filterParams['where']);
         }
 
         if ($res = $this->query($sql, $binds)->result_array()) {
             $result = $res;
+        }
+
+        return $result;
+    }
+
+    public function getCountUsed($code)
+    {
+        $result = 0;
+
+        $binds = [
+            ':code' => $code
+        ];
+        $sql = 'SELECT 
+                    count(*) as cnt 
+                FROM 
+                    transactions 
+                WHERE 
+                    status != \'ERROR\' AND 
+                    promocode IS NOT NULL AND 
+                    promocode = :code 
+                GROUP BY 
+                    promocode';
+        if ($res = $this->query($sql, $binds)) {
+            $result = (int) $res->row()->cnt;
         }
 
         return $result;

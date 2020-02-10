@@ -67,6 +67,17 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label>Тип подписки</label>
+                            <select name="subscr_type" class="form-control">
+                                <option value="" <?=set_select('target_type', '', true)?>>Нет</option>
+                                <?php foreach ($subscr_types as $key => $value) :?>
+                                    <option value="<?=$key?>" <?=set_select('subscr_type', $key, ($item['subscr_type'] === $key))?>><?=$value?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-6">

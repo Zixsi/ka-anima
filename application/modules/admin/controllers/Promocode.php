@@ -22,6 +22,7 @@ class Promocode extends APP_Controller
 
         $data['error'] = null;
         $data['types'] = $this->getTypeList();
+        $data['subscr_types'] = $this->getSubscrTypeList();
         $data['course_list'] = $this->CoursesModel->listActive(['id', 'name']);
         $data['workshop_list'] = $this->WorkshopModel->getListActive(['id', 'title']);
 
@@ -43,6 +44,7 @@ class Promocode extends APP_Controller
         $data = [];
         $data['error'] = null;
         $data['types'] = $this->getTypeList();
+        $data['subscr_types'] = $this->getSubscrTypeList();
         $data['course_list'] = $this->CoursesModel->listActive(['id', 'name']);
         $data['workshop_list'] = $this->WorkshopModel->getListActive(['id', 'title']);
 
@@ -79,6 +81,15 @@ class Promocode extends APP_Controller
         return [
             'course' => 'Курс',
             'workshop' => 'Мастерская'
+        ];
+    }
+
+    private function getSubscrTypeList()
+    {
+        return [
+            'standart' => 'Стандартная',
+            'advanced' => 'Расширенная',
+            'vip' => 'VIP',
         ];
     }
 }
