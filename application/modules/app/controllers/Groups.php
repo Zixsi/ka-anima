@@ -78,8 +78,13 @@ class Groups extends APP_Controller
         $data['user'] = null;
         $data['homeworks'] = [];
         $data['total_not_verified_works'] = 0;
-        foreach ($data['users'] as $row) {
+        $users_without_hw_review = $this->LecturesHomeworkModel->getUsersIdWithoutReviewHomework($data['item']['id']);
+        foreach ($data['users'] as &$row) {
+            $row['mark'] = null;
             $data['total_not_verified_works'] += $row['homeworks'] - $row['reviews'];
+            if (in_array($row['id'], $users_without_hw_review)) {
+                $row['mark'] = 'warning';
+            }
         }
 
         if (isset($params['user']) && array_key_exists($params['user'], $data['users'])) {
