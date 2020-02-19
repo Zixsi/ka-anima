@@ -24,7 +24,7 @@
                         <?php if ($users) :?>
                             <?php $i = 0;?>
                             <?php foreach ($users as $val) :?>
-                                <tr <?=($user && $val['id'] == $user['id'])?'class="bg-info"':''?>>
+                                <tr <?=($user && $val['id'] == $user['id'])?'class="bg-info"':($val['mark']?'class="bg-'.$val['mark'].'"':'');?>>
                                     <td><?=(++$i)?></td>
                                     <td>
                                         <a href="./?user=<?=$val['id']?>" class="text-primary"><?=$val['full_name']?></a>
