@@ -12,6 +12,7 @@ class SubscriptionHelper extends APP_Model
     public function __construct()
     {
         parent::__construct();
+        $this->CI->load->library('main/notifications');
     }
 
     // TODO поправить цену
