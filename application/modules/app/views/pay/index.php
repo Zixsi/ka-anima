@@ -75,14 +75,20 @@ alert_error($error);
                 </div>
                
                 <div class="col-12 col-md-6 col-lg-8">
-                        <?php if ($item['price'] !== $item['origin_price']) :?>
+                    <?php if ($item['price'] !== $item['origin_price']) :?>
                         <h4 class="text-right mb-5">
                             Всего : <s class="text-muted"><?=number_format($item['origin_price'], 2, '.', '')?>&nbsp;<?=PRICE_CHAR?></s><br>
                             <?=number_format($item['price'], 2, '.', '')?>&nbsp;<?=PRICE_CHAR?>
                         </h4>
-                        <?php else :?>
+                    <?php else :?>
                         <h4 class="text-right mb-5">Всего : <?=number_format($item['price'], 2, '.', '')?>&nbsp;<?=PRICE_CHAR?></h4>
-                        <?php endif;?>
+                    <?php endif;?>
+                </div>
+
+                <div class="col-12">
+                    <?php if ($is_new && empty($promocode) === false && $item['params']['subscr_type'] === 1) :?>
+                        <div class="alert alert-danger">Внимание! При помесячной оплате, скидка действует только на первый месяц.</div>
+                    <?php endif;?>
                 </div>
             </div>
             <hr>

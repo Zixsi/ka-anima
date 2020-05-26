@@ -92,6 +92,7 @@ class Pay extends APP_Controller
         }
 
         $data['csrf'] = cr_get_key();
+        //debug($data); die();
         $this->load->lview('pay/index', $data);
     }
 
