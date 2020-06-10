@@ -27,7 +27,7 @@
 					<?if($items):?>
 						<?$i = 0;?>
 						<?foreach($items as $item):?>
-							<div class="roadmap-item item-color<?=(++$i)?>">
+							<div class="roadmap-item item-color<?=(((++$i) % 8) + 1)?>">
 								<div class="item-head colored">
 									<span class="title"><?=$item['name']?></span>
 									<span class="btn-menu btn-collapse" data-toggle="collapse" data-target="#items-row-wrap<?=$item['id']?>"><i class="fa fa-angle-down"></i></span>
