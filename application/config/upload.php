@@ -5,7 +5,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $config['upload_homework'] = [
 	'upload_path' => './data/homework/',
 	'allowed_types' => 'jpeg|jpg|png|mp4|rar|zip|mov',
-	'max_size' => 32768, // 10 мб
+	'max_size' => 102400, // 10 мб
 	'max_width' => 4096,
 	'max_height' => 4096,
 	'encrypt_name' => true,
