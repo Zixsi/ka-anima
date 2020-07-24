@@ -77,7 +77,7 @@ class PayHelper extends APP_Model
             if ($this->TransactionsHelper->processingData($tx_item['data'])) {
                 $this->TransactionsModel->update($tx_item['id'], ['status' => TransactionsModel::STATUS_SUCCESS]);
             }
-
+            
             header('Location: '.$base_url.PAY_RETURN_URL);
         } else {
             try {

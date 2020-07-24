@@ -53,6 +53,7 @@ class AuthHelper extends APP_Model
 	{
 		$this->form_validation->reset_validation();
 		$this->form_validation->set_data($data);
+                $this->form_validation->set_message('is_unique', '%s уже зарегистрирован в системе');
 
 		if($this->form_validation->run('auth_register') === false)
 			throw new AppBadLogicExtension($this->form_validation->error_string());
