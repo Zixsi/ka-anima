@@ -101,6 +101,6 @@ $route['auth/blocked'] = 'app/auth/blocked';
 $route['ajax'] = 'app/ajax/index';
 
 $route['file/download/(:num)'] = 'app/file/download/$1';
-
+$route['external/pay'] = 'app/external/pay';
 
 // $route['(.*)'] = 'app/$1';

@@ -503,6 +503,21 @@ function appListener()
 
 		return false;
 	});
+        
+        
+        $('#external-pay-form').on('change', 'input[type="radio"]', function(){
+            let type = $('#external-pay-form input[name="type"]:checked').val();
+            if(type === 'undefined') {
+                type = 'standart';
+            }
+            
+            let period = $('#external-pay-form input[name="period"]:checked').val();
+            if(period === 'undefined') {
+                period = 'full';
+            }
+            
+            $('#price-block span').removeClass('active').end().find('#price-' + type + '-' + period).addClass('active');
+        });
 }
 
 function reloadPage(timeout = 0)

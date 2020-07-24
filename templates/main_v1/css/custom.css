@@ -503,6 +503,18 @@ hr.primary {border-top-color: #25378b;}
 
 .notification-ripple.notification-relative {position: relative !important; display: inline-block; margin-left: 10px; margin-bottom: .4rem; font-size: 0.813rem; line-height: 1.3rem;}
 
+#external-pay-form #price-block {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+#external-pay-form #price-block span {
+    display: none;
+}
+#external-pay-form #price-block span.active {
+    display: block;
+}
+
 /*==============================================*/
 
 /*lg*/

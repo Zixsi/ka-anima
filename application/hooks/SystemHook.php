@@ -1,95 +1,97 @@
-<?
+<?php
+
 class SystemHook
 {
-	public $CI;
 
-	public function __construct()
-	{
-		$this->CI = &get_instance();
-	}
+    public $CI;
 
-	public function profiler()
-	{
-		$this->CI->output->enable_profiler(false);
-	}
+    public function __construct()
+    {
+        $this->CI = &get_instance();
+    }
 
-	public function initOptions()
-	{
-		date_default_timezone_set('Europe/Moscow');
-		// setlocale(LC_ALL, 'ru_RU.UTF-8');
-		$this->CI->form_validation->set_error_delimiters('', '<br>');
-	}
+    public function profiler()
+    {
+        $this->CI->output->enable_profiler(false);
+    }
 
-	public function sessionStart()
-	{
-		// запускаем сессию только если пользователь авторизован (ранее была запущена сессия)
-		$session_cookie_name = $this->CI->config->item('sess_cookie_name');
-		if(!empty($_COOKIE[$session_cookie_name]))
-			$this->CI->load->library('session');
-	}
+    public function initOptions()
+    {
+        date_default_timezone_set('Europe/Moscow');
+        // setlocale(LC_ALL, 'ru_RU.UTF-8');
+        $this->CI->form_validation->set_error_delimiters('', '<br>');
+    }
 
-	public function checkAuth()
-	{
-		if(is_cli() == true)
-			return;
+    public function sessionStart()
+    {
+        // запускаем сессию только если пользователь авторизован (ранее была запущена сессия)
+        $session_cookie_name = $this->CI->config->item('sess_cookie_name');
+        if (empty($_COOKIE[$session_cookie_name]) === false) {
+            $this->CI->load->library('session');
+        }
+    }
 
-		$c = $this->CI->router->fetch_class();
-		$a = $this->CI->router->fetch_method();
-		$d = $this->CI->uri->segment(1);
+    public function checkAuth()
+    {
+        if (is_cli() == true)
+            return;
 
-		$check = $this->CI->Auth->check();
-		$user = $this->CI->Auth->user();
+        $c = $this->CI->router->fetch_class();
+        $a = $this->CI->router->fetch_method();
+        $d = $this->CI->uri->segment(1);
 
-		// var_dump($check);
-		// var_dump($user); die();
+        $check = $this->CI->Auth->check();
+        $user = $this->CI->Auth->user();
 
-		$ignored = ['auth', 'ajax'];
+        // var_dump($check);
+        // var_dump($user); die();
 
-		// если не авторизован и
-		// контроллер не в списке игнора или
-		// контроллер авторизации и метод выхода
-		// то делаем редирект на авторизацию
-		if(!$check && (!in_array($c, $ignored) || ($c === 'auth' && $a === 'logout')))
-		{
-			setRequestBackUri();
-			redirect('/auth/');
-		}
+        $ignored = ['auth', 'ajax', 'external'];
 
-		// если авторизован
-		if($check)
-		{
-			if($backUri = getRequestBackUri())
-			{
-				clearRequestBackUri();
-				redirect(urldecode($backUri));
-			}
+        // если не авторизован и
+        // контроллер не в списке игнора или
+        // контроллер авторизации и метод выхода
+        // то делаем редирект на авторизацию
+        if (!$check && (!in_array($c, $ignored) || ($c === 'auth' && $a === 'logout'))) {
+            if(getRequestBackUri() === null) {
+                setRequestBackUri();
+            }
+            redirect('/auth/');
+        }
 
-			$is_admin = $this->CI->Auth->isAdmin();
+        // если авторизован
+        if ($check) {
+            if ($backUri = getRequestBackUri()) {
+                clearRequestBackUri();
+                redirect(urldecode($backUri));
+            }
 
-			if($this->CI->cache->file->get('user_'. $user['id'] .'_checkAuth') === false)
-			{
-				$this->CI->UsersHelper->setLastActive($user['id']);
-				$this->CI->cache->file->save('user_'. $user['id'] .'_checkAuth', 1, 60);
-			}
+            $is_admin = $this->CI->Auth->isAdmin();
 
-			// если контроллер авторизации, но не страница из списка
-			if($c === 'auth' && !in_array($a, ['logout', 'confirmation', 'soc']))
-			{
-				if($is_admin)
-					redirect('/admin/');
-				else
-					redirect('/');
-			}
+            if ($this->CI->cache->file->get('user_' . $user['id'] . '_checkAuth') === false) {
+                $this->CI->UsersHelper->setLastActive($user['id']);
+                $this->CI->cache->file->save('user_' . $user['id'] . '_checkAuth', 1, 60);
+            }
 
-			// если админ но не раздел админки и не страница игнора
-			if($is_admin && $d !== 'admin' && !in_array($c, $ignored))
-				redirect('/admin/');
-			// если не админ но раздел админки
-			elseif(!$is_admin && $d === 'admin')
-				redirect('/');
+            // если контроллер авторизации, но не страница из списка
+            if ($c === 'auth' && !in_array($a, ['logout', 'confirmation', 'soc'])) {
+                if ($is_admin) {
+                    redirect('/admin/');
+                } else {
+                    redirect('/');
+                }
+            }
 
+            // если админ но не раздел админки и не страница игнора
+            if ($is_admin && $d !== 'admin' && !in_array($c, $ignored)) {
+                redirect('/admin/');
+            // если не админ но раздел админки
+            } elseif (!$is_admin && $d === 'admin') {
+                redirect('/');
+            }
 
-			$this->CI->load->library('main/notifications');
-		}
-	}
+            $this->CI->load->library('main/notifications');
+        }
+    }
+
 }
