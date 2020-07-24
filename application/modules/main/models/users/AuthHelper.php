@@ -66,7 +66,7 @@ class AuthHelper extends APP_Model
 			'name' => $data['name'],
 			'lastname' => $data['lastname'],
 			'password' => $this->UserModel->pwdHash($data['password']),
-			'active' => 0,
+			'active' => ($data['active'] ?? 0),
 			'hash' => sha1($data['email'].time())
 		];
 
@@ -77,6 +77,7 @@ class AuthHelper extends APP_Model
 
 			// авторизуем
 			$this->setUser($user);
+                        $user['origin_password'] = $data['password'];
 
 			Action::send(Action::REGISTRATION, [$user]);
 			Action::send(Action::LOGIN, [$user]);

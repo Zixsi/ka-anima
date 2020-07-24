@@ -31,8 +31,9 @@ class EmailHelper extends APP_Model
 		$this->init();
 		
 		$params = [
-			'site' => $this->site,
-			'url' => $this->site['url'].'auth/confirmation/?code='.($data['code'] ?? $data['hash'] ?? '')
+                    'site' => $this->site,
+                    'url' => $this->site['url'].'auth/confirmation/?code='.($data['code'] ?? $data['hash'] ?? ''),
+                    'originPassword' => ($data['origin_password'] ?? null)
 		];
 		$html = $this->load->viewl('email', 'email/registration', $params, true, 'app');
 		$to = ($data['email'] ?? null);

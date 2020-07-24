@@ -9,6 +9,26 @@ class PayHelper extends APP_Model
     {
         parent::__construct();
     }
+    
+//    public function createOrder($input)
+//    {
+//        // очистить предыдущие заказы
+//        $sessionKeys = array_keys($_SESSION);
+//        foreach ($sessionKeys as $key) {
+//            if (strpos($key, 'ORDER_') !== false) {
+//                unset($_SESSION[$key]);
+//            }
+//        }
+//
+//        $userId = $this->Auth->userID();
+//        $input['user'] = $userId;
+//        $order = $this->parse($input);
+//        $orderId = md5($userId . microtime(true));
+//
+//        $this->session->set_userdata('ORDER_' . $orderId, $order);
+//        
+//        return $orderId;
+//    }
 
     // разбираем входные данные
     public function parse($data)

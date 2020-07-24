@@ -48,7 +48,8 @@ class ActionHook
 				'email' => $user['email'],
 				'hash' => $user['hash'],
 				'name' => $user['name'],
-				'lastname' => $user['lastname']
+				'lastname' => $user['lastname'],
+                                'origin_password' => $user['origin_password']
 			];
 
 			$this->CI->TasksHelper->add(TasksModel::TYPE_EMAIL, Action::REGISTRATION, $params, 5, $user['email']);
