@@ -33,6 +33,8 @@
                             </label>
                         <?php endif;?>
                     </div>
+                <?php else:?>
+                    <input type="radio" name="type" value="standart" checked="true" style="visibility: hidden; opacity: 0; position: absolute; width: 1px; height: 1px;">
                 <?php endif;?>
                 <div class="form-group text-center">
                     <label class="mx-2">
@@ -71,6 +73,17 @@
                 </div>
             <?php endif; ?>
 
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend bg-transparent">
+                        <span class="input-group-text bg-transparent border-right-0">
+                            <i class="mdi mdi-qrcode text-primary"></i>
+                        </span>
+                    </div>
+                    <input type="text" class="form-control form-control-lg border-left-0" name="promocode" value="<?= ($promocode ?? '') ?>" placeholder="Промокод">
+                </div>
+            </div>
+                
             <div class="my-3">
                 <?php if($isAuth): ?>
                     <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium">Оплатить</button>
