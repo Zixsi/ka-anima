@@ -210,7 +210,7 @@
 				<div class="wrapper">
 					<?if($selected_offer_index !== null):?>
 						<?if($this->Auth->isActive()):?>
-							<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+							<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 						<?else:?>
 							<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 						<?endif;?>
@@ -296,7 +296,7 @@
 					<div class="wrapper">
 						<?if($selected_offer_index !== null):?>
 							<?if($this->Auth->isActive()):?>
-								<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+								<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 							<?else:?>
 								<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 							<?endif;?>
@@ -358,7 +358,7 @@
 						<div class="wrapper">
 							<?if($vip_offer !== null):?>
 								<?if($this->Auth->isActive()):?>
-									<button type="submit" class="btn btn-outline-primary btn-block" onclick="ym(55112686, 'reachGoal', 'Oplata'); return true;">Подписаться</button>
+									<button type="submit" class="btn btn-outline-primary btn-block">Подписаться</button>
 								<?else:?>
 									<button type="button" class="btn btn-outline-primary btn-block" data-toggle="popover" title="Пользователь не активирован" data-content="Подписка недоступна." data-placement="top">Подписаться</button>
 								<?endif;?>

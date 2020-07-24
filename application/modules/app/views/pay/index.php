@@ -96,7 +96,7 @@ alert_error($error);
                 <div class="col-12">
                     <form action="" method="post">
                         <input type="hidden" name="<?=$csrf['key']?>" value="<?=$csrf['value']?>">
-                        <button type="submit" class="btn btn-success float-right mt-4"><i class="mdi mdi-telegram mr-1"></i>Оплата</button> 
+                        <button type="submit" class="btn btn-success float-right mt-4" onclick="ym(51851432,'reachGoal','oplataPlatform'); return true;"><i class="mdi mdi-telegram mr-1"></i>Оплата</button> 
                     </form>
                 </div>
             </div>
