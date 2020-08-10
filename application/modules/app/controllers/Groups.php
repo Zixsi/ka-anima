@@ -122,8 +122,10 @@ class Groups extends APP_Controller
 
         $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
         $data['lecture_id'] = ((int) $lecture === 0)?current($data['lectures'])['id']:$lecture;
-        $last_active_lecture = $this->prepareLectures($data['lectures']);
+        $last_active_lecture = $this->prepareLectures($data['lectures'], $data['subscr']);
         $data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
+        
+//        debug($data['lectures']); die();
 
         if ($data['lectures_is_active'] && $data['subscr_is_active']) {
             if (empty($data['lectures'][$data['lecture_id']]) or $data['lectures'][$data['lecture_id']]['active'] == 0) {
@@ -180,6 +182,7 @@ class Groups extends APP_Controller
         $data['pageTitle'] = $data['group']['name'];
             
         $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
+        $this->prepareLectures($data['lectures'], $data['subscr']);
         $data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
         $data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
         $data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
@@ -295,15 +298,26 @@ class Groups extends APP_Controller
     }
 
     // подготовка лекций
-    private function prepareLectures(&$data)
+    private function prepareLectures(&$data, $subscr = null)
     {
         $last_active_id = 0;
+        $subscrTsEnd = null;
+        $isStandart = false;
+        if (isset($subscr['id']) && (int) $subscr['id'] > 0) {
+            $isStandart = ($subscr['type'] === 'standart');
+            $subscrTsEnd = strtotime($subscr['ts_end']);
+        }
+        
 
         if ($data) {
             $tmp_data = $data;
             $data = [];
             
             foreach ($tmp_data as $val) {
+                if ($isStandart && strtotime($val['ts']) <= $subscrTsEnd ) {
+                    $val['active'] = 1;
+                }
+                
                 $data[$val['id']] = $val;
                 if ($val['active'] == 1) {
                     $last_active_id = $val['id'];
