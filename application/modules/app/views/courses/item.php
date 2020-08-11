@@ -199,12 +199,12 @@
 					<?endif;?>
 				</div>
 				<ul class="list-unstyled plan-features">
-					<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
+					<li class="checked"><i class="fa fa-times"></i>Доступ к лекциям сразу после оплаты</li>
 					<?/*<li><i class="fa fa-times"></i>Проверка домашних работ</li>
 					<li><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 					<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>
 					<li><i class="fa fa-times"></i>Личные онлайн встречи</li>*/?>
-					<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
+					<li class="checked"><i class="fa fa-times"></i>Самостоятельное изучение</li>
 					<?/*<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>*/?>
 				</ul>
 				<div class="wrapper">
@@ -285,12 +285,13 @@
 						<?endif;?>
 					</div>
 					<ul class="list-unstyled plan-features">
-						<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
+						<li class="checked"><i class="fa fa-times"></i>Доступ к лекции каждую неделю</li>
 						<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
 						<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 						<li class="checked"><i class="fa fa-times"></i>Груповые онлайн встречи</li>
 						<?/*<li><i class="fa fa-times"></i>Личные онлайн встречи</li>*/?>
 						<li class="checked"><i class="fa fa-times"></i>Начало в назначенную дату</li>
+						<li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
 						<?/*<li><i class="fa fa-times"></i>Старт в ближайший понедельник</li>*/?>
 					</ul>
 					<div class="wrapper">
@@ -347,13 +348,15 @@
 							</div>
 						</div>
 						<ul class="list-unstyled plan-features">
-							<li class="checked"><i class="fa fa-times"></i>Доступ ко всем лекциям курса</li>
+							<li class="checked"><i class="fa fa-times"></i>Доступ к лекции каждую неделю</li>
 							<li class="checked"><i class="fa fa-times"></i>Проверка домашних работ</li>
 							<li class="checked"><i class="fa fa-times"></i>Закрытый канал в дискорде</li>
 							<?/*<li><i class="fa fa-times"></i>Груповые онлайн встречи</li>**/?>
 							<li class="checked"><i class="fa fa-times"></i>Личные онлайн встречи</li>
 							<?/*<li><i class="fa fa-times"></i>Начало в назначенную дату</li>*/?>
 							<li class="checked"><i class="fa fa-times"></i>Старт в ближайший понедельник</li>
+                                                        <li class="checked"><i class="fa fa-times"></i>Гарантируем результат</li>
+                                                        <li class="checked"><i class="fa fa-times"></i>Сертификат об окончании курса</li>
 						</ul>
 						<div class="wrapper">
 							<?if($vip_offer !== null):?>

@@ -263,7 +263,10 @@
 
 .pricing-table-wrapper {}
 .pricing-table .pricing-card .pricing-card-body .plan-features li {text-align: center;}
-.pricing-table .pricing-card .pricing-card-body .plan-features {height: 160px;}
+.pricing-table .pricing-card .pricing-card-body .plan-features {height: 190px;}
+.pricing-table .pricing-card .pricing-card-body {
+    padding: 50px 30px 43px 30px;
+}
 .pricing-table ul li i {display: none; margin-right: 10px; background: #e1e6fa; color: #e1e6fa; width: 18px; height: 18px; border-radius: 2px;}
 .pricing-table ul li i:before {display: inline-block; width: 18px; height: 18px; text-align: center; line-height: 18px; font-family: Material Design Icons; content: "\F12C"; font-size: .9375rem; font-weight: bold;}
 .pricing-table ul li.checked i {background: #25378b; color: #fff;}
