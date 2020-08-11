@@ -231,7 +231,7 @@ class GroupsHelper extends APP_Model
 			$result[$val['status']]['items'][] = $val;
 		}
 
-		ksort($result);
+		krsort($result);
 		$result = array_values($result);
 		$data = $result;
 	}
