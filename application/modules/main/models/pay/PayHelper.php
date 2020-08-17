@@ -193,18 +193,18 @@ class PayHelper extends APP_Model
         // TODO проверить есть ли у пользователя уже активная подписка VIP
 
         $data['group'] = $this->GroupsHelper->makeCode($course_item['code'], $data['type'], date('dmy', strtotime($data['group'] ?? 0)));
-        if (($group_item = $this->GroupsModel->getByCode($data['group'])) === false) {
-            throw new Exception('неверный код группы', 1);
-        }
+//        if (($group_item = $this->GroupsModel->getByCode($data['group'])) === false) {
+//            throw new Exception('неверный код группы', 1);
+//        }
 
         // debug($group_item); die();
 
-        $data['course'] = $group_item['course_id'];
-        $data['group'] = $group_item['id'];
+        $data['course'] = $course_item['id'];
+//        $data['group'] = $group_item['id'];
         $group = $this->SubscriptionHelper->prepareGroup($data);
         $group['data'] = json_decode($group['data'], true);
 
-        $payData = new PayData(PayData::OBJ_TYPE_COURSE, $group_item['id'], $data['type']);
+        $payData = new PayData(PayData::OBJ_TYPE_COURSE, $group['target'], $data['type']);
         $payData->setName($group['description']);
         $payData->addRow($group['description'].' '.date(DATE_FORMAT_SHORT, strtotime($group['ts_start'])).' - '.date(DATE_FORMAT_SHORT, strtotime($group['ts_end'])), $group['data']['price']);
         $payData->setPeriod($group['ts_start'], $group['ts_end']);
@@ -213,7 +213,7 @@ class PayHelper extends APP_Model
             'price' => ($group['data']['price'] ?? null),
             'subscr_type' => $group['subscr_type'],
             'course_id' => $course_item['id'],
-            'group_id' => $group_item['id']
+            'group_id' => $group['target']
         ]);
         $payData->setNew(true);
         $payData->calcPrice();

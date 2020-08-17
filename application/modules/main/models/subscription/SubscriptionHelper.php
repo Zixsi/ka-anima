@@ -54,9 +54,13 @@ class SubscriptionHelper extends APP_Model
                     throw new Exception('ошибка создания группы', 1);
                 }
             }
+        } else {
+            if (($item = $this->GroupsModel->getByCode($group_id))) {
+                $group_id = $item['id'];
+            } 
         }
-
-        if (($item = $this->GroupsModel->getByIdDetail($group_id)) === false) {
+        
+         if (($item = $this->GroupsModel->getByIdDetail($group_id)) === false) {
             throw new Exception('группа не найдена', 1);
         }
 
@@ -68,8 +72,7 @@ class SubscriptionHelper extends APP_Model
         //  die();
         // }
 
-        $item['price'] = json_decode($item['price'], true);
-
+        $item['price'] = json_decode($item['price'], true);        
         if (!array_key_exists($data['type'], $item['price']) && !array_key_exists($data['period'], $item['price'][$data['type']])) {
             throw new Exception('неверные параметры', 1);
         }
