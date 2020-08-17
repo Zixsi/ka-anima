@@ -21,7 +21,7 @@ class Pay extends APP_Controller
 		];
 
 		$list = $this->TransactionsModel->list($filter);
-		// debug($list); die();
+//		 debug($list); die();
 		foreach($list as $val)
 		{
 			if(empty($val['pay_system_hash']))
@@ -29,8 +29,9 @@ class Pay extends APP_Controller
 
 			try
 			{
-				$info = $system->getOrderInfo($val['pay_system_hash']);
-				if($info->getStatus() === 'succeeded')
+//				$info = $system->getOrderInfo($val['pay_system_hash']);
+//				if($info->getStatus() === 'succeeded')
+                                if(true)
 				{
 					// обработка данных транзакции
 					if(!empty($val['data']))
