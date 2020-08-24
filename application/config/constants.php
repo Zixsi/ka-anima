@@ -107,6 +107,6 @@ defined('IMG_DEFAULT_16_9') OR define('IMG_DEFAULT_16_9', TEMPLATE_DIR.'/assets/
 defined('IMG_UNICORN') OR define('IMG_UNICORN', TEMPLATE_DIR.'/assets/unicorn.jpg');
 defined('IMG_DUMMY') OR define('IMG_DUMMY', TEMPLATE_DIR.'/assets/img_dummy.jpg');
 
-defined('PAY_RETURN_URL') OR define('PAY_RETURN_URL', 'transactions/');
+defined('PAY_RETURN_URL') OR define('PAY_RETURN_URL', 'pay/success/');
 
 defined('UPLOAD_PROFILE_IMG_INFO') OR define('UPLOAD_PROFILE_IMG_INFO', 'Допустимые расширения файла jpeg, jpg, png. Максимальный объем файла 1 мб. Максимальный размер 1024px. Минимальный размер 128px.');

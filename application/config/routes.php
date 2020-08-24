@@ -47,6 +47,7 @@ $route['transactions'] = 'app/transactions/index';
 $route['users'] = 'app/users/index';
 $route['faq'] = 'app/faq/index';
 $route['pay'] = 'app/pay/index';
+$route['pay/success'] = 'app/pay/success';
 
 $route['subscription'] = 'app/subscription/index';
 

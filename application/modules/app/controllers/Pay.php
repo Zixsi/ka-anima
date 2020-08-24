@@ -124,4 +124,10 @@ class Pay extends APP_Controller
        
         $this->load->lview('pay/create_order', $data);
     }
+    
+    public function success()
+    {
+        $this->load->layout = 'empty';
+        $this->load->lview('pay/success');
+    }
 }
