@@ -86,9 +86,9 @@
                 
             <div class="my-3">
                 <?php if($isAuth): ?>
-                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium" onclick="ym(51851432,'reachGoal','oplataLend'); return true;">Оплатить</button>
+                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium" onclick="ym(51851432,'reachGoal','KnopkaOplLend'); return true;">Оплатить</button>
                 <?php else: ?>
-                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium" onclick="ym(51851432,'reachGoal','oplataLend'); return true;">Продолжить</button>
+                    <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium" onclick="ym(51851432,'reachGoal','KnopkaOplLend'); return true;">Продолжить</button>
                 <?php endif; ?>
             </div>
 
