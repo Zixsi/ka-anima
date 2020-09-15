@@ -10,9 +10,9 @@ class SupportController extends APP_Controller
         $this->support->prepareAdminTickets($data['items']);
         $data['items'] = $this->support->splitByStatus($data['items']);
         $data['statusList'] = $this->support->getStatusList();
-        $this->notifications->changeTypeStatus('support');
+        $data['notificationsIds'] = $this->notifications->getListUnreadTypeIds('support');
 
-        // debug($data['items']); die();
+//        debug($data['items']); die();
         $this->load->lview('support/index', $data);
     }
 
@@ -27,6 +27,7 @@ class SupportController extends APP_Controller
         }
 
         $this->support->prepareTicket($data['item']);
+        $this->notifications->changeTragetTypeStatus('support', $data['item']['id']);
         $data['statusList'] = $this->support->getStatusList();
 
         if (cr_valid_key()) {
@@ -34,6 +35,7 @@ class SupportController extends APP_Controller
                 switch ($data['post']['type']) {
                     case 'update':
                         $this->SupportModel->update($data['item']['id'], ['status' => $data['post']['status']]);
+                        $this->notifications->setReadTragetTypeStatus('support', $data['item']['id']);
                         $this->notifications->addItem($data['item']['user'], 'support', null, $data['item']['id']);
                         redirect('/admin/support/');
                         break;

@@ -57,4 +57,54 @@ class NotificationModel extends APP_Model
 
         return $result;
     }
+    
+    public function setTargetTypeStatus(int $user, string $type, string $target, int $status)
+    {
+        $this->db->where([
+            'user' => $user, 
+            'type' => $type,
+            'param1' => $target
+        ]);
+        
+        if ($this->db->update(self::TABLE, ['status' => $status])) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public function setAllTargetTypeStatus(string $type, string $target, int $status)
+    {
+        $this->db->where([
+            'type' => $type,
+            'param1' => $target
+        ]);
+        
+        if ($this->db->update(self::TABLE, ['status' => $status])) {
+            return true;
+        }
+
+        return false;
+    }
+    
+    public function getListUnreadType(int $user, string $type)
+    {
+        $result = [];
+        $res = $this->db->where(
+                [
+                    'user' => $user, 
+                    'type' => $type,
+                    'status' => 0
+                ]
+            )
+            ->limit($limit)
+            ->order_by('id', 'DESC')
+            ->get(self::TABLE);
+
+        if ($res) {
+            $result = $res->result_array();
+        }
+
+        return $result;
+    }
 }
