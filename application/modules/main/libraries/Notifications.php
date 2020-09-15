@@ -71,6 +71,7 @@ class Notifications
     {
         $result = false;
         $items = $this->getListFromDb();
+
         if (count($items)) {
             foreach ($items as $row) {
                 if ($row['type'] === $type) {
@@ -102,6 +103,27 @@ class Notifications
     public function changeTypeStatus($type)
     {
         $this->c->NotificationModel->setUserTypeStatus($this->getUserId(), $type, 1);
+    }
+    
+    public function changeTragetTypeStatus($type, $targetId)
+    {
+        $this->c->NotificationModel->setTargetTypeStatus($this->getUserId(), $type, $targetId, 1);
+    }
+    
+    public function setReadTragetTypeStatus($type, $targetId)
+    {
+        $this->c->NotificationModel->setAllTargetTypeStatus($type, $targetId, 1);
+    }
+    
+    public function getListUnreadTypeIds($type)
+    {
+        $list = $this->c->NotificationModel->getListUnreadType($this->getUserId(), $type);
+        
+        return array_map(
+            function ($row) {
+                return $row['param1'];
+            }, 
+            $list);
     }
 
     public function showPoint($class = 'relative')
