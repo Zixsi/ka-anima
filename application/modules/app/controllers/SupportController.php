@@ -21,7 +21,8 @@ class SupportController extends APP_Controller
 
         $data['items'] = $this->support->getUserTickets();
         $data['csrf'] = cr_get_key();
-        $this->notifications->changeTypeStatus('support');
+        $data['notificationsIds'] = $this->notifications->getListUnreadTypeIds('support');
+//        $this->notifications->changeTypeStatus('support');
 
         // debug($data['items']); die();
         $this->load->lview('support/index', $data);
@@ -37,6 +38,7 @@ class SupportController extends APP_Controller
             show_404();
         }
 
+        $this->notifications->changeTragetTypeStatus('support', $data['item']['id']);
         $data['items'] = $this->support->getTicketMessage($data['item']['id']);
         $data['isEnabledMessage'] = (count($data['items']) && (int) end($data['items'])['user'] === 0 && $data['item']['status'] === SupportModel::PENDING)?true:false;
     
