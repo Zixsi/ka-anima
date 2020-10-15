@@ -24,6 +24,13 @@ class Profile extends APP_Controller
 		
 		$this->load->lview('profile/index', $data);
 	}
+        
+        public function debug()
+        {
+            $user = $this->Auth->user();
+            
+            $this->load->lview('profile/debug', ['user' => $user]);
+        }
 
 	public function edit()
 	{
