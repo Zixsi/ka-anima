@@ -73,12 +73,15 @@ class Groups extends APP_Controller
 
         // лекции группы
         $lectures = $this->LecturesGroupModel->listForGroup($data['item']['id']);
+        
+        $data['item']['current_week'] = $this->currentGroupWeek($lectures);
 
         // дз ученика
         $data['user'] = null;
         $data['homeworks'] = [];
         $data['total_not_verified_works'] = 0;
         $users_without_hw_review = $this->LecturesHomeworkModel->getUsersIdWithoutReviewHomework($data['item']['id']);
+        
         foreach ($data['users'] as &$row) {
             $row['mark'] = null;
             $data['total_not_verified_works'] += $row['homeworks'] - $row['reviews'];

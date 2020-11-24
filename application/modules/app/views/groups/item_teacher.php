@@ -3,11 +3,13 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h3 class="card-title">Группа <?=$item['name']?> (<?=$item['code']?>)</h3>
+                <p>Текущая неделя: <?=$item['current_week']?></p>
                 <table class="table">
                     <thead>
                         <tr>
                             <th width="40">#</th>
                             <th>Ученик</th>
+                            <th class="text-center" width="120">Оплачено до</th>
                             <th class="text-center" width="120">Задания</th>
                             <th class="text-center" width="120">Непроверено</th>
                         </tr>
@@ -16,6 +18,7 @@
                         <tr class="bg-secondary">
                             <td></td>
                             <td class="text-white">Всего</td>
+                            <td class="text-center text-white"></td>
                             <td class="text-center text-white"></td>
                             <td class="text-center text-white"><?=$total_not_verified_works?></td>
                         </tr>
@@ -28,6 +31,12 @@
                                     <td><?=(++$i)?></td>
                                     <td>
                                         <a href="./?user=<?=$val['id']?>" class="text-primary"><?=$val['full_name']?></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <?php
+                                        $tsEnd = strtotime($val['ts_end']);
+                                        ?>
+                                        <span class="badge <?=($tsEnd < time())?'badge-danger':''?>"><?=date('Y-m-d', $tsEnd)?></span>
                                     </td>
                                     <td class="text-center"><?=$val['reviews']?> / <?=$item['cnt']?></td>
                                     <td class="text-center"><?=($val['homeworks'] - $val['reviews'])?></td>
