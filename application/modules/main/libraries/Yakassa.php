@@ -1,7 +1,8 @@
 <?php
 
-require_once APPPATH.'third_party/yandex-checkout-sdk-php-master/lib/autoload.php';
-use YandexCheckout\Client;
+require_once APPPATH.'third_party/yookassa-sdk-php-master/lib/autoload.php';
+
+use YooKassa\Client;
 
 class Yakassa
 {
