@@ -15,6 +15,7 @@
 					<thead>
 						<tr>
 							<th>ID</th>
+							<th>Код</th>
 							<th>Дата</th>
 							<th>Статус</th>
 							<th>Тип</th>
@@ -27,6 +28,7 @@
 						<?foreach($items as $row):?>
 							<tr>
 								<td><?=$row['id']?></td>
+								<td><?=$row['code']?></td>
 								<td><?=$row['date']?></td>
 								<td>
 									<?if((int) $row['status'] === 1):?>
