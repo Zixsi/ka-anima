@@ -108,7 +108,7 @@ class External extends APP_Controller
         $orderArray['user'] = $this->Auth->userID();
         $this->PayHelper->pay($orderArray);
         
-        header('Location: ' . $this->config->item('base_url') . PAY_RETURN_URL);
+//        header('Location: ' . $this->config->item('base_url') . PAY_RETURN_URL);
     }
     
     private function getItem()
