@@ -216,4 +216,33 @@ class LecturesHomeworkModel extends APP_Model
 
         return $result;
     }
+    
+    public function getGroupsWithoutReviewHomework()
+    {
+        $result = [];
+        $sql = 'SELECT 
+                    DISTINCT lh.group_id as id 
+                FROM 
+                    lectures_homework as lh 
+                LEFT JOIN 
+                    review as r 
+                ON(
+                    r.group_id = lh.group_id AND 
+                    r.lecture_id = lh.lecture_id AND 
+                    r.user = lh.user
+                ) 
+                WHERE 
+                    lh.ts > r.ts
+                    OR r.ts IS NULL';
+
+        if ($res = $this->db->query($sql, [$group_id])) {
+            $res = $res->result_array();
+            
+            foreach ($res as $row) {
+                $result[] = $row['id'];
+            }
+        }
+
+        return $result;
+    }
 }

@@ -32,7 +32,12 @@ class Groups extends APP_Controller
             'with_subscribed' => true, // с подписанными пользователями
         ];
         $data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false, $filter);
-        // debug($data['items']); die();
+        $withoutReviewGroup = $this->LecturesHomeworkModel->getGroupsWithoutReviewHomework();
+        
+        foreach ($data['items'] as &$row) {
+           $row['review_mark'] = in_array($row['id'], $withoutReviewGroup);
+        }
+        
         $this->GroupsHelper->prepareListForTeacher($data['items'], $filter);
 
         $this->load->lview('groups/index_teacher', $data);
