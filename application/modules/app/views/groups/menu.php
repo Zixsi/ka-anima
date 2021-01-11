@@ -7,11 +7,11 @@ $timestamp_start = strtotime($group['ts']);
 ?>
 <h3 class="text-center" style="margin-bottom: 30px;">
     <span><?= $group['name'] ?> [<?= GroupsHelper::getTypeName($group['type']) ?>] </span>
-    <?if($timestamp_start > time()):?>
-    <span class="badge badge-danger">Начало <?= date(DATE_FORMAT_SHORT, $timestamp_start) ?></span>
-    <?endif;?>
+    <?php if($group['ts'] !== 'standart' && $timestamp_start > time()):?>
+        <span class="badge badge-danger">Начало <?= date(DATE_FORMAT_SHORT, $timestamp_start) ?></span>
+    <?php endif;?>
 </h3>
-<?php if((time() - strtotime($subscr['ts_end'])) <= 604800): ?>
+<?php if ((strtotime($subscr['ts_end']) - time()) <= 604800): ?>
 <div class="alert alert-info w-100 text-center" style="font-size: 16px;">
     Срок действия вашей подписки заканчивается <?=date('d.m.Y', strtotime($subscr['ts_end']))?>. Продлите чтобы продолжить обучение.
     <a href="/pay/?action=renewal&hash=<?=$subscr['hash']?>" class="btn btn-info btn-sm">Продлить</a> 

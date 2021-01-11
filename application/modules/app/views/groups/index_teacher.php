@@ -19,6 +19,7 @@
                     <thead>
                         <tr>
                             <th>Группа</th>
+                            <th class="text-right" width="180">Новые работы</th>							
                             <th class="text-right" width="100">Участники</th>							
                             <th class="text-right" width="100">Тип</th>							
                             <th class="text-right" width="100">Статус</th>
@@ -29,6 +30,11 @@
                         <tr>
                             <td>
                                 <a href="/groups/<?= $row['code'] ?>/"><?= $row['name'] ?> <?= date(DATE_FORMAT_SHORT, $row['timestamp_start']) ?> - <?= date(DATE_FORMAT_SHORT, $row['timestamp_end']) ?></a>
+                            </td>
+                            <td class="text-right">
+                                <?php if ($row['review_mark']): ?>
+                                    <span class="badge badge-danger">Да</span>
+                                <?php endif; ?>
                             </td>
                             <td class="text-right"><?= $row['subscr_cnt'] ?></td>
                             <td class="text-right">
