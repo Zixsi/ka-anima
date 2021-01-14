@@ -225,6 +225,51 @@ class GroupsModel extends APP_Model
 
 		return  [];
 	}
+        
+        /**
+         * @param int $course
+         * @return array
+         */
+	public function getActiveForCourse($course)
+	{
+		$sql = sprintf(
+                    "SELECT 
+                        *
+                    FROM 
+                        %s 
+                    WHERE 
+                        course_id = %s AND 
+                        deleted = 0 AND 
+                        ts_end > '%s'  
+                    ORDER BY 
+                        ts_end ASC",
+                    self::TABLE,
+                    $course,
+                    date('Y-m-d 00:00:00')
+                );
+                
+		if (($res = $this->db->query($sql))) {
+                    $rows = $res->result_array();
+                    $result = [];
+                    
+                    foreach ($rows as $row) {
+                        $result[] = [
+                            'id' => $row['id'],
+                            'type' => $row['type'],
+                            'title' => sprintf(
+                                "%s (%s / %s)", 
+                                $row['type'], 
+                                date('Y-m-d', strtotime($row['ts'])), 
+                                date('Y-m-d', strtotime($row['ts_end']))
+                            ) 
+                        ];
+                    }
+                    
+                    return $result;
+		}
+
+		return  [];
+	}
 
 	// список активных групп
 	public function getActiveGroups()

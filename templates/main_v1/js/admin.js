@@ -314,6 +314,28 @@ function groupListener()
 
 		return false;
 	});
+        
+        let modalGroupUserMove = $('#group--user-move');
+        let modalGroupUserMoveForm = modalGroupUserMove.find('form');
+        
+        $('.group--user-move-btn').on('click', function() {
+            modalGroupUserMoveForm.find('input[name="user"]').val($(this).data('id'));
+            modalGroupUserMove.modal('show');
+        });
+        
+        modalGroupUserMoveForm.on('submit', function(){
+            var params = $(this).serializeControls();
+            
+            ajaxQuery('group.user.move', params, function(res){
+                toastrMsg('success', res);
+                modalGroupUserMoveForm.find('input[name="user"]').val(0);
+                setTimeout(function(){
+                    window.location.reload(true);
+                }, 1000);
+            });
+
+            return false;
+	});
 
 }
 

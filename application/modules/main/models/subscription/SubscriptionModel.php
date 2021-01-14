@@ -96,7 +96,7 @@ class SubscriptionModel extends APP_Model
 	}
 
 	
-	public function сheck($user, $target, $target_type = 'course')
+	public function check($user, $target, $target_type = 'course')
 	{
 		$bind = [$user, $target, $target_type];
 		$sql = 'SELECT * FROM '.self::TABLE.' WHERE user = ? AND target = ? AND target_type = ?';

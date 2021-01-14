@@ -17,6 +17,9 @@ class Groups extends APP_Controller
 
 	public function item($code = null)
 	{
+//            $this->GroupsHelper->moveToGroup(7, 96, 99); 
+//            die();
+            
 		$data = [];
 		if(($data['item'] = $this->GroupsModel->getByCode($code)) === false)
 			show_404();
@@ -26,7 +29,9 @@ class Groups extends APP_Controller
 
 		$data['teacherList'] = $this->UserModel->listTeachers();
 		$data['teacherList'] = setArrayKeys($data['teacherList'], 'id');
-		// debug($data['teacherList']); die();
+                $data['groupMonth'] = $this->LecturesGroupModel->getGroupMonthMap($data['item']['id']);
+		$data['groups'] = $this->GroupsModel->getActiveForCourse($data['item']['course_id']);
+                
 		$data['users'] = $this->SubscriptionModel->getGroupUsers($data['item']['id'], $type);
 		$this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
