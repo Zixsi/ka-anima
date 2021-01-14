@@ -45,7 +45,7 @@ class Workshop extends APP_Controller
 		$this->VideoHelper->prepareVideoList($data['videos']);
 		$data['totalDuration'] = $this->VideoHelper->getTotalDuration($data['videos']);
 		$data['currentVideo'] = $this->getCurrentVideo($data['videos'], $videoCode);
-		$data['access'] = $this->SubscriptionModel->сheck($userId, $data['item']['id'], 'workshop');
+		$data['access'] = $this->SubscriptionModel->check($userId, $data['item']['id'], 'workshop');
 		$data['isStarted'] = (time() >= strtotime($data['item']['date']));
 		$data['showRightColl'] = (($data['item']['type'] === 'webinar' && $data['access'] && $data['isStarted']) || $data['item']['type'] === 'collection');
 		$data['teacher'] = null;

@@ -37,6 +37,10 @@ class Ajax extends APP_Controller
 				case 'group.user.add':
 					$this->groupUserAdd();
 				break;
+                                case 'group.user.move':
+					$this->groupUserMove();
+				break;
+                            
 				case 'setGroupTeacher':
 					$this->setGroupTeacher();
 				break;
@@ -118,6 +122,16 @@ class Ajax extends APP_Controller
 	private function groupUserAdd()
 	{
 		$this->GroupsHelper->userAdd(($this->request['params'] ?? []));
+		$this->jsonajax->result('Успешно');
+	}
+        
+        private function groupUserMove()
+	{
+		$this->GroupsHelper->moveToGroup(
+                    (int) ($this->request['params']['user'] ?? 0),
+                    (int) ($this->request['params']['group'] ?? 0),
+                    (int) ($this->request['params']['new_group'] ?? 0)
+                );
 		$this->jsonajax->result('Успешно');
 	}
 

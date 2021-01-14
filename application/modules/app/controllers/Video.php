@@ -42,7 +42,7 @@ class Video extends APP_Controller
 			if(isset($item['code']))
 				$data['mark'] .= '#'.$data['user']['id'];
 
-			if($this->SubscriptionModel->сheck($data['user']['id'], $video['source_id'], 'workshop') === false)
+			if($this->SubscriptionModel->check($data['user']['id'], $video['source_id'], 'workshop') === false)
 				$show404 = true;
 		}
 		else

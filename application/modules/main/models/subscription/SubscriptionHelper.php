@@ -80,7 +80,7 @@ class SubscriptionHelper extends APP_Model
         $price = (float) $item['price'][$data['type']][$data['period']];
 
         // проверяем подписал юзер на эту группу или нет
-        if ($this->SubscriptionModel->сheck($data['user'], $item['group_id'])) {
+        if ($this->SubscriptionModel->check($data['user'], $item['group_id'])) {
             throw new Exception('уже подписан', 1);
         }
 
@@ -322,7 +322,7 @@ class SubscriptionHelper extends APP_Model
             throw new Exception('Элемент ненайден', 1);
         }
 
-        if ($this->SubscriptionModel->сheck($user, $id, 'workshop')) {
+        if ($this->SubscriptionModel->check($user, $id, 'workshop')) {
             throw new Exception('Уже подписан', 1);
         }
 
