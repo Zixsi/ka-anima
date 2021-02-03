@@ -133,7 +133,6 @@ class PayHelper extends APP_Model
         $payData->setParams($params);
         $payData->calcPrice();
 
-        // return $payData->toArray();
         return $payData;
     }
 

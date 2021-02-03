@@ -170,15 +170,27 @@ class SubscriptionHelper extends APP_Model
             $today = new DateTime();
             $date = new DateTime($item['ts_end']);
             $date->setTime(0, 0, 0);
-            // рассчитываем сумму и дату окончания подписки
-            while ($date->getTimestamp() < $today->getTimestamp()) {
+
+            if (($date->getTimestamp() - $today->getTimestamp()) > 0) {
                 $date->modify('+4 weeks');
+                
                 if ($price_item < $item['amount']) {
                     $price_item += $price;
                 } else {
                     $price_item = $item['amount'];
                 }
+            } else {
+                // рассчитываем сумму и дату окончания подписки
+                while ($date->getTimestamp() < $today->getTimestamp()) {
+                    $date->modify('+4 weeks');
+                    if ($price_item < $item['amount']) {
+                        $price_item += $price;
+                    } else {
+                        $price_item = $item['amount'];
+                    }
+                }
             }
+            
             if ($date->getTimestamp() > $group['ts_end_timestamp']) {
                 $date = new DateTime($group['ts_end']);
             }
@@ -221,7 +233,7 @@ class SubscriptionHelper extends APP_Model
         else {
             throw new Exception('непредвиденное исключение', 1);
         }
-
+        
         return $result;
     }
 
