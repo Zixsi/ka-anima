@@ -517,6 +517,12 @@ function appListener()
             }
             
             $('#price-block span').removeClass('active').end().find('#price-' + type + '-' + period).addClass('active');
+            
+            if (period === 'full') {
+                $('#promo-info').hide();
+            } else {
+                $('#promo-info').show();
+            }
         });
 }
 

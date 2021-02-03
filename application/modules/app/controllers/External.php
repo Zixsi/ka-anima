@@ -27,6 +27,7 @@ class External extends APP_Controller
         $data = [
             'type' => ($_POST['type'] ?? $_GET['type'] ?? 'standart'),
             'period' => ($_POST['period'] ?? $_GET['period'] ?? 'full'),
+            'agree' => (bool) ($_POST['agree'] ?? $_GET['agree'] ?? false),
             'email' => $this->input->post('email', true),
             'isAuth' => $isAuth,
             'target' => ($_GET['target'] ?? 'course'),
@@ -39,6 +40,11 @@ class External extends APP_Controller
             
 //            debug($data); die();
             if ($this->input->method() === 'post') {
+                
+                if((bool) ($this->input->post('agree', true) ?? false) === false) {
+                    throw new Exception('Необходимо принять условия соглашения');
+                }
+                
                 if ($isAuth === false) {
                     $userPassword = random_string('alnum', 8);
                     $newUser = [
@@ -54,7 +60,7 @@ class External extends APP_Controller
                     $isAuth = true;
                     $data['isAuth'] = true;
                 }
-                
+                        
                 clearRequestBackUri();
                 switch ($data['target']) {
                      case 'workshop':
