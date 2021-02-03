@@ -82,8 +82,18 @@
                     </div>
                     <input type="text" class="form-control form-control-lg border-left-0" name="promocode" value="<?= ($promocode ?? '') ?>" placeholder="Промокод">
                 </div>
+                <span id="promo-info" class="text-danger" <?=($period === 'month')?'':'style="display: none;"'?>><small>Промокод действует только на первый месяц подписки</small></span>
             </div>
-                
+            <div class="form-group">
+                <div class="form-check">
+                    <input type="hidden" name="agree" value="0">
+                    <label class="form-check-label text-muted">
+                        <input type="checkbox" class="form-check-input" name="agree" <?=$agree?'checked="true"':''?> value="1">
+                        Я согласен со всеми условиями
+                    </label>
+                    <label class="form-check-label"><a href="<?=$landUrl?>/terms/" target="_blank">Правила и условия</a> <a href="<?=$landUrl?>/policy/" target="_blank">Политика конфиденциальности</a></label>
+                </div>
+            </div>
             <div class="my-3">
                 <?php if($isAuth): ?>
                     <button type="submit" class="btn btn-block btn-primary btn-lg font-weight-medium" onclick="ym(51851432,'reachGoal','KnopkaOplLend'); return true;">Оплатить</button>
