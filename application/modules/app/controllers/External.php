@@ -32,7 +32,8 @@ class External extends APP_Controller
             'isAuth' => $isAuth,
             'target' => ($_GET['target'] ?? 'course'),
             'promocode' => ($_POST['promocode'] ?? $_GET['promocode'] ?? null),
-            'error' => null
+            'error' => null,
+            'landUrl' => $this->config->item('land_url')
         ];
         
         try {
