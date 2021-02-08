@@ -163,9 +163,11 @@ class PayHelper extends APP_Model
         $payData->setName($item['title']);
         $payData->addRow($item['title'], $item['price']);
 
-        $date = new DateTime($item['date']);
-        $date->modify('+1 year');
-        $payData->setPeriod($item['date'], $date->format(DATE_FORMAT_DB_FULL));
+        $dateFrom = new DateTime();
+        $dateTo = clone $dateFrom;
+        $dateTo->modify('+1 year');
+        
+        $payData->setPeriod($dateFrom->format(DATE_FORMAT_DB_FULL), $dateTo->format(DATE_FORMAT_DB_FULL));
         $payData->setParams([
             'course_id' => $item['id']
         ]);
