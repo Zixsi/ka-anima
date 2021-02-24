@@ -45,6 +45,10 @@
                             <?php else :?>
                                 </span>
                             <?php endif;?>
+                                    
+                            <?php if(in_array($val['id'], $subscriptions)): ?>
+                                <?php $this->notifications->showPoint();?>
+                            <?php endif;?>
                         </h4>
                         <div class="card-text"><?=strip_tags($val['description'])?></div>
                         <div class="text-center">
