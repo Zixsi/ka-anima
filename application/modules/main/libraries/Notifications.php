@@ -15,11 +15,12 @@ class Notifications
     public function __construct()
     {
         $this->c = &get_instance();
-        $this->loadUserId();
     }
 
     public function load()
     {
+        $this->loadUserId();
+        
         if (!$this->c->Auth->isActive()) {
             $this->add(self::WARNING, 'Пользователь неактивирован', '/profile/');
         }
@@ -30,6 +31,7 @@ class Notifications
     public function loadFromDb()
     {
         $res = $this->c->NotificationModel->getListByUser($this->getUserId(), 30);
+
         if (is_array($res)) {
             $this->list_from_db = $res;
         }
@@ -102,11 +104,13 @@ class Notifications
 
     public function changeTypeStatus($type)
     {
+        $this->loadUserId();
         $this->c->NotificationModel->setUserTypeStatus($this->getUserId(), $type, 1);
     }
     
     public function changeTragetTypeStatus($type, $targetId)
     {
+        $this->loadUserId();
         $this->c->NotificationModel->setTargetTypeStatus($this->getUserId(), $type, $targetId, 1);
     }
     
@@ -117,6 +121,7 @@ class Notifications
     
     public function getListUnreadTypeIds($type)
     {
+        $this->loadUserId();
         $list = $this->c->NotificationModel->getListUnreadType($this->getUserId(), $type);
         
         return array_map(

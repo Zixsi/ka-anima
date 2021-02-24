@@ -170,6 +170,8 @@ class Groups extends APP_Controller
         }
 
         $this->setHomeworkStatus($group_id, $this->user['id'], $data['lectures']);
+        $this->notifications->changeTragetTypeStatus('subscription', $data['subscr']['id']);
+        
         // debug($data);
 
         $this->load->lview('groups/item_user', $data);

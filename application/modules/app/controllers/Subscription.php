@@ -10,8 +10,9 @@ class Subscription extends APP_Controller
         $data['items'] = $this->SubscriptionModel->getByUserList($userId);
         $this->SubscriptionHelper->prepareList($data['items']);
         $data['types'] = $this->SubscriptionHelper->getObjectTypes();
+        $data['subscriptions'] = $this->notifications->getListUnreadTypeIds('subscription');
 
-        $this->notifications->changeTypeStatus('subscription');
+//        $this->notifications->changeTypeStatus('subscription');
 
         $this->load->lview('subscription/index', $data);
     }

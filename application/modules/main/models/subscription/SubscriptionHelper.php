@@ -361,6 +361,7 @@ class SubscriptionHelper extends APP_Model
 
         foreach ($data as $row) {
             $rowItem = [
+                'id' => (int) $row['id'],
                 'code' => '',
                 'type' => $row['target_type'],
                 'subType' => null,
