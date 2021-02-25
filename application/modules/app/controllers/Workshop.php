@@ -61,6 +61,10 @@ class Workshop extends APP_Controller
 		if($data['currentVideo'] !== null)
 			$data['currentVideo']['iframe_url'] = getVideoIframeUrl($data['currentVideo']);
 		// debug($data['currentVideo']); die();
+                
+                
+                $subscr = $this->SubscriptionModel->get($userId, $data['item']['id'], 'workshop');
+                $this->notifications->changeTragetTypeStatus('subscription', (int) $subscr['id']);
 
 		$this->load->lview('workshop/item', $data);
 	}
