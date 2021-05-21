@@ -1,0 +1,15 @@
+{
+    "autoload": {
+        "psr-4": {
+            "App\\": "application/",
+            "Core\\": "system/"
+        },
+        "files": [
+            "application/modules/main/models/pay/PayData.php"
+        ]
+    },
+    "require": {
+        "vlucas/valitron": "^1.4",
+        "doctrine/migrations": "~2.3"
+    }
+}

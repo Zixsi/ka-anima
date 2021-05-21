@@ -1,13 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+use App\Service\NewsService;
 
 class Main extends APP_Controller
 {
-	public function index()
-	{
-		$data = [];
-		$data['news'] = $this->NewsModel->list('desc');
 
-		$this->load->lview('main/index', $data);
-	}
+    /**
+     * @return void
+     */
+    public function index()
+    {
+        $this->load->lview('main/index', [
+            'news' => (new NewsService())->getListLatestByTimestamp()
+        ]);
+    }
+
 }

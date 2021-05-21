@@ -1,5 +1,60 @@
 <?php
 
+/**
+ * @return Doctrine\DBAL\Connection
+ */
+function dbConnection()
+{
+    include APPPATH . 'config/database.php';
+    
+    return \Doctrine\DBAL\DriverManager::getConnection([
+        'driver' => 'pdo_mysql',
+        'user' => $db['default']['username'],
+        'password' => $db['default']['password'],
+        'dbname' => $db['default']['database'],
+        'host' => $db['default']['hostname'],
+        'charset'  => $db['default']['char_set'],
+        'driverOptions' => [
+            1002 => 'SET NAMES utf8'
+        ]
+    ]);
+}
+
+/**
+ * @staticvar CI_Upload $instance
+ * @return CI_Upload
+ */
+function uploader()
+{
+    static $instance;
+
+    if ($instance === null) {
+        $ci = get_instance();
+        $ci->load->config('upload');
+        $ci->load->library('upload');
+        $instance = $ci->upload;
+    }
+
+
+    return $instance;
+}
+
+/**
+ * @staticvar CI_Config $instance
+ * @return CI_Config
+ */
+function config()
+{
+    static $instance;
+
+    if ($instance === null) {
+        $instance = get_instance()->config;
+    }
+
+
+    return $instance;
+}
+
 function showError($text)
 {
     if (empty($text) == false) {

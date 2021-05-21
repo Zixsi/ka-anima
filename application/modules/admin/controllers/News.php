@@ -1,108 +1,105 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+use App\Form\NewsForm;
+use App\Service\NewsService;
 
 class News extends APP_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * @var NewsService
+     */
+    private $newsService;
+    
+    /**
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->newsService = new NewsService();
+    }
+    
+    /**
+     * @return void
+     */
+    public function index()
+    {
+        $this->load->lview('news/index', [
+            'items' => $this->newsService->getListForAdmin()
+        ]);
+    }
 
-	public function index()
-	{
-		$data = [];
-		if(($id = $this->input->post('id', true)) && $this->input->post('type') === 'delete')
-			$this->NewsModel->delete($id);
-		$data['items'] = $this->NewsModel->list('desc');
+    /**
+     * @return void
+     */
+    public function add()
+    {
+        $item = new \App\Entity\News();
+        $error = null;
+        
+        if (cr_valid_key()) {
+            $form = (new NewsForm($item))->setRequestParams($this->input->post(null, true));
+            
+            if ($form->handle()) {
+                $this->newsService->save($item);
+                redirect(sprintf('/admin/news/edit/%d/', $item->id));
+            } else {
+                $error = $form->getError();
+            }
+        }
 
-		$this->load->lview('news/index', $data);
-	}
+        $this->load->lview('news/add', [
+            'item' => $item->toDbArray(),
+            'error' => $error,
+            'csrf' => cr_get_key()
+        ]);
+    }
 
-	public function add()
-	{
-		$data = [];
-		$data['error'] = null;
+    /**
+     * 
+     * @param int $id
+     * @return void
+     */
+    public function edit($id = 0)
+    {
+        $item = $this->newsService->getById((int) $id);
+        
+        if ($item === false) {
+            show_404();
+        }
+        
+        $error = null;
+        
+        if (cr_valid_key()) {
+            $form = (new NewsForm($item))->setRequestParams($this->input->post(null, true));
+            
+            if ($form->handle()) {
+                $this->newsService->save($item);
+            } else {
+                $error = $form->getError();
+            }
+        }
 
-		if(cr_valid_key())
-		{
-			try
-			{
-				$form_data = $this->input->post(null, true);
+        $this->load->lview('news/edit', [
+            'error' => $error,
+            'item' => $item->toDbArray(),
+            'csrf' => cr_get_key()
+        ]);
+    }
 
-				$this->form_validation->reset_validation();
-				$this->form_validation->set_data($form_data);
-
-				if($this->form_validation->run('news_add') === false)
-					throw new Exception($this->form_validation->error_string());
-
-				if($img = $this->NewsHelper->prepareImg('img'))
-					$form_data['img'] = $img;
-
-				$form_data = [
-					'title' => htmlspecialchars_decode($form_data['title']),
-					'text' => htmlspecialchars_decode($form_data['text']),
-					'description' => htmlspecialchars_decode($form_data['description'] ?? ''),
-					'img' => ($form_data['img'] ?? '')
-				];
-				if($this->NewsModel->add($form_data) === false)
-					throw new Exception($this->NewsModel->getLastError());
-
-				header('Location: ../');
-			}
-			catch(Exception $e)
-			{
-				$data['error'] = $e->getMessage();
-			}
-		}
-
-		$data['csrf'] = cr_get_key();
-
-		$this->load->lview('news/add', $data);
-	}
-
-	public function edit($id = 0)
-	{
-		$data = [];
-		$data['error'] = null;
-
-		if(cr_valid_key())
-		{
-			try
-			{
-				$form_data = $this->input->post(null, true);
-				$this->form_validation->reset_validation();
-				$this->form_validation->set_data($form_data);
-
-				if($this->form_validation->run('news_edit') === false)
-					throw new Exception($this->form_validation->error_string());
-
-				if($img = $this->NewsHelper->prepareImg('img'))
-					$form_data['img'] = '/'.$img;
-
-				$form_data = [
-					'title' => htmlspecialchars_decode($form_data['title']),
-					'text' => htmlspecialchars_decode($form_data['text']),
-					'description' => htmlspecialchars_decode($form_data['description'] ?? ''),
-					'img' => ($form_data['img'] ?? '')
-				];
-
-				if($this->NewsModel->update($id, $form_data) === false)
-					throw new Exception($this->NewsModel->getLastError());
-
-				header('Location: ../../');
-			}
-			catch(Exception $e)
-			{
-				$data['error'] = $e->getMessage();
-			}
-		}
-
-		if(($data['item'] = $this->NewsModel->getById($id)) === false)
-		{
-			header('Location: ../');
-		}
-		$data['csrf'] = cr_get_key();
-
-		$this->load->lview('news/edit', $data);
-	}
+    /**
+     * @param int $id
+     * @return void
+     */
+    public function delete($id = 0)
+    {
+        $item = $this->newsService->getById((int) $id);
+        
+        if ($item) {
+            $this->newsService->delete((int) $id);
+        }
+        
+        redirect('/admin/news/');
+    }
 }
