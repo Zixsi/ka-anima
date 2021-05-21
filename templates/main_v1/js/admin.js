@@ -1,7 +1,14 @@
 $(document).ready(function(){
 	$('.delete-item-form').on('submit', function(){
-		if(confirm("Вы действительно хотите УДАЛИТЬ этот элемент?") === false)
-			return false;
+            if(confirm("Вы действительно хотите УДАЛИТЬ этот элемент?") === false) {
+                return false;
+            }
+	});
+        
+        $('.delete-item-btn').on('click', function(){
+            if(confirm("Вы действительно хотите УДАЛИТЬ этот элемент?") === false) {
+                return false;
+            }
 	});
 
 	AJAX_API_URL = '/admin/ajax/';
