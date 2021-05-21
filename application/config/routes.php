@@ -35,6 +35,11 @@ $route['admin/promocode/view/(:num)'] = 'admin/promocode/view/$1';
 $route['admin/promocode/add'] = 'admin/promocode/add';
 $route['admin/promocode/(.*)'] = 'admin/promocode/$1';
 
+$route['admin/news'] = 'admin/news/index';
+$route['admin/news/delete/(:num)'] = 'admin/news/delete/$1';
+$route['admin/news/add'] = 'admin/news/add';
+$route['admin/news/edit/(:num)'] = 'admin/news/edit/$1';
+
 
 $route['admin/(.*)'] = 'admin/$1';
 
