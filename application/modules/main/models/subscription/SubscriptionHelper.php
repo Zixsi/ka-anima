@@ -218,7 +218,7 @@ class SubscriptionHelper extends APP_Model
             }
         }
         // если закончился период подписки - продление на год
-        elseif ($item['ts_end_timestamp'] < time()) {
+        elseif (($item['ts_end_timestamp'] - time()) <= 604800) {
             $date = new DateTime();
             $date->modify('next year');
             $date->setTime(0, 0, 0);
