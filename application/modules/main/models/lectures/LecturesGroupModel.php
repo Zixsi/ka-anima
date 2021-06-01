@@ -104,7 +104,7 @@ class LecturesGroupModel extends APP_Model
      */
     public function getGroupMonthMap($group)
     {
-         $sql = 'SELECT 
+        $sql = 'SELECT 
                 cg.ts as ts_start, 
                 lg.ts as ts_end
             FROM 
@@ -124,7 +124,7 @@ class LecturesGroupModel extends APP_Model
             $chunks = array_chunk($rows, 4);
             $month = 1;
             $result = [];
-            
+
             foreach ($chunks as $key => $chunk) {
                 if ($key === 0) {
                     $firstItem = current($chunk);
@@ -133,9 +133,9 @@ class LecturesGroupModel extends APP_Model
                         'start' => $firstItem['ts_start'],
                         'end' => $firstItem['ts_start']
                     ];
-                   $month++; 
+                    $month++;
                 }
-                
+
                 $item = end($chunk);
                 $result[$month] = [
                     'number' => $month,
@@ -144,10 +144,31 @@ class LecturesGroupModel extends APP_Model
                 ];
                 $month++;
             }
-            
+
             return $result;
         }
-        
+
         return [];
+    }
+
+    /**
+     * @param int $group
+     * @param int $lecture
+     * @param type $date
+     * @return bool
+     */
+    public function addLectureToGroupTs($group, $lecture, $date)
+    {
+        $data = [
+            'group_id' => (int) $group,
+            'lecture_id' => (int) $lecture,
+            'ts' => $date
+        ];
+
+        if ($this->db->insert(self::TABLE_LECTURES_GROUPS, $data)) {
+            return $this->db->insert_id();
+        }
+
+        return false;
     }
 }

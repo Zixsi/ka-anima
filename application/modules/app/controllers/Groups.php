@@ -1,8 +1,10 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Groups extends APP_Controller
 {
+
     public $user;
 
     public function __construct()
@@ -11,7 +13,7 @@ class Groups extends APP_Controller
         if (!$this->Auth->isActive()) {
             header('Location: /');
         }
-        
+
         $this->user = $this->Auth->user();
     }
 
@@ -33,11 +35,11 @@ class Groups extends APP_Controller
         ];
         $data['items'] = $this->GroupsModel->getTeacherGroups($this->user['id'], false, $filter);
         $withoutReviewGroup = $this->LecturesHomeworkModel->getGroupsWithoutReviewHomework();
-        
+
         foreach ($data['items'] as &$row) {
-           $row['review_mark'] = in_array($row['id'], $withoutReviewGroup);
+            $row['review_mark'] = in_array($row['id'], $withoutReviewGroup);
         }
-        
+
         $this->GroupsHelper->prepareListForTeacher($data['items'], $filter);
 
         $this->load->lview('groups/index_teacher', $data);
@@ -78,7 +80,7 @@ class Groups extends APP_Controller
 
         // лекции группы
         $lectures = $this->LecturesGroupModel->listForGroup($data['item']['id']);
-        
+
         $data['item']['current_week'] = $this->currentGroupWeek($lectures);
 
         // дз ученика
@@ -86,7 +88,7 @@ class Groups extends APP_Controller
         $data['homeworks'] = [];
         $data['total_not_verified_works'] = 0;
         $users_without_hw_review = $this->LecturesHomeworkModel->getUsersIdWithoutReviewHomework($data['item']['id']);
-        
+
         foreach ($data['users'] as &$row) {
             $row['mark'] = null;
             $data['total_not_verified_works'] += $row['homeworks'] - $row['reviews'];
@@ -126,21 +128,22 @@ class Groups extends APP_Controller
         $group_id = $data['group']['id'];
 
         $data['subscr'] = $this->checkSubscr($group_id);
-        $data['subscr_is_active'] = (($data['subscr']['active'] ?? false))?true:false;
+        $data['subscr_is_active'] = (($data['subscr']['active'] ?? false)) ? true : false;
 
         $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
-        $data['lecture_id'] = ((int) $lecture === 0)?current($data['lectures'])['id']:$lecture;
+        $data['lecture_id'] = ((int) $lecture === 0) ? current($data['lectures'])['id'] : $lecture;
         $last_active_lecture = $this->prepareLectures($data['lectures'], $data['subscr']);
-        $data['lectures_is_active'] = ($last_active_lecture == 0)?false:true;
-        
+        $data['lectures_is_active'] = ($last_active_lecture == 0) ? false : true;
+
 //        debug($data['lectures']); die();
 
         if ($data['lectures_is_active'] && $data['subscr_is_active']) {
             if (empty($data['lectures'][$data['lecture_id']]) or $data['lectures'][$data['lecture_id']]['active'] == 0) {
-                header('Location: /groups/'.$data['group']['code'].'/lecture/'.$last_active_lecture);
+                header('Location: /groups/' . $data['group']['code'] . '/lecture/' . $last_active_lecture);
             }
 
-            $data['lecture'] = $this->LecturesModel->getByID($data['lecture_id']);
+            $lecture = (new \App\Service\LectureService())->getById($data['lecture_id']);
+            $data['lecture'] = $lecture->toViewArray();
             $data['lecture']['ts'] = $data['lectures'][$data['lecture_id']]['ts'];
             $data['lecture']['can_upload_files'] = true;
             // если прошла 3 недели после запуска
@@ -163,7 +166,7 @@ class Groups extends APP_Controller
             if (cr_valid_key()) {
                 $this->uploadHomeWork($data);
             }
-            
+
             $data['csrf'] = cr_get_key();
             $data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($group_id, $data['lecture_id']);
             $data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
@@ -171,7 +174,7 @@ class Groups extends APP_Controller
 
         $this->setHomeworkStatus($group_id, $this->user['id'], $data['lectures']);
         $this->notifications->changeTragetTypeStatus('subscription', $data['subscr']['id']);
-        
+
         // debug($data);
 
         $this->load->lview('groups/item_user', $data);
@@ -186,11 +189,11 @@ class Groups extends APP_Controller
         $group_id = (int) ($data['group']['id']);
 
         if (($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false) {
-            header('Location: /groups/'.$data['group']['code'].'/');
+            header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         $data['pageTitle'] = $data['group']['name'];
-            
+
         $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
         $this->prepareLectures($data['lectures'], $data['subscr']);
         $data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
@@ -201,7 +204,6 @@ class Groups extends APP_Controller
 
         $data['wall'] = $this->WallModel->list($group_id);
         // debug($data['wall']); die();
-
         // debug($data); die();
         $this->load->lview('groups/group', $data);
     }
@@ -214,11 +216,11 @@ class Groups extends APP_Controller
         $group_id = (int) ($data['group']['id']);
 
         if (($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false) {
-            header('Location: /groups/'.$data['group']['code'].'/');
+            header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         if (($data['subscr']['type'] ?? '') === 'standart') {
-            header('Location: /groups/'.$data['group']['code'].'/');
+            header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         $data['pageTitle'] = $data['group']['name'];
@@ -229,7 +231,7 @@ class Groups extends APP_Controller
             if (intval($review_item['item_is_viewed'] ?? 1) === 0 && intval($review_item['user'] ?? 1) === (int) $this->user['id']) {
                 $this->ReviewModel->setViewedStatus($review_item['id'], true);
             }
-        
+
             if ($user = $this->UserModel->getByID($review_item['user'])) {
                 $review_item['user_name'] = $user['full_name'];
             }
@@ -263,12 +265,12 @@ class Groups extends APP_Controller
         $group_id = (int) ($data['group']['id']);
 
         if (($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false) {
-            header('Location: /groups/'.$data['group']['code'].'/');
+            header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         $data['group'] = $this->CoursesGroupsModel->getByID($group_id);
         if (($data['subscr']['type'] ?? '') === 'standart') {
-            header('Location: /groups/'.$data['group']['code'].'/');
+            header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         $data['pageTitle'] = $data['group']['name'];
@@ -286,9 +288,9 @@ class Groups extends APP_Controller
             if (empty($data['item'])) {
                 $data['item'] = current($data['list']);
             }
-            
+
             if (!in_array($data['item']['id'], $streams_id)) {
-                header('Location: /groups/'.$data['group']['code'].'/stream/');
+                header('Location: /groups/' . $data['group']['code'] . '/stream/');
             }
 
             $this->load->library(['youtube']);
@@ -317,23 +319,23 @@ class Groups extends APP_Controller
             $isStandart = ($subscr['type'] === 'standart');
             $subscrTsEnd = strtotime($subscr['ts_end']);
         }
-        
+
 
         if ($data) {
             $tmp_data = $data;
             $data = [];
-            
+
             foreach ($tmp_data as $val) {
-                if ($isStandart && strtotime($val['ts']) <= $subscrTsEnd ) {
+                if ($isStandart && strtotime($val['ts']) <= $subscrTsEnd) {
                     $val['active'] = 1;
                 }
-                
+
                 $data[$val['id']] = $val;
                 if ($val['active'] == 1) {
                     $last_active_id = $val['id'];
                 }
             }
-        
+
             unset($tmp_data);
         }
 
@@ -345,7 +347,7 @@ class Groups extends APP_Controller
         $cnt = 0;
         if ($list && is_array($list)) {
             foreach ($list as $val) {
-                $cnt += ($val['active'] == 1 && (int) $val['type'] === 0)?1:0;
+                $cnt += ($val['active'] == 1 && (int) $val['type'] === 0) ? 1 : 0;
             }
         }
 
@@ -365,7 +367,7 @@ class Groups extends APP_Controller
             }
         }
     }
-    
+
     private function uploadHomeWork(&$data)
     {
         $comment = $this->input->post('text', true);
@@ -406,7 +408,7 @@ class Groups extends APP_Controller
 
         return $result;
     }
-    
+
     private function listenUserActions($group, $params, $data = [])
     {
         if (!isset($params['action']) || empty($params['action'])) {
@@ -416,17 +418,17 @@ class Groups extends APP_Controller
         switch ($params['action']) {
             case 'download':
                 if (isset($params['target']) && $params['target'] == 'homework') {
-                    $lecture = $this->LecturesModel->getByID($params['lecture']);
+                    $lecture = (new \App\Service\LectureService())->getById((int) $params['lecture']);
 
-                    $actionParams =[
+                    $actionParams = [
                         'group_code' => $group['code'],
-                        'lecture_name' => $lecture['name'],
+                        'lecture_name' => $lecture->name,
                         'user_id' => $data['user']['id'],
                         'user_name' => $data['user']['full_name']
                     ];
-                    
+
                     Action::send(Action::HOMEWORK_DOWNLOAD, [$actionParams]);
-                    
+
                     $this->HomeworkHelper->download($group['id'], $params['lecture'], $params['user']);
                 }
                 break;
@@ -435,4 +437,5 @@ class Groups extends APP_Controller
                 break;
         }
     }
+
 }
