@@ -1,110 +1,100 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+use App\Entity\Lecture;
+use App\Form\LectureForm;
+use App\Service\LectureService;
 
 class Lectures extends APP_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
+    /**
+     * @var LectureService
+     */
+    private $lectureService;
+    
+    /**
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->lectureService = new LectureService();
+    }
 
-	public function index($course = 0)
-	{
-		$data = [];
-		$this->checkAccess($course);
+    /**
+     * @param int $course
+     * @return void
+     */
+    public function index($course = 0)
+    {
+        if ((new CoursesModel())->getByID($course) == false) {
+            show_404();
+        }
 
-		$data['items'] = $this->LecturesModel->getByCourse($course);
-		
-		$this->load->lview('lectures/index', $data);
-	}
+        $this->load->lview('lectures/index', [
+            'items' => $this->lectureService->getShortListByCourse((int) $course)
+        ]);
+    }
 
-	public function add($course = 0)
-	{
-		$data = [];
-		$data['types'] = LecturesModel::TYPES;
+    /**
+     * @param int $course
+     * @return void
+     */
+    public function add($course = 0)
+    {
+        $item = new Lecture();
+        $item->courseId = (int) $course;
+        $form = new LectureForm($item);
+        
+        if (cr_valid_key()) {
+            $form->setRequestParams($_POST);
+            
+            if ($form->handle()) {
+                $this->lectureService->save($item);
+                header(sprintf('Location: ../edit/%s/', $item->id));
+            }
+        }
 
-		if(cr_valid_key())
-		{
-			$form_data = $this->input->post(null, true);
-			$form_data['course_id'] = $course;
-			if($id = $this->LecturesModel->add($form_data))
-			{
-				$this->VideoModel->prepareAndSet($id, 'lecture', $form_data['video']);
-				$this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures');
-				header('Location: ../');
-			}
-		}
+        $this->load->lview('lectures/add', [
+            'types' => \App\Enum\LectureType::getViewList(),
+            'csrf' => cr_get_key(),
+            'error' => $form->getError(),
+            'item' => $item->toViewArray()
+        ]);
+    }
 
-		$data['csrf'] = cr_get_key();
-		$data['error'] = $this->LecturesModel->getLastError();
+    /**
+     * @param int $id
+     * @param int $course
+     * @return void
+     */
+    public function edit($id = 0, $course = 0)
+    {
+        $item = $this->lectureService->getById((int) $id);
 
-		$this->load->lview('lectures/add', $data);
-	}
+        if ($item === false || (int) $course !== $item->courseId) {
+            show_404();
+        }
+        
+        $form = new LectureForm($item);
 
-	public function edit($id = 0, $course = 0)
-	{
-		$data = [];
-		$data['types'] = LecturesModel::TYPES;
-		
-		$id = intval($id);
+        if (cr_valid_key()) {
+            $form->setRequestParams($_POST);
+            
+            if ($form->handle()) {
+               $this->lectureService->save($item);
 
-		if(($data['item'] = $this->LecturesModel->getByID($id)) == false)
-		{
-			header('Location: ../');
-		}
+                SetFlashMessage('success', 'Success');
+            }
+        }
 
-		if($data['item']['course_id'] !== $course)
-		{
-			header('Location: ../');
-		}
-		
-		$data['error'] = null;
-
-		if(cr_valid_key())
-		{
-			$form_data = $this->input->post(null, true);
-			$form_data['course_id'] = $course;
-			if($this->LecturesModel->update($id, $form_data))
-			{
-				$data['item'] = $form_data + $data['item'];
-				$this->VideoModel->prepareAndSet($id, 'lecture', $data['item']['video']);
-
-				$this->FilesModel->deleteLinkFile(($form_data['del_files'] ?? []), $id, 'lecture');
-				if($this->FilesModel->filesUpload('files', $id, 'lecture', 'upload_lectures'))
-				{
-					$data['error'] = $this->FilesModel->getLastError();
-				}
-
-				SetFlashMessage('success', 'Success');
-			}
-			else
-			{
-				$data['error'] =$this->LecturesModel->getLastError();
-			}
-		}
-
-		$data['item']['files'] = $this->FilesModel->listLinkFiles($id, 'lecture');
-		$data['csrf'] = cr_get_key();
-		
-
-		$this->load->lview('lectures/edit', $data);
-	}
-
-	private function checkAccess($id = 0)
-	{
-		try
-		{
-			if($id == 0)
-				throw new Exception("Empty course id", 1);
-
-			if(($item = $this->CoursesModel->getByID($id)) == false)
-				throw new Exception("Course not found", 1);
-		}
-		catch(Exception $e)
-		{
-			header('Location: /admin/courses/');
-		}
-
-		return true;
-	}
+        $this->load->lview('lectures/edit', [
+            'types' => \App\Enum\LectureType::getViewList(),
+            'item' => $item->toViewArray(),
+            'itemFiles' => (new FilesModel())->listLinkFiles($id, 'lecture'),
+            'error' => $form->getError(),
+            'csrf' => cr_get_key()
+        ]);
+    }
+    
 }

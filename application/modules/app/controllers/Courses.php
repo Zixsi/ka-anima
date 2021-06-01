@@ -1,56 +1,58 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Courses extends APP_Controller
 {
-	public function __construct()
-	{
-		parent::__construct();
-	}
 
-	// список доступных курсов
-	public function index()
-	{
-		$data = [];
-		$data['items'] = $this->CoursesModel->listActive();
-		$this->CoursesHelper->prepareOffers($data['items']);
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
-		$this->load->lview('courses/index', $data);
-	}
+    // список доступных курсов
+    public function index()
+    {
+        $data = [];
+        $data['items'] = $this->CoursesModel->listActive();
+        $this->CoursesHelper->prepareOffers($data['items']);
 
-	// подробная информация по курсу
-	public function item($code = null)
-	{
-		$data = [];
+        $this->load->lview('courses/index', $data);
+    }
 
-		// курс
-		if(($data['item'] = $this->CoursesModel->getByCode($code)) === false)
-			header('Location: ../');
+    // подробная информация по курсу
+    public function item($code = null)
+    {
+        $data = [];
 
-		$this->CoursesHelper->prepareItem($data['item']);
-		$data['pageTitle'] = $data['item']['name'];
+        // курс
+        if (($data['item'] = $this->CoursesModel->getByCode($code)) === false)
+            header('Location: ../');
 
-		// список предложений
-		$data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);
-		if(count($data['offers']) && empty($this->input->get('date')))
-		{
-			$offer = current($data['offers']);
-			header('Location: ./?date='.$offer['ts_formated']);
-		}
+        $this->CoursesHelper->prepareItem($data['item']);
+        $data['pageTitle'] = $data['item']['name'];
 
-		// список лекций
-		$data['lectures'] = $this->LecturesModel->getByCourse($data['item']['id']);
-		// преподаватель
-		$data['teacher'] = $this->UserModel->getById($data['item']['teacher']);
+        // список предложений
+        $data['offers'] = $this->GroupsModel->listOffersForCourse($data['item']['id']);
+        if (count($data['offers']) && empty($this->input->get('date'))) {
+            $offer = current($data['offers']);
+            header('Location: ./?date=' . $offer['ts_formated']);
+        }
 
-		$offer_date = $this->input->get('date');
-		$data['selected_offer_index'] = $this->GroupsHelper->selectOfferByDate($offer_date, $data['offers']);
+        // список лекций
+        $data['lectures'] = (new \App\Service\LectureService())->getShortListByCourse($data['item']['id']);
+        // преподаватель
+        $data['teacher'] = $this->UserModel->getById($data['item']['teacher']);
 
-		// поиск подходящей вип группы, если её нет - создаем
-		$data['vip_offer'] = null;
-		if(!$data['item']['only_standart'] && ($vip_group_id = $this->GroupsHelper->makeGroup($data['item'], GroupsModel::TYPE_VIP, time())))
-			$data['vip_offer'] = $this->GroupsModel->getByID($vip_group_id);
+        $offer_date = $this->input->get('date');
+        $data['selected_offer_index'] = $this->GroupsHelper->selectOfferByDate($offer_date, $data['offers']);
 
-		$this->load->lview('courses/item', $data);
-	}
+        // поиск подходящей вип группы, если её нет - создаем
+        $data['vip_offer'] = null;
+        if (!$data['item']['only_standart'] && ($vip_group_id = $this->GroupsHelper->makeGroup($data['item'], GroupsModel::TYPE_VIP, time())))
+            $data['vip_offer'] = $this->GroupsModel->getByID($vip_group_id);
+
+        $this->load->lview('courses/item', $data);
+    }
+
 }
