@@ -1,5 +1,10 @@
 <?php
 
+use App\Entity\LectureGroup;
+use App\Enum\LectureType;
+use App\Service\GroupService;
+use App\Service\LectureService;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class GroupsHelper extends APP_Model
@@ -126,11 +131,13 @@ class GroupsHelper extends APP_Model
             }
 
             // добавляем лекции в группу
-            $lectureService = new \App\Service\LectureService();
+            $lectureService = new LectureService();
             $lectures = $lectureService->getShortListByCourse($course['id']);
             
             if (empty($lectures) === false) {
                 $ts_item = clone $ts_start;
+                
+                $groupService = new GroupService();
                 
                 foreach ($lectures as $item) {
                     if ($item['active'] === false) {
@@ -144,7 +151,12 @@ class GroupsHelper extends APP_Model
                         $ts_item->add(new DateInterval('P1W')); // +1 неделя
                     }
 
-                    (new LecturesGroupModel())->addLectureToGroupTs((int) $group_id, (int) $item['id'], $ts);
+                    $groupLecture = new LectureGroup();
+                    $groupLecture->groupId = (int) $group_id;
+                    $groupLecture->lectureId = (int) $item['id'];
+                    $groupLecture->ts = new DateTime($ts);
+
+                    $groupService->addGroupLecture($groupLecture);
                 }
             }
 
@@ -173,7 +185,7 @@ class GroupsHelper extends APP_Model
                 throw new Exception('Группа не найдена');
 
             $this->GroupsModel->remove($item['id']);
-            $this->LecturesGroupModel->removeByGroup($item['id']);
+            (new GroupService())->removeLecturesForGroup((int) $item['id']);
 
             if ($this->db->trans_status() === false) {
                 $this->db->trans_rollback();
@@ -328,7 +340,7 @@ class GroupsHelper extends APP_Model
         ];
 
         if (isset($data['month']) && (int) $data['month'] > 0) {
-            $months = $this->LecturesGroupModel->getGroupMonthMap($group['id']);
+            $months = (new GroupService())->getGroupMonthMap((int) $group['id']);
             $month = $months[(int) $data['month']];
             $price = (float) $course['price'][$params['type']]['month'];
 
@@ -348,7 +360,7 @@ class GroupsHelper extends APP_Model
 
     // создание группы с заданным типом
     public function makeGroup($course, $type, $ts, $cnt = 1)
-    {
+    {        
         $result = null;
         if ($cnt > 1)
             $result = [];
@@ -394,16 +406,18 @@ class GroupsHelper extends APP_Model
             if ($group_item = $this->GroupsModel->getByCode($group_item_params['code'])) {
                 $group_item_id = $group_item['id'];
             } else {
-                if (($group_item_id = $this->GroupsModel->add($group_item_params)) === false)
+                if (($group_item_id = $this->GroupsModel->add($group_item_params)) === false) {
                     throw new Exception('ошибка создания группы');
+                }
 
                 if ($lectures === null) {
-                    $lectures = (new \App\Service\LectureService())->getShortListByCourse($course['id']);
+                    $lectures = (new LectureService())->getShortListByCourse($course['id']);
                 }
 
                 // добавляем лекции в группу
                 if ($lectures) {
                     $ts_item = clone $ts_start_group;
+                    $groupService = new GroupService();
                     
                     foreach ($lectures as $item) {
                         if ($item['active'] === false) {
@@ -417,15 +431,21 @@ class GroupsHelper extends APP_Model
                             $ts_item->add($interval);
                         }
 
-                        (new LecturesGroupModel())->addLectureToGroupTs((int) $group_item_id, (int) $item['id'], $ts);
+                        $groupLecture = new LectureGroup();
+                        $groupLecture->groupId = (int) $group_item_id;
+                        $groupLecture->lectureId = (int) $item['id'];
+                        $groupLecture->ts = new DateTime($ts);
+                        
+                        $groupService->addGroupLecture($groupLecture);
                     }
                 }
             }
 
-            if ($cnt === 1)
+            if ($cnt === 1) {
                 $result = $group_item_id;
-            else
+            } else {
                 $result[] = $group_item_id;
+            }
 
             // делаем смещение на 1 неделю
             $ts_start->modify('next monday');
@@ -456,7 +476,7 @@ class GroupsHelper extends APP_Model
 
         // подготавливаем лекции
         foreach ($lectures as $val) {
-            if ((int) $val['type'] === \App\Enum\LectureType::INTRO) {
+            if ((int) $val['type'] === LectureType::INTRO) {
                 continue;
             }
 
@@ -547,8 +567,9 @@ class GroupsHelper extends APP_Model
             throw new Exception('неверные параметры', 1);
         }
 
-        $mapLecturesGroup = $this->LecturesGroupModel->getGroupMonthMap($group);
-        $mapLecturesNewGroup = $this->LecturesGroupModel->getGroupMonthMap($newGroup);
+        $groupService = new GroupService();
+        $mapLecturesGroup = $groupService->getGroupMonthMap((int) $group);
+        $mapLecturesNewGroup = $groupService->getGroupMonthMap((int) $newGroup);
         $payedMonthIndex = 1;
         $subscriptionEndTs = strtotime($subscription['ts_end']);
 
