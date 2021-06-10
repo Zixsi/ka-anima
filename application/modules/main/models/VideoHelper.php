@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\GroupService;
+use App\Service\LectureService;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class VideoHelper extends APP_Model
@@ -13,7 +16,7 @@ class VideoHelper extends APP_Model
             $result['course'] = null;
 
             if ($result['source_type'] === 'lecture') {
-                $lecture = (new \App\Service\LectureService())->getById((int) $result['source_id']);
+                $lecture = (new LectureService())->getById((int) $result['source_id']);
                     
                 if ($lecture) {
                     $result['source'] = $lecture->toViewArray();
@@ -39,7 +42,8 @@ class VideoHelper extends APP_Model
             if ((bool) $val['subscr_active'] === false || (int) $courseId !== (int) $val['id'])
                 continue;
 
-            $lectures = $this->LecturesGroupModel->listForGroup($val['course_group']);
+            $lectures = (new GroupService())->getListPublicLecturesForGroup((int) $val['course_group']);
+            
             foreach ($lectures as $lectureVal) {
                 if ((int) $lectureVal['id'] === $lectureId && (int) $lectureVal['active'] === 1) {
                     $hasAccess = true;

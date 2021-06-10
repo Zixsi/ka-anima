@@ -1,6 +1,7 @@
 <?php
 
-defined('BASEPATH') or exit('No direct script access allowed');
+use App\Service\GroupService;
+use App\Service\LectureService;
 
 class Groups extends APP_Controller
 {
@@ -79,7 +80,7 @@ class Groups extends APP_Controller
         $this->GroupsHelper->setUsersHomeworkStatus($data['item']['id'], $data['users']);
 
         // лекции группы
-        $lectures = $this->LecturesGroupModel->listForGroup($data['item']['id']);
+        $lectures = (new GroupService())->getListPublicLecturesForGroup((int) $data['item']['id']);
 
         $data['item']['current_week'] = $this->currentGroupWeek($lectures);
 
@@ -113,7 +114,6 @@ class Groups extends APP_Controller
 
         $data['wall'] = $this->WallModel->list($data['item']['id']);
 
-        // debug($data); die();
         $this->load->lview('groups/item_teacher', $data);
     }
 
@@ -125,35 +125,25 @@ class Groups extends APP_Controller
         $data['section'] = 'index';
         $data['group'] = $item;
         $data['pageTitle'] = $data['group']['name'];
-        $group_id = $data['group']['id'];
+        $groupId = $data['group']['id'];
 
-        $data['subscr'] = $this->checkSubscr($group_id);
+        $data['subscr'] = $this->checkSubscr($groupId);
         $data['subscr_is_active'] = (($data['subscr']['active'] ?? false)) ? true : false;
 
-        $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
+        $data['lectures'] = (new GroupService())->getListPublicLecturesForGroup((int) $groupId);
         $data['lecture_id'] = ((int) $lecture === 0) ? current($data['lectures'])['id'] : $lecture;
         $last_active_lecture = $this->prepareLectures($data['lectures'], $data['subscr']);
         $data['lectures_is_active'] = ($last_active_lecture == 0) ? false : true;
-
-//        debug($data['lectures']); die();
 
         if ($data['lectures_is_active'] && $data['subscr_is_active']) {
             if (empty($data['lectures'][$data['lecture_id']]) or $data['lectures'][$data['lecture_id']]['active'] == 0) {
                 header('Location: /groups/' . $data['group']['code'] . '/lecture/' . $last_active_lecture);
             }
 
-            $lecture = (new \App\Service\LectureService())->getById($data['lecture_id']);
+            $lecture = (new LectureService())->getById($data['lecture_id']);
             $data['lecture'] = $lecture->toViewArray();
             $data['lecture']['ts'] = $data['lectures'][$data['lecture_id']]['ts'];
             $data['lecture']['can_upload_files'] = true;
-            // если прошла 3 недели после запуска
-            // запрещаем закружать в эту лекцию файлы
-            // $ts_now = new DateTime('now');
-            // $ts_lecture_start = new DateTime($data['lecture']['ts']);
-            // $diff = $ts_now->diff($ts_lecture_start);
-            // if((int) $diff->days > 21)
-            //  $data['lecture']['can_upload_files'] = false;
-            // unset($ts_now, $ts_lecture_start, $diff);
 
             $data['lecture']['video_code'] = '';
             if ($res = $this->VideoModel->bySource($data['lecture']['id'])) {
@@ -168,11 +158,11 @@ class Groups extends APP_Controller
             }
 
             $data['csrf'] = cr_get_key();
-            $data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($group_id, $data['lecture_id']);
+            $data['lecture_homework'] = $this->LecturesHomeworkModel->getListForUsers($groupId, $data['lecture_id']);
             $data['lecture']['files'] = $this->FilesModel->listLinkFiles($data['lecture_id'], 'lecture');
         }
 
-        $this->setHomeworkStatus($group_id, $this->user['id'], $data['lectures']);
+        $this->setHomeworkStatus($groupId, $this->user['id'], $data['lectures']);
         $this->notifications->changeTragetTypeStatus('subscription', $data['subscr']['id']);
 
         // debug($data);
@@ -186,23 +176,23 @@ class Groups extends APP_Controller
         $data['error'] = null;
         $data['section'] = 'group';
         $data['group'] = $this->CoursesGroupsModel->getByCode($group);
-        $group_id = (int) ($data['group']['id']);
+        $groupId = (int) ($data['group']['id']);
 
-        if (($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false) {
+        if (($data['subscr'] = $this->checkSubscr($groupId)) === false || ($data['subscr']['active'] ?? false) === false) {
             header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
         $data['pageTitle'] = $data['group']['name'];
 
-        $data['lectures'] = $this->LecturesGroupModel->listForGroup($group_id);
+        $data['lectures'] = (new GroupService())->getListPublicLecturesForGroup($groupId);
         $this->prepareLectures($data['lectures'], $data['subscr']);
         $data['group']['current_week'] = $this->currentGroupWeek($data['lectures']);
         $data['teacher'] = $this->UserModel->getById($data['group']['teacher']);
-        $data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
-        $data['images'] = $this->GroupsModel->getImageFiles($group_id);
-        $data['videos'] = $this->GroupsModel->getVideoFiles($group_id);
+        $data['users'] = $this->SubscriptionModel->getGroupUsers($groupId);
+        $data['images'] = $this->GroupsModel->getImageFiles($groupId);
+        $data['videos'] = $this->GroupsModel->getVideoFiles($groupId);
 
-        $data['wall'] = $this->WallModel->list($group_id);
+        $data['wall'] = $this->WallModel->list($groupId);
         // debug($data['wall']); die();
         // debug($data); die();
         $this->load->lview('groups/group', $data);
@@ -213,9 +203,9 @@ class Groups extends APP_Controller
         $data = [];
         $data['section'] = 'review';
         $data['group'] = $this->CoursesGroupsModel->getByCode($group);
-        $group_id = (int) ($data['group']['id']);
+        $groupId = (int) ($data['group']['id']);
 
-        if (($data['subscr'] = $this->checkSubscr($group_id)) === false || ($data['subscr']['active'] ?? false) === false) {
+        if (($data['subscr'] = $this->checkSubscr($groupId)) === false || ($data['subscr']['active'] ?? false) === false) {
             header('Location: /groups/' . $data['group']['code'] . '/');
         }
 
@@ -242,16 +232,17 @@ class Groups extends APP_Controller
 
         $filter = $this->input->get('filter', true);
         $data['filter_url'] = http_build_query(['filter' => $filter]);
-        $data['items'] = $this->ReviewModel->getByGroup($group_id, $filter);
+        $data['items'] = $this->ReviewModel->getByGroup($groupId, $filter);
         $data['lectures'] = [];
-        $lectures = $this->LecturesGroupModel->listForGroup($group_id);
+        $lectures = (new GroupService())->getListPublicLecturesForGroup($groupId);
+
         foreach ($lectures as $key => $row) {
             $row['index'] = $key;
             $data['lectures'][$row['id']] = $row;
         }
 
-        $data['users'] = $this->SubscriptionModel->getGroupUsers($group_id);
-        $data['not_viewed'] = $this->ReviewModel->notViewedItems((int) $this->user['id'], $group_id);
+        $data['users'] = $this->SubscriptionModel->getGroupUsers($groupId);
+        $data['not_viewed'] = $this->ReviewModel->notViewedItems((int) $this->user['id'], $groupId);
 
         // debug($data['review_item']); die();
         $this->load->lview('groups/reviews', $data);
@@ -418,7 +409,7 @@ class Groups extends APP_Controller
         switch ($params['action']) {
             case 'download':
                 if (isset($params['target']) && $params['target'] == 'homework') {
-                    $lecture = (new \App\Service\LectureService())->getById((int) $params['lecture']);
+                    $lecture = (new LectureService())->getById((int) $params['lecture']);
 
                     $actionParams = [
                         'group_code' => $group['code'],

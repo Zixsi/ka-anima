@@ -147,7 +147,6 @@ $autoload['model'] = [
     'main/courses/CoursesHelper',
     'main/courses/CoursesGroupsModel',
 
-    'main/lectures/LecturesGroupModel',
     'main/lectures/LecturesHomeworkModel',
 
     'main/groups/GroupsModel',

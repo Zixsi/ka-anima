@@ -11,8 +11,9 @@ class LectureRemoveHandler
      */
     public function handle(int $id)
     {
-        try {
-            $db = dbConnection();
+        $db = dbConnection();
+        
+        try {    
             $lectureService = new \App\Service\LectureService();
             
             $db->beginTransaction();
@@ -23,7 +24,7 @@ class LectureRemoveHandler
             }
 
             (new \VideoModel())->remove($item->id);
-            (new \LecturesGroupModel())->removeByLecture($item->id);
+            (new \App\Service\GroupService())->removeLectureFromAllGroups($item->id);
             $lectureService->delete($item->id);
 
             $db->commit();
